@@ -30,18 +30,7 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/pokedex/";
           },
-        },{id: "post-samsara-notes",
-        
-          title: "Samsara notes",
-        
-        description: "notes on various interviews with Sanjit of Samsara",
-        section: "Posts",
-        handler: () => {
-          
-            window.location.href = "/blog/2025/samsara-seqoia/";
-          
-        },
-      },{id: "books-chip-war",
+        },{id: "books-chip-war",
           title: 'Chip War',
           description: "",
           section: "Books",handler: () => {
@@ -141,6 +130,21 @@ ninja.data = [{
           description: "",
           section: "Books",handler: () => {
               window.location.href = "/books/2026/SurrenderExp/";
+            },},{id: "books-marooned-in-realtime",
+          title: 'Marooned in Realtime',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/2026/marooned_in_realtime/";
+            },},{id: "books-the-peace-war",
+          title: 'The Peace War',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/2026/the_peace_war/";
+            },},{id: "books-time-is-a-mother",
+          title: 'Time is a Mother',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/2026/time_is_a_mother/";
             },},{id: "books-this-is-how-you-lose-the-time-war",
           title: 'This Is How You Lose the Time War',
           description: "",
@@ -218,46 +222,18 @@ ninja.data = [{
           section: "Projects",handler: () => {
               window.location.href = "/projects/9_project/";
             },},{
-        id: 'social-cv',
-        title: 'CV',
+        id: 'social-github',
+        title: 'GitHub',
         section: 'Socials',
         handler: () => {
-          window.open("/assets/pdf/example_pdf.pdf", "_blank");
+          window.open("https://github.com/resplendentHSHI", "_blank");
         },
       },{
-        id: 'social-email',
-        title: 'email',
+        id: 'social-linkedin',
+        title: 'LinkedIn',
         section: 'Socials',
         handler: () => {
-          window.open("mailto:%79%6F%75@%65%78%61%6D%70%6C%65.%63%6F%6D", "_blank");
-        },
-      },{
-        id: 'social-inspire',
-        title: 'Inspire HEP',
-        section: 'Socials',
-        handler: () => {
-          window.open("https://inspirehep.net/authors/1010907", "_blank");
-        },
-      },{
-        id: 'social-rss',
-        title: 'RSS Feed',
-        section: 'Socials',
-        handler: () => {
-          window.open("/feed.xml", "_blank");
-        },
-      },{
-        id: 'social-scholar',
-        title: 'Google Scholar',
-        section: 'Socials',
-        handler: () => {
-          window.open("https://scholar.google.com/citations?user=qc6CJjYAAAAJ", "_blank");
-        },
-      },{
-        id: 'social-custom_social',
-        title: 'Custom_social',
-        section: 'Socials',
-        handler: () => {
-          window.open("https://www.alberteinstein.com/", "_blank");
+          window.open("https://www.linkedin.com/in/chris-shi-170293369", "_blank");
         },
       },{
       id: 'light-theme',
