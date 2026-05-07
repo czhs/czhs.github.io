@@ -198,6 +198,12 @@ ul.task-list input[type="checkbox"] {
 .profile {
   width: 100%;
 
+  // Soften the corners on the about-page profile photo. Bootstrap's `rounded`
+  // class only does 0.25rem; this is a deliberate, larger radius.
+  img {
+    border-radius: 16px;
+  }
+
   .more-info {
     margin-bottom: 5px;
     margin-top: 5px;
@@ -413,25 +419,29 @@ ul.task-list input[type="checkbox"] {
 
 .social {
   text-align: center;
+  // Tucked towards the bottom of the about page, separated from the body.
+  margin-top: 4.5rem;
 
   .contact-icons {
-    font-size: 4rem;
+    font-size: 2rem;
 
     a {
+      margin: 0 0.25rem;
+
       img {
-        width: 3.2rem;
-        height: 3.2rem;
-        margin-bottom: 1rem;
+        width: 1.6rem;
+        height: 1.6rem;
+        margin-bottom: 0.5rem;
       }
 
       svg {
-        width: 3.5rem;
-        height: 4rem;
-        margin-bottom: 0.5rem;
+        width: 1.8rem;
+        height: 2rem;
+        margin-bottom: 0.3rem;
 
         image {
-          width: 3.5rem;
-          height: 3.5rem;
+          width: 1.8rem;
+          height: 1.8rem;
         }
       }
 
@@ -451,7 +461,9 @@ ul.task-list input[type="checkbox"] {
   }
 
   .contact-note {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    opacity: 0.7;
   }
 }
 

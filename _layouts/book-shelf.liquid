@@ -3,48 +3,48 @@ layout: page
 ---
 {{ content }}
 
+<style>
+.shelf-divider {
+  margin: 2.5rem 0 1.75rem;
+  border: 0;
+  border-top: 1px solid var(--global-divider-color);
+}
+.shelf-recs-note {
+  margin-top: 2.5rem;
+  text-align: center;
+  font-style: italic;
+  color: var(--global-text-color-light);
+  font-size: 0.95rem;
+}
+</style>
+
 {% if page.collection and page.collection.size > 0 %}
   {% assign collection = site[page.collection] %}
   {% if collection and collection.size > 0 %}
     {% comment %}
-      Optional "shelf tags" for books.
-
-      Add to any book in `_books/*.md` front matter:
-        shelf_tags: [recommended, discuss]
-
-      Backwards-compatible aliases also supported:
-        recommended: true
-        discuss: true
-        talk: true
+      Two sections only:
+        1. The "discuss" shelf — books explicitly tagged for conversation.
+        2. Everything else, randomized into a single shelf each visit.
+      All other prior groupings (recommended / art / per-year) have been
+      collapsed; only year is kept on the per-book pages.
     {% endcomment %}
 
-    {% assign recommended_books = collection | where_exp: "b", "b.shelf_tags contains 'recommended' or b.recommended == true or b.recommend == true" %}
-    {% assign discuss_books = collection | where_exp: "b", "b.shelf_tags contains 'discuss' or b.shelf_tags contains 'discussion' or b.discuss == true or b.talk == true" %}
-    {% assign art_books = collection | where_exp: "b", "b.shelf_tags contains 'art'" %}
-
-    {% if recommended_books and recommended_books.size > 0 %}
-      <h2 id="recommended">Books that live rent free in my head</h2>
-      <p><em>pretty much the title</em></p>
-      <div class="book-shelf-grid">
-        {% for item in recommended_books reversed %}
-          <figure class="cover">
-            <a class="cover-link" href="{{ item.url | relative_url }}">
-              {% if item.cover %}
-                <img alt="{{ item.title }} cover" src="{{ item.cover | prepend: page.covers | relative_url }}" style="height:200px">
-              {% elsif item.olid %}
-                <img alt="{{ item.title }} cover" src="http://covers.openlibrary.org/b/olid/{{ item.olid }}-L.jpg?default=false" style="height:200px">
-              {% elsif item.isbn %}
-                <img alt="{{ item.title }} cover" src="http://covers.openlibrary.org/b/isbn/{{ item.isbn }}-L.jpg?default=false" style="height:200px">
-              {% endif %}
-            </a>
-          </figure>
-        {% endfor %}
-      </div>
-    {% endif %}
+    {% assign discuss_books = '' | split: '' %}
+    {% assign other_books = '' | split: '' %}
+    {% for item in collection %}
+      {% assign is_discuss = false %}
+      {% if item.shelf_tags contains 'discuss' or item.shelf_tags contains 'discussion' or item.discuss == true or item.talk == true %}
+        {% assign is_discuss = true %}
+      {% endif %}
+      {% if is_discuss %}
+        {% assign discuss_books = discuss_books | push: item %}
+      {% else %}
+        {% assign other_books = other_books | push: item %}
+      {% endif %}
+    {% endfor %}
 
     {% if discuss_books and discuss_books.size > 0 %}
-      <h2 id="discuss">Lmk if you've read these!</h2>
-      <p><em>books that are still churning in my brain and would love your take on (a super set of rent-free books)</em></p>
+      <h2 id="discuss">Have you read these? I would love to talk to you about them!</h2>
       <div class="book-shelf-grid">
         {% for item in discuss_books reversed %}
           <figure class="cover">
@@ -62,10 +62,12 @@ layout: page
       </div>
     {% endif %}
 
-    {% if art_books and art_books.size > 0 %}
-      <h2 id="art">Art</h2>
-      <div class="book-shelf-grid">
-        {% for item in art_books reversed %}
+    {% if other_books and other_books.size > 0 %}
+      {% if discuss_books and discuss_books.size > 0 %}<hr class="shelf-divider">{% endif %}
+      <h2 id="shelf">my books, in randomized order</h2>
+      {% assign shuffled = other_books | sample: other_books.size %}
+      <div class="book-shelf-grid" id="book-shelf-grid">
+        {% for item in shuffled %}
           <figure class="cover">
             <a class="cover-link" href="{{ item.url | relative_url }}">
               {% if item.cover %}
@@ -79,93 +81,25 @@ layout: page
           </figure>
         {% endfor %}
       </div>
+      <script>
+        // Reshuffle on each page load so the shelf feels alive between visits.
+        // (Liquid already gave us one random ordering at build time; this layers
+        // a client-side shuffle on top so visitors see a fresh layout each time.)
+        (() => {
+          const grid = document.getElementById('book-shelf-grid');
+          if (!grid) return;
+          const items = Array.from(grid.children);
+          for (let i = items.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [items[i], items[j]] = [items[j], items[i]];
+          }
+          const frag = document.createDocumentFragment();
+          items.forEach(el => frag.appendChild(el));
+          grid.appendChild(frag);
+        })();
+      </script>
     {% endif %}
 
-    {% comment %} Collect all unique years from books not in recommended/discuss sections {% endcomment %}
-    {% assign years_list = '' | split: ',' %}
-    {% for item in collection %}
-      {% assign is_recommended = false %}
-      {% assign is_discuss = false %}
-      {% assign is_art = false %}
-      {% if item.shelf_tags contains 'recommended' or item.recommended == true or item.recommend == true %}
-        {% assign is_recommended = true %}
-      {% endif %}
-      {% if item.shelf_tags contains 'discuss' or item.shelf_tags contains 'discussion' or item.discuss == true or item.talk == true %}
-        {% assign is_discuss = true %}
-      {% endif %}
-      {% if item.shelf_tags contains 'art' %}
-        {% assign is_art = true %}
-      {% endif %}
-      {% unless is_recommended or is_discuss or is_art %}
-        {% if item.finished and item.finished != '' %}
-          {% assign group_date = item.finished %}
-        {% elsif item.started and item.started != '' %}
-          {% assign group_date = item.started %}
-        {% else %}
-          {% assign group_date = item.date %}
-        {% endif %}
-        {% assign book_year = group_date | date: '%Y' %}
-        {% if book_year and book_year != '' %}
-          {% unless years_list contains book_year %}
-            {% assign years_list = years_list | push: book_year %}
-          {% endunless %}
-        {% endif %}
-      {% endunless %}
-    {% endfor %}
-    
-    {% comment %} Sort years in descending order (newest first) {% endcomment %}
-    {% assign sorted_years = years_list | sort | reverse %}
-    
-    {% comment %} Display books grouped by year, newest first {% endcomment %}
-    {% for year in sorted_years %}
-      {% assign has_books = false %}
-      {% for item in collection reversed %}
-        {% assign is_recommended = false %}
-        {% assign is_discuss = false %}
-        {% assign is_art = false %}
-        {% if item.shelf_tags contains 'recommended' or item.recommended == true or item.recommend == true %}
-          {% assign is_recommended = true %}
-        {% endif %}
-        {% if item.shelf_tags contains 'discuss' or item.shelf_tags contains 'discussion' or item.discuss == true or item.talk == true %}
-          {% assign is_discuss = true %}
-        {% endif %}
-        {% if item.shelf_tags contains 'art' %}
-          {% assign is_art = true %}
-        {% endif %}
-        {% unless is_recommended or is_discuss or is_art %}
-          {% if item.finished and item.finished != '' %}
-            {% assign group_date = item.finished %}
-          {% elsif item.started and item.started != '' %}
-            {% assign group_date = item.started %}
-          {% else %}
-            {% assign group_date = item.date %}
-          {% endif %}
-          {% assign item_year = group_date | date: '%Y' %}
-          {% if item_year == year %}
-            {% unless has_books %}
-              <h1 id="y{{ year }}">
-                <a href="{{ year | prepend: '/books/' | relative_url }}">{{ year }}</a>
-              </h1>
-              <ul>
-              {% assign has_books = true %}
-            {% endunless %}
-            <figure class="cover">
-              <a class="cover-link" href="{{ item.url | relative_url }}">
-                {% if item.cover %}
-                  <img alt="{{ item.title }} cover" src="{{ item.cover | prepend: page.covers | relative_url }}" style="height:200px">
-                {% elsif item.olid %}
-                  <img alt="{{ item.title }} cover" src="http://covers.openlibrary.org/b/olid/{{ item.olid }}-L.jpg?default=false" style="height:200px">
-                {% elsif item.isbn %}
-                  <img alt="{{ item.title }} cover" src="http://covers.openlibrary.org/b/isbn/{{ item.isbn }}-L.jpg?default=false" style="height:200px">
-                {% endif %}
-              </a>
-            </figure>
-          {% endif %}
-        {% endunless %}
-      {% endfor %}
-      {% if has_books %}
-        </ul>
-      {% endif %}
-    {% endfor %}
+    <p class="shelf-recs-note">Got any book recomendation? Feel free to reach out to me!</p>
   {% endif %}
 {% endif %}

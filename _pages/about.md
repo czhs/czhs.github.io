@@ -2,29 +2,38 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Motto. Etc.
+subtitle:
 
 profile:
   align: right
-  image: prof_pic.jpg
+  image: chris_shi.png
   image_circular: false # crops the image to make it circular
-  more_info: >
-    <p>A painting by Morisot</p>
-    <img src="/assets/img/homepage/geese.jpeg" alt="geese" class="img-fluid rounded z-depth-1" style="max-width: 100%; height: auto;">
-    <p>a gift from my english teacher I keep with me</p>
 
-selected_papers: true # includes a list of papers marked as "selected={true}"
+
+selected_papers: false
 social: true # includes social icons at the bottom of the page
 
 announcements:
-  enabled: true # includes a list of news items
-  scrollable: true # adds a vertical scroll bar if there are more than 3 news items
-  limit: 5 # leave blank to include all the news in the `_news` folder
+  enabled: false
 
 latest_posts:
   enabled: true
-  scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
-  limit: 3 # leave blank to include all the blog posts
+  scrollable: true
+  limit: 3
 ---
-A personal blog about infrastructure and math, sometimes both.  
+
+Hi, I'm Chris Shi.
+
+This is a personal blog about infrastructure and math, sometimes both.
 Biodefense, interpretability, automation.
+
+I work on the theory and hardware of intelligence. I believe there's a class of
+intelligent algorithms — perhaps a single "intelligence equation" — of which all
+the phenomena we observe are special cases. I'm interested in optimal transport,
+high-dimensional geometry, and building non-classical computers. I think
+a lot about what a post-invention-scarcity society looks like, and I would love
+to talk to you about safely stewarding autoresearch-related technologies!
+
+Reach me at chrisshi[at]andrew[dot]cmu[dot]edu.
+
+Adjacent musings on Substack: [ultrastructure](https://substack.com/@ultrastructure).

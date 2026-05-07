@@ -6,42 +6,43 @@
 
 :root {
   color-scheme: light;
-  --global-bg-color: #{$white-color};
+  // Light mode: warm cream paper, dark forest accents.
+  --global-bg-color: #{$tan-cream};
   --global-code-bg-color: #{$code-bg-color-light};
-  --global-text-color: #{$black-color};
-  --global-text-color-light: #{$grey-color};
-  --global-theme-color: #{$purple-color};
-  --global-hover-color: #{$purple-color};
-  --global-hover-text-color: #{$white-color};
-  --global-footer-bg-color: #{$grey-color-dark};
-  --global-footer-text-color: #{$grey-color-light};
-  --global-footer-link-color: #{$white-color};
-  --global-distill-app-color: #{$grey-color};
-  --global-divider-color: rgba(0, 0, 0, 0.1);
-  --global-card-bg-color: #{$white-color};
-  --global-highlight-color: #{$red-color-dark};
+  --global-text-color: #{$forest-text};
+  --global-text-color-light: #{$brown-warm};
+  --global-theme-color: #{$forest};
+  --global-hover-color: #{$forest-soft};
+  --global-hover-text-color: #{$tan-cream};
+  --global-footer-bg-color: #{$forest-deep};
+  --global-footer-text-color: #{$tan-light};
+  --global-footer-link-color: #{$tan-cream};
+  --global-distill-app-color: #{$brown-warm};
+  --global-divider-color: rgba(47, 74, 58, 0.16);
+  --global-card-bg-color: #{$tan-paper};
+  --global-highlight-color: #{$brown-warm};
   --global-back-to-top-bg-color: rgba(
-    #{color.channel($black-color, "red", $space: rgb)},
-    #{color.channel($black-color, "green", $space: rgb)},
-    #{color.channel($black-color, "blue", $space: rgb)},
-    0.4
+    #{color.channel($forest-deep, "red", $space: rgb)},
+    #{color.channel($forest-deep, "green", $space: rgb)},
+    #{color.channel($forest-deep, "blue", $space: rgb)},
+    0.5
   );
-  --global-back-to-top-text-color: #{$white-color};
-  --global-newsletter-bg-color: #{$white-color};
-  --global-newsletter-text-color: #{$black-color};
+  --global-back-to-top-text-color: #{$tan-cream};
+  --global-newsletter-bg-color: #{$tan-paper};
+  --global-newsletter-text-color: #{$forest-text};
 
-  --global-tip-block: #42b983;
-  --global-tip-block-bg: #e2f5ec;
-  --global-tip-block-text: #215d42;
-  --global-tip-block-title: #359469;
-  --global-warning-block: #e7c000;
-  --global-warning-block-bg: #fff8d8;
-  --global-warning-block-text: #6b5900;
-  --global-warning-block-title: #b29400;
-  --global-danger-block: #c00;
-  --global-danger-block-bg: #ffe0e0;
-  --global-danger-block-text: #600;
-  --global-danger-block-title: #c00;
+  --global-tip-block: #4a7a52;
+  --global-tip-block-bg: #e6efde;
+  --global-tip-block-text: #1f3528;
+  --global-tip-block-title: #2f4a3a;
+  --global-warning-block: #b89868;
+  --global-warning-block-bg: #f6ecd6;
+  --global-warning-block-text: #5c4a32;
+  --global-warning-block-title: #8b6f47;
+  --global-danger-block: #a04a3c;
+  --global-danger-block-bg: #f1d8cf;
+  --global-danger-block-text: #5b261a;
+  --global-danger-block-title: #a04a3c;
 
   #light-toggle-system {
     padding-left: 10px;
@@ -78,41 +79,42 @@
 
 html[data-theme="dark"] {
   color-scheme: dark;
-  --global-bg-color: #{$grey-color-dark};
+  // Dark mode: deep forest bg, warm tan/cream accents.
+  --global-bg-color: #{$forest-deep};
   --global-code-bg-color: #{$code-bg-color-dark};
-  --global-text-color: #{$grey-color-light};
-  --global-text-color-light: #{$grey-color};
-  --global-theme-color: #{$cyan-color};
-  --global-hover-color: #{$cyan-color};
-  --global-hover-text-color: #{$white-color};
-  --global-footer-bg-color: #{$grey-color-light};
-  --global-footer-text-color: #{$grey-color-dark};
-  --global-footer-link-color: #{$black-color};
-  --global-distill-app-color: #{$grey-color-light};
-  --global-divider-color: #424246;
-  --global-card-bg-color: #{$grey-900};
+  --global-text-color: #{$cream-text};
+  --global-text-color-light: #{$tan-warm};
+  --global-theme-color: #{$tan-light};
+  --global-hover-color: #{$tan-warm};
+  --global-hover-text-color: #{$forest-deep};
+  --global-footer-bg-color: #{$brown-deep};
+  --global-footer-text-color: #{$tan-cream};
+  --global-footer-link-color: #{$tan-light};
+  --global-distill-app-color: #{$tan-warm};
+  --global-divider-color: rgba(216, 196, 160, 0.18);
+  --global-card-bg-color: #{$forest};
   --global-back-to-top-bg-color: rgba(
-    #{color.channel($white-color, "red", $space: rgb)},
-    #{color.channel($white-color, "green", $space: rgb)},
-    #{color.channel($white-color, "blue", $space: rgb)},
-    0.5
+    #{color.channel($tan-light, "red", $space: rgb)},
+    #{color.channel($tan-light, "green", $space: rgb)},
+    #{color.channel($tan-light, "blue", $space: rgb)},
+    0.45
   );
-  --global-back-to-top-text-color: #{$black-color};
-  --global-newsletter-bg-color: #{$grey-color-light};
-  --global-newsletter-text-color: #{$grey-color-dark};
+  --global-back-to-top-text-color: #{$forest-deep};
+  --global-newsletter-bg-color: #{$forest};
+  --global-newsletter-text-color: #{$cream-text};
 
-  --global-tip-block: #42b983;
-  --global-tip-block-bg: #215d42;
-  --global-tip-block-text: #beffe2;
-  --global-tip-block-title: #e2f5ec;
-  --global-warning-block: #e7c000;
-  --global-warning-block-bg: #6b5900;
-  --global-warning-block-text: #fff2af;
-  --global-warning-block-title: #fff8d8;
-  --global-danger-block: #c00;
-  --global-danger-block-bg: #600;
-  --global-danger-block-text: #ffb9b9;
-  --global-danger-block-title: #ffe0e0;
+  --global-tip-block: #7a9985;
+  --global-tip-block-bg: #2f4a3a;
+  --global-tip-block-text: #e6efde;
+  --global-tip-block-title: #d8c4a0;
+  --global-warning-block: #b89868;
+  --global-warning-block-bg: #5c4a32;
+  --global-warning-block-text: #f6ecd6;
+  --global-warning-block-title: #f1e9d7;
+  --global-danger-block: #b85c4a;
+  --global-danger-block-bg: #5b261a;
+  --global-danger-block-text: #f1d8cf;
+  --global-danger-block-title: #f1d8cf;
 
   .only-light {
     display: none;

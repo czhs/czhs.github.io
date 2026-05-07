@@ -18,6 +18,26 @@ pagination:
 
 <div class="post">
 
+  <figure class="blog-header">
+    <img src="{{ '/assets/img/prof_pic.jpg' | relative_url }}" alt="A painting by Morisot" class="blog-header-img">
+  </figure>
+
+  <style>
+    .blog-header {
+      margin: 0 0 2rem;
+      padding: 0;
+    }
+    .blog-header-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 360px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 6px;
+    }
+  </style>
+
 {% assign blog_name_size = site.blog_name | size %}
 {% assign blog_description_size = site.blog_description | size %}
 

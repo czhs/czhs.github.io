@@ -1,9 +1,20 @@
 ---
 layout: default
 ---
-{% assign year = page.started | date: '%Y' %}
-{% assign tags = page.tags | join: '' %}
-{% assign categories = page.categories | join: '' %}
+{% comment %}
+  Per-book metadata is intentionally minimal — only the year is shown.
+  Author / release date / start / finish / stars / tags / categories /
+  buy link have all been removed; the year falls back across `finished`,
+  `started`, then `date` so a year is shown regardless of which fields
+  the front matter provides.
+{% endcomment %}
+{% if page.finished and page.finished != '' %}
+  {% assign year = page.finished | date: '%Y' %}
+{% elsif page.started and page.started != '' %}
+  {% assign year = page.started | date: '%Y' %}
+{% else %}
+  {% assign year = page.date | date: '%Y' %}
+{% endif %}
 
 {% if page._styles %}
   <!-- Page/Post style -->
@@ -15,89 +26,11 @@ layout: default
 <div class="post">
   <header class="post-header">
     <h1 class="post-title">{{ page.title }}</h1>
-    {% if page.author or page.released %}
-      <p class="post-meta">
-        {% if page.author %}
-          {{ page.author }}
-        {% endif %}
-        {% if page.author and page.released %} &nbsp;&middot;&nbsp; {% endif %}
-        {% if page.released %}
-          {{ page.released }}
-        {% endif %}
+    {% if year and year != '' %}
+      <p class="post-tags">
+        <i class="fa-solid fa-calendar fa-sm"></i> {{ year }}
       </p>
     {% endif %}
-
-    {% if page.started or page.finished or page.stars %}
-      <p class="post-meta">
-        {% if page.started %}
-          <i class="fa-solid fa-play fa-sm" style="color: var(--global-tip-block) !important"></i> <em>{{ page.started }}</em>
-        {% endif %}
-        {% if page.finished %}
-          {% if page.started %}
-            &nbsp;&middot;&nbsp;
-          {% endif %}
-          <i class="fa-solid fa-stop fa-sm" style="color: #e56565 !important"></i> <em>{{ page.finished }}</em>
-        {% endif %}
-        {% if page.stars %}
-          {% if page.started or page.finished %}
-            &nbsp;&middot;&nbsp;
-          {% endif %}
-          {% if page.goodreads_review %}
-            <a target="_blank" href="https://www.goodreads.com/review/show/{{ page.goodreads_review }}"><i class="fa-brands fa-goodreads-g"></i>
-          {% endif %}
-          {% assign full_stars = page.stars | floor %}
-          {% assign half_star = page.stars | minus: full_stars %}
-          {% assign empty_stars = 5 | minus: full_stars %}
-          {% if half_star > 0 %}
-            {% assign empty_stars = empty_stars | minus: 1 %}
-          {% endif %}
-          {% for i in (1..full_stars) -%}
-            <i class="fa-solid fa-star fa-sm"></i>
-          {%- endfor -%}
-          {%- if half_star > 0 %}<i class="fa-solid fa-star-half-stroke fa-sm"></i>{% endif -%}
-          {%- for i in (1..empty_stars) -%}
-            <i class="fa-regular fa-star fa-sm"></i>
-          {%- endfor -%}
-          {% if page.goodreads_review %}
-            </a>
-          {% endif %}
-        {% endif %}
-        {% if page.buy_link %}
-          {% if page.started or page.finished or page.stars %}
-            &nbsp;&middot;&nbsp;
-          {% endif %}
-          <a target="_blank" href="{{ page.buy_link }}"
-            ><i class="fa-solid fa-cart-shopping"></i>
-            {% assign is_amazon_link = page.buy_link | slice: 0, 19 %}
-            {% if is_amazon_link == 'https://www.amazon.' %}
-              <i class="fa-brands fa-amazon"></i>
-            {% endif %}
-          </a>
-        {% endif %}
-      </p>
-    {% endif %}
-    <p class="post-tags">
-      <a href="{{ year | prepend: '/books/' | relative_url }}"> <i class="fa-solid fa-calendar fa-sm"></i> {{ year }}</a>
-      {% if tags != '' %}
-        &nbsp;&middot;&nbsp;
-        {% for tag in page.tags %}
-          <a href="{{ tag | slugify | prepend: '/books/tag/' | relative_url }}"> <i class="fa-solid fa-hashtag fa-sm"></i> {{ tag }}</a>
-          {% unless forloop.last %}
-            &nbsp;
-          {% endunless %}
-        {% endfor %}
-      {% endif %}
-
-      {% if categories != '' %}
-        &nbsp;&middot;&nbsp;
-        {% for category in page.categories %}
-          <a href="{{ category | slugify | prepend: '/books/category/' | relative_url }}"> <i class="fa-solid fa-tag fa-sm"></i> {{ category }}</a>
-          {% unless forloop.last %}
-            &nbsp;
-          {% endunless %}
-        {% endfor %}
-      {% endif %}
-    </p>
     <hr>
   </header>
 

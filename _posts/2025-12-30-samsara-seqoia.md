@@ -6,6 +6,7 @@ description: notes on various interviews with Sanjit of Samsara
 tags: samsara
 categories: strategy
 related_posts: false
+published: false
 ---
 [From the Samsara Seqoia Interview](https://www.youtube.com/watch?v=VQXivhM8I-g)
 
