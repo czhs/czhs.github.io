@@ -3,6 +3,7 @@
 # -----------------------------------------------------------------------------
 
 title: Chris Shi # the website title (if blank, full name will be used instead)
+navbar_brand: home # text shown in the top-left of the navbar on non-home pages; falls back to title if blank
 first_name: Chris
 middle_name:
 last_name: Shi
