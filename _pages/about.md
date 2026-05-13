@@ -1,8 +1,8 @@
 ---
 layout: about
-title: about
+title: Chris Shi
 permalink: /
-subtitle:
+subtitle: Undergraduate at Carnegie Mellon University.
 
 profile:
   align: right
@@ -22,7 +22,8 @@ latest_posts:
   limit: 3
 ---
 
-Hi, I'm Chris Shi.
+Hi, I'm Chris Shi (also known as Hongyi Shi). I'm an undergraduate at
+Carnegie Mellon University.
 
 This is a personal blog about infrastructure and math, sometimes both.
 Biodefense, interpretability, automation.
@@ -34,6 +35,6 @@ high-dimensional geometry, and building non-classical computers. I think
 a lot about what a post-invention-scarcity society looks like, and I would love
 to talk to you about safely stewarding autoresearch-related technologies!
 
-Reach me at chrisshi[at]andrew[dot]cmu[dot]edu.
+Reach me at chrisshi [at] andrew [dot] cmu [dot] edu.
 
-Adjacent musings on Substack: [ultrastructure](https://substack.com/@ultrastructure).
+My Substack: [ultrastructure](https://ultrastructure.substack.com/).
