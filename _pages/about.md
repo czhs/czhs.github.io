@@ -2,7 +2,7 @@
 layout: about
 title: Chris Shi
 permalink: /
-subtitle: Undergraduate at Carnegie Mellon University.
+subtitle: Math and computer engineering undergraduate at Carnegie Mellon University.
 
 profile:
   align: right
@@ -22,8 +22,7 @@ latest_posts:
   limit: 3
 ---
 
-Hi, I'm Chris Shi (also known as Hongyi Shi). I'm an undergraduate at
-Carnegie Mellon University.
+Hi, I'm Chris Shi (also known as Hongyi Shi).
 
 This is a personal blog about infrastructure and math, sometimes both.
 Biodefense, interpretability, automation.
