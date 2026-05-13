@@ -2,7 +2,7 @@
 layout: about
 title: Chris Shi
 permalink: /
-subtitle: Math and computer engineering undergraduate at Carnegie Mellon University.
+subtitle: Math and computer engineering at Carnegie Mellon University.
 
 profile:
   align: right
