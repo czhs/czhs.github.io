@@ -14,5 +14,5 @@ released:
 stars: 
 goodreads_review: 
 status: Finished
-shelf_tags: [recommended]
+shelf_tags: ['discuss']
 ---
