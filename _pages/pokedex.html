@@ -2,49 +2,210 @@
 layout: page
 permalink: /pokedex/
 title: pokedex
+description: things i'm working on, and things i've worked on.
 nav: true
 nav_order: 9
 ---
 
-*Under construction.*
+<p class="phenomena-link">
+  <a href="{{ '/phenomena/' | relative_url }}">
+    <span class="phenomena-link-label">pokedex of phenomena</span>
+    <span class="phenomena-link-blurb">— mysterious things i can't yet explain</span>
+    <span class="phenomena-link-arrow" aria-hidden="true">→</span>
+  </a>
+</p>
 
-A collection of tools and harnesses that I find useful, particularly for
-autoresearch — collected from across the internet. None of these are mine. Feel free to reach out to me if you have anything to add!
+<div class="proj-filter" role="tablist" aria-label="filter projects by tag">
+  <button type="button" class="proj-filter-pill is-active" data-tag="all">all</button>
+  <button type="button" class="proj-filter-pill" data-tag="research">research</button>
+  <button type="button" class="proj-filter-pill" data-tag="bio">bio</button>
+  <button type="button" class="proj-filter-pill" data-tag="robotics">robotics</button>
+  <button type="button" class="proj-filter-pill" data-tag="community">community</button>
+</div>
 
-<ul class="tool-list">
-  <li class="tool">
-    <a class="tool-name" href="https://github.com/ykdojo/safeclaw" target="_blank" rel="noopener">safeclaw</a>
-    <p class="tool-blurb">Sandboxing layer for Claude Code — a useful starting point if you're hardening an agent harness against itself.</p>
+<ul class="proj-list">
+  <li class="proj-item" data-tags="research bio">
+    <a class="proj-card" href="https://meetings.cshl.edu/abstracts.aspx?meet=DATA&amp;year=24" target="_blank" rel="noopener">
+      <div class="proj-meta">
+        <span class="proj-year">2024</span>
+        <span class="proj-dot">·</span>
+        <span class="proj-tag">research</span>
+        <span class="proj-tag">bio</span>
+      </div>
+      <h3 class="proj-title">Protein folding research</h3>
+      <p class="proj-body">Presented at the Cold Spring Harbor Laboratory Biological Data Science meeting.</p>
+      <span class="proj-arrow" aria-hidden="true">↗</span>
+    </a>
+  </li>
+  <li class="proj-item" data-tags="robotics community">
+    <a class="proj-card" href="https://github.com/apirrone/Open_Duck_Mini" target="_blank" rel="noopener">
+      <div class="proj-meta">
+        <span class="proj-year">ongoing</span>
+        <span class="proj-dot">·</span>
+        <span class="proj-tag">robotics</span>
+        <span class="proj-tag">community</span>
+      </div>
+      <h3 class="proj-title">Open Duck Mini</h3>
+      <p class="proj-body">Following along as a community member on Antoine Pirrone's open-source bipedal mini-duck robot. Not a contributor — just watching, learning, and occasionally chiming in.</p>
+      <span class="proj-arrow" aria-hidden="true">↗</span>
+    </a>
   </li>
 </ul>
 
 <style>
-.tool-list {
+/* ── slim phenomena link ──────────────────────────────────── */
+.phenomena-link {
+  margin: -0.25rem 0 2rem;
+  font-size: 0.9rem;
+}
+.phenomena-link a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  color: var(--global-text-color);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+.phenomena-link a:hover {
+  opacity: 1;
+  color: var(--global-theme-color);
+  text-decoration: none;
+}
+.phenomena-link-label {
+  font-weight: 600;
+}
+.phenomena-link-blurb {
+  opacity: 0.7;
+}
+.phenomena-link-arrow {
+  font-size: 0.95rem;
+}
+
+/* ── tag filter row ───────────────────────────────────────── */
+.proj-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1rem;
+}
+.proj-filter-pill {
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.78rem;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--global-text-color);
+  opacity: 0.75;
+  cursor: pointer;
+  transition: opacity 0.15s ease, border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+.proj-filter-pill:hover {
+  opacity: 1;
+  border-color: var(--global-theme-color);
+}
+.proj-filter-pill.is-active {
+  opacity: 1;
+  background: var(--global-theme-color);
+  border-color: var(--global-theme-color);
+  color: var(--global-hover-text-color);
+}
+
+/* ── project list ─────────────────────────────────────────── */
+.proj-list {
   list-style: none;
   padding: 0;
-  margin: 1.5rem 0 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.75rem;
 }
-.tool-list .tool {
-  padding: 1rem 0 1.1rem;
-  border-top: 1px solid var(--global-divider-color);
+.proj-item { margin: 0; }
+
+.proj-card {
+  position: relative;
+  display: block;
+  padding: 1rem 1.1rem 1.05rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 10px;
+  color: inherit;
+  text-decoration: none;
+  background: transparent;
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
-.tool-list .tool:last-child {
-  border-bottom: 1px solid var(--global-divider-color);
+.proj-card:hover {
+  border-color: var(--global-theme-color);
+  background: var(--global-card-bg-color);
+  text-decoration: none;
 }
 
-.tool-name {
+.proj-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--global-text-color);
+  opacity: 0.7;
+  margin-bottom: 0.4rem;
+}
+.proj-year {
+  font-family: var(--global-code-font-family, monospace);
   font-weight: 600;
-  font-size: 1.05rem;
+}
+.proj-dot { opacity: 0.5; }
+.proj-tag {
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+.proj-tag::before { content: "#"; opacity: 0.6; }
+
+.proj-title {
+  margin: 0 1.5rem 0.3rem 0;
+  font-weight: 700;
+  font-size: 1.02rem;
+  line-height: 1.25;
+}
+
+.proj-body {
+  margin: 0 1.5rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--global-text-color);
+  opacity: 0.8;
+}
+
+.proj-arrow {
+  position: absolute;
+  top: 0.85rem;
+  right: 1rem;
+  font-size: 0.95rem;
+  color: var(--global-text-color);
+  opacity: 0.45;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+.proj-card:hover .proj-arrow {
+  opacity: 1;
   color: var(--global-theme-color);
 }
-.tool-name:hover {
-  color: var(--global-hover-color);
-}
-
-.tool-blurb {
-  margin: 0.4rem 0 0;
-  font-size: 0.93rem;
-  color: var(--global-text-color);
-  opacity: 0.85;
-}
 </style>
+
+<script>
+(function () {
+  var pills = document.querySelectorAll('.proj-filter-pill');
+  var items = document.querySelectorAll('.proj-item');
+  pills.forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      var tag = pill.dataset.tag;
+      pills.forEach(function (p) { p.classList.toggle('is-active', p === pill); });
+      items.forEach(function (item) {
+        var tags = (item.dataset.tags || '').split(/\s+/);
+        var show = tag === 'all' || tags.indexOf(tag) !== -1;
+        item.style.display = show ? '' : 'none';
+      });
+    });
+  });
+})();
+</script>
