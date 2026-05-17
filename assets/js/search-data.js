@@ -25,7 +25,7 @@ ninja.data = [{
           },
         },{id: "nav-pokedex",
           title: "pokedex",
-          description: "",
+          description: "things i&#39;m working on, and things i&#39;ve worked on.",
           section: "Navigation",
           handler: () => {
             window.location.href = "/pokedex/";
