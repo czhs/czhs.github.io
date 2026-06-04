@@ -3,6 +3,8 @@
 # -----------------------------------------------------------------------------
 
 title: Chris Shi # the website title (if blank, full name will be used instead)
+tagline: Math & Computer Engineering, CMU # appended to the homepage <title> and social titles for SEO
+substack_url: https://ultrastructure.substack.com/ # used in the Person schema sameAs (not shown as a social icon)
 navbar_brand: home # text shown in the top-left of the navbar on non-home pages; falls back to title if blank
 first_name: Chris
 middle_name:

@@ -35,13 +35,23 @@
       {{ page.title }} | {{ title }}
     {% endif %}
   {% else %}
-    {{ title }}
+    {% if site.tagline %}{{ title }} | {{ site.tagline }}{% else %}{{ title }}{% endif %}
   {% endif %}
 </title>
 <meta name="author" content="{{ author_name }}">
 <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
 {% if page.keywords or site.keywords %}
   <meta name="keywords" content="{% if page.keywords %}{{ page.keywords }}{% else %}{{ site.keywords }}{% endif %}">
+{% endif %}
+
+{% if page.url == '/' %}
+  <!-- rel="me" identity links help Google/IndieAuth associate these profiles with this site -->
+  {% if site.data.socials.github_username %}
+    <link rel="me" href="https://github.com/{{ site.data.socials.github_username }}">
+  {% endif %}
+  {% if site.data.socials.linkedin_username %}
+    <link rel="me" href="https://www.linkedin.com/in/{{ site.data.socials.linkedin_username }}">
+  {% endif %}
 {% endif %}
 
 {% assign is_blog_post = false %}
@@ -55,7 +65,7 @@
   <!-- OpenGraph -->
   <meta property="og:site_name" content="{{ title }}">
   <meta property="og:type" content="{% if is_blog_post %}article{% else %}website{% endif %}">
-  <meta property="og:title" content="{% if page.title %}{{ title }} | {{ page.title }}{% else %}{{ title }}{% endif %}">
+  <meta property="og:title" content="{% if page.url == '/' %}{% if site.tagline %}{{ title }} | {{ site.tagline }}{% else %}{{ title }}{% endif %}{% elsif page.title %}{{ title }} | {{ page.title }}{% else %}{{ title }}{% endif %}">
   <meta property="og:url" content="{{ page.url | prepend: site.baseurl | prepend: site.url | remove_first: 'index.html' }}">
   <meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
   {% if page.og_image or site.og_image %}
@@ -65,7 +75,7 @@
 
   <!-- Twitter card -->
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="{% if page.title %}{{ page.title }}{% else %}{{ title }}{% endif %}">
+  <meta name="twitter:title" content="{% if page.url == '/' %}{% if site.tagline %}{{ title }} | {{ site.tagline }}{% else %}{{ title }}{% endif %}{% elsif page.title %}{{ page.title }}{% else %}{{ title }}{% endif %}">
   <meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
   {% if page.og_image or site.og_image %}
     <meta name="twitter:image" content="{% if page.og_image %}{{ page.og_image }}{% else %}{{ site.og_image }}{% endif %}">
@@ -235,7 +245,7 @@
         },
         "url": "{{ page.url | prepend: site.baseurl | prepend: site.url }}",
         "@type": "{% if is_blog_post %}BlogPosting{% else %}WebSite{% endif %}",
-        "description": "{% if page.description %}{{ page.description }}{% else if site.description %}{{ site.description }}{% endif %}",
+        "description": "{% if page.description %}{{ page.description | strip_newlines | strip }}{% else if site.description %}{{ site.description | strip_newlines | strip }}{% endif %}",
         "headline": "{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}",
         {% if sameaslinks != blank %}
         "sameAs": {{ sameaslinks | jsonify }},
@@ -244,4 +254,34 @@
         "@context": "https://schema.org"
     }
   </script>
+
+  {% if page.url == '/' %}
+    {% comment %} Standalone Person entity for the homepage — the main thing search engines index for "Chris Shi". {% endcomment %}
+    {% assign person_sameas = sameaslinks %}
+    {% if site.substack_url %}
+      {% assign person_sameas = person_sameas | push: site.substack_url %}
+    {% endif %}
+    <script type="application/ld+json">
+      {
+          "@context": "https://schema.org",
+          "@type": "Person",
+          "name": "{{ author_name }}",
+          "alternateName": "Hongyi Shi",
+          "url": "{{ site.url }}{{ site.baseurl }}/",
+          {% if site.icon != blank and site.icon.size > 4 %}
+          "image": "{{ site.icon | prepend: '/assets/img/' | absolute_url }}",
+          {% endif %}
+          "jobTitle": "Student",
+          "alumniOf": {
+              "@type": "CollegeOrUniversity",
+              "name": "Carnegie Mellon University"
+          },
+          "knowsAbout": ["Biodefense", "Interpretability", "Optimal transport", "Robotics", "Automation", "High-dimensional geometry"],
+          {% if person_sameas != blank %}
+          "sameAs": {{ person_sameas | jsonify }},
+          {% endif %}
+          "description": "{{ site.description | strip_newlines | strip }}"
+      }
+    </script>
+  {% endif %}
 {% endif %}

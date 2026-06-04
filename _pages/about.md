@@ -22,7 +22,8 @@ latest_posts:
   limit: 3
 ---
 
-Hi, I'm Chris Shi (also known as Hongyi Shi).
+Hi, I'm Chris Shi (also known as Hongyi Shi), an undergraduate studying math and
+computer engineering at Carnegie Mellon University (CMU).
 
 This is a personal blog about infrastructure and math, sometimes both.
 Biodefense, interpretability, automation.
@@ -38,3 +39,5 @@ to talk to you about safely stewarding autoresearch-related technologies.
 Reach me at chrisshi [at] andrew [dot] cmu [dot] edu.
 
 My Substack: [ultrastructure](https://ultrastructure.substack.com/).
+
+More [about me and my research interests](/about/).
