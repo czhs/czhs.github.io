@@ -23,13 +23,6 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "nav-mln-club",
-          title: "MLn Club",
-          description: "a weekly ML paper reading group in Pittsburgh — and a week-by-week archive.",
-          section: "Navigation",
-          handler: () => {
-            window.location.href = "/mln/";
-          },
         },{id: "nav-pokedex",
           title: "pokedex",
           description: "things i&#39;m working on, and things i&#39;ve worked on.",
