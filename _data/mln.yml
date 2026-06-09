@@ -96,23 +96,23 @@ weeks:
     slug: "kpf9zriu"
     evt: "evt-Ldd7152eF3yPzrb"
     status: upcoming
-    title: "Attention Residuals"
+    title: "A Mathematical Framework for Transformer Circuits"
     cover: "https://images.lumacdn.com/gallery-images/87/0b766ae1-14a6-4eae-925f-75e0515c671f.png"
-    summary: "Is network depth just another sequence to attend over? What if the residual stream — not attention — is the real bottleneck in deep models?"
+    summary: "What does it mean to “fully understand” a model — and is a one-layer transformer just a lookup table? If the residual stream is only a communication channel, where does the computation actually live?"
     description: >-
-      Is network depth just another sequence to attend over? What if the
-      residual stream — not attention — is the real bottleneck in deep models?
-      This paper introduces Attention Residuals (AttnRes), a new architectural
-      mechanism that rethinks how information flows through modern LLMs. The
-      central problem: standard residual connections with PreNorm accumulate
-      every layer’s output using fixed unit weights — a uniform aggregation that
-      causes uncontrolled hidden-state growth with depth and progressively
-      dilutes each layer’s unique contribution. To overcome this, the authors
-      replace fixed accumulation with a softmax attention mechanism over
-      preceding layer outputs, letting each layer selectively aggregate earlier
-      representations using learned, input-dependent weights — the same
-      linear-to-softmax leap that once transformed sequence modeling, now applied
-      to depth. Discussion at 8 pm, (optional) quiet reading from 7 pm.
+      This is a founding document of transformer mechanistic interpretability.
+      The authors rewrite attention-only transformers in a mathematically
+      equivalent form where the weights become directly readable: the residual
+      stream is a passive communication channel, each head is an independent
+      additive unit, and every head splits into a QK circuit (where to attend)
+      and an OV circuit (what to write). Under this lens, a one-layer model is
+      just an ensemble of bigram and “skip-trigram” tables — bugs included. The
+      payoff comes at two layers, where heads compose through the residual
+      stream: K-composition with a previous-token head produces induction heads,
+      which find earlier occurrences of the current token and copy what came
+      next — a real in-context algorithm rather than a lookup table, and the
+      paper’s candidate mechanism for in-context learning in large models.
+      Discussion at 8 pm, (optional) quiet reading from 7 pm.
     reading:
-      - title: "Attention Residuals — Kimi Team"
-        url: "https://arxiv.org/pdf/2603.15031"
+      - title: "A Mathematical Framework for Transformer Circuits — Elhage, Nanda, Olsson, et al. (Anthropic)"
+        url: "https://transformer-circuits.pub/2021/framework/index.html"
