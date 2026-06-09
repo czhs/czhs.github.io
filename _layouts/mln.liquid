@@ -1,0 +1,49 @@
+---
+layout: default
+---
+
+{% include mln_styles.liquid %}
+
+{% assign w = site.data.mln.weeks | where: "num", page.week | first %}
+
+<div class="post">
+  <a class="mln-back" href="{{ '/mln/' | relative_url }}">← all weeks</a>
+
+  <header class="mln-detail-head post-header">
+    <div class="mln-detail-eyebrow">MLn CLUB · WEEK {{ w.num }}</div>
+    <h1 class="post-title">{{ w.title }}</h1>
+  </header>
+
+  <div class="mln-detail-grid">
+    <div class="mln-resources">
+      <h2>About this week</h2>
+      <p class="mln-desc">{{ w.description }}</p>
+
+      {% if w.reading %}
+      <h3>Reading</h3>
+      <ul class="mln-reading">
+        {% for r in w.reading %}<li><a href="{{ r.url }}" target="_blank" rel="noopener">{{ r.title }}</a></li>{% endfor %}
+      </ul>
+      {% endif %}
+
+      {{ content }}
+    </div>
+
+    <aside class="mln-embed">
+      <iframe
+        src="https://lu.ma/embed/event/{{ w.evt }}/simple"
+        allowfullscreen
+        aria-hidden="false"
+        tabindex="0"
+        title="{{ w.title }} on Luma"></iframe>
+      <p class="mln-embed-fallback">
+        Trouble loading? <a href="https://luma.com/{{ w.slug }}" target="_blank" rel="noopener">open this event on Luma ↗</a>
+      </p>
+      {% if site.data.mln.contact_url %}
+      <a class="mln-feedback" href="{{ site.data.mln.contact_url }}" target="_blank" rel="noopener">
+        Have feedback on this session? Share it ↗
+      </a>
+      {% endif %}
+    </aside>
+  </div>
+</div>

@@ -12,3 +12,6 @@ node_modules/
 vendor
 .idea
 .venv
+
+# local jekyll-serve overlay (excludes large untracked robotics_media/)
+_config_local.yml

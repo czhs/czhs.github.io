@@ -1,0 +1,45 @@
+---
+layout: page
+permalink: /mln/
+title: MLn Club
+description: a weekly ML paper reading group in Pittsburgh — and a week-by-week archive.
+nav: true
+nav_order: 8
+---
+
+{% include mln_styles.liquid %}
+
+<p class="mln-intro">
+  We meet weekly on Mondays in person to talk about new ML papers! As always,
+  optional quiet reading from 7 pm, discussion starts 8 pm. Come and join the
+  discussion! Click any week to register and grab the reading list, notes &amp;
+  resources for running the discussion yourself.
+</p>
+
+<p class="mln-cadence">
+  <span class="mln-chip">Mondays · 7–9pm</span>
+  <span class="mln-chip">quiet reading 7pm · discussion 8pm</span>
+  <a href="{{ site.data.mln.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">follow on Luma ↗</a>
+</p>
+
+<ul class="mln-grid">
+  {% assign weeks = site.data.mln.weeks | sort: "num" | reverse %}
+  {% for w in weeks %}
+  <li>
+    <a class="mln-card" href="{{ '/mln/week-' | append: w.num | append: '/' | relative_url }}">
+      <div class="mln-card-thumb">
+        <img src="{{ w.cover }}" alt="{{ w.title }} cover" loading="lazy">
+        <span class="mln-status {% if w.status == 'upcoming' %}is-upcoming{% endif %}">{{ w.status }}</span>
+      </div>
+      <div class="mln-card-body">
+        <div class="mln-card-top">
+          <span class="mln-week">WEEK {{ w.num }}</span>
+        </div>
+        <h3 class="mln-card-title">{{ w.title }}</h3>
+        <p class="mln-card-blurb">{{ w.summary }}</p>
+        <span class="mln-card-cta">open week <span class="mln-arrow">→</span></span>
+      </div>
+    </a>
+  </li>
+  {% endfor %}
+</ul>

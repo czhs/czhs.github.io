@@ -1,0 +1,118 @@
+# MLn Reading Club — week-by-week archive.
+# Every card on /mln/ and every /mln/week-N/ page is rendered from this file.
+# All titles / summaries / descriptions are pulled verbatim from each Luma event.
+# To add a week: copy a block, bump `num`, paste the Luma slug + cover_url +
+# the evt id (grep the event page source for "api_id":"evt-" and "cover_url").
+calendar_url: https://luma.com/mln
+contact_url: https://forms.gle/Vr6gxhKGjhsEnwPC7
+weeks:
+  - num: 1
+    slug: "36josb91"
+    evt: "evt-dsV5XL1ugeM9MUa"
+    status: past
+    title: "ML Reading Group"
+    cover: "https://images.lumacdn.com/gallery-images/i5/07dddbd8-1b4d-4a2e-98d2-e3bb0df54045.png"
+    summary: "Ilya Sutskever: “If you really learn [these 30 papers], you’ll know 90% of what matters today.”"
+    description: >-
+      Ilya Sutskever: “If you really learn [these 30 papers], you’ll know 90% of
+      what matters today.” Week One. Discussion at 20:00, (optional) quiet
+      reading from 19:00.
+    reading:
+      - title: "The First Law of Complexodynamics"
+        url: "https://aman.ai/primers/ai/top-30-papers/#the-first-law-of-complexodynamics"
+      - title: "The Unreasonable Effectiveness of Recurrent Neural Networks"
+        url: "https://aman.ai/primers/ai/top-30-papers/#the-unreasonable-effectiveness-of-recurrent-neural-networks"
+      - title: "Understanding LSTM Networks"
+        url: "https://aman.ai/primers/ai/top-30-papers/#understanding-lstm-networks"
+      - title: "Recurrent Neural Network Regularization"
+        url: "https://aman.ai/primers/ai/top-30-papers/#recurrent-neural-network-regularization"
+  - num: 2
+    slug: "j1nuamn0"
+    evt: "evt-Jr60KmhawN27Tzy"
+    status: past
+    title: "LeJEPA: Provable and Scalable Self-Supervised Learning Without the Heuristics"
+    cover: "https://images.lumacdn.com/gallery-images/i5/07dddbd8-1b4d-4a2e-98d2-e3bb0df54045.png"
+    summary: "LeJEPA pushes in the opposite direction: instead of stabilizing training with heuristics, it builds a system where the objective itself prevents collapse."
+    description: >-
+      Most self-supervised learning methods work by carefully balancing
+      instability. Remove stop-gradients, momentum encoders, or augmentation
+      tricks, and they collapse. We’ve gotten strong results, but not a clean
+      understanding of why they work. LeJEPA pushes in the opposite direction:
+      instead of stabilizing training with heuristics, it builds a system where
+      the objective itself prevents collapse. The core idea is simple but sharp:
+      learn representations by predicting latent structure across views, while
+      designing the objective so that trivial solutions (e.g., constant
+      embeddings) are provably suboptimal. This removes the need for asymmetric
+      updates used in methods like BYOL or contrastive negatives from SimCLR.
+      Discussion at 20:00, (optional) quiet reading from 19:00.
+    reading:
+      - title: "LeJEPA: Provable and Scalable Self-Supervised Learning Without the Heuristics"
+        url: "https://arxiv.org/pdf/2511.08544"
+  - num: 3
+    slug: "6iekrw4k"
+    evt: "evt-djk4VogmHL77Hfv"
+    status: past
+    title: "Tiny Recursive Models"
+    cover: "https://images.unsplash.com/photo-1655635643486-a17bc48771ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjQyMjF8MHwxfHNlYXJjaHw1OHx8YWl8ZW58MHx8fHwxNzczMjc3MjY0fDI&ixlib=rb-4.1.0&q=80&w=1080"
+    summary: "Using just a single 2-layer network with 7M parameters, TRM outperforms much larger language models by recursively refining both its current answer and internal reasoning state."
+    description: >-
+      This paper introduces Tiny Recursive Models (TRM), which drastically
+      simplifies previous hierarchical reasoning approaches while achieving
+      better performance on puzzle tasks like Sudoku and ARC-AGI. Using just a
+      single 2-layer network with 7M parameters, TRM outperforms much larger
+      language models by recursively refining both its current answer and
+      internal reasoning state. The work challenges conventional scaling wisdom
+      by showing that smaller networks with deeper recursion can outperform
+      larger models, offering a parameter-efficient approach to complex
+      reasoning tasks. Discussion at 20:00, (optional) quiet reading from 19:00.
+    reading:
+      - title: "Less is More: Recursive Reasoning with Tiny Networks"
+        url: "https://alexiajm.github.io/2025/09/29/tiny_recursive_models.html"
+      - title: "The Hidden Drivers of HRM’s Performance on ARC-AGI (optional, recommended blog post)"
+        url: "https://arcprize.org/blog/hrm-analysis"
+  - num: 4
+    slug: "sact70yu"
+    evt: "evt-UBgzSJNI7besnJp"
+    status: past
+    title: "Touching the Elephant — TPUs"
+    cover: "https://images.lumacdn.com/uploads/qe/e05f54e2-b550-486e-84b6-c40691c4b6d9.png"
+    summary: "What if the real moat in AI isn’t the model, but the chip? Should AI run on custom silicon or general-purpose chips?"
+    description: >-
+      What if the real moat in AI isn’t the model, but the chip? Should AI run
+      on custom silicon or general-purpose chips? This article is a deep dive
+      into the history and architecture of Google’s Tensor Processing Units
+      (TPUs) — custom silicon that now powers the world’s most advanced AI
+      models. Reed Oliver traces how Google moved away from general-purpose chips
+      to build dedicated, “monastic” hardware optimised for one thing: matrix
+      multiplication at scale. The piece explores why Google made the bet on
+      custom hardware when GPUs were already dominant, what makes TPUs
+      architecturally different, and how that decision reshaped the broader AI
+      industry — from training costs to the competitive landscape. Discussion at
+      8 pm, (optional) quiet reading from 7 pm.
+    reading:
+      - title: "Touching the Elephant — Reed Oliver"
+        url: "https://considerthebulldog.com/tte-tpu/"
+  - num: 5
+    slug: "kpf9zriu"
+    evt: "evt-Ldd7152eF3yPzrb"
+    status: upcoming
+    title: "Attention Residuals"
+    cover: "https://images.lumacdn.com/gallery-images/87/0b766ae1-14a6-4eae-925f-75e0515c671f.png"
+    summary: "Is network depth just another sequence to attend over? What if the residual stream — not attention — is the real bottleneck in deep models?"
+    description: >-
+      Is network depth just another sequence to attend over? What if the
+      residual stream — not attention — is the real bottleneck in deep models?
+      This paper introduces Attention Residuals (AttnRes), a new architectural
+      mechanism that rethinks how information flows through modern LLMs. The
+      central problem: standard residual connections with PreNorm accumulate
+      every layer’s output using fixed unit weights — a uniform aggregation that
+      causes uncontrolled hidden-state growth with depth and progressively
+      dilutes each layer’s unique contribution. To overcome this, the authors
+      replace fixed accumulation with a softmax attention mechanism over
+      preceding layer outputs, letting each layer selectively aggregate earlier
+      representations using learned, input-dependent weights — the same
+      linear-to-softmax leap that once transformed sequence modeling, now applied
+      to depth. Discussion at 8 pm, (optional) quiet reading from 7 pm.
+    reading:
+      - title: "Attention Residuals — Kimi Team"
+        url: "https://arxiv.org/pdf/2603.15031"

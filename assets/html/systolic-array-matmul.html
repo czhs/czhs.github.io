@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weight-stationary systolic array — matrix multiply animation</title>
+<style>
+  /* ---- Demo page chrome (delete if embedding) ---- */
+  body{margin:0;padding:2rem 1rem;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+       background:#fafaf7;color:#1a1a18;display:flex;justify-content:center;}
+  @media (prefers-color-scheme:dark){body{background:#1b1b19;color:#ececea;}}
+
+  /* ================= COMPONENT: scoped under #mac-viz ================= */
+  #mac-viz{
+    --bg-primary:#ffffff;--bg-secondary:#f3f2ec;
+    --text-primary:#1a1a18;--text-secondary:#5f5e5a;--text-tertiary:#8a8980;
+    --border:#e2e0d8;--border-strong:#cac8be;--radius:8px;
+    --k0b:#EEEDFE;--k0t:#3C3489;--k0e:#7F77DD;
+    --k1b:#E1F5EE;--k1t:#0F6E56;--k1e:#1D9E75;
+    --k2b:#FAECE7;--k2t:#993C1D;--k2e:#D85A30;
+    max-width:680px;margin:0 auto;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    color:var(--text-primary);line-height:1.5;
+  }
+  @media (prefers-color-scheme:dark){
+    #mac-viz{
+      --bg-primary:#2a2a27;--bg-secondary:#232320;
+      --text-primary:#ececea;--text-secondary:#b4b2a9;--text-tertiary:#888780;
+      --border:#3a3a36;--border-strong:#4a4a45;
+      --k0b:#3C3489;--k0t:#CECBF6;--k0e:#7F77DD;
+      --k1b:#085041;--k1t:#9FE1CB;--k1e:#1D9E75;
+      --k2b:#712B13;--k2t:#F5C4B3;--k2e:#D85A30;
+    }
+  }
+  #mac-viz *{box-sizing:border-box;}
+  #mac-viz button{
+    font:inherit;font-size:14px;padding:7px 12px;border:0.5px solid var(--border-strong);
+    background:transparent;color:var(--text-primary);border-radius:var(--radius);cursor:pointer;
+    transition:background .15s,transform .05s;
+  }
+  #mac-viz button:hover{background:var(--bg-secondary);}
+  #mac-viz button:active{transform:scale(0.98);}
+  #mac-viz input[type=range]{accent-color:var(--k0e);cursor:pointer;}
+  #mac-viz .lbl{font-size:12px;color:var(--text-secondary);margin:0 0 6px;}
+  #mac-viz .key{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text-secondary);}
+  #mac-viz .dot{width:11px;height:11px;border-radius:3px;display:inline-block;}
+  #mac-viz .cell{border:0.5px solid var(--border);border-radius:var(--radius);
+    background:var(--bg-primary);position:relative;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
+</style>
+</head>
+<body>
+
+<div id="mac-viz">
+  <h2 class="sr-only">Animated 3 by 3 weight-stationary systolic array computing C = X times W one clock cycle at a time.</h2>
+
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+    <button id="play" style="min-width:84px;">&#9654; Play</button>
+    <button id="back">&#9664; Step</button>
+    <button id="fwd">Step &#9654;</button>
+    <button id="reset">Reset</button>
+    <span style="font-size:14px;color:var(--text-secondary);margin-left:4px;">Cycle</span>
+    <span id="cyc" style="font-size:20px;font-weight:500;min-width:18px;">0</span>
+    <span style="flex:1;"></span>
+    <span style="font-size:12px;color:var(--text-secondary);">slow</span>
+    <input id="spd" type="range" min="250" max="1400" step="50" value="850" style="width:90px;">
+    <span style="font-size:12px;color:var(--text-secondary);">fast</span>
+  </div>
+
+  <div style="display:flex;gap:14px;align-items:flex-start;justify-content:center;flex-wrap:wrap;">
+    <div>
+      <p class="lbl">Inputs <b style="color:var(--text-primary);font-weight:500;">X</b> stream right &rarr;</p>
+      <div id="feed" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+    <div>
+      <p class="lbl">Weights <b style="color:var(--text-primary);font-weight:500;">W</b> resident &middot; sums fall &darr;</p>
+      <div id="array" style="display:grid;grid-template-columns:repeat(3,74px);grid-template-rows:repeat(3,74px);gap:8px;"></div>
+    </div>
+    <div>
+      <p class="lbl">Result <b style="color:var(--text-primary);font-weight:500;">C = X&middot;W</b></p>
+      <div id="out" style="display:grid;grid-template-columns:repeat(3,50px);grid-template-rows:repeat(3,50px);gap:6px;"></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:16px;margin:14px 0 10px;flex-wrap:wrap;">
+    <span class="key"><span class="dot" style="background:var(--k0e);"></span> vector 0 &rarr; row 0 of C</span>
+    <span class="key"><span class="dot" style="background:var(--k1e);"></span> vector 1 &rarr; row 1 of C</span>
+    <span class="key"><span class="dot" style="background:var(--k2e);"></span> vector 2 &rarr; row 2 of C</span>
+  </div>
+
+  <div id="readout" style="min-height:48px;font-size:14px;line-height:1.6;color:var(--text-secondary);
+       border-top:0.5px solid var(--border);padding-top:10px;"></div>
+</div>
+
+<script>
+(function(){
+  const root=document.getElementById('mac-viz');
+  const $=s=>root.querySelector(s);
+  const N=3;
+  const W=[[1,0,2],[0,1,1],[2,1,0]];
+  const X=[[1,2,1],[0,1,3],[2,0,1]];
+  const kv=k=>['--k0','--k1','--k2'][k];
+  const bg=k=>`var(${kv(k)}b)`, tx=k=>`var(${kv(k)}t)`, ed=k=>`var(${kv(k)}e)`;
+  function partial(k,j,upto){let s=0;for(let r=0;r<=upto;r++)s+=X[k][r]*W[r][j];return s;}
+  const MAX=2*(N-1)+2;
+  let t=0, timer=null, playing=false;
+
+  const feedEl=$('#feed'), arrEl=$('#array'), outEl=$('#out'),
+        cycEl=$('#cyc'), roEl=$('#readout');
+
+  function renderFeed(){
+    let h='';
+    for(let i=0;i<N;i++){
+      h+='<div style="display:flex;gap:5px;align-items:center;">';
+      for(let off=N+1;off>=0;off--){
+        const k=t+off-i, has=(k>=0&&k<N);
+        if(has){
+          h+=`<div style="width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;background:${bg(k)};color:${tx(k)};border:0.5px solid ${ed(k)};${off===0?'box-shadow:0 0 0 2px '+ed(k):''}">${X[k][i]}</div>`;
+        } else {
+          h+='<div style="width:24px;height:24px;border-radius:5px;border:0.5px dashed var(--border);"></div>';
+        }
+      }
+      h+='<span style="font-size:11px;color:var(--text-tertiary);">row '+i+'</span></div>';
+    }
+    feedEl.innerHTML=h;
+  }
+
+  function renderArray(){
+    let h='';
+    for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+      const k=t-i-j, active=(k>=0&&k<N), w=W[i][j];
+      if(active){
+        const inp=X[k][i], ps=partial(k,j,i), isOut=(i===N-1);
+        h+=`<div class="cell" style="background:${bg(k)};border-color:${ed(k)};${isOut?'box-shadow:0 0 0 2px '+ed(k):''}">`;
+        h+=`<span style="position:absolute;top:3px;right:5px;font-size:10px;color:var(--text-tertiary);">w=${w}</span>`;
+        h+=`<span style="font-size:22px;font-weight:500;color:${tx(k)};line-height:1;">${ps}</span>`;
+        h+=`<span style="font-size:11px;color:${tx(k)};margin-top:3px;">${inp}&middot;${w}${i>0?' +'+partial(k,j,i-1):''}</span>`;
+        if(i<N-1) h+=`<span style="position:absolute;bottom:-1px;font-size:12px;color:${ed(k)};">&darr;</span>`;
+        h+='</div>';
+      } else {
+        h+=`<div class="cell"><span style="position:absolute;top:3px;right:5px;font-size:10px;color:var(--text-tertiary);">w=${w}</span><span style="font-size:18px;color:var(--border-strong);">&middot;</span></div>`;
+      }
+    }
+    arrEl.innerHTML=h;
+  }
+
+  function renderOut(){
+    let h='';
+    for(let k=0;k<N;k++)for(let j=0;j<N;j++){
+      const done=t>=(k+j+(N-1)), justNow=(t===(k+j+(N-1)));
+      if(done){
+        h+=`<div class="cell" style="background:${bg(k)};border-color:${ed(k)};${justNow?'box-shadow:0 0 0 2px '+ed(k):''}"><span style="font-size:17px;font-weight:500;color:${tx(k)};">${partial(k,j,N-1)}</span></div>`;
+      } else {
+        h+='<div class="cell" style="border-style:dashed;"><span style="color:var(--border-strong);font-size:14px;">&middot;</span></div>';
+      }
+    }
+    outEl.innerHTML=h;
+  }
+
+  function renderReadout(){
+    const done=[];
+    for(let k=0;k<N;k++)for(let j=0;j<N;j++) if(t===(k+j+(N-1))) done.push([k,j]);
+    if(done.length===0){
+      if(t===0) roEl.innerHTML='Weights are parked in the grid. Inputs are about to march in from the left, one diagonal wavefront per cycle.';
+      else if(t>MAX-1) roEl.innerHTML='Done. Every column finished its dot product &mdash; the right-hand grid <b style="color:var(--text-primary);font-weight:500;">is</b> X&middot;W.';
+      else roEl.innerHTML='Partial sums are cascading down the columns &mdash; each step adds one more product to the running total.';
+      return;
+    }
+    let h='Completed this cycle (each = a full column dot product):<br>';
+    done.forEach(([k,j])=>{
+      const terms=[];for(let r=0;r<N;r++)terms.push(`${X[k][r]}&middot;${W[r][j]}`);
+      h+=`<span style="color:${tx(k)};font-weight:500;">C[${k}][${j}]</span> = ${terms.join(' + ')} = <b style="color:var(--text-primary);font-weight:500;">${partial(k,j,N-1)}</b><br>`;
+    });
+    roEl.innerHTML=h;
+  }
+
+  function render(){cycEl.textContent=t;renderFeed();renderArray();renderOut();renderReadout();}
+  function step(d){t=Math.max(0,Math.min(MAX,t+d));render();if(t>=MAX)stop();}
+  function start(){playing=true;$('#play').innerHTML='&#10074;&#10074; Pause';
+    const ms=1450-Number($('#spd').value);
+    timer=setInterval(()=>{if(t>=MAX){stop();return;}step(1);},ms);}
+  function stop(){playing=false;$('#play').innerHTML='&#9654; Play';if(timer)clearInterval(timer);timer=null;}
+
+  $('#play').onclick=()=>{if(playing)stop();else{if(t>=MAX){t=0;render();}start();}};
+  $('#fwd').onclick=()=>{stop();step(1);};
+  $('#back').onclick=()=>{stop();step(-1);};
+  $('#reset').onclick=()=>{stop();t=0;render();};
+  $('#spd').oninput=()=>{if(playing){stop();start();}};
+  render();
+})();
+</script>
+
+</body>
+</html>
