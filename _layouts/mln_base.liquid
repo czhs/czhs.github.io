@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="{{ site.lang }}">
+  <head>
+    {% include head.liquid %}
+    {% include mln_styles.liquid %}
+  </head>
+
+  <body class="mln-site">
+    <header class="mln-masthead">
+      <div class="mln-shell mln-masthead-inner">
+        <a class="mln-brand" href="{{ '/mln/' | relative_url }}">
+          <span class="mln-brand-mark">MLn</span>
+          <span class="mln-brand-sub">Reading Club</span>
+        </a>
+        <nav class="mln-topnav">
+          <a href="{{ '/mln/' | relative_url }}">Weeks</a>
+          <a href="{{ site.data.mln.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">Luma ↗</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mln-shell mln-main" role="main">
+      {{ content }}
+    </main>
+
+    <footer class="mln-foot">
+      <div class="mln-shell mln-foot-inner">
+        <span class="mln-foot-name">MLn Reading Club</span>
+        <span class="mln-foot-dot">·</span>
+        <span>Pittsburgh · Mondays 7–9pm</span>
+        <a class="mln-foot-by" href="{{ '/' | relative_url }}">by Chris Shi</a>
+      </div>
+    </footer>
+
+    {% include scripts.liquid %}
+  </body>
+</html>

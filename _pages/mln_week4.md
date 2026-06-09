@@ -2,6 +2,7 @@
 layout: mln
 permalink: /mln/week-4/
 week: 4
+standalone_title: "Week 4 · Touching the Elephant — TPUs — MLn Reading Club"
 ---
 
 ### Interactive: weight-stationary systolic array

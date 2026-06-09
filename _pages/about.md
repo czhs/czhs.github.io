@@ -40,4 +40,6 @@ Reach me at chrisshi [at] andrew [dot] cmu [dot] edu.
 
 My Substack: [ultrastructure](https://ultrastructure.substack.com/).
 
+I run the [MLn Reading Club](/mln/) — a weekly ML paper reading group in Pittsburgh.
+
 <div style="display: none" aria-hidden="true"><a href="/about/">More about me and my research interests</a></div>

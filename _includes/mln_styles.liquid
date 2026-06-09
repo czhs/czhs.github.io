@@ -1,7 +1,105 @@
 <style>
-/* ── MLn Reading Club ─────────────────────────────────────── */
+/* ── MLn Reading Club — standalone micro-site ─────────────── */
 
-/* intro / hero */
+/* shell: a single centered column for masthead, content, footer */
+.mln-shell {
+  width: 100%;
+  max-width: 940px;
+  margin: 0 auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+body.mln-site { padding: 0; }
+
+/* masthead */
+.mln-masthead {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--global-bg-color);
+  border-bottom: 1px solid var(--global-divider-color);
+  backdrop-filter: saturate(180%) blur(6px);
+}
+.mln-masthead-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+.mln-brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  text-decoration: none;
+  color: var(--global-text-color);
+}
+.mln-brand:hover { text-decoration: none; }
+.mln-brand-mark {
+  font-weight: 800;
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+  color: var(--global-theme-color);
+}
+.mln-brand-sub {
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.mln-topnav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.mln-topnav a {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--global-text-color);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+.mln-topnav a:hover { opacity: 1; color: var(--global-theme-color); text-decoration: none; }
+
+/* main + footer spacing */
+.mln-main { padding-top: 2.5rem; padding-bottom: 3.5rem; min-height: 60vh; }
+.mln-foot {
+  border-top: 1px solid var(--global-divider-color);
+  padding: 1.5rem 0;
+  margin-top: 2rem;
+}
+.mln-foot-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  opacity: 0.75;
+}
+.mln-foot-name { font-weight: 700; opacity: 1; }
+.mln-foot-dot { opacity: 0.5; }
+.mln-foot-by { margin-left: auto; color: var(--global-theme-color); text-decoration: none; }
+.mln-foot-by:hover { text-decoration: underline; }
+
+/* hero (landing) */
+.mln-hero { margin: 0 0 2.25rem; }
+.mln-hero-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 0.75rem;
+}
+.mln-hero-lead {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  max-width: 660px;
+  margin: 0 0 1.25rem;
+}
+
+/* intro / hero (legacy) */
 .mln-intro {
   margin: -0.25rem 0 1.75rem;
   font-size: 0.98rem;
