@@ -1,6 +1,58 @@
 ---
 layout: default
 ---
+{% if page.announcement %}
+  <div class="home-banner" id="home-banner" data-id="{{ page.announcement_id }}" role="region" aria-label="Announcement" hidden>
+    <span class="home-banner-text">{{ page.announcement }}</span>
+    <button type="button" class="home-banner-close" id="home-banner-close" aria-label="Dismiss announcement">&times;</button>
+  </div>
+  <style>
+    .home-banner {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 0 0 2rem;
+      padding: 0.7rem 0.75rem 0.7rem 1rem;
+      border: 1px solid var(--global-divider-color);
+      border-left: 3px solid var(--global-theme-color);
+      border-radius: 8px;
+      background: var(--global-card-bg-color);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+    .home-banner[hidden] { display: none; }
+    .home-banner-text { flex: 1 1 auto; }
+    .home-banner-text a { color: var(--global-theme-color); font-weight: 600; }
+    .home-banner-close {
+      flex: 0 0 auto;
+      background: none;
+      border: 0;
+      font-size: 1.3rem;
+      line-height: 1;
+      color: var(--global-text-color);
+      opacity: 0.45;
+      cursor: pointer;
+      padding: 0 0.3rem;
+      transition: opacity 0.15s ease;
+    }
+    .home-banner-close:hover { opacity: 1; }
+  </style>
+  <script>
+    (function () {
+      var el = document.getElementById('home-banner');
+      if (!el) return;
+      var key = 'home-banner:' + (el.dataset.id || 'default');
+      try { if (localStorage.getItem(key) === '1') return; } catch (e) {}
+      el.hidden = false;
+      var btn = document.getElementById('home-banner-close');
+      if (btn) btn.addEventListener('click', function () {
+        el.hidden = true;
+        try { localStorage.setItem(key, '1'); } catch (e) {}
+      });
+    })();
+  </script>
+{% endif %}
+
 <div class="post">
   <header class="post-header">
     <h1 class="post-title">

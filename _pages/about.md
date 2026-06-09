@@ -13,6 +13,15 @@ profile:
 selected_papers: false
 social: true # includes social icons at the bottom of the page
 
+# Dismissible top banner (replaces al-folio's news feature). Bump announcement_id
+# to re-show the banner to people who previously closed it; clear `announcement`
+# to remove the banner entirely.
+announcement_id: yc-sus-2026
+announcement: >
+  I’ll be in the Bay Area <b>July 25–26</b> for
+  <a href="https://www.startupschool.org/" target="_blank" rel="noopener">YC Startup School</a>
+  — say hi if you’re around!
+
 announcements:
   enabled: false
 
