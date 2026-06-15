@@ -5,7 +5,7 @@ author: Vernor Vinge
 cover: assets/img/book_covers/a_fire_upon_the_deep.jpg
 olid: 
 isbn: 
-categories: 
+categories: sci-fi fiction space-opera
 tags: 
 buy_link: 
 started: 

@@ -5,7 +5,7 @@ author: Gabrielle Zevin
 cover: assets/img/book_covers/tomorrow_and_tomorrow_and_tomorrow.jpg
 olid: 
 isbn: 
-categories: 
+categories: fiction contemporary
 tags: 
 buy_link: 
 started: 2024-07-15

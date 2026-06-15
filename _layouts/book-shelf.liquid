@@ -16,6 +16,39 @@ layout: page
   color: var(--global-text-color-light);
   font-size: 0.95rem;
 }
+.shelf-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0 1.5rem;
+}
+.shelf-filter {
+  cursor: pointer;
+  border: 1px solid var(--global-divider-color);
+  background: transparent;
+  color: var(--global-text-color);
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.shelf-filter:hover {
+  border-color: var(--global-theme-color);
+  color: var(--global-theme-color);
+}
+.shelf-filter.is-active {
+  background: var(--global-theme-color);
+  border-color: var(--global-theme-color);
+  color: #fff;
+}
+.cover.is-hidden {
+  display: none;
+}
+.shelf-empty {
+  color: var(--global-text-color-light);
+  font-style: italic;
+}
 </style>
 
 {% if page.collection and page.collection.size > 0 %}
@@ -65,10 +98,17 @@ layout: page
     {% if other_books and other_books.size > 0 %}
       {% if discuss_books and discuss_books.size > 0 %}<hr class="shelf-divider">{% endif %}
       <h2 id="shelf">my books, in randomized order</h2>
+      <div class="shelf-filters" id="shelf-filters" role="group" aria-label="Filter books by genre">
+        <button class="shelf-filter is-active" data-filter="all">all</button>
+        <button class="shelf-filter" data-filter="fiction">fiction</button>
+        <button class="shelf-filter" data-filter="non-fiction">non-fiction</button>
+        <button class="shelf-filter" data-filter="biography">biography</button>
+        <button class="shelf-filter" data-filter="biology">biology</button>
+      </div>
       {% assign shuffled = other_books | sample: other_books.size %}
       <div class="book-shelf-grid" id="book-shelf-grid">
         {% for item in shuffled %}
-          <figure class="cover">
+          <figure class="cover" data-cats="{{ item.categories | join: ' ' | downcase }}">
             <a class="cover-link" href="{{ item.url | relative_url }}">
               {% if item.cover %}
                 <img alt="{{ item.title }} cover" src="{{ item.cover | prepend: page.covers | relative_url }}" style="height:200px">
@@ -96,6 +136,51 @@ layout: page
           const frag = document.createDocumentFragment();
           items.forEach(el => frag.appendChild(el));
           grid.appendChild(frag);
+        })();
+
+        // Genre filtering. Each cover carries its space-separated categories in
+        // data-cats. "fiction"/"non-fiction" are derived from genre keywords so
+        // books don't all need an explicit fiction/non-fiction token; "biography"
+        // and "biology" match the category token directly.
+        (() => {
+          const grid = document.getElementById('book-shelf-grid');
+          const bar = document.getElementById('shelf-filters');
+          if (!grid || !bar) return;
+
+          const FICTION = ['fiction', 'sci-fi', 'scifi', 'fantasy', 'historical-fiction',
+            'thriller', 'mystery', 'space-opera', 'grimdark', 'romance', 'classics', 'poetry'];
+
+          const matches = (cats, filter) => {
+            const toks = cats.split(/\s+/).filter(Boolean);
+            if (filter === 'all') return true;
+            if (filter === 'fiction') return toks.some(t => FICTION.includes(t));
+            if (filter === 'non-fiction') return !toks.some(t => FICTION.includes(t));
+            return toks.includes(filter); // biography, biology, etc.
+          };
+
+          bar.addEventListener('click', (e) => {
+            const btn = e.target.closest('.shelf-filter');
+            if (!btn) return;
+            const filter = btn.dataset.filter;
+            bar.querySelectorAll('.shelf-filter').forEach(b =>
+              b.classList.toggle('is-active', b === btn));
+
+            let visible = 0;
+            grid.querySelectorAll('.cover').forEach(card => {
+              const show = matches(card.dataset.cats || '', filter);
+              card.classList.toggle('is-hidden', !show);
+              if (show) visible++;
+            });
+
+            let empty = grid.parentNode.querySelector('.shelf-empty');
+            if (!empty) {
+              empty = document.createElement('p');
+              empty.className = 'shelf-empty';
+              empty.textContent = 'no books match that filter yet.';
+              grid.after(empty);
+            }
+            empty.style.display = visible === 0 ? '' : 'none';
+          });
         })();
       </script>
     {% endif %}

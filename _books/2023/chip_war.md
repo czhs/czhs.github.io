@@ -5,7 +5,7 @@ author: Chris Miller
 cover: assets/img/book_covers/chip_war.jpg
 olid:
 isbn:
-categories:
+categories: non-fiction history tech business
 tags:
 buy_link:
 started: 2023-01-01

@@ -5,7 +5,7 @@ author: Ursula K. Le Guin
 cover: assets/img/book_covers/left_hand_of_darkness.jpg
 olid:
 isbn:
-categories:
+categories: sci-fi fiction classics
 tags:
 buy_link:
 started: 2024-01-01
