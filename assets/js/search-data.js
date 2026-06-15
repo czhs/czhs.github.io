@@ -40,11 +40,6 @@ ninja.data = [{
           description: "",
           section: "Books",handler: () => {
               window.location.href = "/books/2024/left_hand_of_darkness/";
-            },},{id: "books-remarkably-bright-creatures",
-          title: 'Remarkably Bright Creatures',
-          description: "",
-          section: "Books",handler: () => {
-              window.location.href = "/books/2024/remarkably_bright_creatures/";
             },},{id: "books-tomorrow-and-tomorrow-and-tomorrow",
           title: 'Tomorrow, and Tomorrow, and Tomorrow',
           description: "",
@@ -105,11 +100,6 @@ ninja.data = [{
           description: "",
           section: "Books",handler: () => {
               window.location.href = "/books/2025/the_forever_war/";
-            },},{id: "books-the-poppy-war",
-          title: 'The Poppy War',
-          description: "",
-          section: "Books",handler: () => {
-              window.location.href = "/books/2025/the_poppy_war/";
             },},{id: "books-the-thinking-machine-nvidia",
           title: 'The Thinking Machine (NVIDIA)',
           description: "",
@@ -130,21 +120,61 @@ ninja.data = [{
           description: "",
           section: "Books",handler: () => {
               window.location.href = "/books/2026/SurrenderExp/";
+            },},{id: "books-an-immense-world",
+          title: 'An Immense World',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/2026/an_immense_world/";
+            },},{id: "books-bad-blood",
+          title: 'Bad Blood',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/2026/bad_blood/";
+            },},{id: "books-behave",
+          title: 'Behave',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/2026/behave/";
+            },},{id: "books-guns-germs-and-steel",
+          title: 'Guns, Germs, and Steel',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/2026/guns_germs_and_steel/";
+            },},{id: "books-i-contain-multitudes",
+          title: 'I Contain Multitudes',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/2026/i_contain_multitudes/";
             },},{id: "books-marooned-in-realtime",
           title: 'Marooned in Realtime',
           description: "",
           section: "Books",handler: () => {
               window.location.href = "/books/2026/marooned_in_realtime/";
+            },},{id: "books-the-billion-dollar-molecule",
+          title: 'The Billion-Dollar Molecule',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/2026/the_billion_dollar_molecule/";
             },},{id: "books-the-peace-war",
           title: 'The Peace War',
           description: "",
           section: "Books",handler: () => {
               window.location.href = "/books/2026/the_peace_war/";
+            },},{id: "books-the-snowball",
+          title: 'The Snowball',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/2026/the_snowball/";
             },},{id: "books-time-is-a-mother",
           title: 'Time is a Mother',
           description: "",
           section: "Books",handler: () => {
               window.location.href = "/books/2026/time_is_a_mother/";
+            },},{id: "books-why-we-sleep",
+          title: 'Why We Sleep',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/2026/why_we_sleep/";
             },},{id: "books-this-is-how-you-lose-the-time-war",
           title: 'This Is How You Lose the Time War',
           description: "",
