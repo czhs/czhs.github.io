@@ -17,17 +17,21 @@ social: true # includes social icons at the bottom of the page
 # to re-show the banner to people who previously closed it; clear `announcement`
 # to remove the banner entirely.
 announcement_id: yc-sus-2026
+announcement_expires: 2026-07-26
 announcement: >
   I’ll be in the Bay Area <b>July 25–26</b> for
   <a href="https://www.startupschool.org/" target="_blank" rel="noopener">YC Startup School</a>
   — say hi if you’re around!
 
-# Additional dismissible banners. Each needs a unique `id` (bump it to re-show)
-# and an `text` (HTML allowed). Remove an entry to drop its banner.
+# Additional dismissible banners. Each needs a unique `id` (bump it to re-show),
+# a `text` (HTML allowed), and an optional `expires` date (YYYY-MM-DD) after
+# which the banner auto-hides. Remove an entry to drop its banner.
 banners:
   - id: escaping-flatland-pgh-2026
+    expires: 2026-07-18
     text: >
-      I’m hosting the <b>Escaping Flatland</b> meetup in Pittsburgh —
+      I’m hosting the <b>Escaping Flatland</b> meetup in Pittsburgh on
+      <b>July 18</b> —
       <a href="https://luma.com/mpdeu6mo" target="_blank" rel="noopener">RSVP on Luma ↗</a>
 
 announcements:
@@ -55,8 +59,9 @@ to talk to you about safely stewarding autoresearch-related technologies.
 
 Reach me at chrisshi [at] andrew [dot] cmu [dot] edu.
 
-My Substack: [ultrastructure](https://ultrastructure.substack.com/).
-
-I run the [MLn Reading Club](/mln/) — a weekly ML paper reading group in Pittsburgh.
+<div class="home-links">
+  <a class="home-link home-link-substack" href="https://ultrastructure.substack.com/" target="_blank" rel="noopener">Read my Substack — ultrastructure <span class="home-link-arrow">→</span></a>
+  <a class="home-link home-link-mln" href="/mln/">MLn Reading Club — weekly ML papers in Pittsburgh <span class="home-link-arrow">→</span></a>
+</div>
 
 <div style="display: none" aria-hidden="true"><a href="/about/">More about me and my research interests</a></div>

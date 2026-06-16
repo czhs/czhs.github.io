@@ -2,18 +2,20 @@
 layout: default
 ---
 {% comment %}
-  Banners: render page.banners (a list of {id, text}). The legacy single
-  announcement / announcement_id pair is still honored and shown first.
+  Banners: render page.banners (a list of {id, text, expires}). The legacy
+  single announcement / announcement_id pair is still honored and shown first.
+  `expires` is an ISO date (YYYY-MM-DD) — the banner auto-hides once that date
+  has passed (checked client-side, so it disappears without a rebuild).
 {% endcomment %}
 {% if page.announcement or page.banners %}
   {% if page.announcement %}
-  <div class="home-banner" data-id="{{ page.announcement_id }}" role="region" aria-label="Announcement" hidden>
+  <div class="home-banner" data-id="{{ page.announcement_id }}" data-expires="{{ page.announcement_expires }}" role="region" aria-label="Announcement" hidden>
     <span class="home-banner-text">{{ page.announcement }}</span>
     <button type="button" class="home-banner-close" aria-label="Dismiss announcement">&times;</button>
   </div>
   {% endif %}
   {% for b in page.banners %}
-  <div class="home-banner" data-id="{{ b.id }}" role="region" aria-label="Announcement" hidden>
+  <div class="home-banner" data-id="{{ b.id }}" data-expires="{{ b.expires }}" role="region" aria-label="Announcement" hidden>
     <span class="home-banner-text">{{ b.text }}</span>
     <button type="button" class="home-banner-close" aria-label="Dismiss announcement">&times;</button>
   </div>
@@ -52,7 +54,14 @@ layout: default
   <script>
     (function () {
       var banners = document.querySelectorAll('.home-banner');
+      // End of "today" in local time, so a banner stays up through its expiry date.
+      var today = new Date(); today.setHours(0, 0, 0, 0);
       Array.prototype.forEach.call(banners, function (el) {
+        var exp = el.dataset.expires;
+        if (exp) {
+          var d = new Date(exp + 'T23:59:59');
+          if (!isNaN(d) && today > d) return; // past its date — leave hidden
+        }
         var key = 'home-banner:' + (el.dataset.id || 'default');
         try { if (localStorage.getItem(key) === '1') return; } catch (e) {}
         el.hidden = false;
@@ -65,6 +74,42 @@ layout: default
     })();
   </script>
 {% endif %}
+
+<style>
+  .home-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 1.5rem 0;
+  }
+  .home-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.95rem;
+    border: 1px solid var(--global-divider-color);
+    border-left-width: 3px;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    color: var(--global-text-color);
+    background: var(--global-card-bg-color);
+    transition: border-color 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .home-link:hover {
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  }
+  .home-link .home-link-arrow { transition: transform 0.15s ease; }
+  .home-link:hover .home-link-arrow { transform: translateX(2px); }
+  .home-link-substack { border-left-color: #ff6719; }
+  .home-link-substack:hover { border-color: #ff6719; color: #ff6719; }
+  .home-link-mln { border-left-color: var(--global-theme-color); }
+  .home-link-mln:hover { border-color: var(--global-theme-color); color: var(--global-theme-color); }
+</style>
 
 <div class="post">
   <header class="post-header">
