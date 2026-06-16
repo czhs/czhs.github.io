@@ -83,11 +83,11 @@ layout: page
           <figure class="cover">
             <a class="cover-link" href="{{ item.url | relative_url }}">
               {% if item.cover %}
-                <img alt="{{ item.title }} cover" src="{{ item.cover | prepend: page.covers | relative_url }}" style="height:200px">
+                <img alt="{{ item.title }} cover" src="{{ item.cover | prepend: page.covers | relative_url }}" loading="lazy" decoding="async" style="height:200px">
               {% elsif item.olid %}
-                <img alt="{{ item.title }} cover" src="http://covers.openlibrary.org/b/olid/{{ item.olid }}-L.jpg?default=false" style="height:200px">
+                <img alt="{{ item.title }} cover" src="https://covers.openlibrary.org/b/olid/{{ item.olid }}-L.jpg?default=false" loading="lazy" decoding="async" style="height:200px">
               {% elsif item.isbn %}
-                <img alt="{{ item.title }} cover" src="http://covers.openlibrary.org/b/isbn/{{ item.isbn }}-L.jpg?default=false" style="height:200px">
+                <img alt="{{ item.title }} cover" src="https://covers.openlibrary.org/b/isbn/{{ item.isbn }}-L.jpg?default=false" loading="lazy" decoding="async" style="height:200px">
               {% endif %}
             </a>
           </figure>
@@ -111,11 +111,11 @@ layout: page
           <figure class="cover" data-cats="{{ item.categories | join: ' ' | downcase }}">
             <a class="cover-link" href="{{ item.url | relative_url }}">
               {% if item.cover %}
-                <img alt="{{ item.title }} cover" src="{{ item.cover | prepend: page.covers | relative_url }}" style="height:200px">
+                <img alt="{{ item.title }} cover" src="{{ item.cover | prepend: page.covers | relative_url }}" loading="lazy" decoding="async" style="height:200px">
               {% elsif item.olid %}
-                <img alt="{{ item.title }} cover" src="http://covers.openlibrary.org/b/olid/{{ item.olid }}-L.jpg?default=false" style="height:200px">
+                <img alt="{{ item.title }} cover" src="https://covers.openlibrary.org/b/olid/{{ item.olid }}-L.jpg?default=false" loading="lazy" decoding="async" style="height:200px">
               {% elsif item.isbn %}
-                <img alt="{{ item.title }} cover" src="http://covers.openlibrary.org/b/isbn/{{ item.isbn }}-L.jpg?default=false" style="height:200px">
+                <img alt="{{ item.title }} cover" src="https://covers.openlibrary.org/b/isbn/{{ item.isbn }}-L.jpg?default=false" loading="lazy" decoding="async" style="height:200px">
               {% endif %}
             </a>
           </figure>

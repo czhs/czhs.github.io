@@ -26,10 +26,23 @@ nav: false
 <ul class="mln-grid">
   {% assign weeks = site.data.mln.weeks | sort: "num" | reverse %}
   {% for w in weeks %}
+  {%- comment -%}
+    Serve a right-sized thumbnail. Luma covers go through its image CDN
+    (cdn-cgi/image) so we fetch a ~640px webp instead of the full-res PNG;
+    Unsplash covers get a width hint on the query string.
+  {%- endcomment -%}
+  {%- assign cover_src = w.cover -%}
+  {%- if w.cover contains 'images.lumacdn.com/' -%}
+    {%- unless w.cover contains 'cdn-cgi/image' -%}
+      {%- assign cover_src = w.cover | replace: 'images.lumacdn.com/', 'images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,quality=75,width=640/' -%}
+    {%- endunless -%}
+  {%- elsif w.cover contains 'images.unsplash.com/' -%}
+    {%- assign cover_src = w.cover | replace: 'w=1080', 'w=640' -%}
+  {%- endif -%}
   <li>
     <a class="mln-card" href="{{ '/mln/week-' | append: w.num | append: '/' | relative_url }}">
       <div class="mln-card-thumb">
-        <img src="{{ w.cover }}" alt="{{ w.title }} cover" loading="lazy">
+        <img src="{{ cover_src }}" alt="{{ w.title }} cover" loading="lazy" decoding="async">
         <span class="mln-status {% if w.status == 'upcoming' %}is-upcoming{% endif %}">{{ w.status }}</span>
       </div>
       <div class="mln-card-body">

@@ -52,7 +52,10 @@ layout: default
     .home-banner-close:hover { opacity: 1; }
   </style>
   <script>
+    // Run after the DOM is parsed so the restore button (further down the page)
+    // exists when this runs — otherwise it would never be revealed.
     (function () {
+    function init() {
       var banners = document.querySelectorAll('.home-banner');
       // End of "today" in local time, so a banner stays up through its expiry date.
       var today = new Date(); today.setHours(0, 0, 0, 0);
@@ -99,6 +102,12 @@ layout: default
         restore.hidden = true;
       });
       refreshRestore();
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
     })();
   </script>
 {% endif %}
