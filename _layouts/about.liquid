@@ -56,21 +56,49 @@ layout: default
       var banners = document.querySelectorAll('.home-banner');
       // End of "today" in local time, so a banner stays up through its expiry date.
       var today = new Date(); today.setHours(0, 0, 0, 0);
-      Array.prototype.forEach.call(banners, function (el) {
+      var restore = document.getElementById('home-banner-restore');
+
+      function keyFor(el) { return 'home-banner:' + (el.dataset.id || 'default'); }
+      function isExpired(el) {
         var exp = el.dataset.expires;
-        if (exp) {
-          var d = new Date(exp + 'T23:59:59');
-          if (!isNaN(d) && today > d) return; // past its date — leave hidden
-        }
-        var key = 'home-banner:' + (el.dataset.id || 'default');
-        try { if (localStorage.getItem(key) === '1') return; } catch (e) {}
+        if (!exp) return false;
+        var d = new Date(exp + 'T23:59:59');
+        return !isNaN(d) && today > d;
+      }
+      function isDismissed(el) {
+        try { return localStorage.getItem(keyFor(el)) === '1'; } catch (e) { return false; }
+      }
+      // Show the "show announcements" button only when something is hidden by
+      // dismissal but is still live (not past its expiry date).
+      function refreshRestore() {
+        if (!restore) return;
+        var any = Array.prototype.some.call(banners, function (el) {
+          return !isExpired(el) && isDismissed(el);
+        });
+        restore.hidden = !any;
+      }
+
+      Array.prototype.forEach.call(banners, function (el) {
+        if (isExpired(el)) return; // past its date — leave hidden
+        if (isDismissed(el)) return;
         el.hidden = false;
         var btn = el.querySelector('.home-banner-close');
         if (btn) btn.addEventListener('click', function () {
           el.hidden = true;
-          try { localStorage.setItem(key, '1'); } catch (e) {}
+          try { localStorage.setItem(keyFor(el), '1'); } catch (e) {}
+          refreshRestore();
         });
       });
+
+      if (restore) restore.addEventListener('click', function () {
+        Array.prototype.forEach.call(banners, function (el) {
+          if (isExpired(el)) return;
+          try { localStorage.removeItem(keyFor(el)); } catch (e) {}
+          el.hidden = false;
+        });
+        restore.hidden = true;
+      });
+      refreshRestore();
     })();
   </script>
 {% endif %}
@@ -109,6 +137,21 @@ layout: default
   .home-link-substack:hover { border-color: #ff6719; color: #ff6719; }
   .home-link-mln { border-left-color: var(--global-theme-color); }
   .home-link-mln:hover { border-color: var(--global-theme-color); color: var(--global-theme-color); }
+
+  .home-banner-restore-wrap { margin: 2.5rem 0 0; text-align: center; }
+  .home-banner-restore[hidden] { display: none; }
+  .home-banner-restore {
+    background: none;
+    border: 0;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    font-family: inherit;
+    color: var(--global-text-color);
+    opacity: 0.45;
+    cursor: pointer;
+    transition: opacity 0.15s ease, color 0.15s ease;
+  }
+  .home-banner-restore:hover { opacity: 1; color: var(--global-theme-color); }
 </style>
 
 <div class="post">
@@ -185,6 +228,14 @@ layout: default
 
     {% if site.newsletter and site.newsletter.enabled and site.footer_fixed %}
       {% include newsletter.liquid center=true %}
+    {% endif %}
+
+    {% if page.announcement or page.banners %}
+      <div class="home-banner-restore-wrap">
+        <button type="button" id="home-banner-restore" class="home-banner-restore" hidden>
+          ↑ Show dismissed announcements
+        </button>
+      </div>
     {% endif %}
   </article>
 </div>
