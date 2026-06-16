@@ -95,7 +95,7 @@ weeks:
   - num: 5
     slug: "kpf9zriu"
     evt: "evt-Ldd7152eF3yPzrb"
-    status: upcoming
+    status: past
     title: "A Mathematical Framework for Transformer Circuits"
     cover: "https://images.lumacdn.com/gallery-images/87/0b766ae1-14a6-4eae-925f-75e0515c671f.png"
     summary: "What does it mean to “fully understand” a model — and is a one-layer transformer just a lookup table? If the residual stream is only a communication channel, where does the computation actually live?"
@@ -116,3 +116,41 @@ weeks:
     reading:
       - title: "A Mathematical Framework for Transformer Circuits — Elhage, Nanda, Olsson, et al. (Anthropic)"
         url: "https://transformer-circuits.pub/2021/framework/index.html"
+  - num: 6
+    slug: "qw3n9205"
+    evt: "evt-yIx5VWUnQde6Bdc"
+    status: upcoming
+    title: "Self-Distillation Enables Continual Learning"
+    cover: "https://images.lumacdn.com/uploads/7i/abcae379-f22d-4d83-8810-87766cbd4f40.png"
+    summary: "Why does on-policy learning dramatically reduce catastrophic forgetting? Does SDFT outperform SFT, RLHF-style pipelines, and continual pre-training?"
+    description: >-
+      Why does on-policy learning dramatically reduce catastrophic forgetting?
+      Does SDFT outperform SFT, RLHF-style pipelines, and continual
+      pre-training? This week we read Self-Distillation Fine-Tuning (SDFT), a
+      framework for continual learning that casts the model as both teacher and
+      student at once — generating its own on-policy training data so it can
+      absorb new tasks while preserving what it already knows. Join us at CASI
+      for discussion at 8 pm, (optional) quiet reading from 7 pm.
+    reading:
+      - title: "Self-Distillation Enables Continual Learning"
+        url: "https://arxiv.org/pdf/2601.19897"
+  - num: 7
+    slug: "okwrdjl7"
+    evt: "evt-UiqEgfiHOo1vTcQ"
+    status: upcoming
+    title: "In-context Learning and Induction Heads"
+    cover: "https://images.lumacdn.com/gallery-images/kq/f2ffdd00-cfd5-4956-8a0a-66d57af05754.png"
+    summary: "When does a model suddenly learn to learn — and can you spot the moment on the loss curve? If a circuit is defined to do nothing but copy random text, why does the same circuit also translate French?"
+    description: >-
+      When does a model suddenly learn to learn — and can you spot the moment on
+      the loss curve? If a circuit is defined to do nothing but copy random
+      text, why does the same circuit also translate French? The sequel to the
+      Mathematical Framework paper, this work argues that induction heads — which
+      complete patterns by finding and copying earlier occurrences — are the
+      mechanism behind most in-context learning, and that the bulk of a model’s
+      in-context ability appears in a sharp phase change exactly when these heads
+      form. Join us at CASI for discussion at 8 pm, (optional) quiet reading from
+      7 pm.
+    reading:
+      - title: "In-context Learning and Induction Heads — Olsson, Elhage, Nanda, et al. (Anthropic)"
+        url: "https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html"
