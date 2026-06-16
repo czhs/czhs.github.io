@@ -22,6 +22,14 @@ announcement: >
   <a href="https://www.startupschool.org/" target="_blank" rel="noopener">YC Startup School</a>
   — say hi if you’re around!
 
+# Additional dismissible banners. Each needs a unique `id` (bump it to re-show)
+# and an `text` (HTML allowed). Remove an entry to drop its banner.
+banners:
+  - id: escaping-flatland-pgh-2026
+    text: >
+      I’m hosting the <b>Escaping Flatland</b> meetup in Pittsburgh —
+      <a href="https://luma.com/mpdeu6mo" target="_blank" rel="noopener">RSVP on Luma ↗</a>
+
 announcements:
   enabled: false
 

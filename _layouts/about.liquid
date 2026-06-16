@@ -1,11 +1,23 @@
 ---
 layout: default
 ---
-{% if page.announcement %}
-  <div class="home-banner" id="home-banner" data-id="{{ page.announcement_id }}" role="region" aria-label="Announcement" hidden>
+{% comment %}
+  Banners: render page.banners (a list of {id, text}). The legacy single
+  announcement / announcement_id pair is still honored and shown first.
+{% endcomment %}
+{% if page.announcement or page.banners %}
+  {% if page.announcement %}
+  <div class="home-banner" data-id="{{ page.announcement_id }}" role="region" aria-label="Announcement" hidden>
     <span class="home-banner-text">{{ page.announcement }}</span>
-    <button type="button" class="home-banner-close" id="home-banner-close" aria-label="Dismiss announcement">&times;</button>
+    <button type="button" class="home-banner-close" aria-label="Dismiss announcement">&times;</button>
   </div>
+  {% endif %}
+  {% for b in page.banners %}
+  <div class="home-banner" data-id="{{ b.id }}" role="region" aria-label="Announcement" hidden>
+    <span class="home-banner-text">{{ b.text }}</span>
+    <button type="button" class="home-banner-close" aria-label="Dismiss announcement">&times;</button>
+  </div>
+  {% endfor %}
   <style>
     .home-banner {
       display: flex;
@@ -39,15 +51,16 @@ layout: default
   </style>
   <script>
     (function () {
-      var el = document.getElementById('home-banner');
-      if (!el) return;
-      var key = 'home-banner:' + (el.dataset.id || 'default');
-      try { if (localStorage.getItem(key) === '1') return; } catch (e) {}
-      el.hidden = false;
-      var btn = document.getElementById('home-banner-close');
-      if (btn) btn.addEventListener('click', function () {
-        el.hidden = true;
-        try { localStorage.setItem(key, '1'); } catch (e) {}
+      var banners = document.querySelectorAll('.home-banner');
+      Array.prototype.forEach.call(banners, function (el) {
+        var key = 'home-banner:' + (el.dataset.id || 'default');
+        try { if (localStorage.getItem(key) === '1') return; } catch (e) {}
+        el.hidden = false;
+        var btn = el.querySelector('.home-banner-close');
+        if (btn) btn.addEventListener('click', function () {
+          el.hidden = true;
+          try { localStorage.setItem(key, '1'); } catch (e) {}
+        });
       });
     })();
   </script>
