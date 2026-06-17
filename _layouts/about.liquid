@@ -161,6 +161,12 @@ layout: default
     transition: opacity 0.15s ease, color 0.15s ease;
   }
   .home-banner-restore:hover { opacity: 1; color: var(--global-theme-color); }
+
+  /* Social icons sit directly under the profile picture, not tucked at the page bottom. */
+  .profile .profile-social { margin-top: 0.85rem; }
+  .profile .profile-social .contact-icons { font-size: 1.7rem; }
+  .profile .profile-social .contact-icons a img,
+  .profile .profile-social .contact-icons a svg { margin-bottom: 0; }
 </style>
 
 <div class="post">
@@ -197,6 +203,16 @@ layout: default
         {% if page.profile.more_info %}
           <div class="more-info">{{ page.profile.more_info }}</div>
         {% endif %}
+
+        <!-- Social (under the profile picture) -->
+        {% if page.social %}
+          <div class="social profile-social">
+            <div class="contact-icons">{% include social.liquid %}</div>
+            {% if site.contact_note and site.contact_note != '' %}
+              <div class="contact-note">{{ site.contact_note }}</div>
+            {% endif %}
+          </div>
+        {% endif %}
       </div>
     {% endif %}
 
@@ -224,15 +240,6 @@ layout: default
         <a href="{{ '/publications/' | relative_url }}" style="color: inherit">selected publications</a>
       </h2>
       {% include selected_papers.liquid %}
-    {% endif %}
-
-    <!-- Social -->
-    {% if page.social %}
-      <div class="social">
-        <div class="contact-icons">{% include social.liquid %}</div>
-
-        <div class="contact-note">{{ site.contact_note }}</div>
-      </div>
     {% endif %}
 
     {% if site.newsletter and site.newsletter.enabled and site.footer_fixed %}
