@@ -1,8 +1,8 @@
 # MLn Reading Club — week-by-week archive.
 # Every card on /mln/ and every /mln/week-N/ page is rendered from this file.
 # All titles / summaries / descriptions are pulled verbatim from each Luma event.
-# To add a week: copy a block, bump `num`, paste the Luma slug + cover_url +
-# the evt id (grep the event page source for "api_id":"evt-" and "cover_url").
+# To add a week manually: copy a block, bump `num`, paste the Luma slug +
+# cover_url + evt id. To sync automatically, run bin/update_mln_from_luma.sh.
 calendar_url: https://luma.com/mln
 contact_url: https://forms.gle/Vr6gxhKGjhsEnwPC7
 weeks:
@@ -154,3 +154,39 @@ weeks:
     reading:
       - title: "In-context Learning and Induction Heads — Olsson, Elhage, Nanda, et al. (Anthropic)"
         url: "https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html"
+  - num: 8
+    slug: "gfk5xp1o"
+    evt: "evt-sYrcAstM80gnHU6"
+    status: upcoming
+    title: "Mapping the neuronal building blocks of human language with language models"
+    cover: "https://images.lumacdn.com/uploads/km/e9ac657e-b6bd-4dab-807c-3caab3f5bb6d.webp"
+    summary: "A full second before you speak a word, some neuron has already decided whether it's a noun or a verb — how does a single cell know your grammar in advance?"
+    description: >-
+      A full second before you speak a word, some neuron has already decided
+      whether it's a noun or a verb — how does a single cell know your grammar
+      in advance? And why do the embeddings from a large language model predict
+      when a neuron in your temporal lobe will fire — what does that say about
+      whether brains and models build language the same way? The paper sketches
+      a cellular-scale map of how the brain assembles words into sentences.
+      Researchers record from hundreds of individual neurons across the human
+      frontotemporal cortex while people speak naturally, then uses natural
+      language processing models to label and track fine-grained linguistic
+      features of each word. Some neurons fire selectively for a word's part of
+      speech or its grammatical relationship to other words; others track
+      higher-order structure — how words group into phrases, where phrases
+      merge, and their sequence. Strikingly, syntax and meaning turned out to be
+      handled largely by separate cells — only a tiny fraction of neurons
+      encoded both syntactic and semantic information — suggesting the two are
+      dissociable at the single-cell level. Contextual embeddings from a large
+      language model (Vicuna) predicted neural activity better than syntax or
+      semantics alone, and that predictivity climbed up to roughly a second
+      before each word was spoken — implying these cells integrate several words
+      of preceding context as they plan speech. Although the neurons were
+      distributed broadly across the cortex, their encoding strength was
+      left-lateralized and varied between regions. Join us at CASI for
+      discussion at 8 pm, and (optional) quiet reading from 7 pm.
+    reading:
+      - title: "Mapping the Neuronal Building Blocks of Human Language with Language Models — Cai, Kfir, Jamali, et al. (Harvard / Mass General)"
+        url: "https://www.nature.com/articles/s41586-026-10691-5"
+      - title: "Nature news (optional paper overview)"
+        url: "https://www.nature.com/articles/d41586-026-01922-w"
