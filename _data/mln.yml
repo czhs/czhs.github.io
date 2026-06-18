@@ -190,3 +190,41 @@ weeks:
         url: "https://www.nature.com/articles/s41586-026-10691-5"
       - title: "Nature news (optional paper overview)"
         url: "https://www.nature.com/articles/d41586-026-01922-w"
+  - num: 9
+    slug: "lbszsb1n"
+    evt: "evt-gcthBtp5jBKOiQo"
+    status: upcoming
+    title: "From Worm to Human"
+    cover: "https://images.lumacdn.com/uploads/km/c297387a-df03-41e1-bb47-bea1a7497ff6.png"
+    summary: "We've had the full wiring diagram of a ~300-neuron worm for decades — and now one for a 140,000-neuron fly. So what actually stands between that and emulating the ~86 billion neurons in your head?"
+    description: >-
+      We've had the full wiring diagram of a ~300-neuron worm for decades — and
+      now one for a 140,000-neuron fly. So what actually stands between that and
+      emulating the ~86 billion neurons in your head? Today's largest AI clusters
+      are already within striking distance of the raw compute a real-time human-
+      brain emulation would need. If the silicon is nearly there, is the real
+      bottleneck the microscope? From Worm to Human: Scaling Brain Emulation Isaak
+      Freeman (MIT, Boyden Lab) This thesis argues that high-quality, biologically
+      faithful emulation of whole brains — starting with model organisms and
+      aiming eventually at humans — is far more tractable than it sounds, and the
+      case comes from bridging four fields that rarely talk to each other:
+      connectomics, functional imaging, neural simulation, and AI hardware.
+      Connectomics has jumped from the only complete connectome being a 302-neuron
+      roundworm to a full adult fruit-fly brain of roughly 140,000 neurons, while
+      the cost to reconstruct a single neuron has fallen from about $16,500 to
+      roughly $100, and functional imaging now reaches near-complete coverage of
+      larval zebrafish brains and around a million cortical neurons in mice.
+      Translating all of this into common units, the author uses order-of-
+      magnitude estimates to reduce whole-brain emulation to concrete hardware
+      demands — and finds that mid-2020s AI clusters (about 4e20 FLOP/s) are
+      already close to a rough estimate of what a real-time human emulation would
+      need (about 6e20 FLOP/s). Crude human-scale simulations of tens of billions
+      of neurons have already been run, though the work carefully distinguishes a
+      true emulation — one that matches a brain's internal causal dynamics at a
+      chosen level of detail — from these proofs-of-concept, and argues that C.
+      elegans, larval zebrafish, and Drosophila are the compelling near-term
+      targets for building the methods needed to scale toward human brains. Join
+      us at CASI for discussion at 8 pm, and (optional) quiet reading from 7 pm.
+    reading:
+      - title: "From Worm to Human: Scaling Brain Emulation"
+        url: "https://pdf.isaak.net/thesis"
