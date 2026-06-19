@@ -7,14 +7,6 @@ nav: true
 nav_order: 9
 ---
 
-<p class="phenomena-link">
-  <a href="{{ '/phenomena/' | relative_url }}">
-    <span class="phenomena-link-label">pokedex of phenomena</span>
-    <span class="phenomena-link-blurb">— mysterious things i can't yet explain</span>
-    <span class="phenomena-link-arrow" aria-hidden="true">→</span>
-  </a>
-</p>
-
 <div class="proj-filter" role="tablist" aria-label="filter projects by tag">
   <button type="button" class="proj-filter-pill is-active" data-tag="all">all</button>
   <button type="button" class="proj-filter-pill" data-tag="research">research</button>
@@ -53,35 +45,6 @@ nav_order: 9
 </ul>
 
 <style>
-/* ── slim phenomena link ──────────────────────────────────── */
-.phenomena-link {
-  margin: -0.25rem 0 2rem;
-  font-size: 0.9rem;
-}
-.phenomena-link a {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.4rem;
-  color: var(--global-text-color);
-  text-decoration: none;
-  opacity: 0.8;
-  transition: opacity 0.15s ease, color 0.15s ease;
-}
-.phenomena-link a:hover {
-  opacity: 1;
-  color: var(--global-theme-color);
-  text-decoration: none;
-}
-.phenomena-link-label {
-  font-weight: 600;
-}
-.phenomena-link-blurb {
-  opacity: 0.7;
-}
-.phenomena-link-arrow {
-  font-size: 0.95rem;
-}
-
 /* ── tag filter row ───────────────────────────────────────── */
 .proj-filter {
   display: flex;

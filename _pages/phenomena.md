@@ -3,6 +3,7 @@ layout: page
 permalink: /phenomena/
 title: pokedex of phenomena
 nav: false
+published: false
 ---
 
 *Under construction.*
