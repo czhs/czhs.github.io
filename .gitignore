@@ -15,3 +15,14 @@ vendor
 
 # local jekyll-serve overlay (excludes large untracked robotics_media/)
 _config_local.yml
+
+# Local-only tooling, never published (e.g. update_mln_from_luma.sh).
+/local/
+
+# Local-only robotics WIP: previewed via jekyll serve, but never tracked/published.
+/_data/robotics.yml
+/_includes/robotics_styles.liquid
+/_layouts/robotics*.liquid
+/_pages/robotics.html
+/_pages/robotics_*.md
+/robotics_media/
