@@ -27,12 +27,6 @@ announcement: >
 # a `text` (HTML allowed), and an optional `expires` date (YYYY-MM-DD) after
 # which the banner auto-hides. Remove an entry to drop its banner.
 banners:
-  - id: escaping-flatland-pgh-2026
-    expires: 2026-07-18
-    text: >
-      I’m hosting the <b>Escaping Flatland</b> meetup in Pittsburgh on
-      <b>July 18</b> —
-      <a href="https://luma.com/mpdeu6mo" target="_blank" rel="noopener">RSVP on Luma ↗</a>
 
 announcements:
   enabled: false
