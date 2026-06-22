@@ -124,6 +124,49 @@ body.mln-site { padding: 0; }
 .mln-cadence a { color: var(--global-theme-color); text-decoration: none; }
 .mln-cadence a:hover { text-decoration: underline; }
 
+/* bring-your-own-paper callout */
+.mln-byop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 0 0 0.5rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--global-divider-color);
+  border-left: 3px solid var(--global-theme-color);
+  border-radius: 12px;
+  background: var(--global-card-bg-color);
+  color: var(--global-text-color);
+  text-decoration: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+.mln-byop:hover {
+  border-color: var(--global-theme-color);
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+.mln-byop-badge {
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  color: var(--global-hover-text-color);
+  background: var(--global-theme-color);
+}
+.mln-byop-text {
+  flex: 1;
+  min-width: 220px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+.mln-byop:hover .mln-byop-text .mln-arrow { transform: translateX(3px); }
+
 /* week grid */
 .mln-grid {
   list-style: none;
