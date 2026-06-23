@@ -124,6 +124,71 @@ body.mln-site { padding: 0; }
 .mln-cadence a { color: var(--global-theme-color); text-decoration: none; }
 .mln-cadence a:hover { text-decoration: underline; }
 
+/* "What's this?" expandable holding the club copy */
+.mln-faq {
+  margin: 0 0 1.75rem;
+  border-top: 1px solid var(--global-divider-color);
+  border-bottom: 1px solid var(--global-divider-color);
+}
+.mln-faq summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 0;
+  font-weight: 700;
+  font-size: 1rem;
+}
+.mln-faq summary::-webkit-details-marker { display: none; }
+.mln-faq summary::before {
+  content: "›";
+  display: inline-block;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--global-theme-color);
+  transition: transform 0.15s ease;
+}
+.mln-faq[open] summary::before { transform: rotate(90deg); }
+.mln-faq[open] summary { padding-bottom: 0.3rem; }
+.mln-faq .mln-about { margin: 0; padding-bottom: 1.1rem; }
+
+/* about: the club copy, arranged as compact plain-text columns (no cards) */
+.mln-about {
+  columns: 3 220px;
+  column-gap: 2rem;
+  margin: 0 0 2rem;
+}
+.mln-about-sec {
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  margin: 0 0 1.3rem;
+}
+.mln-about-h {
+  margin: 0 0 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--global-theme-color);
+  font-family: var(--global-code-font-family, monospace);
+}
+.mln-about-sec p { margin: 0; }
+.mln-about-sec ul { margin: 0; padding-left: 1.05rem; }
+.mln-about-sec li,
+.mln-about-sec p { font-size: 0.9rem; line-height: 1.5; opacity: 0.9; }
+.mln-about-sec li { margin-bottom: 0.3rem; }
+.mln-about-sec li:last-child { margin-bottom: 0; }
+.mln-sched {
+  margin: 0;
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.84rem;
+}
+.mln-sched > div { display: flex; gap: 0.55rem; padding: 0.12rem 0; }
+.mln-sched dt { flex: 0 0 4.4rem; font-weight: 700; opacity: 0.9; }
+.mln-sched dd { margin: 0; opacity: 0.82; }
+@media (max-width: 576px) { .mln-about { columns: 1; } }
+
 /* bring-your-own-paper callout */
 .mln-byop {
   display: block;
