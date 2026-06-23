@@ -11,14 +11,14 @@ ninja.data = [{
     },
   },{id: "nav-bookshelf",
           title: "bookshelf",
-          description: "",
+          description: "Books Chris Shi has read and recommends — a running bookshelf.",
           section: "Navigation",
           handler: () => {
             window.location.href = "/books/";
           },
         },{id: "nav-blog",
           title: "blog",
-          description: "",
+          description: "Writing by Chris Shi on infrastructure and math — biodefense, interpretability, and automation.",
           section: "Navigation",
           handler: () => {
             window.location.href = "/blog/";
