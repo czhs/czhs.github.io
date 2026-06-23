@@ -47,6 +47,9 @@
 {%- if page_description == nil or page_description == '' -%}{%- if mln_week -%}{%- assign page_description = mln_week.summary -%}{%- else -%}{%- assign page_description = site.description -%}{%- endif -%}{%- endif -%}
 {%- assign page_og_image = page.og_image -%}
 {%- if page_og_image == nil or page_og_image == '' -%}{%- if mln_week -%}{%- assign page_og_image = mln_week.cover -%}{%- else -%}{%- assign page_og_image = site.og_image -%}{%- endif -%}{%- endif -%}
+{%- comment -%} Absolutize relative og:image paths so external scrapers (Discord, iMessage, Slack, etc.) can fetch them — they don't resolve site-relative URLs. {%- endcomment -%}
+{%- if page_og_image and page_og_image != '' -%}{%- unless page_og_image contains '://' -%}{%- assign page_og_image = page_og_image | prepend: site.baseurl | prepend: site.url -%}{%- endunless -%}{%- endif -%}
+{%- assign page_description = page_description | strip_newlines | strip -%}
 <meta name="author" content="{{ author_name }}">
 <meta name="description" content="{{ page_description }}">
 {% if page.keywords or site.keywords %}

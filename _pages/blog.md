@@ -2,6 +2,7 @@
 layout: default
 permalink: /blog/
 title: blog
+description: Writing by Chris Shi on infrastructure and math — biodefense, interpretability, and automation.
 nav: true
 nav_order: 1
 pagination:
