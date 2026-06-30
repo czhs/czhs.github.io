@@ -2,7 +2,7 @@
 layout: book-shelf
 title: bookshelf
 permalink: /books/
-description: Books Chris Shi has read and recommends — a running bookshelf.
+description: drop a book rec anytime!
 nav: true
 collection: books
 ---
