@@ -11,7 +11,7 @@ ninja.data = [{
     },
   },{id: "nav-bookshelf",
           title: "bookshelf",
-          description: "Books Chris Shi has read and recommends — a running bookshelf.",
+          description: "drop a book rec anytime!",
           section: "Navigation",
           handler: () => {
             window.location.href = "/books/";
