@@ -119,7 +119,7 @@ weeks:
   - num: 6
     slug: "qw3n9205"
     evt: "evt-yIx5VWUnQde6Bdc"
-    status: upcoming
+    status: past
     title: "Self-Distillation Enables Continual Learning"
     cover: "https://images.lumacdn.com/uploads/7i/abcae379-f22d-4d83-8810-87766cbd4f40.png"
     summary: "Why does on-policy learning dramatically reduce catastrophic forgetting? Does SDFT outperform SFT, RLHF-style pipelines, and continual pre-training?"
@@ -137,9 +137,9 @@ weeks:
   - num: 7
     slug: "okwrdjl7"
     evt: "evt-UiqEgfiHOo1vTcQ"
-    status: upcoming
+    status: past
     title: "In-context Learning and Induction Heads"
-    cover: "https://images.lumacdn.com/gallery-images/kq/f2ffdd00-cfd5-4956-8a0a-66d57af05754.png"
+    cover: "https://images.lumacdn.com/uploads/2n/b777d557-7995-4db7-9060-373e6f4b910f.png"
     summary: "When does a model suddenly learn to learn — and can you spot the moment on the loss curve? If a circuit is defined to do nothing but copy random text, why does the same circuit also translate French?"
     description: >-
       When does a model suddenly learn to learn — and can you spot the moment on
@@ -191,6 +191,38 @@ weeks:
       - title: "Nature news (optional paper overview)"
         url: "https://www.nature.com/articles/d41586-026-01922-w"
   - num: 9
+    slug: "chg317s6"
+    evt: "evt-JHuwaV0TYNDoV1j"
+    status: upcoming
+    title: "Nested Learning: The Illusion of Deep Learning Architectures"
+    cover: "https://images.lumacdn.com/uploads/hn/f998a170-4336-4792-9e63-32da498ce33e.png"
+    summary: "How might nested optimization structures allow models to generalize more efficiently by reusing global representations while adapting locally to new tasks? Could the hierarchical nature of nested learning make large models inherently more resilient to poisoning or backdoor attempts by isolating adversarial influence within inner-loop adaptations?"
+    description: >-
+      How might nested optimization structures allow models to generalize more
+      efficiently by reusing global representations while adapting locally to new
+      tasks? Could the hierarchical nature of nested learning make large models
+      inherently more resilient to poisoning or backdoor attempts by isolating
+      adversarial influence within inner-loop adaptations? A recent study by
+      Google Research introduces Nested Learning (NL): a new paradigm that
+      redefines deep learning as a hierarchy of nested optimization problems
+      rather than stacked layers. The authors argue that modern neural networks,
+      including Transformers, effectively compress their own context flow, and
+      that in-context learning emerges naturally from this internal compression
+      process. Through this framework, common algorithms such as SGD and Adam are
+      reinterpreted as associative memory modules that store and adapt to
+      gradient information. Building on these insights, the paper presents HOPE, a
+      self-referential model that learns to modify its own update rules using a
+      continuum memory system inspired by human neuroplasticity. Empirical results
+      across language modeling and reasoning benchmarks show that HOPE outperforms
+      recent architectures like DeltaNet and Titans, particularly in long-context
+      reasoning and continual learning. These findings suggest a new direction for
+      AI model design, toward systems that learn across multiple timescales and
+      self-optimize beyond traditional backpropagation. Join us at CASI for
+      discussion at 8 pm, and (optional) quiet reading from 7 pm.
+    reading:
+      - title: "Nested Learning: The Illusion of Deep Learning Architectures — Behrouz et al. (Google Research)"
+        url: "https://abehrouz.github.io/files/NL.pdf"
+  - num: 10
     slug: "lbszsb1n"
     evt: "evt-gcthBtp5jBKOiQo"
     status: upcoming
