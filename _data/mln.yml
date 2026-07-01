@@ -1,8 +1,8 @@
 # MLn Reading Club — week-by-week archive.
 # Every card on /mln/ and every /mln/week-N/ page is rendered from this file.
 # All titles / summaries / descriptions are pulled verbatim from each Luma event.
-# To add a week manually: copy a block, bump `num`, paste the Luma slug +
-# cover_url + evt id. To sync automatically, run bin/update_mln_from_luma.sh.
+# To add a week: copy a block, bump `num`, paste the Luma slug + evt id +
+# cover_url. Sync is manual — pull the current state from https://luma.com/mln.
 calendar_url: https://luma.com/mln
 contact_url: https://forms.gle/Vr6gxhKGjhsEnwPC7
 weeks:
@@ -155,8 +155,8 @@ weeks:
       - title: "In-context Learning and Induction Heads — Olsson, Elhage, Nanda, et al. (Anthropic)"
         url: "https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html"
   - num: 8
-    slug: "gfk5xp1o"
-    evt: "evt-sYrcAstM80gnHU6"
+    slug: "ov4cf4jy"
+    evt: "evt-WYLAOC0uKYiofUb"
     status: upcoming
     title: "Mapping the neuronal building blocks of human language with language models"
     cover: "https://images.lumacdn.com/uploads/km/e9ac657e-b6bd-4dab-807c-3caab3f5bb6d.webp"
@@ -191,11 +191,11 @@ weeks:
       - title: "Nature news (optional paper overview)"
         url: "https://www.nature.com/articles/d41586-026-01922-w"
   - num: 9
-    slug: "chg317s6"
-    evt: "evt-JHuwaV0TYNDoV1j"
+    slug: "gfk5xp1o"
+    evt: "evt-sYrcAstM80gnHU6"
     status: upcoming
     title: "Nested Learning: The Illusion of Deep Learning Architectures"
-    cover: "https://images.lumacdn.com/uploads/hn/f998a170-4336-4792-9e63-32da498ce33e.png"
+    cover: "https://images.lumacdn.com/uploads/cs/880fc699-e930-41e2-b892-d7de04dac10f.png"
     summary: "How might nested optimization structures allow models to generalize more efficiently by reusing global representations while adapting locally to new tasks? Could the hierarchical nature of nested learning make large models inherently more resilient to poisoning or backdoor attempts by isolating adversarial influence within inner-loop adaptations?"
     description: >-
       How might nested optimization structures allow models to generalize more
@@ -260,3 +260,83 @@ weeks:
     reading:
       - title: "From Worm to Human: Scaling Brain Emulation"
         url: "https://pdf.isaak.net/thesis"
+  - num: 11
+    slug: "5wvhx171"
+    evt: "evt-r6zcq5sAFOwiOEh"
+    status: upcoming
+    title: "Manifold-Constrained Hyper-Connections"
+    cover: "https://images.lumacdn.com/gallery-images/wx/3b0a8406-85d0-426f-a10d-f00084982b88.png"
+    summary: "How does constraining residual connections to a geometric manifold restore identity mappings and enable stable scaling in large language models? Can richer cross-layer connectivity improve reasoning and representation quality without sacrificing optimization stability?"
+    description: >-
+      How does constraining residual connections to a geometric manifold restore
+      identity mappings and enable stable scaling in large language models? Can
+      richer cross-layer connectivity improve reasoning and representation
+      quality without sacrificing optimization stability? DeepSeek’s
+      Manifold-Constrained Hyper-Connections (mHC) introduce a principled fix to
+      recent attempts at widening residual streams. While Hyper-Connections
+      improve performance by allowing richer cross-layer mixing, their
+      unconstrained residual matrices break the identity-mapping property that
+      makes deep networks trainable, leading to severe instability at scale. mHC
+      resolves this by projecting residual mixing matrices onto the manifold of
+      doubly stochastic matrices, ensuring residual updates remain convex
+      combinations of features and preserving signal magnitude across depth.
+      Empirically, this constraint dramatically stabilizes training in large
+      language models, eliminating gradient explosions observed in unconstrained
+      HC while retaining its performance gains. With careful systems
+      co-design—kernel fusion, recomputation, and pipeline overlap—mHC incurs
+      only ~6–7% overhead at 27B scale, while consistently improving downstream
+      reasoning benchmarks. The result reframes architectural scaling as a
+      geometric constraint problem, showing that richer connectivity can be
+      safely exploited when paired with mathematically grounded structure rather
+      than ad-hoc regularization. Join us at CASI for discussion at 8 pm, and
+      (optional) quiet reading from 7 pm.
+    reading:
+      - title: "mHC: Manifold-Constrained Hyper-Connections — DeepSeek"
+        url: "https://www.arxiv.org/pdf/2512.24880"
+  - num: 12
+    slug: "srsz8rga"
+    evt: "evt-v89wbXHXDCt5bik"
+    status: upcoming
+    title: "Attention Residuals: Rethinking Information Flow in LLMs"
+    cover: "https://images.lumacdn.com/gallery-images/l6/26a28b85-5c4f-4d9a-a09a-e401c29ce330.png"
+    summary: "Standard residual connections with PreNorm accumulate every layer’s output with fixed unit weights, letting the hidden state grow uncontrollably with depth and diluting each layer’s unique contribution — what if each layer could instead learn which earlier representations to read from?"
+    description: >-
+      Standard residual connections with PreNorm accumulate every layer’s output
+      with fixed unit weights, letting the hidden state grow uncontrollably with
+      depth and diluting each layer’s unique contribution — what if each layer
+      could instead learn which earlier representations to read from? This paper
+      introduces Attention Residuals (AttnRes), a novel architectural mechanism
+      by the Kimi Team designed to rethink how information flows in modern Large
+      Language Models. The central challenge is that standard residual
+      connections with PreNorm accumulate all layer outputs using fixed unit
+      weights; this uniform aggregation causes uncontrolled hidden-state growth
+      with depth, progressively diluting each layer’s unique contribution. To
+      overcome this limitation, the authors replace the fixed accumulation with a
+      softmax attention mechanism over preceding layer outputs, allowing each
+      layer to selectively aggregate earlier representations using learned,
+      input-dependent weights. Join us at CASI for discussion at 8 pm, and
+      (optional) quiet reading from 7 pm.
+    reading:
+      - title: "Attention Residuals: Rethinking Information Flow in LLMs — Kimi Team"
+        url: "https://arxiv.org/pdf/2603.15031"
+  - num: 13
+    slug: "lh8qgar2"
+    evt: "evt-FqbMX8pVOgTu3xT"
+    status: upcoming
+    title: "Fundamental Limitations of Single-Vector Embeddings"
+    cover: "https://images.lumacdn.com/gallery-images/s0/94a98dc7-f16e-4e74-b733-4b62747a738d.png"
+    summary: "Why does something as simple as “finding people who like apples” break our best models? What do alternatives like multi-vector models or cross-encoders mean for real products?"
+    description: >-
+      Why does something as simple as “finding people who like apples” break our
+      best models? What do alternatives like multi-vector models or
+      cross-encoders mean for real products? This research establishes a
+      fundamental mathematical constraint in dense retrieval: embedding models
+      cannot represent all possible top-k combinations of relevant documents
+      simultaneously. Weller et al. demonstrate this through both theory and a
+      clever benchmark (LIMIT) where even advanced state-of-the-art models
+      struggle with trivially simple queries, suggesting important implications
+      for instruction-following retrieval systems. Join us at CASI for discussion
+      at 8 pm, and (optional) quiet reading from 7 pm.
+    reading:
+      - title: "On the Theoretical Limitations of Embedding-Based Retrieval — Weller et al."
+        url: "https://arxiv.org/abs/2508.21038"
