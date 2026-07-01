@@ -63,7 +63,7 @@ body.mln-site { padding: 0; }
 .mln-topnav a:hover { opacity: 1; color: var(--global-theme-color); text-decoration: none; }
 
 /* main + footer spacing */
-.mln-main { padding-top: 2.5rem; padding-bottom: 3.5rem; min-height: 60vh; }
+.mln-main { padding-top: 1.5rem; padding-bottom: 3.5rem; min-height: 60vh; }
 .mln-foot {
   border-top: 1px solid var(--global-divider-color);
   padding: 1.5rem 0;
@@ -83,20 +83,20 @@ body.mln-site { padding: 0; }
 .mln-foot-by:hover { text-decoration: underline; }
 
 /* hero (landing) */
-.mln-hero { margin: 0 0 2.25rem; }
+.mln-hero { margin: 0 0 1.35rem; }
 .mln-hero-title {
-  font-size: 2.1rem;
+  font-size: 1.85rem;
   font-weight: 800;
   letter-spacing: -0.02em;
-  line-height: 1.1;
-  margin: 0 0 0.75rem;
+  line-height: 1.08;
+  margin: 0 0 0.5rem;
 }
 .mln-hero-lead {
-  font-size: 1.02rem;
-  line-height: 1.6;
+  font-size: 0.95rem;
+  line-height: 1.5;
   opacity: 0.9;
   max-width: 660px;
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.85rem;
 }
 
 /* intro / hero (legacy) */
@@ -111,7 +111,7 @@ body.mln-site { padding: 0; }
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-  margin: 0 0 1.75rem;
+  margin: 0 0 1rem;
   font-family: var(--global-code-font-family, monospace);
   font-size: 0.8rem;
   opacity: 0.8;
@@ -126,7 +126,7 @@ body.mln-site { padding: 0; }
 
 /* "What's this?" expandable holding the club copy */
 .mln-faq {
-  margin: 0 0 1.75rem;
+  margin: 0 0 1rem;
   border-top: 1px solid var(--global-divider-color);
   border-bottom: 1px solid var(--global-divider-color);
 }
@@ -136,9 +136,9 @@ body.mln-site { padding: 0; }
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.8rem 0;
+  padding: 0.6rem 0;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 .mln-faq summary::-webkit-details-marker { display: none; }
 .mln-faq summary::before {
@@ -193,7 +193,7 @@ body.mln-site { padding: 0; }
 .mln-byop {
   display: block;
   margin: 0 0 0.5rem;
-  padding: 1.15rem 1.3rem;
+  padding: 0.95rem 1.2rem;
   border: 1px solid var(--global-divider-color);
   border-left: 3px solid var(--global-theme-color);
   border-radius: 12px;
@@ -210,7 +210,7 @@ body.mln-site { padding: 0; }
 }
 .mln-byop-badge {
   display: inline-block;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.6rem;
   font-family: var(--global-code-font-family, monospace);
   font-size: 0.72rem;
   font-weight: 700;
@@ -223,10 +223,10 @@ body.mln-site { padding: 0; }
 }
 .mln-byop-p {
   display: block;
-  font-size: 0.9rem;
-  line-height: 1.6;
+  font-size: 0.88rem;
+  line-height: 1.5;
   opacity: 0.9;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.5rem;
 }
 .mln-byop-lead {
   font-size: 1rem;
@@ -363,6 +363,129 @@ body.mln-site { padding: 0; }
 }
 .mln-card:hover .mln-card-cta .mln-arrow { transform: translateX(3px); }
 .mln-arrow { transition: transform 0.15s ease; display: inline-block; }
+
+/* meeting date, right-aligned in the card eyebrow */
+.mln-date {
+  margin-left: auto;
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  opacity: 0.6;
+}
+
+/* current week — the session members should be reading for right now */
+.mln-card.is-current {
+  border-color: var(--global-theme-color);
+  background: var(--global-card-bg-color);
+  box-shadow: 0 0 0 1px var(--global-theme-color), 0 6px 22px rgba(0, 0, 0, 0.10);
+}
+.mln-card.is-current:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px var(--global-theme-color), 0 10px 26px rgba(0, 0, 0, 0.14);
+}
+.mln-card.is-current .mln-status { display: none; }
+.mln-current-flag {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  z-index: 2;
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.16rem 0.55rem;
+  border-radius: 999px;
+  color: var(--global-hover-text-color);
+  background: var(--global-theme-color);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* "+N more weeks" toggle — shaped like a week card, expands the far weeks */
+.mln-far-week { display: none; }
+.mln-grid.mln-expanded .mln-far-week { display: block; }
+
+.mln-more-li { margin: 0; }
+.mln-more-card {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  min-height: 240px;
+  overflow: hidden;
+  cursor: pointer;
+  font: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.mln-more-card:hover {
+  border-color: var(--global-theme-color);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+/* full-bleed mosaic of the covers hidden behind the toggle — the layout
+   adapts to how many weeks are hidden (1–4 previews) so it always fills. */
+.mln-more-thumbs {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+  background: var(--global-card-bg-color);
+}
+.mln-more-thumbs.mln-thumbs-1 { grid-template-columns: 1fr; grid-template-rows: 1fr; }
+.mln-more-thumbs.mln-thumbs-2 { grid-template-rows: 1fr; }
+.mln-more-thumbs.mln-thumbs-3 img:first-child { grid-row: span 2; }
+.mln-more-thumbs img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.mln-more-card:hover .mln-more-thumbs img { transform: scale(1.05); }
+/* scrim so the label stays legible over the covers */
+.mln-more-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.20) 55%, rgba(0, 0, 0, 0.34));
+}
+.mln-more-text {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  text-align: center;
+  color: #fff;
+}
+.mln-more-icon {
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 2.1rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+}
+.mln-more-label {
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+  align-items: center;
+  gap: 0.35rem;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.65);
+}
+.mln-more-open { display: inline-flex; }
+.mln-more-close { display: none; }
+.mln-grid.mln-expanded .mln-more-open { display: none; }
+.mln-grid.mln-expanded .mln-more-close { display: inline-flex; }
+.mln-more-card:hover .mln-arrow { transform: translateY(2px); }
 
 /* ── detail page ──────────────────────────────────────────── */
 .mln-back {

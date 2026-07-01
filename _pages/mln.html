@@ -9,7 +9,7 @@ nav: false
 ---
 
 <section class="mln-hero">
-  <h1 class="mln-hero-title">A weekly ML ’n other topics reading group.</h1>
+  <h1 class="mln-hero-title">A weekly ML ’n related topics reading group.</h1>
   <p class="mln-hero-lead">
     We meet weekly on Mondays in person to talk about new ML papers! As always,
     optional quiet reading from 7 pm, discussion starts 8 pm. Come and join the
@@ -93,36 +93,68 @@ nav: false
 </section>
 
 <ul class="mln-grid">
-  {% assign weeks = site.data.mln.weeks | sort: "num" | reverse %}
-  {% for w in weeks %}
   {%- comment -%}
-    Serve a right-sized thumbnail. Luma covers go through its image CDN
-    (cdn-cgi/image) so we fetch a ~640px webp instead of the full-res PNG;
-    Unsplash covers get a width hint on the query string.
+    Ordered by real meeting date, newest→oldest (left→right), not `num`. Only the
+    coming week (next meeting) shows as a standalone card, flagged "reading now".
+    Every other upcoming week collapses behind the dropdown card, which sits first
+    (left of the coming week). Past weeks follow, most recent first. Layout when
+    collapsed: [dropdown] [this week] [past…]; expanded inserts the future weeks
+    (newest first) between the dropdown and the coming week.
   {%- endcomment -%}
-  {%- assign cover_src = w.cover -%}
-  {%- if w.cover contains 'images.lumacdn.com/' -%}
-    {%- unless w.cover contains 'cdn-cgi/image' -%}
-      {%- assign cover_src = w.cover | replace: 'images.lumacdn.com/', 'images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,quality=75,width=640/' -%}
-    {%- endunless -%}
-  {%- elsif w.cover contains 'images.unsplash.com/' -%}
-    {%- assign cover_src = w.cover | replace: 'w=1080', 'w=640' -%}
+  {%- assign today_str = site.time | date: "%Y-%m-%d" -%}
+  {%- assign upcoming = site.data.mln.weeks | where_exp: "w", "w.date >= today_str" | sort: "date" -%}
+  {%- assign past = site.data.mln.weeks | where_exp: "w", "w.date < today_str" | sort: "date" | reverse -%}
+  {%- assign coming = upcoming | first -%}
+  {%- assign current_slug = coming.slug -%}
+  {%- assign future = upcoming | where_exp: "w", "w.slug != current_slug" | sort: "date" | reverse -%}
+
+  {%- if future.size > 0 -%}
+    <li class="mln-more-li">
+      <button type="button" id="mln-more-btn" class="mln-card mln-more-card" aria-expanded="false">
+        {%- assign preview_count = future.size -%}
+        {%- if preview_count > 4 -%}{%- assign preview_count = 4 -%}{%- endif -%}
+        <span class="mln-more-thumbs mln-thumbs-{{ preview_count }}" aria-hidden="true">
+          {%- for w in future limit: 4 -%}
+            {%- assign tsrc = w.cover -%}
+            {%- if w.cover contains 'images.lumacdn.com/' -%}
+              {%- unless w.cover contains 'cdn-cgi/image' -%}
+                {%- assign tsrc = w.cover | replace: 'images.lumacdn.com/', 'images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,quality=80,width=480/' -%}
+              {%- endunless -%}
+            {%- elsif w.cover contains 'images.unsplash.com/' -%}
+              {%- assign tsrc = w.cover | replace: 'w=1080', 'w=480' -%}
+            {%- endif -%}
+            <img src="{{ tsrc }}" alt="" loading="lazy" decoding="async">
+          {%- endfor -%}
+        </span>
+        <span class="mln-more-text">
+          <span class="mln-more-icon" aria-hidden="true">+{{ future.size }}</span>
+          <span class="mln-more-label mln-more-open">more upcoming week{% if future.size != 1 %}s{% endif %} <span class="mln-arrow">↓</span></span>
+          <span class="mln-more-label mln-more-close">show fewer <span class="mln-arrow">↑</span></span>
+        </span>
+      </button>
+    </li>
+    {%- for w in future -%}
+      {% include mln_card.liquid w=w today_str=today_str current_slug=current_slug far=true %}
+    {%- endfor -%}
   {%- endif -%}
-  <li>
-    <a class="mln-card" href="{{ '/mln/week-' | append: w.num | append: '/' | relative_url }}">
-      <div class="mln-card-thumb">
-        <img src="{{ cover_src }}" alt="{{ w.title }} cover" loading="lazy" decoding="async">
-        <span class="mln-status {% if w.status == 'upcoming' %}is-upcoming{% endif %}">{{ w.status }}</span>
-      </div>
-      <div class="mln-card-body">
-        <div class="mln-card-top">
-          <span class="mln-week">WEEK {{ w.num }}</span>
-        </div>
-        <h3 class="mln-card-title">{{ w.title }}</h3>
-        <p class="mln-card-blurb">{{ w.summary }}</p>
-        <span class="mln-card-cta">open week <span class="mln-arrow">→</span></span>
-      </div>
-    </a>
-  </li>
-  {% endfor %}
+
+  {%- if coming -%}
+    {% include mln_card.liquid w=coming today_str=today_str current_slug=current_slug %}
+  {%- endif -%}
+
+  {%- for w in past -%}
+    {% include mln_card.liquid w=w today_str=today_str current_slug=current_slug %}
+  {%- endfor -%}
 </ul>
+
+<script>
+  (function () {
+    var btn = document.getElementById('mln-more-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var grid = btn.closest('.mln-grid');
+      var open = grid.classList.toggle('mln-expanded');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  })();
+</script>

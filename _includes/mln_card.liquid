@@ -1,0 +1,38 @@
+{%- comment -%}
+  One week card for the /mln/ grid.
+  params: w (week hash), today_str ("%Y-%m-%d" build date), current_slug
+          (slug of the week members should be reading for now), far (bool —
+          collapsed behind the "more weeks" toggle).
+  Luma covers go through its image CDN so we fetch a ~640px webp instead of the
+  full-res PNG; Unsplash covers get a width hint on the query string.
+{%- endcomment -%}
+{%- assign w = include.w -%}
+{%- assign cover_src = w.cover -%}
+{%- if w.cover contains 'images.lumacdn.com/' -%}
+  {%- unless w.cover contains 'cdn-cgi/image' -%}
+    {%- assign cover_src = w.cover | replace: 'images.lumacdn.com/', 'images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,quality=75,width=640/' -%}
+  {%- endunless -%}
+{%- elsif w.cover contains 'images.unsplash.com/' -%}
+  {%- assign cover_src = w.cover | replace: 'w=1080', 'w=640' -%}
+{%- endif -%}
+{%- if w.date >= include.today_str -%}{%- assign wstatus = 'upcoming' -%}{%- else -%}{%- assign wstatus = 'past' -%}{%- endif -%}
+{%- assign is_current = false -%}
+{%- if include.current_slug and w.slug == include.current_slug -%}{%- assign is_current = true -%}{%- endif -%}
+<li{% if include.far %} class="mln-far-week"{% endif %}>
+  <a class="mln-card{% if is_current %} is-current{% endif %}" href="{{ '/mln/week-' | append: w.num | append: '/' | relative_url }}">
+    {% if is_current %}<span class="mln-current-flag">reading now</span>{% endif %}
+    <div class="mln-card-thumb">
+      <img src="{{ cover_src }}" alt="{{ w.title }} cover" loading="lazy" decoding="async">
+      <span class="mln-status {% if wstatus == 'upcoming' %}is-upcoming{% endif %}">{{ wstatus }}</span>
+    </div>
+    <div class="mln-card-body">
+      <div class="mln-card-top">
+        <span class="mln-week">WEEK {{ w.num }}</span>
+        <span class="mln-date">{{ w.date | date: "%b %-d" }}</span>
+      </div>
+      <h3 class="mln-card-title">{{ w.title }}</h3>
+      <p class="mln-card-blurb">{{ w.summary }}</p>
+      <span class="mln-card-cta">open week <span class="mln-arrow">→</span></span>
+    </div>
+  </a>
+</li>

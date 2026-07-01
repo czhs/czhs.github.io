@@ -2,5 +2,5 @@
 layout: mln
 permalink: /mln/week-8/
 week: 8
-standalone_title: "Week 8 · Mapping the neuronal building blocks of human language with language models — MLn Reading Club"
+standalone_title: "Week 8 · Nested Learning: The Illusion of Deep Learning Architectures — MLn Reading Club"
 ---

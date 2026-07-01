@@ -9,7 +9,7 @@ weeks:
   - num: 1
     slug: "36josb91"
     evt: "evt-dsV5XL1ugeM9MUa"
-    status: past
+    date: "2026-05-18"
     title: "ML Reading Group"
     cover: "https://images.lumacdn.com/gallery-images/i5/07dddbd8-1b4d-4a2e-98d2-e3bb0df54045.png"
     summary: "Ilya Sutskever: “If you really learn [these 30 papers], you’ll know 90% of what matters today.”"
@@ -29,7 +29,7 @@ weeks:
   - num: 2
     slug: "j1nuamn0"
     evt: "evt-Jr60KmhawN27Tzy"
-    status: past
+    date: "2026-05-25"
     title: "LeJEPA: Provable and Scalable Self-Supervised Learning Without the Heuristics"
     cover: "https://images.lumacdn.com/gallery-images/i5/07dddbd8-1b4d-4a2e-98d2-e3bb0df54045.png"
     summary: "LeJEPA pushes in the opposite direction: instead of stabilizing training with heuristics, it builds a system where the objective itself prevents collapse."
@@ -51,7 +51,7 @@ weeks:
   - num: 3
     slug: "6iekrw4k"
     evt: "evt-djk4VogmHL77Hfv"
-    status: past
+    date: "2026-06-01"
     title: "Tiny Recursive Models"
     cover: "https://images.unsplash.com/photo-1655635643486-a17bc48771ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjQyMjF8MHwxfHNlYXJjaHw1OHx8YWl8ZW58MHx8fHwxNzczMjc3MjY0fDI&ixlib=rb-4.1.0&q=80&w=1080"
     summary: "Using just a single 2-layer network with 7M parameters, TRM outperforms much larger language models by recursively refining both its current answer and internal reasoning state."
@@ -73,7 +73,7 @@ weeks:
   - num: 4
     slug: "sact70yu"
     evt: "evt-UBgzSJNI7besnJp"
-    status: past
+    date: "2026-06-08"
     title: "Touching the Elephant — TPUs"
     cover: "https://images.lumacdn.com/uploads/qe/e05f54e2-b550-486e-84b6-c40691c4b6d9.png"
     summary: "What if the real moat in AI isn’t the model, but the chip? Should AI run on custom silicon or general-purpose chips?"
@@ -95,7 +95,7 @@ weeks:
   - num: 5
     slug: "kpf9zriu"
     evt: "evt-Ldd7152eF3yPzrb"
-    status: past
+    date: "2026-06-15"
     title: "A Mathematical Framework for Transformer Circuits"
     cover: "https://images.lumacdn.com/gallery-images/87/0b766ae1-14a6-4eae-925f-75e0515c671f.png"
     summary: "What does it mean to “fully understand” a model — and is a one-layer transformer just a lookup table? If the residual stream is only a communication channel, where does the computation actually live?"
@@ -119,7 +119,7 @@ weeks:
   - num: 6
     slug: "qw3n9205"
     evt: "evt-yIx5VWUnQde6Bdc"
-    status: past
+    date: "2026-06-22"
     title: "Self-Distillation Enables Continual Learning"
     cover: "https://images.lumacdn.com/uploads/7i/abcae379-f22d-4d83-8810-87766cbd4f40.png"
     summary: "Why does on-policy learning dramatically reduce catastrophic forgetting? Does SDFT outperform SFT, RLHF-style pipelines, and continual pre-training?"
@@ -137,7 +137,7 @@ weeks:
   - num: 7
     slug: "okwrdjl7"
     evt: "evt-UiqEgfiHOo1vTcQ"
-    status: past
+    date: "2026-06-29"
     title: "In-context Learning and Induction Heads"
     cover: "https://images.lumacdn.com/uploads/2n/b777d557-7995-4db7-9060-373e6f4b910f.png"
     summary: "When does a model suddenly learn to learn — and can you spot the moment on the loss curve? If a circuit is defined to do nothing but copy random text, why does the same circuit also translate French?"
@@ -155,45 +155,9 @@ weeks:
       - title: "In-context Learning and Induction Heads — Olsson, Elhage, Nanda, et al. (Anthropic)"
         url: "https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html"
   - num: 8
-    slug: "ov4cf4jy"
-    evt: "evt-WYLAOC0uKYiofUb"
-    status: upcoming
-    title: "Mapping the neuronal building blocks of human language with language models"
-    cover: "https://images.lumacdn.com/uploads/km/e9ac657e-b6bd-4dab-807c-3caab3f5bb6d.webp"
-    summary: "A full second before you speak a word, some neuron has already decided whether it's a noun or a verb — how does a single cell know your grammar in advance?"
-    description: >-
-      A full second before you speak a word, some neuron has already decided
-      whether it's a noun or a verb — how does a single cell know your grammar
-      in advance? And why do the embeddings from a large language model predict
-      when a neuron in your temporal lobe will fire — what does that say about
-      whether brains and models build language the same way? The paper sketches
-      a cellular-scale map of how the brain assembles words into sentences.
-      Researchers record from hundreds of individual neurons across the human
-      frontotemporal cortex while people speak naturally, then uses natural
-      language processing models to label and track fine-grained linguistic
-      features of each word. Some neurons fire selectively for a word's part of
-      speech or its grammatical relationship to other words; others track
-      higher-order structure — how words group into phrases, where phrases
-      merge, and their sequence. Strikingly, syntax and meaning turned out to be
-      handled largely by separate cells — only a tiny fraction of neurons
-      encoded both syntactic and semantic information — suggesting the two are
-      dissociable at the single-cell level. Contextual embeddings from a large
-      language model (Vicuna) predicted neural activity better than syntax or
-      semantics alone, and that predictivity climbed up to roughly a second
-      before each word was spoken — implying these cells integrate several words
-      of preceding context as they plan speech. Although the neurons were
-      distributed broadly across the cortex, their encoding strength was
-      left-lateralized and varied between regions. Join us at CASI for
-      discussion at 8 pm, and (optional) quiet reading from 7 pm.
-    reading:
-      - title: "Mapping the Neuronal Building Blocks of Human Language with Language Models — Cai, Kfir, Jamali, et al. (Harvard / Mass General)"
-        url: "https://www.nature.com/articles/s41586-026-10691-5"
-      - title: "Nature news (optional paper overview)"
-        url: "https://www.nature.com/articles/d41586-026-01922-w"
-  - num: 9
     slug: "gfk5xp1o"
     evt: "evt-sYrcAstM80gnHU6"
-    status: upcoming
+    date: "2026-07-06"
     title: "Nested Learning: The Illusion of Deep Learning Architectures"
     cover: "https://images.lumacdn.com/uploads/cs/880fc699-e930-41e2-b892-d7de04dac10f.png"
     summary: "How might nested optimization structures allow models to generalize more efficiently by reusing global representations while adapting locally to new tasks? Could the hierarchical nature of nested learning make large models inherently more resilient to poisoning or backdoor attempts by isolating adversarial influence within inner-loop adaptations?"
@@ -222,10 +186,10 @@ weeks:
     reading:
       - title: "Nested Learning: The Illusion of Deep Learning Architectures — Behrouz et al. (Google Research)"
         url: "https://abehrouz.github.io/files/NL.pdf"
-  - num: 10
+  - num: 9
     slug: "lbszsb1n"
     evt: "evt-gcthBtp5jBKOiQo"
-    status: upcoming
+    date: "2026-07-13"
     title: "From Worm to Human"
     cover: "https://images.lumacdn.com/uploads/km/c297387a-df03-41e1-bb47-bea1a7497ff6.png"
     summary: "We've had the full wiring diagram of a ~300-neuron worm for decades — and now one for a 140,000-neuron fly. So what actually stands between that and emulating the ~86 billion neurons in your head?"
@@ -260,10 +224,10 @@ weeks:
     reading:
       - title: "From Worm to Human: Scaling Brain Emulation"
         url: "https://pdf.isaak.net/thesis"
-  - num: 11
+  - num: 10
     slug: "5wvhx171"
     evt: "evt-r6zcq5sAFOwiOEh"
-    status: upcoming
+    date: "2026-07-20"
     title: "Manifold-Constrained Hyper-Connections"
     cover: "https://images.lumacdn.com/gallery-images/wx/3b0a8406-85d0-426f-a10d-f00084982b88.png"
     summary: "How does constraining residual connections to a geometric manifold restore identity mappings and enable stable scaling in large language models? Can richer cross-layer connectivity improve reasoning and representation quality without sacrificing optimization stability?"
@@ -293,10 +257,10 @@ weeks:
     reading:
       - title: "mHC: Manifold-Constrained Hyper-Connections — DeepSeek"
         url: "https://www.arxiv.org/pdf/2512.24880"
-  - num: 12
+  - num: 11
     slug: "srsz8rga"
     evt: "evt-v89wbXHXDCt5bik"
-    status: upcoming
+    date: "2026-07-27"
     title: "Attention Residuals: Rethinking Information Flow in LLMs"
     cover: "https://images.lumacdn.com/gallery-images/l6/26a28b85-5c4f-4d9a-a09a-e401c29ce330.png"
     summary: "Standard residual connections with PreNorm accumulate every layer’s output with fixed unit weights, letting the hidden state grow uncontrollably with depth and diluting each layer’s unique contribution — what if each layer could instead learn which earlier representations to read from?"
@@ -319,10 +283,10 @@ weeks:
     reading:
       - title: "Attention Residuals: Rethinking Information Flow in LLMs — Kimi Team"
         url: "https://arxiv.org/pdf/2603.15031"
-  - num: 13
+  - num: 12
     slug: "lh8qgar2"
     evt: "evt-FqbMX8pVOgTu3xT"
-    status: upcoming
+    date: "2026-08-24"
     title: "Fundamental Limitations of Single-Vector Embeddings"
     cover: "https://images.lumacdn.com/gallery-images/s0/94a98dc7-f16e-4e74-b733-4b62747a738d.png"
     summary: "Why does something as simple as “finding people who like apples” break our best models? What do alternatives like multi-vector models or cross-encoders mean for real products?"
