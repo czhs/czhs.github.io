@@ -628,7 +628,33 @@ body.mln-site { padding: 0; }
 .mln-desc {
   font-size: 0.95rem;
   line-height: 1.65;
+}
+.mln-desc p {
+  margin: 0 0 0.9em;
   opacity: 0.9;
+}
+.mln-desc p:last-child { margin-bottom: 0; }
+/* lead paragraph — the opening question(s)/hook, set a touch larger */
+.mln-desc p:first-child {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  opacity: 1;
+}
+/* trailing "Join us at CASI…" schedule line — quiet, set off from the body */
+.mln-desc p:last-child {
+  margin-top: 1.1em;
+  padding-top: 0.9em;
+  border-top: 1px solid var(--global-divider-color);
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+/* don't dim/hairline when the whole description is a single paragraph */
+.mln-desc p:first-child:last-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+  font-size: 1.05rem;
+  opacity: 1;
 }
 .mln-reading {
   margin: 0.25rem 0 0.5rem;
