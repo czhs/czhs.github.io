@@ -8,7 +8,7 @@ layout: mln_base
   <a class="mln-back" href="{{ '/mln/' | relative_url }}">← all weeks</a>
 
   <header class="mln-detail-head post-header">
-    <div class="mln-detail-eyebrow">MLn CLUB · WEEK {{ w.num }}</div>
+    <div class="mln-detail-eyebrow">MLn CLUB · WEEK {{ w.num }}{% if w.symposium %} · 🎉 SYMPOSIUM{% endif %}</div>
     <h1 class="post-title">{{ w.title }}</h1>
   </header>
 
@@ -45,3 +45,7 @@ layout: mln_base
     </aside>
   </div>
 </div>
+
+{%- if w.symposium -%}
+  {% include mln_confetti.liquid %}
+{%- endif -%}
