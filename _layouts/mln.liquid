@@ -14,15 +14,15 @@ layout: mln_base
 
   <div class="mln-detail-grid">
     <div class="mln-resources">
-      <h2>About this week</h2>
-      <div class="mln-desc">{{ w.description | markdownify }}</div>
-
       {% if w.reading %}
-      <h3>Reading</h3>
+      <h2>Reading</h2>
       <ul class="mln-reading">
         {% for r in w.reading %}<li><a href="{{ r.url }}" target="_blank" rel="noopener">{{ r.title }}</a></li>{% endfor %}
       </ul>
       {% endif %}
+
+      <h2>About this week</h2>
+      <div class="mln-desc">{{ w.description | markdownify }}</div>
 
       {{ content }}
     </div>
