@@ -32,6 +32,19 @@
       </div>
       <h3 class="mln-card-title">{{ w.title }}</h3>
       <p class="mln-card-blurb">{{ w.summary }}</p>
+      {%- if w.tags and w.tags.size > 0 -%}
+      <div class="mln-card-tags">
+        {%- for t in w.tags -%}
+          {%- case t -%}
+            {%- when 'visualization' -%}{%- assign tico = '📊' -%}
+            {%- when 'photos' -%}{%- assign tico = '📷' -%}
+            {%- when 'demo' -%}{%- assign tico = '🕹️' -%}
+            {%- else -%}{%- assign tico = '✦' -%}
+          {%- endcase -%}
+          <span class="mln-tag"><span class="mln-tag-ico" aria-hidden="true">{{ tico }}</span>{{ t }}</span>
+        {%- endfor -%}
+      </div>
+      {%- endif -%}
       <span class="mln-card-cta">open week <span class="mln-arrow">→</span></span>
     </div>
   </a>

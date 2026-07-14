@@ -64,6 +64,7 @@ weeks:
     slug: "sact70yu"
     evt: "evt-UBgzSJNI7besnJp"
     date: "2026-06-08"
+    tags: ["visualization"]
     title: "Touching the Elephant — TPUs"
     cover: "https://images.lumacdn.com/uploads/qe/e05f54e2-b550-486e-84b6-c40691c4b6d9.png"
     summary: "What if the real moat in AI isn’t the model, but the chip? Should AI run on custom silicon or general-purpose chips?"
@@ -130,6 +131,7 @@ weeks:
     slug: "gfk5xp1o"
     evt: "evt-sYrcAstM80gnHU6"
     date: "2026-07-06"
+    tags: ["photos"]
     title: "Nested Learning: The Illusion of Deep Learning Architectures"
     cover: "https://images.lumacdn.com/uploads/cs/880fc699-e930-41e2-b892-d7de04dac10f.png"
     summary: "How might nested optimization structures allow models to generalize more efficiently by reusing global representations while adapting locally to new tasks? Could the hierarchical nature of nested learning make large models inherently more resilient to poisoning or backdoor attempts by isolating adversarial influence within inner-loop adaptations?"
@@ -151,6 +153,7 @@ weeks:
     evt: "evt-1ijpSvQD1SEYyfi"
     date: "2026-07-13"
     symposium: true
+    tags: ["photos"]
     title: "Symposium Week"
     cover: "https://images.lumacdn.com/uploads/lr/794a5dcf-999d-4444-ad29-ec7222d78fce.png"
     summary: "A little different this week — no single paper. Bring something that excites you and present it: great creative work is historically done together, across backgrounds and disciplines, in small, high-trust groups."
