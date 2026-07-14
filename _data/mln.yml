@@ -161,23 +161,23 @@ weeks:
 
       Join us at CASI!
   - num: 10
-    slug: "5wvhx171"
-    evt: "evt-r6zcq5sAFOwiOEh"
+    slug: "c3mvm73d"
+    evt: "evt-fSNsVqUMdTI9mQK"
     date: "2026-07-20"
-    title: "Manifold-Constrained Hyper-Connections"
-    cover: "https://images.lumacdn.com/gallery-images/wx/3b0a8406-85d0-426f-a10d-f00084982b88.png"
-    summary: "How does constraining residual connections to a geometric manifold restore identity mappings and enable stable scaling in large language models? Can richer cross-layer connectivity improve reasoning and representation quality without sacrificing optimization stability?"
+    title: "A global workspace in language models"
+    cover: "https://images.lumacdn.com/uploads/ul/eb843472-64fa-45b7-81a1-2ed0b7512cfd.png"
+    summary: "How can we identify and understand the internal “workspace” where large language models integrate information, reason, and broadcast concepts across their networks? Can mechanistic interpretability reveal whether LLMs develop functional equivalents of global information sharing found in cognitive architectures?"
     description: |-
-      How does constraining residual connections to a geometric manifold restore identity mappings and enable stable scaling in large language models? Can richer cross-layer connectivity improve reasoning and representation quality without sacrificing optimization stability?
+      How can we identify and understand the internal “workspace” where large language models integrate information, reason, and broadcast concepts across their networks? Can mechanistic interpretability reveal whether LLMs develop functional equivalents of global information sharing found in cognitive architectures?
 
-      DeepSeek’s Manifold-Constrained Hyper-Connections (mHC) introduce a principled fix to recent attempts at widening residual streams. While Hyper-Connections improve performance by allowing richer cross-layer mixing, their unconstrained residual matrices break the identity-mapping property that makes deep networks trainable, leading to severe instability at scale. mHC resolves this by projecting residual mixing matrices onto the manifold of doubly stochastic matrices, ensuring residual updates remain convex combinations of features and preserving signal magnitude across depth.
+      Anthropic’s Global Workspace research investigates whether large language models contain internal structures analogous to the global workspace theory of cognition—a framework proposing that intelligence emerges when specialized processes compete for access to a shared information space. By tracing how concepts and features propagate through model activations, the researchers identify patterns of information routing and representation sharing that resemble a distributed workspace.
 
-      Empirically, this constraint dramatically stabilizes training in large language models, eliminating gradient explosions observed in unconstrained HC while retaining its performance gains. With careful systems co-design—kernel fusion, recomputation, and pipeline overlap—mHC incurs only ~6–7% overhead at 27B scale, while consistently improving downstream reasoning benchmarks. The result reframes architectural scaling as a geometric constraint problem, showing that richer connectivity can be safely exploited when paired with mathematically grounded structure rather than ad-hoc regularization.
+      Rather than treating models as opaque functions, this work attempts to map the internal communication pathways that support reasoning and abstraction. The findings suggest that advanced capabilities may emerge not from a single reasoning module, but from the interaction of many specialized representations that become globally available across the network. This provides a new lens for understanding scaling: as models grow, intelligence may depend not only on increasing parameter count, but on developing richer internal mechanisms for information integration, coordination, and reuse.
 
       Join us at CASI for discussion at 8 pm, and (optional) quiet reading from 7 pm.
     reading:
-      - title: "mHC: Manifold-Constrained Hyper-Connections — DeepSeek"
-        url: "https://www.arxiv.org/pdf/2512.24880"
+      - title: "A global workspace in language models — Anthropic"
+        url: "https://www.anthropic.com/research/global-workspace"
   - num: 11
     slug: "srsz8rga"
     evt: "evt-v89wbXHXDCt5bik"
@@ -232,3 +232,21 @@ weeks:
     reading:
       - title: "From Worm to Human: Scaling Brain Emulation"
         url: "https://pdf.isaak.net/thesis"
+  - num: 14
+    slug: "5wvhx171"
+    evt: "evt-r6zcq5sAFOwiOEh"
+    date: "2026-09-07"
+    title: "Manifold-Constrained Hyper-Connections"
+    cover: "https://images.lumacdn.com/gallery-images/wx/3b0a8406-85d0-426f-a10d-f00084982b88.png"
+    summary: "How does constraining residual connections to a geometric manifold restore identity mappings and enable stable scaling in large language models? Can richer cross-layer connectivity improve reasoning and representation quality without sacrificing optimization stability?"
+    description: |-
+      How does constraining residual connections to a geometric manifold restore identity mappings and enable stable scaling in large language models? Can richer cross-layer connectivity improve reasoning and representation quality without sacrificing optimization stability?
+
+      DeepSeek’s Manifold-Constrained Hyper-Connections (mHC) introduce a principled fix to recent attempts at widening residual streams. While Hyper-Connections improve performance by allowing richer cross-layer mixing, their unconstrained residual matrices break the identity-mapping property that makes deep networks trainable, leading to severe instability at scale. mHC resolves this by projecting residual mixing matrices onto the manifold of doubly stochastic matrices, ensuring residual updates remain convex combinations of features and preserving signal magnitude across depth.
+
+      Empirically, this constraint dramatically stabilizes training in large language models, eliminating gradient explosions observed in unconstrained HC while retaining its performance gains. With careful systems co-design—kernel fusion, recomputation, and pipeline overlap—mHC incurs only ~6–7% overhead at 27B scale, while consistently improving downstream reasoning benchmarks. The result reframes architectural scaling as a geometric constraint problem, showing that richer connectivity can be safely exploited when paired with mathematically grounded structure rather than ad-hoc regularization.
+
+      Join us at CASI for discussion at 8 pm, and (optional) quiet reading from 7 pm.
+    reading:
+      - title: "mHC: Manifold-Constrained Hyper-Connections — DeepSeek"
+        url: "https://www.arxiv.org/pdf/2512.24880"
