@@ -99,6 +99,7 @@ weeks:
     slug: "qw3n9205"
     evt: "evt-yIx5VWUnQde6Bdc"
     date: "2026-06-22"
+    tags: ["photos"]
     title: "Self-Distillation Enables Continual Learning"
     cover: "https://images.lumacdn.com/uploads/7i/abcae379-f22d-4d83-8810-87766cbd4f40.png"
     summary: "Why does on-policy learning dramatically reduce catastrophic forgetting? Does SDFT outperform SFT, RLHF-style pipelines, and continual pre-training?"
