@@ -23,18 +23,14 @@ What people brought and presented this week:
 <div class="mln-gallery">
   <figure>
     <img src="{{ '/assets/img/mln/week9-group.webp' | relative_url }}" alt="MLn Reading Club Symposium Week — the group gathered at CASI" loading="lazy" decoding="async">
-    <figcaption>The full room at CASI for Symposium Week.</figcaption>
   </figure>
   <figure>
     <img src="{{ '/assets/img/mln/week9-presenting.jpg' | relative_url }}" alt="A talk in progress — a slide and a whiteboard of notes" loading="lazy" decoding="async">
-    <figcaption>Presentations and discussion in full swing.</figcaption>
   </figure>
   <figure>
     <img src="{{ '/assets/img/mln/week9-slowdown.webp' | relative_url }}" alt="A presenter sketching notes on a flip chart" loading="lazy" decoding="async">
-    <figcaption>Whiteboarding a talk on the fly.</figcaption>
   </figure>
   <figure>
     <img src="{{ '/assets/img/mln/week9-food.webp' | relative_url }}" alt="Stacked Chipotle catering trays on a table" loading="lazy" decoding="async">
-    <figcaption>Fuel for the evening.</figcaption>
   </figure>
 </div>
