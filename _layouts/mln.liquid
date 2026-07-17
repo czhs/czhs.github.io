@@ -21,6 +21,11 @@ layout: mln_base
       </ul>
       {% endif %}
 
+      {% if w.recording %}
+      <h2>Paper audio</h2>
+      <audio class="mln-recording" controls preload="none" src="{{ w.recording | relative_url }}"></audio>
+      {% endif %}
+
       <h2>About this week</h2>
       <div class="mln-desc">{{ w.description | markdownify }}</div>
 

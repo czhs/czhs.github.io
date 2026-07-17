@@ -43,13 +43,7 @@ computer engineering at Carnegie Mellon University (CMU).
 This is a personal blog about infrastructure and math, sometimes both.
 Biodefense, interpretability, automation.
 
-I'm interested in the geometry and hardware of thinking. I believe there's a class of
-intelligent algorithms — perhaps a single "intelligence equation" — of which all
-the phenomena we observe are special cases. I'm interested in optimal transport,
-high-dimensional geometry, and building non-classical computers. For fun, I also work on animating robots (think disney, but irl). 
-
-What might post-invention-scarcity society looks like? I would love
-to talk to you about safely stewarding autoresearch-related technologies.
+I’m fascinated by the geometry and hardware of thinking: mech interp and asics. I'm also interested in optimal transport and high dimensional probability. For fun, I work on animating robots (<a href="https://thewaltdisneycompany.com/news/behind-the-bdx-droids/" target="_blank" rel="noopener">like these</a>).
 
 Reach me at chrisshi [at] andrew [dot] cmu [dot] edu.
 
@@ -57,5 +51,7 @@ Reach me at chrisshi [at] andrew [dot] cmu [dot] edu.
   <a class="home-link home-link-substack" href="https://ultrastructure.substack.com/" target="_blank" rel="noopener">Read my Substack — ultrastructure <span class="home-link-arrow">→</span></a>
   <a class="home-link home-link-mln" href="/mln/">MLn Reading Club — weekly ML papers in Pittsburgh <span class="home-link-arrow">→</span></a>
 </div>
+
+<a href="https://www.anilada.com/notes/godel-letter.pdf" target="_blank" rel="noopener">Gödel’s letter to von Neumann</a>
 
 <div style="display: none" aria-hidden="true"><a href="/about/">More about me and my research interests</a></div>

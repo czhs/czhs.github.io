@@ -168,6 +168,8 @@ weeks:
     slug: "c3mvm73d"
     evt: "evt-fSNsVqUMdTI9mQK"
     date: "2026-07-20"
+    tags: ["paper audio"]
+    recording: "/assets/audio/mln-week-10-global-workspace.mp3"
     title: "A global workspace in language models"
     cover: "https://images.lumacdn.com/uploads/ul/eb843472-64fa-45b7-81a1-2ed0b7512cfd.png"
     summary: "How can we identify and understand the internal “workspace” where large language models integrate information, reason, and broadcast concepts across their networks? Can mechanistic interpretability reveal whether LLMs develop functional equivalents of global information sharing found in cognitive architectures?"
