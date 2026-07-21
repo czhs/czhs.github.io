@@ -34,8 +34,3 @@ What people brought and presented this week:
     <img src="{{ '/assets/img/mln/week9-food.webp' | relative_url }}" alt="Stacked Chipotle catering trays on a table" loading="lazy" decoding="async">
   </figure>
 </div>
-
-<figure class="mln-recap">
-  <img src="{{ '/assets/img/mln/week9-slowdown-board.jpg' | relative_url }}" alt="A flip chart from the Slowdown talk — 'every LLM is jailbreakable', Robopair 100%, and Cyblock" loading="lazy" decoding="async">
-  <figcaption>James Waters' “Slowdown / Cyblock” talk — every LLM is jailbreakable.</figcaption>
-</figure>
