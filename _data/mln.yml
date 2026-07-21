@@ -10,6 +10,7 @@ weeks:
     slug: "36josb91"
     evt: "evt-dsV5XL1ugeM9MUa"
     date: "2026-05-18"
+    tags: ["photos"]
     title: "ML Reading Group"
     cover: "https://images.lumacdn.com/gallery-images/i5/07dddbd8-1b4d-4a2e-98d2-e3bb0df54045.png"
     summary: "Ilya Sutskever: “If you really learn [these 30 papers], you’ll know 90% of what matters today.”"
@@ -30,6 +31,7 @@ weeks:
     slug: "j1nuamn0"
     evt: "evt-Jr60KmhawN27Tzy"
     date: "2026-05-25"
+    tags: ["photos"]
     title: "LeJEPA: Provable and Scalable Self-Supervised Learning Without the Heuristics"
     cover: "https://images.lumacdn.com/gallery-images/i5/07dddbd8-1b4d-4a2e-98d2-e3bb0df54045.png"
     summary: "LeJEPA pushes in the opposite direction: instead of stabilizing training with heuristics, it builds a system where the objective itself prevents collapse."
@@ -46,6 +48,7 @@ weeks:
     slug: "6iekrw4k"
     evt: "evt-djk4VogmHL77Hfv"
     date: "2026-06-01"
+    tags: ["photos"]
     title: "Tiny Recursive Models"
     cover: "https://images.unsplash.com/photo-1655635643486-a17bc48771ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjQyMjF8MHwxfHNlYXJjaHw1OHx8YWl8ZW58MHx8fHwxNzczMjc3MjY0fDI&ixlib=rb-4.1.0&q=80&w=1080"
     summary: "Using just a single 2-layer network with 7M parameters, TRM outperforms much larger language models by recursively refining both its current answer and internal reasoning state."
@@ -116,6 +119,7 @@ weeks:
     slug: "okwrdjl7"
     evt: "evt-UiqEgfiHOo1vTcQ"
     date: "2026-06-29"
+    tags: ["photos"]
     title: "In-context Learning and Induction Heads"
     cover: "https://images.lumacdn.com/uploads/2n/b777d557-7995-4db7-9060-373e6f4b910f.png"
     summary: "When does a model suddenly learn to learn — and can you spot the moment on the loss curve? If a circuit is defined to do nothing but copy random text, why does the same circuit also translate French?"
