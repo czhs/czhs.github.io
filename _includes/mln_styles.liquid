@@ -681,6 +681,82 @@ body.mln-site { padding: 0; }
   border-radius: 12px;
   background: #000;
 }
+
+/* manual photo/media carousel (user-driven via thumbnails, no autoplay/auto-rotate).
+   Pure-CSS: hidden radios ~ checked slide/thumb. Rules cover up to 6 slides. */
+.mln-carousel { margin: 1.75rem 0 0.5rem; }
+.mln-carousel-radio { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.mln-carousel-stage { position: relative; }
+.mln-carousel-slide { display: none; margin: 0; }
+.mln-carousel-slide img,
+.mln-carousel-slide video {
+  display: block;
+  max-width: 100%;
+  max-height: 60vh;
+  margin: 0 auto;
+  border-radius: 12px;
+  background: #000;
+}
+.mln-carousel-slide figcaption {
+  font-size: 0.82rem;
+  opacity: 0.65;
+  margin-top: 0.55rem;
+  text-align: center;
+}
+.mln-carousel-slide figcaption a { color: var(--global-theme-color); }
+.mln-carousel-radio:nth-of-type(1):checked ~ .mln-carousel-stage .mln-carousel-slide:nth-of-type(1),
+.mln-carousel-radio:nth-of-type(2):checked ~ .mln-carousel-stage .mln-carousel-slide:nth-of-type(2),
+.mln-carousel-radio:nth-of-type(3):checked ~ .mln-carousel-stage .mln-carousel-slide:nth-of-type(3),
+.mln-carousel-radio:nth-of-type(4):checked ~ .mln-carousel-stage .mln-carousel-slide:nth-of-type(4),
+.mln-carousel-radio:nth-of-type(5):checked ~ .mln-carousel-stage .mln-carousel-slide:nth-of-type(5),
+.mln-carousel-radio:nth-of-type(6):checked ~ .mln-carousel-stage .mln-carousel-slide:nth-of-type(6) {
+  display: block;
+}
+.mln-carousel-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.9rem;
+}
+.mln-carousel-thumb {
+  position: relative;
+  width: 68px;
+  height: 50px;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  opacity: 0.55;
+  transition: opacity 0.15s ease, border-color 0.15s ease;
+}
+.mln-carousel-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mln-carousel-thumb:hover { opacity: 0.85; }
+.mln-thumb-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.9rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.18);
+}
+.mln-carousel-radio:nth-of-type(1):checked ~ .mln-carousel-thumbs .mln-carousel-thumb:nth-of-type(1),
+.mln-carousel-radio:nth-of-type(2):checked ~ .mln-carousel-thumbs .mln-carousel-thumb:nth-of-type(2),
+.mln-carousel-radio:nth-of-type(3):checked ~ .mln-carousel-thumbs .mln-carousel-thumb:nth-of-type(3),
+.mln-carousel-radio:nth-of-type(4):checked ~ .mln-carousel-thumbs .mln-carousel-thumb:nth-of-type(4),
+.mln-carousel-radio:nth-of-type(5):checked ~ .mln-carousel-thumbs .mln-carousel-thumb:nth-of-type(5),
+.mln-carousel-radio:nth-of-type(6):checked ~ .mln-carousel-thumbs .mln-carousel-thumb:nth-of-type(6) {
+  opacity: 1;
+  border-color: var(--global-theme-color);
+}
+.mln-carousel-radio:focus-visible ~ .mln-carousel-thumbs {
+  outline: 2px solid var(--global-theme-color);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
 .mln-recap figcaption {
   font-size: 0.82rem;
   opacity: 0.6;
