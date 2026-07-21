@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="{{ site.lang }}">
+  <head>
+    {% include head.liquid %}
+    {% include portfolio_styles.liquid %}
+  </head>
+
+  <body class="rbx-site">
+    {{ content }}
+
+    <!-- Hidden theme toggle: al-folio's theme.js wires listeners to these IDs on load.
+         This standalone micro-site has no navbar, so we keep them present but hidden
+         to avoid a null-addEventListener crash that would halt all page JS. -->
+    <button id="light-toggle" title="Change theme" style="display: none;" aria-hidden="true">
+      <i class="ti ti-sun-moon" id="light-toggle-system"></i>
+      <i class="ti ti-moon-filled" id="light-toggle-dark"></i>
+      <i class="ti ti-sun-filled" id="light-toggle-light"></i>
+    </button>
+
+    {% include scripts.liquid %}
+  </body>
+</html>

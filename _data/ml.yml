@@ -1,0 +1,29 @@
+# Standalone ML projects portfolio (/ml/) — single source of truth.
+# Mirrors the robotics micro-site (same layout system: layout: portfolio / portfolio_post).
+# Add a project: append to `projects` below and create _pages/ml_<slug>.md.
+name: Chris Shi
+url: /ml/
+subtitle: Machine learning projects — models, training, and results.
+under_construction: true
+
+# Sidebar links (bottom of the left column). External links open in a new tab.
+links:
+  - { label: Personal Website, url: / } # the one link back to the main site
+  - { label: LinkedIn, url: "https://www.linkedin.com/in/chris-shi-170293369" }
+  - { label: GitHub, url: "https://github.com/czhs" }
+  - { label: CV, url: /cv/ }
+  - { label: Email, url: "mailto:chrisshi@andrew.cmu.edu" }
+
+# Grid order = list order. For each project:
+#   cover:  a figure to use as the card image (architecture diagram, result plot, etc.)
+#           Drop it into assets/img/ml/<slug>.png and set cover: assets/img/ml/<slug>.png
+#   date:   optional term/year shown on the card and detail page (e.g. "Fall 2025")
+#   links:  optional row of buttons on the detail page, e.g.
+#           links:
+#             - { label: Paper, url: "https://arxiv.org/abs/..." }
+#             - { label: Code,  url: "https://github.com/..." }
+#             - { label: Demo,  url: "https://..." }
+# Blank cover renders an "under construction" placeholder card.
+projects:
+  - { slug: project-one, title: Project One, date: "", cover: "" }
+  - { slug: project-two, title: Project Two, date: "", cover: "" }

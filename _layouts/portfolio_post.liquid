@@ -1,0 +1,37 @@
+---
+layout: portfolio_base
+---
+
+{% assign data = site.data[page.portfolio] %}
+{% assign p = data.projects | where: "slug", page.project | first %}
+
+<div class="rbx-postwrap">
+  <a class="rbx-back" href="{{ data.url | default: '/' | relative_url }}">← Home</a>
+
+  <article class="rbx-post">
+    <header class="rbx-post-head">
+      <h1 class="rbx-post-title">{{ p.title | default: page.title }}</h1>
+      {% if p.date and p.date != '' %}<p class="rbx-post-meta">{{ p.date }}</p>{% endif %}
+    </header>
+
+    {% if p.video and p.video != '' %}
+    <video class="rbx-post-video" controls autoplay muted loop playsinline preload="metadata"{% if p.poster and p.poster != '' %} poster="{{ p.poster | relative_url }}"{% endif %}>
+      <source src="{{ p.video | relative_url }}" type="video/mp4" />
+    </video>
+    {% elsif p.cover and p.cover != '' %}
+    <img class="rbx-post-hero" src="{{ p.cover | relative_url }}" alt="{{ p.title }}" />
+    {% endif %}
+
+    {% if p.links and p.links != empty %}
+    <div class="rbx-post-links">
+      {% for l in p.links %}
+      <a class="rbx-post-link" href="{{ l.url }}" target="_blank" rel="noopener">{{ l.label }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {{ content }}
+  </article>
+
+  <footer class="rbx-post-foot">© {{ data.name }}</footer>
+</div>

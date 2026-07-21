@@ -1,0 +1,50 @@
+---
+layout: portfolio_base
+---
+
+{% assign r = site.data[page.portfolio] %}
+
+<div class="rbx-wrap">
+  <aside class="rbx-side">
+    <a class="rbx-mark-link" href="{{ page.url | relative_url }}" aria-label="{{ r.name }}">
+      <svg class="rbx-mark" viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <line x1="12" y1="2.5" x2="12" y2="21.5" />
+          <line x1="2.5" y1="12" x2="21.5" y2="12" />
+          <line x1="5.3" y1="5.3" x2="18.7" y2="18.7" />
+          <line x1="18.7" y1="5.3" x2="5.3" y2="18.7" />
+        </g>
+      </svg>
+    </a>
+
+    <h1 class="rbx-name">{{ r.name }}</h1>
+    <p class="rbx-sub">{{ r.subtitle }}</p>
+    {% if r.under_construction %}<span class="rbx-uc">Under construction</span>{% endif %}
+
+    <nav class="rbx-links">
+      {% for l in r.links %}
+        {% assign is_url = false %}
+        {% if l.url contains '://' %}{% assign is_url = true %}{% endif %}
+        {% assign is_ext = is_url %}
+        {% if l.url contains 'mailto:' %}{% assign is_ext = true %}{% endif %}
+        <a class="rbx-link" href="{% if is_ext %}{{ l.url }}{% else %}{{ l.url | relative_url }}{% endif %}"{% if is_url %} target="_blank" rel="noopener"{% endif %}>{{ l.label }}</a>
+      {% endfor %}
+    </nav>
+  </aside>
+
+  <main class="rbx-grid">
+    {% for p in r.projects %}
+    <a class="rbx-card" href="{{ page.url | append: p.slug | append: '/' | relative_url }}">
+      {% if p.cover and p.cover != '' %}
+      <img class="rbx-cover" src="{{ p.cover | relative_url }}" alt="{{ p.title }}" loading="lazy" />
+      {% else %}
+      <span class="rbx-cover rbx-cover-empty" aria-hidden="true"></span>
+      {% endif %}
+      <span class="rbx-cap">
+        <span class="rbx-card-title">{{ p.title }}</span>
+        {% if p.date and p.date != '' %}<span class="rbx-card-date">{{ p.date }}</span>{% endif %}
+      </span>
+    </a>
+    {% endfor %}
+  </main>
+</div>

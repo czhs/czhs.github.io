@@ -1,0 +1,29 @@
+# Standalone robotics portfolio (/robotics/) — single source of truth.
+# This micro-site links BACK to the personal site, but the personal site never links to it.
+# Add a project: append to `projects` and create _pages/robotics_<slug>.md (layout: robotics_post).
+name: Chris Shi
+url: /robotics/
+subtitle: Math and computer engineering at Carnegie Mellon University.
+under_construction: true
+
+# Sidebar links (bottom of the left column). External links open in a new tab.
+links:
+  - { label: Personal Website, url: / } # the one link back to the main site
+  - { label: LinkedIn, url: "https://www.linkedin.com/in/chris-shi-170293369" }
+  - { label: GitHub, url: "https://github.com/czhs" }
+  - { label: CV, url: /cv/ }
+  - { label: Email, url: "mailto:chrisshi@andrew.cmu.edu" }
+
+# Grid order = list order. Drop a cover image into assets/img/robotics/<slug>.jpg and set
+# `cover: assets/img/robotics/<slug>.jpg`; fill `date` when ready. Blank = placeholder.
+projects:
+  # NOTE: published as under-construction placeholders for now — covers/videos are
+  # blank on purpose so every card shows the "under construction" state. The processed
+  # media exists locally (gitignored: assets/img|video/robotics/) — restore a project by
+  # setting cover/video/poster back to those paths once it's ready to go public.
+  - { slug: pie-robot, title: Pie Robot, date: "", cover: "" }
+  - { slug: gantry, title: Hack 100 Gantry, date: "", cover: "" }
+  - { slug: robot-dog, title: Robot Dog, date: "", cover: "" }
+  - { slug: duck, title: Duck, date: "", cover: "" }
+  - { slug: dice-arms, title: Dice Arms, date: "", cover: "" }
+  - { slug: tartanimu, title: TartanIMU, date: "", cover: "" }
