@@ -20,15 +20,19 @@
 {%- if include.current_slug and w.slug == include.current_slug -%}{%- assign is_current = true -%}{%- endif -%}
 <li{% if include.far %} class="mln-far-week"{% endif %}>
   <a class="mln-card{% if is_current %} is-current{% endif %}{% if w.symposium %} is-symposium{% endif %}" href="{{ '/mln/week-' | append: w.num | append: '/' | relative_url }}">
-    {% if w.symposium %}<span class="mln-current-flag mln-sympo-flag">🎉 symposium week</span>{% elsif is_current %}<span class="mln-current-flag">reading now</span>{% endif %}
-    <div class="mln-card-thumb">
+    {% if w.symposium %}<span class="mln-current-flag mln-sympo-flag">🎉 symposium week</span>{% elsif w.coming_soon %}<span class="mln-current-flag mln-soon-flag">coming soon</span>{% elsif is_current %}<span class="mln-current-flag">reading now</span>{% endif %}
+    <div class="mln-card-thumb{% if w.coming_soon %} mln-thumb-soon{% endif %}">
+      {% if w.coming_soon %}
+      <span class="mln-thumb-soon-label" aria-hidden="true">TBA</span>
+      {% else %}
       <img src="{{ cover_src }}" alt="{{ w.title }} cover" loading="lazy" decoding="async">
+      {% endif %}
       <span class="mln-status {% if wstatus == 'upcoming' %}is-upcoming{% endif %}">{{ wstatus }}</span>
     </div>
     <div class="mln-card-body">
       <div class="mln-card-top">
         <span class="mln-week">WEEK {{ w.num }}</span>
-        <span class="mln-date">{{ w.date | date: "%b %-d" }}</span>
+        <span class="mln-date">{% if w.coming_soon %}TBA{% else %}{{ w.date | date: "%b %-d" }}{% endif %}</span>
       </div>
       <h3 class="mln-card-title">{{ w.title }}</h3>
       <p class="mln-card-blurb">{{ w.summary }}</p>

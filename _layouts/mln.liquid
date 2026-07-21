@@ -27,12 +27,17 @@ layout: mln_base
       {% endif %}
 
       <h2>About this week</h2>
+      {% if w.description %}
       <div class="mln-desc">{{ w.description | markdownify }}</div>
+      {% elsif w.coming_soon %}
+      <div class="mln-desc"><p>We haven’t picked this week’s paper yet. Check back soon — or come suggest one!</p></div>
+      {% endif %}
 
       {{ content }}
     </div>
 
     <aside class="mln-embed">
+      {% if w.evt %}
       <iframe
         src="https://lu.ma/embed/event/{{ w.evt }}/simple"
         allowfullscreen
@@ -42,6 +47,12 @@ layout: mln_base
       <p class="mln-embed-fallback">
         Trouble loading? <a href="https://luma.com/{{ w.slug }}" target="_blank" rel="noopener">open this event on Luma ↗</a>
       </p>
+      {% else %}
+      <div class="mln-embed-fallback">
+        <p>This week’s session isn’t scheduled yet.</p>
+        <p><a href="{{ site.data.mln.calendar_url }}" target="_blank" rel="noopener">Follow the calendar on Luma ↗</a></p>
+      </div>
+      {% endif %}
       {% if site.data.mln.contact_url %}
       <a class="mln-feedback" href="{{ site.data.mln.contact_url }}" target="_blank" rel="noopener">
         Have feedback on this session? Share it ↗

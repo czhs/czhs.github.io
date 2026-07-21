@@ -168,7 +168,7 @@ weeks:
     slug: "c3mvm73d"
     evt: "evt-fSNsVqUMdTI9mQK"
     date: "2026-07-20"
-    tags: ["paper audio"]
+    tags: ["paper audio", "photos"]
     recording: "/assets/audio/mln-week-10-global-workspace.mp3"
     title: "A global workspace in language models"
     cover: "https://images.lumacdn.com/uploads/ul/eb843472-64fa-45b7-81a1-2ed0b7512cfd.png"
@@ -185,23 +185,10 @@ weeks:
       - title: "A global workspace in language models — Anthropic"
         url: "https://www.anthropic.com/research/global-workspace"
   - num: 11
-    slug: "srsz8rga"
-    evt: "evt-v89wbXHXDCt5bik"
-    date: "2026-07-27"
-    title: "Attention Residuals: Rethinking Information Flow in LLMs"
-    cover: "https://images.lumacdn.com/gallery-images/l6/26a28b85-5c4f-4d9a-a09a-e401c29ce330.png"
-    summary: "Standard residual connections with PreNorm accumulate every layer’s output with fixed unit weights, letting the hidden state grow uncontrollably with depth and diluting each layer’s unique contribution — what if each layer could instead learn which earlier representations to read from?"
-    description: |-
-      Standard residual connections with PreNorm accumulate every layer’s output with fixed unit weights, letting the hidden state grow uncontrollably with depth and diluting each layer’s unique contribution — what if each layer could instead learn which earlier representations to read from?
-
-      This paper introduces Attention Residuals (AttnRes), a novel architectural mechanism by the Kimi Team designed to rethink how information flows in modern Large Language Models. The central challenge is that standard residual connections with PreNorm accumulate all layer outputs using fixed unit weights; this uniform aggregation causes uncontrolled hidden-state growth with depth, progressively diluting each layer’s unique contribution.
-
-      To overcome this limitation, the authors replace the fixed accumulation with a softmax attention mechanism over preceding layer outputs, allowing each layer to selectively aggregate earlier representations using learned, input-dependent weights.
-
-      Join us at CASI for discussion at 8 pm, and (optional) quiet reading from 7 pm.
-    reading:
-      - title: "Attention Residuals: Rethinking Information Flow in LLMs — Kimi Team"
-        url: "https://arxiv.org/pdf/2603.15031"
+    coming_soon: true
+    date: "2026-08-17"
+    title: "Paper to be announced"
+    summary: "We haven’t picked the paper for this week yet — check back soon, or come suggest one!"
   - num: 12
     slug: "lh8qgar2"
     evt: "evt-FqbMX8pVOgTu3xT"
@@ -221,7 +208,7 @@ weeks:
   - num: 13
     slug: "5wvhx171"
     evt: "evt-r6zcq5sAFOwiOEh"
-    date: "2026-09-07"
+    date: "2026-08-31"
     title: "Manifold-Constrained Hyper-Connections"
     cover: "https://images.lumacdn.com/gallery-images/wx/3b0a8406-85d0-426f-a10d-f00084982b88.png"
     summary: "How does constraining residual connections to a geometric manifold restore identity mappings and enable stable scaling in large language models? Can richer cross-layer connectivity improve reasoning and representation quality without sacrificing optimization stability?"
@@ -236,3 +223,21 @@ weeks:
     reading:
       - title: "mHC: Manifold-Constrained Hyper-Connections — DeepSeek"
         url: "https://www.arxiv.org/pdf/2512.24880"
+  - num: 14
+    slug: "srsz8rga"
+    evt: "evt-v89wbXHXDCt5bik"
+    date: "2026-09-07"
+    title: "Attention Residuals: Rethinking Information Flow in LLMs"
+    cover: "https://images.lumacdn.com/gallery-images/l6/26a28b85-5c4f-4d9a-a09a-e401c29ce330.png"
+    summary: "Standard residual connections with PreNorm accumulate every layer’s output with fixed unit weights, letting the hidden state grow uncontrollably with depth and diluting each layer’s unique contribution — what if each layer could instead learn which earlier representations to read from?"
+    description: |-
+      Standard residual connections with PreNorm accumulate every layer’s output with fixed unit weights, letting the hidden state grow uncontrollably with depth and diluting each layer’s unique contribution — what if each layer could instead learn which earlier representations to read from?
+
+      This paper introduces Attention Residuals (AttnRes), a novel architectural mechanism by the Kimi Team designed to rethink how information flows in modern Large Language Models. The central challenge is that standard residual connections with PreNorm accumulate all layer outputs using fixed unit weights; this uniform aggregation causes uncontrolled hidden-state growth with depth, progressively diluting each layer’s unique contribution.
+
+      To overcome this limitation, the authors replace the fixed accumulation with a softmax attention mechanism over preceding layer outputs, allowing each layer to selectively aggregate earlier representations using learned, input-dependent weights.
+
+      Join us at CASI for discussion at 8 pm, and (optional) quiet reading from 7 pm.
+    reading:
+      - title: "Attention Residuals: Rethinking Information Flow in LLMs — Kimi Team"
+        url: "https://arxiv.org/pdf/2603.15031"
