@@ -19,10 +19,20 @@ _config_local.yml
 # Local-only tooling, never published (e.g. update_mln_from_luma.sh).
 /local/
 
-# Local-only robotics WIP: previewed via jekyll serve, but never tracked/published.
+# Local-only portfolio micro-sites (robotics + ml): previewed via jekyll serve,
+# but never tracked/published. Shared layout system lives in portfolio*.liquid.
+/_layouts/portfolio*.liquid
+/_includes/portfolio_styles.liquid
 /_data/robotics.yml
-/_includes/robotics_styles.liquid
-/_layouts/robotics*.liquid
+/_data/ml.yml
 /_pages/robotics.html
 /_pages/robotics_*.md
+/_pages/ml.html
+/_pages/ml_*.md
 /robotics_media/
+
+# Local-only processed media (posters + web videos), never published
+/assets/img/robotics/
+/assets/video/robotics/
+/assets/img/ml/
+/assets/video/ml/
