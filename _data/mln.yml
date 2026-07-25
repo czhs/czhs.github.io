@@ -189,8 +189,10 @@ weeks:
       - title: "A global workspace in language models — Anthropic"
         url: "https://www.anthropic.com/research/global-workspace"
   - num: 11
+    slug: "q7ox1n26"
+    evt: "evt-fgBScV4AgaUwY64"
     coming_soon: true
-    date: "2026-08-17"
+    date: "2026-07-27"
     title: "Paper to be announced"
     summary: "We haven’t picked the paper for this week yet — check back soon, or come suggest one!"
   - num: 12
