@@ -189,16 +189,9 @@ weeks:
       - title: "A global workspace in language models — Anthropic"
         url: "https://www.anthropic.com/research/global-workspace"
   - num: 11
-    slug: "q7ox1n26"
-    evt: "evt-fgBScV4AgaUwY64"
-    coming_soon: true
-    date: "2026-07-27"
-    title: "Paper to be announced"
-    summary: "We haven’t picked the paper for this week yet — check back soon, or come suggest one!"
-  - num: 12
     slug: "lh8qgar2"
     evt: "evt-FqbMX8pVOgTu3xT"
-    date: "2026-08-24"
+    date: "2026-07-27"
     title: "Fundamental Limitations of Single-Vector Embeddings"
     cover: "https://images.lumacdn.com/gallery-images/s0/94a98dc7-f16e-4e74-b733-4b62747a738d.png"
     summary: "Why does something as simple as “finding people who like apples” break our best models? What do alternatives like multi-vector models or cross-encoders mean for real products?"
@@ -211,7 +204,7 @@ weeks:
     reading:
       - title: "On the Theoretical Limitations of Embedding-Based Retrieval — Weller et al."
         url: "https://arxiv.org/abs/2508.21038"
-  - num: 13
+  - num: 12
     slug: "5wvhx171"
     evt: "evt-r6zcq5sAFOwiOEh"
     date: "2026-08-31"
@@ -229,7 +222,7 @@ weeks:
     reading:
       - title: "mHC: Manifold-Constrained Hyper-Connections — DeepSeek"
         url: "https://www.arxiv.org/pdf/2512.24880"
-  - num: 14
+  - num: 13
     slug: "srsz8rga"
     evt: "evt-v89wbXHXDCt5bik"
     date: "2026-09-07"
