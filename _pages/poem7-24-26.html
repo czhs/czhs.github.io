@@ -8,7 +8,6 @@ sitemap: false
 
 <section class="poemlock" id="poemlock">
   <form class="poemlock-gate" id="poemlock-gate" autocomplete="off">
-    <label class="poemlock-label" for="poemlock-pw">this one is locked.</label>
     <div class="poemlock-row">
       <input
         class="poemlock-input"
@@ -16,6 +15,7 @@ sitemap: false
         type="password"
         name="poemlock-pw"
         placeholder="password"
+        aria-label="password"
         autocomplete="off"
         autocapitalize="off"
         autocorrect="off"
@@ -50,12 +50,6 @@ sitemap: false
   /* gate */
   .poemlock-gate {
     text-align: center;
-  }
-  .poemlock-label {
-    display: block;
-    margin-bottom: 1.25rem;
-    opacity: 0.6;
-    font-size: 0.95rem;
   }
   .poemlock-row {
     display: flex;
