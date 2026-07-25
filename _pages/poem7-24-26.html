@@ -1,0 +1,215 @@
+---
+layout: default
+permalink: /poem7-24-26/
+title: poem7-24-26
+nav: false
+sitemap: false
+---
+
+<section class="poemlock" id="poemlock">
+  <form class="poemlock-gate" id="poemlock-gate" autocomplete="off">
+    <label class="poemlock-label" for="poemlock-pw">this one is locked.</label>
+    <div class="poemlock-row">
+      <input
+        class="poemlock-input"
+        id="poemlock-pw"
+        type="password"
+        name="poemlock-pw"
+        placeholder="password"
+        autocomplete="off"
+        autocapitalize="off"
+        autocorrect="off"
+        spellcheck="false"
+      >
+      <button class="poemlock-btn" type="submit">open</button>
+    </div>
+    <p class="poemlock-msg" id="poemlock-msg" role="status" aria-live="polite"></p>
+  </form>
+
+  <div class="poemlock-content" id="poemlock-content" hidden>
+    <button class="poemlock-photo" id="poemlock-photo" type="button" aria-expanded="false" aria-controls="poemlock-note">
+      <img id="poemlock-img" alt="a poem, written on a plane">
+    </button>
+
+    <p class="poemlock-note" id="poemlock-note" hidden></p>
+
+    <p class="poemlock-hint" id="poemlock-hint">click poem for context</p>
+  </div>
+</section>
+
+<style>
+  .poemlock {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 3rem 0 4rem;
+  }
+  .poemlock [hidden] {
+    display: none !important;
+  }
+
+  /* gate */
+  .poemlock-gate {
+    text-align: center;
+  }
+  .poemlock-label {
+    display: block;
+    margin-bottom: 1.25rem;
+    opacity: 0.6;
+    font-size: 0.95rem;
+  }
+  .poemlock-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .poemlock-input {
+    width: 220px;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--global-divider-color);
+    border-radius: 8px;
+    background: var(--global-bg-color);
+    color: var(--global-text-color);
+    font-size: 1rem;
+  }
+  .poemlock-input:focus {
+    outline: none;
+    border-color: var(--global-theme-color);
+  }
+  .poemlock-btn {
+    padding: 0.55rem 1.25rem;
+    border: 1px solid var(--global-divider-color);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--global-text-color);
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  .poemlock-btn:hover {
+    color: var(--global-theme-color);
+    border-color: var(--global-theme-color);
+  }
+  .poemlock-msg {
+    min-height: 1.4em;
+    margin: 1rem 0 0;
+    font-size: 0.9rem;
+    opacity: 0.65;
+  }
+
+  /* content */
+  .poemlock-photo {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    background: #000;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .poemlock-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .poemlock-note {
+    margin: 1.5rem 0 0;
+    padding: 1.1rem 1.25rem;
+    border-left: 2px solid var(--global-theme-color);
+    background: var(--global-code-bg-color);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .poemlock-hint {
+    margin: 1.25rem 0 0;
+    text-align: center;
+    font-size: 0.85rem;
+    opacity: 0.5;
+  }
+</style>
+
+<script>
+  (function () {
+    var PAYLOAD_URL = "{{ '/assets/enc/poem7-24-26.json' | relative_url }}";
+
+    var gate = document.getElementById("poemlock-gate");
+    var pw = document.getElementById("poemlock-pw");
+    var msg = document.getElementById("poemlock-msg");
+    var content = document.getElementById("poemlock-content");
+    var photo = document.getElementById("poemlock-photo");
+    var img = document.getElementById("poemlock-img");
+    var note = document.getElementById("poemlock-note");
+    var hint = document.getElementById("poemlock-hint");
+
+    function b64(s) {
+      return Uint8Array.from(atob(s), function (c) {
+        return c.charCodeAt(0);
+      });
+    }
+
+    var payload = null;
+    function getPayload() {
+      if (payload) return Promise.resolve(payload);
+      return fetch(PAYLOAD_URL)
+        .then(function (r) {
+          return r.json();
+        })
+        .then(function (p) {
+          payload = p;
+          return p;
+        });
+    }
+
+    function decrypt(password) {
+      return getPayload().then(function (p) {
+        var subtle = window.crypto.subtle;
+        return subtle
+          .importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"])
+          .then(function (km) {
+            return subtle.deriveKey(
+              { name: "PBKDF2", salt: b64(p.salt), iterations: p.iter, hash: "SHA-256" },
+              km,
+              { name: "AES-GCM", length: 256 },
+              false,
+              ["decrypt"]
+            );
+          })
+          .then(function (key) {
+            return subtle.decrypt({ name: "AES-GCM", iv: b64(p.iv) }, key, b64(p.ct));
+          })
+          .then(function (buf) {
+            return JSON.parse(new TextDecoder().decode(buf));
+          });
+      });
+    }
+
+    gate.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!window.crypto || !window.crypto.subtle) {
+        msg.textContent = "this browser can't decrypt here — try https.";
+        return;
+      }
+      msg.textContent = "unlocking…";
+      decrypt(pw.value).then(
+        function (data) {
+          img.src = data.img;
+          note.textContent = data.note;
+          gate.hidden = true;
+          content.hidden = false;
+        },
+        function () {
+          msg.textContent = "not it.";
+          pw.select();
+        }
+      );
+    });
+
+    photo.addEventListener("click", function () {
+      var open = note.hidden;
+      note.hidden = !open;
+      photo.setAttribute("aria-expanded", open ? "true" : "false");
+      hint.textContent = open ? "click poem to hide context" : "click poem for context";
+    });
+  })();
+</script>
