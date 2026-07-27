@@ -192,6 +192,8 @@ weeks:
     slug: "lh8qgar2"
     evt: "evt-FqbMX8pVOgTu3xT"
     date: "2026-07-27"
+    tags: ["paper audio"]
+    recording: "/assets/audio/mln-week-11-single-vector.mp3"
     title: "Fundamental Limitations of Single-Vector Embeddings"
     cover: "https://images.lumacdn.com/gallery-images/s0/94a98dc7-f16e-4e74-b733-4b62747a738d.png"
     summary: "Why does something as simple as “finding people who like apples” break our best models? What do alternatives like multi-vector models or cross-encoders mean for real products?"
