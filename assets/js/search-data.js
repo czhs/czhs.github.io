@@ -266,6 +266,20 @@ ninja.data = [{
           window.open("https://www.linkedin.com/in/chris-shi-170293369", "_blank");
         },
       },{
+        id: 'social-orcid',
+        title: 'ORCID',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://orcid.org/0009-0002-4153-698X", "_blank");
+        },
+      },{
+        id: 'social-openreview',
+        title: 'Openreview',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://openreview.net/profile?id=~Chris_Shi1", "_blank");
+        },
+      },{
       id: 'light-theme',
       title: 'Change theme to light',
       description: 'Change the theme of the site to Light',
