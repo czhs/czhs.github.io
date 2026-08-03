@@ -1,3 +1,8 @@
-# Bottom-of-page social icons. Two only: GitHub + LinkedIn.
+# Bottom-of-page social icons: GitHub, LinkedIn, ORCID, OpenReview.
 github_username: czhs
 linkedin_username: chris-shi-170293369
+orcid_id: 0009-0002-4153-698X
+openreview:
+  url: https://openreview.net/profile?id=~Chris_Shi1
+  title: OpenReview
+  logo: /assets/img/openreview.png
