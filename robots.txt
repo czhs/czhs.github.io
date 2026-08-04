@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://chrisshi.com/sitemap.xml
+Sitemap: https://czhs.github.io/sitemap.xml
