@@ -293,7 +293,10 @@ html:has(body.rw-site) {
   }
 }
 .rw-chip {
-  padding: 0.24rem 0.68rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0.2rem 0.7rem;
   border: 1px solid var(--rw-line);
   border-radius: 999px;
   background: var(--rw-card);
@@ -311,6 +314,8 @@ html:has(body.rw-site) {
   margin: 0;
   border: none;
 }
+/* Styled as a pill so it reads as something you press — as bare text with a
+   chevron, people didn't see there was anything to open. */
 .rw-faq summary {
   cursor: pointer;
   list-style: none;
@@ -319,10 +324,19 @@ html:has(body.rw-site) {
   gap: 0.4rem;
   /* matches the chip height so the toggle and the chips share one band */
   min-height: 28px;
-  padding: 0;
+  padding: 0.2rem 0.85rem 0.2rem 0.7rem;
+  border: 1px solid var(--rw-card-line);
+  border-radius: 999px;
+  background: var(--rw-card);
   font-family: var(--rw-display);
   font-weight: 600;
-  font-size: 0.88rem;
+  font-size: 0.84rem;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.rw-faq summary:hover,
+.rw-faq[open] summary {
+  border-color: var(--rw-ring);
+  color: var(--rw-ring);
 }
 .rw-faq summary::-webkit-details-marker { display: none; }
 .rw-faq summary::before {
@@ -339,7 +353,7 @@ html:has(body.rw-site) {
   columns: 3 230px;
   column-gap: 2.1rem;
   margin: 0;
-  padding-bottom: 1.2rem;
+  padding: 1.25rem 0 1.2rem;
 }
 .rw-about-sec {
   break-inside: avoid;
@@ -760,6 +774,29 @@ html:has(body.rw-site) {
 
 /* ── blog post page ───────────────────────────────────────── */
 .rw-post { max-width: 720px; }
+
+/* a post written to fill the blog out before there were real ones — said
+   plainly on the post and tagged on its feed card, so it is never mistaken for
+   a member's writeup */
+.rw-placeholder-note {
+  margin: 0 0 1.5rem;
+  padding: 0.8rem 1rem;
+  border: 1px dashed var(--rw-card-line);
+  border-radius: 12px;
+  font-size: 0.87rem;
+  line-height: 1.55;
+  opacity: 0.85;
+}
+.rw-placeholder-note strong { color: var(--rw-gold); }
+.rw-post-tag {
+  display: inline-block;
+  margin-right: 0.4rem;
+  padding: 0.08rem 0.45rem;
+  border: 1px dashed var(--rw-card-line);
+  border-radius: 999px;
+  font-size: 0.66rem;
+  letter-spacing: 0.03em;
+}
 .rw-post-byline {
   margin: 0.55rem 0 0;
   font-family: var(--global-code-font-family, monospace);

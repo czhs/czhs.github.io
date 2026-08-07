@@ -16,8 +16,12 @@
     {%- endif -%}
     <div class="rw-post-body">
       <h3 class="rw-post-title">{{ p.title }}</h3>
+      {%- comment -%}
+        A placeholder shows its tag instead of a byline — there is no person to
+        credit, and printing `author: placeholder` next to the tag said it twice.
+      {%- endcomment -%}
       <p class="rw-post-meta">
-        {{ p.author }}{% if p.date %} · {{ p.date | date: "%b %-d" }}{% endif %}{% if p.session %} · session {{ p.session }}{% endif %}
+        {% if p.placeholder %}<span class="rw-post-tag">AI placeholder</span>{% else %}{{ p.author }} · {% endif %}{% if p.date %}{{ p.date | date: "%b %-d" }}{% endif %}{% if p.session %} · session {{ p.session }}{% endif %}
       </p>
       {%- if p.description -%}
       <p class="rw-post-excerpt">{{ p.description }}</p>

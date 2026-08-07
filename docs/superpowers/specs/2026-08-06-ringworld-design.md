@@ -1,6 +1,6 @@
 # ringworld — design
 
-A micro-site for **ringworld**, a weekly mechanistic-interpretability hacker space in
+A micro-site for **ringworld**, a weekly mechanistic-interpretability maker space in
 Pittsburgh, hosted by CASI. It sits beside the MLn Reading Club micro-site and shares its
 machinery: a Jekyll layout pair, a YAML data file, and card grids.
 
@@ -197,7 +197,7 @@ All body copy is existing text, not written for the site:
 2. **The club blurb**, supplied directly, used as the hero lead and the page description
    meta. Single-sourced from `blurb:` in the data file.
 
-The hero title — *A weekly hacker space for mechanistic interpretability.* — and the
+The hero title — *A weekly maker space for mechanistic interpretability.* — and the
 first blog post are written for the site, since the Luma copy describes a general maker
 space and doesn't carry the interp framing.
 

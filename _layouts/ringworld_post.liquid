@@ -15,14 +15,25 @@ layout: ringworld_base
       </div>
       <h1 class="rw-detail-title">{{ page.title }}</h1>
       <p class="rw-post-byline">
-        {%- if page.author_url -%}
-          <a href="{{ page.author_url }}" target="_blank" rel="noopener">{{ page.author }}</a>
-        {%- else -%}
-          {{ page.author }}
-        {%- endif -%}
-        {%- if page.date %} · {{ page.date | date: "%B %-d, %Y" }}{% endif -%}
+        {%- unless page.placeholder -%}
+          {%- if page.author_url -%}
+            <a href="{{ page.author_url }}" target="_blank" rel="noopener">{{ page.author }}</a>
+          {%- else -%}
+            {{ page.author }}
+          {%- endif -%}
+          {%- if page.date %} · {% endif -%}
+        {%- endunless -%}
+        {%- if page.date %}{{ page.date | date: "%B %-d, %Y" }}{% endif -%}
       </p>
     </header>
+
+    {%- if page.placeholder -%}
+    <p class="rw-placeholder-note">
+      <strong>Placeholder.</strong> This post was written by AI to fill the blog out
+      before the first session, not by anyone who came to one. It will be replaced by a
+      real writeup.
+    </p>
+    {%- endif -%}
 
     {%- if page.cover -%}
     <img class="rw-post-cover" src="{{ page.cover | relative_url }}" alt="" loading="lazy" decoding="async" />

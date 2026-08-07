@@ -1,8 +1,11 @@
 ---
 title: What ringworld is for
-author: Chris Shi
+# Written by Claude, not by a member — so it isn't bylined to a person. The
+# `placeholder` flag puts a notice on the post and a tag on its feed card.
+author: placeholder
+placeholder: true
 date: 2026-08-06
-description: Why a weekly hacker space for mechanistic interpretability, what to bring to the first one, and the one rule we actually enforce.
+description: Why a weekly maker space for mechanistic interpretability, what to bring to the first one, and the one rule we actually enforce.
 cover: /assets/img/ringworld/posts/craig-street-sunset.jpg
 ---
 

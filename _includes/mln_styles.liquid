@@ -181,6 +181,9 @@ body.mln-site { padding: 0; }
   }
 }
 .mln-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
   padding: 0.2rem 0.7rem;
   border: 1px solid var(--global-divider-color);
   border-radius: 999px;
@@ -192,17 +195,28 @@ body.mln-site { padding: 0; }
   margin: 0;
   border: none;
 }
+/* Styled as a pill so it reads as something you press — as bare text with a
+   chevron, people didn't see there was anything to open. */
 .mln-faq summary {
   cursor: pointer;
   list-style: none;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   /* matches the chip height so the toggle and the chips share one band */
   min-height: 28px;
-  padding: 0;
+  padding: 0.2rem 0.85rem 0.2rem 0.7rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 999px;
+  background: var(--global-card-bg-color);
   font-weight: 700;
-  font-size: 0.88rem;
+  font-size: 0.84rem;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.mln-faq summary:hover,
+.mln-faq[open] summary {
+  border-color: var(--global-theme-color);
+  color: var(--global-theme-color);
 }
 .mln-faq summary::-webkit-details-marker { display: none; }
 .mln-faq summary::before {
@@ -214,7 +228,7 @@ body.mln-site { padding: 0; }
   transition: transform 0.15s ease;
 }
 .mln-faq[open] summary::before { transform: rotate(90deg); }
-.mln-faq .mln-about { margin: 0; padding-bottom: 1.1rem; }
+.mln-faq .mln-about { margin: 0; padding: 1.25rem 0 1.1rem; }
 
 /* about: the club copy, arranged as compact plain-text columns (no cards) */
 .mln-about {
