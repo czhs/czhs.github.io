@@ -16,11 +16,18 @@ nav: false
     discussion! Click any week to register and grab the reading list, notes &amp;
     resources for running the discussion yourself.
   </p>
-  <p class="mln-cadence">
+  {%- comment -%}
+    Chips, the cohosting invite, and the What's this? toggle share one row rather
+    than stacking as three full-width bands. Open, the panel takes a row of its
+    own. No Luma link here — the masthead already has one.
+  {%- endcomment -%}
+  <div class="mln-metarow">
     <span class="mln-chip">Mondays · 7–9pm</span>
     <span class="mln-chip">quiet reading 7pm · discussion 8pm</span>
-    <a href="{{ site.data.mln.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">follow on Luma ↗</a>
-  </p>
+    <span class="mln-host-invite">
+      <span aria-hidden="true">✋</span> Interested in cohosting?
+      <a href="mailto:{{ site.data.mln.contact_email }}?subject=Cohosting%20at%20MLn">reach out!</a>
+    </span>
 
   <details class="mln-faq">
     <summary>What's this?</summary>
@@ -69,18 +76,8 @@ nav: false
     </div>
     </div>
   </details>
+  </div>
 </section>
-
-{%- comment -%}
-  Weeks are run by members — the hero already offers the notes and resources for
-  running a discussion yourself — so the ask to host sits right above the grid,
-  where someone browsing weeks will meet it.
-{%- endcomment -%}
-<p class="mln-host-banner">
-  <span class="mln-host-eyebrow" aria-hidden="true">✋</span>
-  <span>Interested in cohosting?</span>
-  <a href="mailto:{{ site.data.mln.contact_email }}?subject=Cohosting%20at%20MLn">reach out!</a>
-</p>
 
 <ul class="mln-grid">
   {%- comment -%}

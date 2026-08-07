@@ -21,11 +21,15 @@ nav: false
   <section class="rw-hero">
     <h1 class="rw-hero-title">A weekly hacker space for <em>mechanistic interpretability</em>.</h1>
     <p class="rw-hero-lead">{{ site.data.ringworld.blurb }}</p>
-    <p class="rw-cadence">
+    {%- comment -%}
+      Chips and the What's this? toggle share one row rather than stacking as two
+      full-width bands with a rule between them. Open, the panel takes a row of
+      its own (.rw-faq[open] goes full-basis). No Luma link here — the masthead
+      already has one, and it was appearing three times on this page.
+    {%- endcomment -%}
+    <div class="rw-metarow">
       <span class="rw-chip">Sundays · {{ site.data.ringworld.time }}</span>
       <span class="rw-chip">{{ site.data.ringworld.location }}</span>
-      <a href="{{ site.data.ringworld.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">follow on Luma ↗</a>
-    </p>
 
     <details class="rw-faq">
       <summary>What’s this?</summary>
@@ -77,6 +81,7 @@ nav: false
         </div>
       </div>
     </details>
+    </div>
   </section>
 
   {%- comment -%}
@@ -85,8 +90,7 @@ nav: false
   {%- endcomment -%}
   <section class="rw-sec">
     <div class="rw-sec-head">
-      <h2 class="rw-sec-title">what people made</h2>
-      <span class="rw-sec-note">the ringworld interpretability blog</span>
+      <h2 class="rw-sec-title">the ringworld interpretability blog</h2>
     </div>
 
     {%- assign posts = site.ringworld | sort: "date" | reverse -%}
@@ -118,10 +122,7 @@ nav: false
     {%- assign with_photo = site.data.ringworld.sessions | where_exp: "s", "s.photo" -%}
     <div class="rw-sec-head">
       <h2 class="rw-sec-title">sessions</h2>
-      {%- if with_photo.size > 0 -%}
-      <span class="rw-sec-note is-hover-only">hover to flip</span>
-      {%- endif -%}
-      <a class="rw-sec-link" href="{{ site.data.ringworld.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">follow on Luma ↗</a>
+      <span class="rw-sec-note">click to open on Luma{% if with_photo.size > 0 %}<span class="is-hover-only"> · hover to see photos</span>{% endif %}</span>
     </div>
 
     {%- comment -%}

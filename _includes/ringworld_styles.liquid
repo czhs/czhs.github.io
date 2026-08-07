@@ -265,12 +265,17 @@ html:has(body.rw-site) {
   margin: 0 0 1rem;
 }
 
-.rw-cadence {
+/* One row instead of three stacked full-width bands: the chips and the What's
+   this? toggle sit together, and the panel only claims a row of its own once
+   it's open. */
+.rw-metarow {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
-  margin: 0 0 1.15rem;
+  gap: 0.5rem 0.75rem;
+  margin: 0 0 1.7rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--rw-line);
   font-family: var(--global-code-font-family, monospace);
   font-size: 0.79rem;
 }
@@ -281,30 +286,36 @@ html:has(body.rw-site) {
   background: var(--rw-card);
   opacity: 0.9;
 }
-.rw-cadence a {
+.rw-metarow a {
   color: var(--rw-ring);
   text-decoration: none;
   font-weight: 600;
 }
-.rw-cadence a:hover { text-decoration: underline; }
+.rw-metarow a:hover { text-decoration: underline; }
 
 /* ── "What's this?" ───────────────────────────────────────── */
+/* closed, it rides at the right end of the meta row; open, it takes the row
+   below so the panel gets full width */
 .rw-faq {
-  margin: 0 0 1.6rem;
-  border-top: 1px solid var(--rw-line);
-  border-bottom: 1px solid var(--rw-line);
+  margin: 0 0 0 auto;
+  border: none;
+}
+.rw-faq[open] {
+  flex: 1 0 100%;
+  margin-left: 0;
 }
 .rw-faq summary {
   cursor: pointer;
   list-style: none;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.65rem 0;
+  gap: 0.4rem;
+  padding: 0;
   font-family: var(--rw-display);
   font-weight: 600;
-  font-size: 0.96rem;
+  font-size: 0.88rem;
 }
+.rw-faq[open] summary { padding: 0.55rem 0 0; }
 .rw-faq summary::-webkit-details-marker { display: none; }
 .rw-faq summary::before {
   content: "›";
@@ -315,7 +326,6 @@ html:has(body.rw-site) {
   transition: transform 0.15s ease;
 }
 .rw-faq[open] summary::before { transform: rotate(90deg); }
-.rw-faq[open] summary { padding-bottom: 0.3rem; }
 
 .rw-about {
   columns: 3 230px;
@@ -593,9 +603,10 @@ html:has(body.rw-site) {
   background: linear-gradient(to top, rgba(20, 28, 40, 0.72), transparent);
 }
 /* The flip affordance is stated once on the section header, since it applies to
-   the whole row, and hover doesn't exist on touch, so it's hidden there. */
+   the whole row, and hover doesn't exist on touch, so that half is hidden there
+   while the click half stays. */
 @media (hover: none) {
-  .rw-sec-note.is-hover-only { display: none; }
+  .rw-sec-note .is-hover-only { display: none; }
 }
 .rw-tile-art {
   display: flex;
