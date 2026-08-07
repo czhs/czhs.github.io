@@ -193,6 +193,20 @@ html:has(body.rw-site) {
   mask: url("{{ '/assets/img/mln_mark.png' | relative_url }}") center / contain no-repeat;
 }
 
+/* sitewide caveat strip, directly under the masthead so it can't be missed */
+.rw-construction {
+  background: rgba(217, 155, 60, 0.13);
+  border-bottom: 1px solid rgba(217, 155, 60, 0.32);
+  font-size: 0.83rem;
+  line-height: 1.5;
+}
+.rw-construction .rw-shell {
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+.rw-construction strong { color: #9a6a1c; }
+.rw-construction span[aria-hidden] { margin-right: 0.4rem; }
+
 .rw-main { padding-bottom: 3.5rem; min-height: 60vh; }
 
 /* ── banner ───────────────────────────────────────────────── */

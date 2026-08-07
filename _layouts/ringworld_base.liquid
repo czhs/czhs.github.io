@@ -28,6 +28,21 @@
       </div>
     </header>
 
+    {%- comment -%}
+      Sitewide, not just the landing page — the whole micro-site is still being
+      built. Remove `under_construction` from _data/ringworld.yml to drop it.
+    {%- endcomment -%}
+    {%- if site.data.ringworld.under_construction -%}
+    <div class="rw-construction">
+      <div class="rw-shell">
+        <span aria-hidden="true">🚧</span>
+        <strong>Under construction.</strong> This site is still being put together —
+        some of what's on it is placeholder, and details will change. The club itself is
+        real; the Luma is the source of truth.
+      </div>
+    </div>
+    {%- endif -%}
+
     <main class="rw-main" role="main">
       {{ content }}
     </main>

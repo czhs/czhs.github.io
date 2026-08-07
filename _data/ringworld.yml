@@ -21,6 +21,9 @@
 #            rocket saturn-orange saturn-peach saturn-purple star-big
 #            star-folded star-ringed star-trail stars-twin ufo-alien ufo-bear
 #            ufo-blue ufo-eye
+# Sitewide banner under the masthead. Delete this line when the site is done.
+under_construction: true
+
 calendar_url: https://luma.com/ringworld
 time: 4–7pm
 location: 201 S Craig St, Unit 1E
