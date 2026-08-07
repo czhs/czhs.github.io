@@ -1,0 +1,50 @@
+---
+layout: ringworld_base
+---
+
+{% assign s = site.data.ringworld.sessions | where: "num", page.session | first %}
+
+<div class="rw-shell">
+  <a class="rw-back" href="{{ '/ringworld/' | relative_url }}">← all sessions</a>
+
+  <header class="rw-detail-head">
+    <div class="rw-detail-eyebrow">ringworld · session {{ s.num }}</div>
+    <h1 class="rw-detail-title">{{ s.title }}</h1>
+    <p class="rw-detail-when">
+      {% if s.evt %}{{ s.date | date: "%A, %B %-d, %Y" }} · {{ site.data.ringworld.time }}{% else %}Not scheduled yet{% endif %}
+      · {{ site.data.ringworld.location }}
+    </p>
+  </header>
+
+  <div class="rw-detail-grid">
+    <div class="rw-body">
+      <h2>About this session</h2>
+      {% if s.description %}
+      <div class="rw-desc">{{ s.description | markdownify }}</div>
+      {% else %}
+      <div class="rw-desc"><p>Same shape as always: two focus blocks, a social break, and an optional show-and-tell at the end. Bring whatever you have been meaning to take apart.</p></div>
+      {% endif %}
+
+      {{ content }}
+    </div>
+
+    <aside class="rw-embed">
+      {% if s.evt %}
+      <iframe
+        src="https://lu.ma/embed/event/{{ s.evt }}/simple"
+        allowfullscreen
+        aria-hidden="false"
+        tabindex="0"
+        title="{{ s.title }} on Luma"></iframe>
+      <p class="rw-embed-fallback">
+        Trouble loading? <a href="https://luma.com/{{ s.slug }}" target="_blank" rel="noopener">open this session on Luma ↗</a>
+      </p>
+      {% else %}
+      <div class="rw-embed-fallback">
+        <p>This session isn’t scheduled yet.</p>
+        <p><a href="{{ site.data.ringworld.calendar_url }}" target="_blank" rel="noopener">Follow the calendar on Luma ↗</a></p>
+      </div>
+      {% endif %}
+    </aside>
+  </div>
+</div>

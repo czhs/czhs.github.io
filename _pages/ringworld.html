@@ -1,0 +1,128 @@
+---
+layout: ringworld_base
+permalink: /ringworld/
+title: ringworld
+standalone_title: ringworld
+description: A friendly community of tinkerers in Pittsburgh, PA — we meet to work on side projects every Sunday near CMU.
+og_image: /assets/img/ringworld/og.png
+nav: false
+---
+
+<div class="rw-banner">
+  <img
+    src="{{ '/assets/img/ringworld/banner.png' | relative_url }}"
+    alt="ringworld — a hand-drawn ring habitat of green land, lakes and mountains, floating among planets and stars"
+    width="1800"
+    height="514"
+    fetchpriority="high" />
+</div>
+
+<div class="rw-shell">
+  <section class="rw-hero">
+    <h1 class="rw-hero-title">A weekly maker space for <em>mechanistic interpretability</em>.</h1>
+    <p class="rw-hero-lead">{{ site.data.ringworld.blurb }}</p>
+    <p class="rw-cadence">
+      <span class="rw-chip">Sundays · {{ site.data.ringworld.time }}</span>
+      <span class="rw-chip">{{ site.data.ringworld.location }}</span>
+      <a href="{{ site.data.ringworld.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">follow on Luma ↗</a>
+    </p>
+
+    <details class="rw-faq">
+      <summary>What’s this?</summary>
+      <div class="rw-about">
+        <div class="rw-about-sec">
+          <h2 class="rw-about-h">What’s this?</h2>
+          <ul>
+            <li>A super warm group of folks working on things we don’t normally have time for!</li>
+            <li>The project you work on can be anything! ex. building a robot, writing a poem, coding an app, making beats, painting shoes — as long as it’s something you’re not obligated to do (i.e. no school work if you’re a student, no job work if you’re employed)</li>
+            <li>At the end, we have a show-and-tell option for people to talk about what they did</li>
+          </ul>
+        </div>
+        <div class="rw-about-sec">
+          <h2 class="rw-about-h">When / Where</h2>
+          <ul>
+            <li>{{ site.data.ringworld.location }} — {{ site.data.ringworld.location_note }}</li>
+            <li>4 PM, every Sunday</li>
+          </ul>
+        </div>
+        <div class="rw-about-sec">
+          <h2 class="rw-about-h">Here’s how it usually goes</h2>
+          <dl class="rw-sched">
+            <div><dt>4:15 PM</dt><dd>introductions</dd></div>
+            <div><dt>4:30 PM</dt><dd>focus time</dd></div>
+            <div><dt>5:20 PM</dt><dd>social break</dd></div>
+            <div><dt>5:40 PM</dt><dd>focus time</dd></div>
+            <div><dt>6:30 PM</dt><dd>(optional) show and tell</dd></div>
+          </dl>
+        </div>
+        <div class="rw-about-sec">
+          <h2 class="rw-about-h">Who’s it for?</h2>
+          <p>People who’ve been wanting to work on a passion of theirs, but just haven’t been able to find the time/motivation.</p>
+        </div>
+        <div class="rw-about-sec">
+          <h2 class="rw-about-h">Why</h2>
+          <ul>
+            <li>We’ve been procrastinating too much on our side projects even though we have so much fun doing them. We know we’re not alone in this and want to keep others accountable for working on what they’re passionate about!</li>
+            <li>We’ve also met a ton of really fun friends by making things we care about!</li>
+          </ul>
+        </div>
+        <div class="rw-about-sec">
+          <h2 class="rw-about-h">Rules / guidelines</h2>
+          <ul>
+            <li>PLEASE DON’T work on your main thing (school or your job) — if you don’t know what to work on, we’re sure we can help you find something.</li>
+            <li>Act like a host, include people in conversations, talk to people even if they’re strangers, offer to help out and clean up, don’t network if you’re here to network we will be so sad, come to make stuff and find super fun friends :)</li>
+            <li>Bring snacks if you’re feeling kind!</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <ul class="rw-grid">
+    {%- comment -%}
+      Ordered by real meeting date, newest→oldest (left→right), not `num`. Only the
+      coming session shows as a standalone card, flagged "up next". Every other
+      upcoming session collapses behind the dropdown card, which sits first (left of
+      the coming session). Past sessions follow, most recent first.
+    {%- endcomment -%}
+    {%- assign today_str = site.time | date: "%Y-%m-%d" -%}
+    {%- assign upcoming = site.data.ringworld.sessions | where_exp: "s", "s.date >= today_str" | sort: "date" -%}
+    {%- assign past = site.data.ringworld.sessions | where_exp: "s", "s.date < today_str" | sort: "date" | reverse -%}
+    {%- assign coming = upcoming | first -%}
+    {%- assign next_slug = coming.slug -%}
+    {%- assign future = upcoming | where_exp: "s", "s.slug != next_slug" | sort: "date" | reverse -%}
+
+    {%- if future.size > 0 -%}
+      <li class="rw-more-li">
+        <button type="button" id="rw-more-btn" class="rw-more-card" aria-expanded="false">
+          <span class="rw-more-icon" aria-hidden="true">+{{ future.size }}</span>
+          <span class="rw-more-label rw-more-open">more upcoming session{% if future.size != 1 %}s{% endif %} <span class="rw-arrow">↓</span></span>
+          <span class="rw-more-label rw-more-close">show fewer <span class="rw-arrow">↑</span></span>
+        </button>
+      </li>
+      {%- for s in future -%}
+        {% include ringworld_card.liquid s=s today_str=today_str next_slug=next_slug far=true %}
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- if coming -%}
+      {% include ringworld_card.liquid s=coming today_str=today_str next_slug=next_slug %}
+    {%- endif -%}
+
+    {%- for s in past -%}
+      {% include ringworld_card.liquid s=s today_str=today_str next_slug=next_slug %}
+    {%- endfor -%}
+  </ul>
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('rw-more-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var grid = btn.closest('.rw-grid');
+      var open = grid.classList.toggle('rw-expanded');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  })();
+</script>

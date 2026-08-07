@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="{{ site.lang }}">
+  <head>
+    {% include head.liquid %}
+    {% include ringworld_styles.liquid %}
+  </head>
+
+  <body class="rw-site">
+    <header class="rw-masthead">
+      <div class="rw-shell rw-masthead-inner">
+        <a class="rw-brand" href="{{ '/ringworld/' | relative_url }}" aria-label="ringworld — home">
+          <img class="rw-brand-ring" src="{{ '/assets/img/ringworld/mark.png' | relative_url }}" alt="" width="480" height="263" />
+          <span class="rw-brand-mark" aria-hidden="true"></span>
+        </a>
+        <nav class="rw-topnav">
+          <a href="{{ '/mln/' | relative_url }}">MLn</a>
+          <a href="{{ site.data.ringworld.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">Luma ↗</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="rw-main" role="main">
+      {{ content }}
+    </main>
+
+    <footer class="rw-foot">
+      <div class="rw-shell rw-foot-inner">
+        <span class="rw-foot-name">ringworld</span>
+        <span class="rw-foot-dot">·</span>
+        <span>Pittsburgh · Sundays 4–7pm</span>
+        <a class="rw-foot-by" href="{{ '/' | relative_url }}">by Chris Shi</a>
+      </div>
+    </footer>
+
+    <!-- Hidden theme toggle: al-folio's theme.js wires listeners to these IDs on load.
+         This micro-site's masthead has no toggle, so we keep them present but hidden
+         to avoid a null-addEventListener crash that would halt all page JS. -->
+    <button id="light-toggle" title="Change theme" style="display: none;" aria-hidden="true">
+      <i class="ti ti-sun-moon" id="light-toggle-system"></i>
+      <i class="ti ti-moon-filled" id="light-toggle-dark"></i>
+      <i class="ti ti-sun-filled" id="light-toggle-light"></i>
+    </button>
+
+    {% include scripts.liquid %}
+  </body>
+</html>

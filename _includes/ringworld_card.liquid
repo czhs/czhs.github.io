@@ -1,0 +1,50 @@
+{%- comment -%}
+  One session card for the /ringworld/ grid.
+  params: s (session hash), today_str ("%Y-%m-%d" build date), next_slug (slug
+          of the session happening next), far (bool — collapsed behind the
+          "more upcoming" toggle).
+
+  Unlike MLn's week cards there is no cover thumbnail: every session is the same
+  recurring event, so a row of identical Luma covers would carry no information.
+  The session number, date, and ring watermark carry the card instead.
+{%- endcomment -%}
+{%- assign s = include.s -%}
+{%- if s.date >= include.today_str -%}{%- assign sstatus = 'upcoming' -%}{%- else -%}{%- assign sstatus = 'past' -%}{%- endif -%}
+{%- assign is_next = false -%}
+{%- if include.next_slug and s.slug == include.next_slug -%}{%- assign is_next = true -%}{%- endif -%}
+{%- comment -%}
+  A "coming soon" session shows TBA for its date only while it has no Luma event
+  — once the session is scheduled the date is real, even if nothing else is.
+{%- endcomment -%}
+{%- assign date_tba = s.coming_soon -%}
+{%- if s.evt -%}{%- assign date_tba = false -%}{%- endif -%}
+<li{% if include.far %} class="rw-far-session"{% endif %}>
+  <a class="rw-card{% if is_next %} is-next{% endif %}" href="{{ '/ringworld/session-' | append: s.num | append: '/' | relative_url }}">
+    <span class="rw-card-ring" aria-hidden="true"></span>
+    <div class="rw-card-top">
+      <span class="rw-num">session {{ s.num }}</span>
+      {% if is_next %}<span class="rw-flag">up next</span>
+      {% elsif s.coming_soon %}<span class="rw-flag rw-soon-flag">coming soon</span>
+      {% else %}<span class="rw-status {% if sstatus == 'upcoming' %}is-upcoming{% endif %}">{{ sstatus }}</span>{% endif %}
+      <span class="rw-date">{% if date_tba %}TBA{% else %}{{ s.date | date: "%b %-d" }}{% endif %}</span>
+    </div>
+    <h3 class="rw-card-title">{{ s.title }}</h3>
+    <p class="rw-card-blurb">{{ s.summary }}</p>
+    {%- if s.tags and s.tags.size > 0 -%}
+    <div class="rw-card-tags">
+      {%- for t in s.tags -%}
+        {%- case t -%}
+          {%- when 'show and tell' -%}{%- assign tico = '🔭' -%}
+          {%- when 'photos' -%}{%- assign tico = '📷' -%}
+          {%- when 'demo' -%}{%- assign tico = '🕹️' -%}
+          {%- when 'board notes' -%}{%- assign tico = '📝' -%}
+          {%- when 'writing' -%}{%- assign tico = '✍️' -%}
+          {%- else -%}{%- assign tico = '✦' -%}
+        {%- endcase -%}
+        <span class="rw-tag"><span class="rw-tag-ico" aria-hidden="true">{{ tico }}</span>{{ t }}</span>
+      {%- endfor -%}
+    </div>
+    {%- endif -%}
+    <span class="rw-card-cta">open session <span class="rw-arrow">→</span></span>
+  </a>
+</li>

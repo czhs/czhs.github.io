@@ -1,0 +1,37 @@
+# ringworld — a weekly mechanistic-interpretability maker space.
+# Every card on /ringworld/ and every /ringworld/session-N/ page is rendered
+# from this file. Sync is manual — pull the current state from
+# https://luma.com/ringworld.
+#
+# To add a session: copy a block, bump `num`, paste the Luma slug + evt id, and
+# add a matching stub page in _pages/rw_sessionN.md.
+#   slug — the luma.com/<slug> path for the event
+#   evt  — the evt-… id used by the lu.ma/embed/event/<evt>/simple iframe
+calendar_url: https://luma.com/ringworld
+time: 4–7pm
+location: 201 S Craig St, Unit 1E
+location_note: enter from the Henry St side
+# The club blurb. Used as the hero lead and as the page description meta, so it
+# only needs changing here.
+blurb: >-
+  A friendly community of tinkerers in Pittsburgh, PA—we meet to work on side
+  projects every Sunday near CMU! Feel free to send a message or notif through
+  Luma if you need to get in contact!
+
+sessions:
+  - num: 1
+    slug: "kduzb3gz"
+    evt: "evt-7loVUQIHc8aBiIk"
+    date: "2026-08-30"
+    # Title and description are pulled verbatim from the Luma event.
+    title: "ringworld"
+    summary: "A super warm group of folks working on things we don't normally have time for! The first one."
+    description: |-
+      Welcome to ringworld!
+
+      The project you work on can be anything! ex. building a robot, writing a poem,
+      coding an app, making beats, painting shoes — as long as it's something you're not
+      obligated to do (i.e. no school work if you're a student, no job work if you're
+      employed).
+
+      At the end, we have a show-and-tell option for people to talk about what they did.
