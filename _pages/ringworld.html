@@ -22,14 +22,17 @@ nav: false
     <h1 class="rw-hero-title">A weekly hacker space for <em>mechanistic interpretability</em>.</h1>
     <p class="rw-hero-lead">{{ site.data.ringworld.blurb }}</p>
     {%- comment -%}
-      Chips and the What's this? toggle share one row rather than stacking as two
-      full-width bands with a rule between them. Open, the panel takes a row of
-      its own (.rw-faq[open] goes full-basis). No Luma link here — the masthead
-      already has one, and it was appearing three times on this page.
+      One row instead of stacked full-width bands. The toggle is in flow at the
+      left and the chips are pinned to the top-right, so opening the panel grows
+      the row downward without moving the summary — the same spot opens and
+      closes it. No Luma link here; the masthead already has one, and it had
+      reached three on this page.
     {%- endcomment -%}
     <div class="rw-metarow">
-      <span class="rw-chip">Sundays · {{ site.data.ringworld.time }}</span>
-      <span class="rw-chip">{{ site.data.ringworld.location }}</span>
+      <span class="rw-metachips">
+        <span class="rw-chip">Sundays · {{ site.data.ringworld.time }}</span>
+        <span class="rw-chip">{{ site.data.ringworld.location }}</span>
+      </span>
 
     <details class="rw-faq">
       <summary>What’s this?</summary>

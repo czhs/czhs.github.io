@@ -265,19 +265,32 @@ html:has(body.rw-site) {
   margin: 0 0 1rem;
 }
 
-/* One row instead of three stacked full-width bands: the chips and the What's
-   this? toggle sit together, and the panel only claims a row of its own once
-   it's open. */
+/* One row instead of stacked full-width bands. The toggle is in normal flow at
+   the left; the chips are pinned to the top-right and out of it. That is what
+   keeps the summary still when the panel opens — in a flex row the toggle got
+   pushed to another line, so the spot that opened the panel was not the spot
+   that closed it. */
 .rw-metarow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 0.75rem;
+  position: relative;
   margin: 0 0 1.7rem;
   padding-bottom: 0.55rem;
   border-bottom: 1px solid var(--rw-line);
   font-family: var(--global-code-font-family, monospace);
   font-size: 0.79rem;
+}
+.rw-metachips {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+@media (max-width: 760px) {
+  .rw-metachips {
+    position: static;
+    flex-wrap: wrap;
+    margin-top: 0.65rem;
+  }
 }
 .rw-chip {
   padding: 0.24rem 0.68rem;
@@ -294,28 +307,23 @@ html:has(body.rw-site) {
 .rw-metarow a:hover { text-decoration: underline; }
 
 /* ── "What's this?" ───────────────────────────────────────── */
-/* closed, it rides at the right end of the meta row; open, it takes the row
-   below so the panel gets full width */
 .rw-faq {
-  margin: 0 0 0 auto;
+  margin: 0;
   border: none;
-}
-.rw-faq[open] {
-  flex: 1 0 100%;
-  margin-left: 0;
 }
 .rw-faq summary {
   cursor: pointer;
   list-style: none;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  /* matches the chip height so the toggle and the chips share one band */
+  min-height: 28px;
   padding: 0;
   font-family: var(--rw-display);
   font-weight: 600;
   font-size: 0.88rem;
 }
-.rw-faq[open] summary { padding: 0.55rem 0 0; }
 .rw-faq summary::-webkit-details-marker { display: none; }
 .rw-faq summary::before {
   content: "›";

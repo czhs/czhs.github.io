@@ -139,9 +139,27 @@ Blog posts are one markdown file per post in `_ringworld/`, with `title`, `autho
 ## 6. Page behaviour
 
 **`/ringworld/`** — full-bleed banner (the artwork's background matches the page and its
-dot grid is continued in CSS, so it has no visible edge), hero title and lead, cadence
-chips, a collapsible `What's this?` FAQ, then **the ringworld interpretability blog**,
-then the **sessions** row.
+dot grid is continued in CSS, so it has no visible edge), hero title and lead, a single
+**meta row**, then **the ringworld interpretability blog**, then the **sessions** row.
+
+The meta row is one line: the `What's this?` toggle at the **left** in normal flow, the
+cadence chips **pinned to the top-right** and out of flow, one rule under both. It
+replaced three stacked full-width bands, which made the top of the page read as a column
+of thin strips.
+
+The chips are absolutely positioned rather than flex items on purpose — **the same spot
+has to open and close the panel.** In a flex row the toggle got pushed to another line
+when the panel opened, so the click target moved. With the chips out of flow the row
+grows downward and the summary doesn't move at all (verified: 0px in both axes). The
+summary carries `min-height: 28px` so it shares a band with the chips. Below the
+breakpoint the chips go `position: static` and stack under the toggle.
+
+MLn's `.mln-metarow` is the same pattern and also carries the cohosting invite as a
+dashed chip in the right-hand group.
+
+**One Luma link per site**, in the masthead. It had reached three on `/ringworld/`
+(masthead, hero, sessions header) and two on `/mln/`. The session cards already go to
+Luma themselves, so the in-page copies were redundant.
 
 The blog feed is a responsive grid of post cards. With no posts it shows an invitation,
 not a blank.
@@ -152,10 +170,11 @@ session first (flagged `up next`), then other upcoming, then past newest-first.
 
 **Session flip cards.** A session with a `photo:` flips on hover: character on the front,
 photo on the back. Every tile shares the flip markup so there is one code path; a session
-without a photo has no back face and never rotates. The affordance is stated once on the
-sessions header ("hover to flip"), only when a session actually has a photo, and hidden
-under `@media (hover: none)` where hover doesn't exist. An earlier ambient auto-flip was
-cut — it got noisy with more than a couple of photo cards.
+without a photo has no back face and never rotates. Both interactions are stated once on
+the sessions header — *click to open on Luma · hover to see photos* — with the hover half
+present only when a session actually has a photo and hidden under `@media (hover: none)`,
+where hover doesn't exist. An earlier ambient auto-flip was cut: it got noisy with more
+than a couple of photo cards.
 
 **`/ringworld/<slug>/`** — back link, eyebrow, serif title, byline, optional cover, the
 post body, and a footer inviting the reader to post.

@@ -17,16 +17,19 @@ nav: false
     resources for running the discussion yourself.
   </p>
   {%- comment -%}
-    Chips, the cohosting invite, and the What's this? toggle share one row rather
-    than stacking as three full-width bands. Open, the panel takes a row of its
-    own. No Luma link here — the masthead already has one.
+    One row instead of three stacked full-width bands. The toggle is in flow at
+    the left and the chips are pinned to the top-right, so opening the panel
+    grows the row downward without moving the summary — the same spot opens and
+    closes it. No Luma link here; the masthead already has one.
   {%- endcomment -%}
   <div class="mln-metarow">
-    <span class="mln-chip">Mondays · 7–9pm</span>
-    <span class="mln-chip">quiet reading 7pm · discussion 8pm</span>
-    <span class="mln-host-invite">
-      <span aria-hidden="true">✋</span> Interested in cohosting?
-      <a href="mailto:{{ site.data.mln.contact_email }}?subject=Cohosting%20at%20MLn">reach out!</a>
+    <span class="mln-metachips">
+      <span class="mln-chip">Mondays · 7–9pm</span>
+      <span class="mln-chip">quiet reading 7pm · discussion 8pm</span>
+      <span class="mln-host-invite">
+        <span aria-hidden="true">✋</span> Interested in cohosting?
+        <a href="mailto:{{ site.data.mln.contact_email }}?subject=Cohosting%20at%20MLn">reach out!</a>
+      </span>
     </span>
 
   <details class="mln-faq">

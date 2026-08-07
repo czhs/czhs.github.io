@@ -154,19 +154,31 @@ body.mln-site { padding: 0; }
   line-height: 1.6;
   opacity: 0.9;
 }
-/* One row instead of three stacked full-width bands: chips, the cohosting
-   invite, and the What's this? toggle sit together, and the panel only claims a
-   row of its own once it's open. */
+/* One row instead of three stacked full-width bands. The toggle is in normal
+   flow at the left; the chips and the cohosting invite are pinned to the
+   top-right and out of it, which is what keeps the summary still when the panel
+   opens — the same spot opens and closes it. */
 .mln-metarow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 0.7rem;
+  position: relative;
   margin: 0 0 1.4rem;
   padding-bottom: 0.55rem;
   border-bottom: 1px solid var(--global-divider-color);
   font-family: var(--global-code-font-family, monospace);
   font-size: 0.8rem;
+}
+.mln-metachips {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+@media (max-width: 900px) {
+  .mln-metachips {
+    position: static;
+    flex-wrap: wrap;
+    margin-top: 0.65rem;
+  }
 }
 .mln-chip {
   padding: 0.2rem 0.7rem;
@@ -176,27 +188,22 @@ body.mln-site { padding: 0; }
 }
 
 /* "What's this?" expandable holding the club copy */
-/* closed, it rides at the right end of the meta row; open, it takes the row
-   below so the panel gets full width */
 .mln-faq {
-  margin: 0 0 0 auto;
+  margin: 0;
   border: none;
-}
-.mln-faq[open] {
-  flex: 1 0 100%;
-  margin-left: 0;
 }
 .mln-faq summary {
   cursor: pointer;
   list-style: none;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  /* matches the chip height so the toggle and the chips share one band */
+  min-height: 28px;
   padding: 0;
   font-weight: 700;
   font-size: 0.88rem;
 }
-.mln-faq[open] summary { padding: 0.55rem 0 0; }
 .mln-faq summary::-webkit-details-marker { display: none; }
 .mln-faq summary::before {
   content: "›";
