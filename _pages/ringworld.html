@@ -3,7 +3,7 @@ layout: ringworld_base
 permalink: /ringworld/
 title: ringworld
 standalone_title: ringworld
-description: A friendly community of tinkerers in Pittsburgh, PA — we meet every Sunday near CMU to work on side projects in AI safety and interpretability. Poets, writers, artists and policy folks are every bit as welcome.
+description: A friendly community of tinkerers in Pittsburgh, PA — we meet every Sunday near CMU to work on side projects in AI safety and interpretability, hosted by CASI. Poets, writers, artists and policy folks are every bit as welcome.
 og_image: /assets/img/ringworld/og.png
 nav: false
 ---
@@ -26,7 +26,12 @@ nav: false
     {%- endcomment -%}
     <h1 class="rw-hero-title">A weekly maker space for
       <em class="rw-rotator" data-terms="{{ site.data.ringworld.subjects | join: '|' }}">mechanistic interpretability</em>.</h1>
-    <p class="rw-hero-lead">{{ site.data.ringworld.blurb }}</p>
+    {%- comment -%}
+      CASI is linked here but left plain in the data file, which also feeds the
+      page description meta — that one has to stay markup-free.
+    {%- endcomment -%}
+    {%- capture casi_link -%}<a href="{{ site.data.ringworld.host_url }}" target="_blank" rel="noopener">CASI</a>{%- endcapture -%}
+    <p class="rw-hero-lead">{{ site.data.ringworld.blurb | replace: 'CASI', casi_link }}</p>
     {%- comment -%}
       One row instead of stacked full-width bands. The toggle is in flow at the
       left and the chips are pinned to the top-right, so opening the panel grows
@@ -37,11 +42,11 @@ nav: false
     <div class="rw-metarow">
       <span class="rw-metachips">
         <span class="rw-chip">Sundays · {{ site.data.ringworld.time }}</span>
-        <span class="rw-chip">{{ site.data.ringworld.location }}</span>
+        <span class="rw-chip">location: {{ site.data.ringworld.location }}</span>
       </span>
 
     <details class="rw-faq">
-      <summary>About the club</summary>
+      <summary>About ringworld</summary>
       <div class="rw-about">
         <div class="rw-about-sec">
           <h2 class="rw-about-h">What’s this?</h2>
@@ -98,15 +103,22 @@ nav: false
     below is the invitation to come make the next one.
   {%- endcomment -%}
   <section class="rw-sec">
+    {%- assign posts = site.ringworld | sort: "date" | reverse -%}
     <div class="rw-sec-head">
       <h2 class="rw-sec-title">the ringworld</h2>
       <span class="rw-sec-note">projects from the ringworld!</span>
+      {%- if posts.size > 3 -%}
+      <a class="rw-sec-link" href="{{ '/ringworld/projects/' | relative_url }}">go to the ringworld →</a>
+      {%- endif -%}
     </div>
 
-    {%- assign posts = site.ringworld | sort: "date" | reverse -%}
     {%- if posts.size > 0 -%}
-      <ul class="rw-feed">
-        {%- for p in posts -%}
+      {%- comment -%}
+        Three across, one row. The rest live on /ringworld/projects/ — the row is
+        a taste of the range, not the archive.
+      {%- endcomment -%}
+      <ul class="rw-feed is-row">
+        {%- for p in posts limit: 3 -%}
           {% include ringworld_post_card.liquid p=p %}
         {%- endfor -%}
       </ul>

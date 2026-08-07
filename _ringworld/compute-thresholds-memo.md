@@ -1,10 +1,10 @@
 ---
 # Empty placeholder so the feed has something in it. Replace the body with a
 # real writeup, or delete the file.
-title: Probing for deception, badly
+title: A one-page memo on compute thresholds
 author: placeholder
 placeholder: true
-date: 2026-08-02
-description: A linear probe, a dataset that turned out to be the problem, and a negative result.
+date: 2026-08-05
+description: Trying to say something useful about reporting thresholds in under 500 words.
 cover: /assets/img/ringworld/posts/campus-lawn.jpg
 ---

@@ -4,7 +4,7 @@ title: What ringworld is for
 # `placeholder` flag puts a notice on the post and a tag on its feed card.
 author: placeholder
 placeholder: true
-date: 2026-08-06
+date: 2026-07-30
 description: Why a weekly maker space for mechanistic interpretability, what to bring to the first one, and the one rule we actually enforce.
 cover: /assets/img/ringworld/posts/craig-street-sunset.jpg
 ---

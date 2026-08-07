@@ -463,6 +463,12 @@ html:has(body.rw-site) {
   gap: 1rem;
 }
 .rw-feed li { margin: 0; }
+/* the landing page shows exactly one row of three; the full set is on
+   /ringworld/projects/, where the feed wraps normally */
+.rw-feed.is-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 760px) {
+  .rw-feed.is-row { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+}
 
 .rw-post-card {
   display: flex;

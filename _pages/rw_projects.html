@@ -1,0 +1,47 @@
+---
+layout: ringworld_base
+permalink: /ringworld/projects/
+title: ringworld — projects
+standalone_title: projects
+description: Everything made at ringworld — interpretability, writing, art, policy.
+og_image: /assets/img/ringworld/og.png
+nav: false
+---
+
+<div class="rw-shell">
+  <a class="rw-back" href="{{ '/ringworld/' | relative_url }}">← ringworld</a>
+
+  <header class="rw-detail-head">
+    <div class="rw-detail-eyebrow">the ringworld</div>
+    <h1 class="rw-detail-title">Projects</h1>
+    {%- comment -%}
+      No `capitalize` on share_note — Liquid's filter lowercases the rest of the
+      string, which turned "Luma" into "luma". It sits mid-sentence instead.
+    {%- endcomment -%}
+    <p class="rw-detail-when">
+      Everything made at ringworld — interpretability, writing, art, policy.
+      Made something? {{ site.data.ringworld.share_note }}
+    </p>
+  </header>
+
+  {%- assign posts = site.ringworld | sort: "date" | reverse -%}
+  {%- if posts.size > 0 -%}
+    <ul class="rw-feed">
+      {%- for p in posts -%}
+        {% include ringworld_post_card.liquid p=p %}
+      {%- endfor -%}
+    </ul>
+  {%- else -%}
+    <div class="rw-empty">
+      <img class="rw-empty-art" src="{{ '/assets/img/ringworld/sprites/crystal.png' | relative_url }}" alt="" aria-hidden="true" decoding="async" />
+      <div>
+        <p class="rw-empty-lead">Nothing here yet — the first session hasn’t happened.</p>
+        <p class="rw-empty-note">
+          Whatever you make at ringworld can go up here: a writeup, a plot, a demo, a
+          poem, a policy memo, a couple of paragraphs about what didn’t work.
+          {{ site.data.ringworld.share_note }}
+        </p>
+      </div>
+    </div>
+  {%- endif -%}
+</div>

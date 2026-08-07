@@ -42,14 +42,14 @@ host: CASI, the CMU AI Safety Initiative
 host_url: https://cmuaisafety.com/
 # How someone gets a post onto the blog. Posts are added by hand — see
 # _ringworld/example-post.md for the template.
-share_note: send it to Chris on Luma and it goes up.
+share_note: send it to us on Luma and it goes up.
 # The club blurb. Used as the hero lead and as the page description meta, so it
 # only needs changing here.
 blurb: >-
   A friendly community of tinkerers in Pittsburgh, PA—we meet every Sunday near
-  CMU to work on side projects in AI safety and interpretability. Poets, writers,
-  artists and policy folks are every bit as welcome. Feel free to send a message
-  or notif through Luma if you need to get in contact!
+  CMU to work on side projects in AI safety and interpretability, hosted by CASI.
+  Poets, writers, artists and policy folks are every bit as welcome. Feel free to
+  send a message or notif through Luma if you need to get in contact!
 
 sessions:
   - num: 1
