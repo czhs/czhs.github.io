@@ -12,12 +12,18 @@
           <span class="mln-brand-ring" aria-hidden="true"></span>
           <span class="mln-brand-mark" aria-hidden="true"></span>
         </a>
+        {%- comment -%}
+          The sibling pill is the LAST nav item on both micro-sites, and both
+          mastheads share a shell width and height, so the two clubs' marks land
+          on exactly the same pixel — click through and the link you just used is
+          under your cursor again.
+        {%- endcomment -%}
         <nav class="mln-topnav">
+          <a href="{{ site.data.mln.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">Luma ↗</a>
           <a class="mln-sibling" href="{{ '/ringworld/' | relative_url }}">
             <img class="mln-sibling-ico" src="{{ '/assets/img/ringworld/mark.png' | relative_url }}" alt="" aria-hidden="true" width="480" height="263" />
             ringworld
           </a>
-          <a href="{{ site.data.mln.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">Luma ↗</a>
         </nav>
       </div>
     </header>

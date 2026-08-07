@@ -86,7 +86,7 @@ nav: false
   <section class="rw-sec">
     <div class="rw-sec-head">
       <h2 class="rw-sec-title">what people made</h2>
-      <span class="rw-sec-note">posted by folks who came</span>
+      <span class="rw-sec-note">the ringworld interpretability blog</span>
     </div>
 
     {%- assign posts = site.ringworld | sort: "date" | reverse -%}
@@ -111,8 +111,16 @@ nav: false
   </section>
 
   <section class="rw-sec">
+    {%- comment -%}
+      The flip hint belongs here, not on each card: it applies to the whole row.
+      Only shown when a session actually has a photo to flip to.
+    {%- endcomment -%}
+    {%- assign with_photo = site.data.ringworld.sessions | where_exp: "s", "s.photo" -%}
     <div class="rw-sec-head">
       <h2 class="rw-sec-title">sessions</h2>
+      {%- if with_photo.size > 0 -%}
+      <span class="rw-sec-note is-hover-only">hover to flip</span>
+      {%- endif -%}
       <a class="rw-sec-link" href="{{ site.data.ringworld.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">follow on Luma ↗</a>
     </div>
 

@@ -34,6 +34,10 @@ body.rw-site {
   --rw-lavender: #8b6fc4;
   --rw-gold: #d99b3c;
   --rw-line: rgba(36, 48, 63, 0.14);
+  /* Cards need a heavier edge than the section rules do: the card fill is a
+     near-match for the page cream, so at --rw-line the outline disappeared and
+     the cards stopped reading as cards. */
+  --rw-card-line: rgba(36, 48, 63, 0.24);
   --rw-dot: rgba(36, 48, 63, 0.07);
 
   /* rebind the theme vars shared components read */
@@ -79,6 +83,7 @@ html[data-theme-setting="dark"] body.rw-site {
   --rw-lavender: #8b6fc4;
   --rw-gold: #d99b3c;
   --rw-line: rgba(36, 48, 63, 0.14);
+  --rw-card-line: rgba(36, 48, 63, 0.24);
   --rw-dot: rgba(36, 48, 63, 0.07);
   --global-hover-text-color: #fff;
   --global-code-bg-color: rgba(62, 111, 180, 0.07);
@@ -88,10 +93,11 @@ html:has(body.rw-site) {
   background-color: #fef9f0;
 }
 
-/* shell: one centred column shared by masthead, content, footer */
+/* shell: one centred column shared by masthead, content, footer. Matches MLn's
+   940px so the two mastheads line up when you click between the sites. */
 .rw-shell {
   width: 100%;
-  max-width: 1020px;
+  max-width: 940px;
   margin: 0 auto;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
@@ -158,9 +164,15 @@ html:has(body.rw-site) {
 .rw-sibling {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.3rem 0.72rem 0.3rem 0.62rem;
-  border: 1px solid var(--rw-line);
+  justify-content: flex-start;
+  gap: 0.45rem;
+  /* Fixed width, and last in the nav, so the pill's right edge is pinned by the
+     shell and its left edge — where the mark sits — is identical on both sites.
+     Keep in sync with .mln-sibling. */
+  min-width: 132px;
+  height: 32px;
+  padding: 0 0.72rem 0 0.6rem;
+  border: 1px solid var(--rw-card-line);
   border-radius: 999px;
   font-weight: 600;
   opacity: 1;
@@ -170,9 +182,11 @@ html:has(body.rw-site) {
   background: var(--rw-card);
 }
 .rw-sibling-ico {
+  /* fixed 24px slot, mark centred in it — the icons have different aspect
+     ratios, so the slot is what actually aligns */
   display: block;
-  width: 15px;
-  height: 15px;
+  width: 24px;
+  height: 16px;
   flex: 0 0 auto;
   background: currentColor;
   -webkit-mask: url("{{ '/assets/img/mln_mark.png' | relative_url }}") center / contain no-repeat;
@@ -186,7 +200,7 @@ html:has(body.rw-site) {
    bottom edge is masked into the page and the dot grid carries on beneath. */
 .rw-banner {
   margin: 0 auto;
-  max-width: 1020px;
+  max-width: 940px;
   line-height: 0;
 }
 .rw-banner img {
@@ -227,13 +241,15 @@ html:has(body.rw-site) {
 .rw-hero-title {
   font-family: var(--rw-serif);
   font-weight: 400;
-  font-size: 1.95rem;
-  line-height: 1.34;
+  font-size: clamp(1.4rem, 3.3vw, 1.95rem);
+  line-height: 1.3;
   letter-spacing: 0;
   margin: 0 0 0.8rem;
-  /* wide enough to sit on two lines — at 20ch it stacked three deep and read
-     as a column rather than a sentence */
-  max-width: 30ch;
+  max-width: none;
+}
+/* one line once there is room for it; below that it wraps rather than overflow */
+@media (min-width: 900px) {
+  .rw-hero-title { white-space: nowrap; }
 }
 .rw-hero-title em {
   font-style: normal;
@@ -385,7 +401,7 @@ html:has(body.rw-site) {
   display: flex;
   flex-direction: column;
   height: 100%;
-  border: 1px solid var(--rw-line);
+  border: 1px solid var(--rw-card-line);
   border-radius: 14px;
   background: var(--rw-card);
   color: inherit;
@@ -461,7 +477,7 @@ html:has(body.rw-site) {
   align-items: center;
   gap: 1.2rem;
   padding: 1.4rem 1.5rem;
-  border: 1px dashed var(--rw-line);
+  border: 1px dashed var(--rw-card-line);
   border-radius: 14px;
 }
 .rw-empty-art { width: 74px; height: auto; flex: 0 0 auto; }
@@ -508,25 +524,78 @@ html:has(body.rw-site) {
 }
 .rw-strip li { margin: 0; flex: 0 0 auto; }
 
+/* The tile is a layout box only — the card chrome lives on .rw-tile-face, so a
+   photo card can put a second face on the back without duplicating any of it.
+   The lift stays on the tile and the rotation on the flip, so the two
+   transforms compose instead of fighting. */
 .rw-tile {
+  display: block;
+  width: 138px;
+  color: inherit;
+  text-decoration: none;
+  perspective: 850px;
+  transition: transform 0.15s ease;
+}
+.rw-tile:hover { text-decoration: none; transform: translateY(-2px); }
+
+.rw-tile-flip {
   position: relative;
+  display: block;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.rw-tile-face {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 138px;
   padding: 0.8rem 0.7rem 0.85rem;
-  border: 1px solid var(--rw-line);
+  border: 1px solid var(--rw-card-line);
   border-radius: 14px;
   background: var(--rw-card);
-  color: inherit;
-  text-decoration: none;
-  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
-.rw-tile:hover {
+.rw-tile:hover .rw-tile-face {
   border-color: var(--rw-ring);
-  text-decoration: none;
-  transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(36, 48, 63, 0.09);
+}
+/* the front is in flow and sets the card's height; the back sits on top of it */
+.rw-tile-back {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  transform: rotateY(180deg);
+}
+.rw-tile.has-photo:hover .rw-tile-flip,
+.rw-tile.has-photo:focus-visible .rw-tile-flip { transform: rotateY(180deg); }
+
+.rw-tile-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.rw-tile-back-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.9rem 0.6rem 0.45rem;
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(to top, rgba(20, 28, 40, 0.72), transparent);
+}
+/* The flip affordance is stated once on the section header, since it applies to
+   the whole row, and hover doesn't exist on touch, so it's hidden there. */
+@media (hover: none) {
+  .rw-sec-note.is-hover-only { display: none; }
 }
 .rw-tile-art {
   display: flex;
@@ -571,11 +640,11 @@ html:has(body.rw-site) {
 }
 /* the ring is drawn inset rather than outset: an outer 0 0 0 1px doubled up
    against the 1px border and was the first thing the scroll box clipped */
-.rw-tile.is-next {
+.rw-tile.is-next .rw-tile-front {
   border-color: var(--rw-ring);
   box-shadow: inset 0 0 0 1px var(--rw-ring), 0 6px 18px rgba(62, 111, 180, 0.14);
 }
-.rw-tile.is-next:hover {
+.rw-tile.is-next:hover .rw-tile-front {
   box-shadow: inset 0 0 0 1px var(--rw-ring), 0 10px 24px rgba(62, 111, 180, 0.2);
 }
 /* past sessions read as history: the character sits back a little */
@@ -658,7 +727,7 @@ html:has(body.rw-site) {
 .rw-embed iframe {
   width: 100%;
   height: 540px;
-  border: 1px solid var(--rw-line);
+  border: 1px solid var(--rw-card-line);
   border-radius: 14px;
   background: var(--rw-card);
 }
@@ -684,7 +753,7 @@ html:has(body.rw-site) {
   display: block;
   width: 100%;
   height: auto;
-  border: 1px solid var(--rw-line);
+  border: 1px solid var(--rw-card-line);
   border-radius: 14px;
   margin: 0 0 1.6rem;
 }
@@ -697,7 +766,7 @@ html:has(body.rw-site) {
   max-width: 720px;
   margin: 2.6rem 0 0;
   padding: 1.1rem 1.3rem;
-  border: 1px dashed var(--rw-line);
+  border: 1px dashed var(--rw-card-line);
   border-radius: 14px;
 }
 .rw-post-foot p {
@@ -755,6 +824,8 @@ html:has(body.rw-site) {
   .rw-post-card:hover .rw-post-thumb img,
   .rw-post-card:hover .rw-post-thumb-sprite,
   .rw-tile:hover .rw-tile-art img { transform: none; }
+  /* the flip still happens — it is the feature — but without the sweep */
+  .rw-tile-flip { transition: none; }
 }
 @media (max-width: 640px) {
   .rw-hero-title { font-size: 1.6rem; }

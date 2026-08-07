@@ -1,11 +1,19 @@
 {%- comment -%}
-  One session tile for the /ringworld/ sessions strip.
+  One session tile for the /ringworld/ sessions row.
   params: s (session hash), today_str ("%Y-%m-%d" build date), next_slug (slug
           of the session happening next).
 
   Tiles link straight to Luma — that is where you register, and a detail page in
   between only added a click. There is no cover image: every session is the same
   recurring event, so each one picks a character via `sprite:` instead.
+
+  A session with a `photo:` becomes a flip card — the character on the front,
+  the photo from that session on the back, revealed on hover. Every tile uses
+  the same flip markup so there is one code path; tiles without a photo simply
+  have no back face and never rotate. The affordance is stated once on the
+  section header rather than on every card — it applies to the whole row — and
+  not hinted with an ambient animation, which got noisy with more than a couple
+  of photo cards.
 {%- endcomment -%}
 {%- assign s = include.s -%}
 {%- if s.date >= include.today_str -%}{%- assign sstatus = 'upcoming' -%}{%- else -%}{%- assign sstatus = 'past' -%}{%- endif -%}
@@ -20,13 +28,30 @@
 {%- endif -%}
 {%- assign sprite = s.sprite | default: 'ringworld' -%}
 <li>
-  <a class="rw-tile{% if is_next %} is-next{% endif %}{% if sstatus == 'past' %} is-past{% endif %}"
+  <a class="rw-tile{% if is_next %} is-next{% endif %}{% if sstatus == 'past' %} is-past{% endif %}{% if s.photo %} has-photo{% endif %}"
      href="{{ href }}?utm_source=czhs" target="_blank" rel="noopener">
-    <span class="rw-tile-art">
-      <img src="{{ '/assets/img/ringworld/sprites/' | append: sprite | append: '.png' | relative_url }}" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+    <span class="rw-tile-flip">
+      <span class="rw-tile-face rw-tile-front">
+        <span class="rw-tile-art">
+          <img src="{{ '/assets/img/ringworld/sprites/' | append: sprite | append: '.png' | relative_url }}" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+        </span>
+        <span class="rw-tile-num">session {{ s.num }}</span>
+        <span class="rw-tile-date">{% if date_tba %}TBA{% else %}{{ s.date | date: "%b %-d" }}{% endif %}</span>
+        {% if is_next %}<span class="rw-tile-flag">up next</span>{% endif %}
+      </span>
+      {%- if s.photo -%}
+      <span class="rw-tile-face rw-tile-back">
+        {%- comment -%}
+          Not lazy: the photo sits on a rotated, backface-hidden face, which
+          browsers treat as not-visible, so a lazy image never loads and the
+          card flips to a blank.
+        {%- endcomment -%}
+        <img class="rw-tile-photo" src="{{ s.photo | relative_url }}"
+             alt="{{ s.photo_alt | default: 'A photo from ringworld session ' | append: s.num }}"
+             decoding="async" />
+        <span class="rw-tile-back-label">session {{ s.num }} <span class="rw-arrow">↗</span></span>
+      </span>
+      {%- endif -%}
     </span>
-    <span class="rw-tile-num">session {{ s.num }}</span>
-    <span class="rw-tile-date">{% if date_tba %}TBA{% else %}{{ s.date | date: "%b %-d" }}{% endif %}</span>
-    {% if is_next %}<span class="rw-tile-flag">up next</span>{% endif %}
   </a>
 </li>

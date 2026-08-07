@@ -7,6 +7,11 @@
 # add a matching stub page in _pages/rw_sessionN.md.
 #   slug   — the luma.com/<slug> path for the event
 #   evt    — the evt-… id used by the lu.ma/embed/event/<evt>/simple iframe
+#   photo  — optional. A photo from that session, put in
+#            assets/img/ringworld/sessions/. Giving a session a photo turns its
+#            card into a flip card: character on the front, photo on the back,
+#            revealed on hover. Add `photo_alt` to describe it. Sessions with no
+#            photo just don't flip.
 #   sprite — the session's character, a filename (no extension) from
 #            assets/img/ringworld/sprites/. Give each session a different one;
 #            it is what tells the cards apart. Defaults to `ringworld`.

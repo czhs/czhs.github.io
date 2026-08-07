@@ -12,12 +12,18 @@
           <img class="rw-brand-ring" src="{{ '/assets/img/ringworld/mark.png' | relative_url }}" alt="" width="480" height="263" />
           <span class="rw-brand-mark" aria-hidden="true"></span>
         </a>
+        {%- comment -%}
+          The sibling pill is the LAST nav item on both micro-sites, and both
+          mastheads share a shell width and height, so the two clubs' marks land
+          on exactly the same pixel — click through and the link you just used is
+          under your cursor again.
+        {%- endcomment -%}
         <nav class="rw-topnav">
+          <a href="{{ site.data.ringworld.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">Luma ↗</a>
           <a class="rw-sibling" href="{{ '/mln/' | relative_url }}">
             <span class="rw-sibling-ico" aria-hidden="true"></span>
             MLn
           </a>
-          <a href="{{ site.data.ringworld.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">Luma ↗</a>
         </nav>
       </div>
     </header>
