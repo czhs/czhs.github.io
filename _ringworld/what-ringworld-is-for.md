@@ -2,7 +2,7 @@
 title: What ringworld is for
 author: Chris Shi
 date: 2026-08-06
-description: Why a weekly maker space for mechanistic interpretability, what to bring to the first one, and the one rule we actually enforce.
+description: Why a weekly hacker space for mechanistic interpretability, what to bring to the first one, and the one rule we actually enforce.
 cover: /assets/img/ringworld/posts/craig-street-sunset.jpg
 ---
 
