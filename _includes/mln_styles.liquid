@@ -237,6 +237,27 @@ body.mln-site { padding: 0; }
 .mln-sched dd { margin: 0; opacity: 0.82; }
 @media (max-width: 576px) { .mln-about { columns: 1; } }
 
+/* "interested in hosting a week?" — a quiet strip above the grid, dashed so it
+   reads as an invitation rather than another week card */
+.mln-host-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1.1rem;
+  padding: 0.7rem 1rem;
+  border: 1px dashed var(--global-divider-color);
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+.mln-host-eyebrow { font-size: 0.95rem; line-height: 1; }
+.mln-host-banner a {
+  color: var(--global-theme-color);
+  font-weight: 700;
+  text-decoration: none;
+}
+.mln-host-banner a:hover { text-decoration: underline; }
+
 /* week grid */
 .mln-grid {
   list-style: none;

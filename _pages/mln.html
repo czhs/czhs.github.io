@@ -71,6 +71,17 @@ nav: false
   </details>
 </section>
 
+{%- comment -%}
+  Weeks are run by members — the hero already offers the notes and resources for
+  running a discussion yourself — so the ask to host sits right above the grid,
+  where someone browsing weeks will meet it.
+{%- endcomment -%}
+<p class="mln-host-banner">
+  <span class="mln-host-eyebrow" aria-hidden="true">✋</span>
+  <span>Interested in cohosting?</span>
+  <a href="mailto:{{ site.data.mln.contact_email }}?subject=Cohosting%20at%20MLn">contact us!</a>
+</p>
+
 <ul class="mln-grid">
   {%- comment -%}
     Ordered by real meeting date, newest→oldest (left→right), not `num`. Only the

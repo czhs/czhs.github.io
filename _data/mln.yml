@@ -5,6 +5,9 @@
 # cover_url. Sync is manual — pull the current state from https://luma.com/mln.
 calendar_url: https://luma.com/mln
 contact_url: https://forms.gle/Vr6gxhKGjhsEnwPC7
+# Where the "interested in hosting a week?" banner points. Same address already
+# used by the runbook and the ML/robotics pages.
+contact_email: chrisshi@andrew.cmu.edu
 weeks:
   - num: 1
     slug: "36josb91"
