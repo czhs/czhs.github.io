@@ -1,0 +1,42 @@
+---
+layout: ringworld_base
+---
+
+<div class="rw-shell">
+  <a class="rw-back" href="{{ '/ringworld/' | relative_url }}">← ringworld</a>
+
+  <article class="rw-post">
+    <header class="rw-detail-head">
+      {%- if page.sprite -%}
+      <img class="rw-detail-sprite" src="{{ '/assets/img/ringworld/sprites/' | append: page.sprite | append: '.png' | relative_url }}" alt="" aria-hidden="true" decoding="async" />
+      {%- endif -%}
+      <div class="rw-detail-eyebrow">
+        made at ringworld{% if page.session %} · session {{ page.session }}{% endif %}
+      </div>
+      <h1 class="rw-detail-title">{{ page.title }}</h1>
+      <p class="rw-post-byline">
+        {%- if page.author_url -%}
+          <a href="{{ page.author_url }}" target="_blank" rel="noopener">{{ page.author }}</a>
+        {%- else -%}
+          {{ page.author }}
+        {%- endif -%}
+        {%- if page.date %} · {{ page.date | date: "%B %-d, %Y" }}{% endif -%}
+      </p>
+    </header>
+
+    {%- if page.cover -%}
+    <img class="rw-post-cover" src="{{ page.cover | relative_url }}" alt="" loading="lazy" decoding="async" />
+    {%- endif -%}
+
+    <div class="rw-body rw-desc">
+      {{ content }}
+    </div>
+  </article>
+
+  <aside class="rw-post-foot">
+    <p>Made something at ringworld? It can go up here — {{ site.data.ringworld.share_note }}</p>
+    <a class="rw-post-foot-cta" href="{{ site.data.ringworld.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">
+      come to the next one ↗
+    </a>
+  </aside>
+</div>

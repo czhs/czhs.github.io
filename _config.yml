@@ -155,6 +155,13 @@ collections:
     output: true
   projects:
     output: true
+  # ringworld blog — what people made at a session. Self-contained: these are
+  # not site posts, so they stay out of the main blog, its RSS feed, and (via
+  # a label check in _scripts/search.liquid.js) the site-wide search.
+  # One file per post, named <slug>.md, with `date:` in the front matter.
+  ringworld:
+    output: true
+    permalink: /ringworld/:name/
 
 # -----------------------------------------------------------------------------
 # Jekyll settings
@@ -195,6 +202,10 @@ exclude:
   - README.md
   - readme_preview/
   - vendor
+  # Full-res ringworld artwork. Kept in git so the sprites can be re-cut
+  # (_scripts/cut_ringworld_sprites.py), but not published — it is ~5 MB and
+  # imagemagick would generate webp variants of every sheet.
+  - assets/img/ringworld/source/
 keep_files:
   - CNAME
   - .nojekyll
@@ -225,6 +236,13 @@ defaults:
       path: "assets"
     values:
       sitemap: false
+  # ringworld blog posts get their layout by default, so a post's front matter
+  # only has to carry its own content.
+  - scope:
+      path: ""
+      type: "ringworld"
+    values:
+      layout: "ringworld_post"
 
 sass:
   style: compressed

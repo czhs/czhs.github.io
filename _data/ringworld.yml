@@ -5,12 +5,26 @@
 #
 # To add a session: copy a block, bump `num`, paste the Luma slug + evt id, and
 # add a matching stub page in _pages/rw_sessionN.md.
-#   slug — the luma.com/<slug> path for the event
-#   evt  — the evt-… id used by the lu.ma/embed/event/<evt>/simple iframe
+#   slug   — the luma.com/<slug> path for the event
+#   evt    — the evt-… id used by the lu.ma/embed/event/<evt>/simple iframe
+#   sprite — the session's character, a filename (no extension) from
+#            assets/img/ringworld/sprites/. Give each session a different one;
+#            it is what tells the cards apart. Defaults to `ringworld`.
+#            Available: alien-green astronaut blob-blue blob-green blob-lilac
+#            blob-peach cloud-blue cloud-mint cloud-purple comet comet-peach
+#            constellation crystal frog jellyfish moon ringworld rock-grey
+#            rocket saturn-orange saturn-peach saturn-purple star-big
+#            star-folded star-ringed star-trail stars-twin ufo-alien ufo-bear
+#            ufo-blue ufo-eye
 calendar_url: https://luma.com/ringworld
 time: 4–7pm
 location: 201 S Craig St, Unit 1E
 location_note: enter from the Henry St side
+host: CASI, the CMU AI Safety Initiative
+host_url: https://cmuaisafety.com/
+# How someone gets a post onto the blog. Posts are added by hand — see
+# _ringworld/example-post.md for the template.
+share_note: send it to Chris on Luma and it goes up.
 # The club blurb. Used as the hero lead and as the page description meta, so it
 # only needs changing here.
 blurb: >-
@@ -23,9 +37,9 @@ sessions:
     slug: "kduzb3gz"
     evt: "evt-7loVUQIHc8aBiIk"
     date: "2026-08-30"
+    sprite: ringworld
     # Title and description are pulled verbatim from the Luma event.
     title: "ringworld"
-    summary: "A super warm group of folks working on things we don't normally have time for! The first one."
     description: |-
       Welcome to ringworld!
 

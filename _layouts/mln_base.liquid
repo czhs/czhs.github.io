@@ -8,12 +8,15 @@
   <body class="mln-site">
     <header class="mln-masthead">
       <div class="mln-shell mln-masthead-inner">
-        <a class="mln-brand" href="{{ '/mln/' | relative_url }}">
-          <span class="mln-brand-mark">MLn</span>
-          <span class="mln-brand-sub">Reading Club</span>
+        <a class="mln-brand" href="{{ '/mln/' | relative_url }}" aria-label="MLn Reading Club — home">
+          <span class="mln-brand-ring" aria-hidden="true"></span>
+          <span class="mln-brand-mark" aria-hidden="true"></span>
         </a>
         <nav class="mln-topnav">
-          <a href="{{ '/ringworld/' | relative_url }}">ringworld</a>
+          <a class="mln-sibling" href="{{ '/ringworld/' | relative_url }}">
+            <img class="mln-sibling-ico" src="{{ '/assets/img/ringworld/mark.png' | relative_url }}" alt="" aria-hidden="true" width="480" height="263" />
+            ringworld
+          </a>
           <a href="{{ site.data.mln.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">Luma ↗</a>
         </nav>
       </div>

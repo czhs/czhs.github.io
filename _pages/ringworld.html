@@ -43,6 +43,7 @@ nav: false
           <ul>
             <li>{{ site.data.ringworld.location }} — {{ site.data.ringworld.location_note }}</li>
             <li>4 PM, every Sunday</li>
+            <li>Hosted by <a href="{{ site.data.ringworld.host_url }}" target="_blank" rel="noopener">{{ site.data.ringworld.host }} ↗</a></li>
           </ul>
         </div>
         <div class="rw-about-sec">
@@ -78,51 +79,60 @@ nav: false
     </details>
   </section>
 
-  <ul class="rw-grid">
+  {%- comment -%}
+    The blog is the page. Everything above is context for it; the sessions strip
+    below is the invitation to come make the next one.
+  {%- endcomment -%}
+  <section class="rw-sec">
+    <div class="rw-sec-head">
+      <h2 class="rw-sec-title">what people made</h2>
+      <span class="rw-sec-note">posted by folks who came</span>
+    </div>
+
+    {%- assign posts = site.ringworld | sort: "date" | reverse -%}
+    {%- if posts.size > 0 -%}
+      <ul class="rw-feed">
+        {%- for p in posts -%}
+          {% include ringworld_post_card.liquid p=p %}
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <div class="rw-empty">
+        <img class="rw-empty-art" src="{{ '/assets/img/ringworld/sprites/crystal.png' | relative_url }}" alt="" aria-hidden="true" decoding="async" />
+        <div>
+          <p class="rw-empty-lead">Nothing here yet — the first session hasn’t happened.</p>
+          <p class="rw-empty-note">
+            Whatever you make at ringworld can go up here: a writeup, a plot, a demo, a
+            couple of paragraphs about what didn’t work. {{ site.data.ringworld.share_note }}
+          </p>
+        </div>
+      </div>
+    {%- endif -%}
+  </section>
+
+  <section class="rw-sec">
+    <div class="rw-sec-head">
+      <h2 class="rw-sec-title">sessions</h2>
+      <a class="rw-sec-link" href="{{ site.data.ringworld.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">follow on Luma ↗</a>
+    </div>
+
     {%- comment -%}
-      Ordered by real meeting date, newest→oldest (left→right), not `num`. Only the
-      coming session shows as a standalone card, flagged "up next". Every other
-      upcoming session collapses behind the dropdown card, which sits first (left of
-      the coming session). Past sessions follow, most recent first.
+      Next session first, then the rest of the upcoming ones, then past sessions
+      newest-first. The strip scrolls sideways rather than wrapping, so a long
+      history never pushes the blog off the top of the page.
     {%- endcomment -%}
     {%- assign today_str = site.time | date: "%Y-%m-%d" -%}
     {%- assign upcoming = site.data.ringworld.sessions | where_exp: "s", "s.date >= today_str" | sort: "date" -%}
     {%- assign past = site.data.ringworld.sessions | where_exp: "s", "s.date < today_str" | sort: "date" | reverse -%}
-    {%- assign coming = upcoming | first -%}
-    {%- assign next_slug = coming.slug -%}
-    {%- assign future = upcoming | where_exp: "s", "s.slug != next_slug" | sort: "date" | reverse -%}
+    {%- assign next_slug = upcoming.first.slug -%}
 
-    {%- if future.size > 0 -%}
-      <li class="rw-more-li">
-        <button type="button" id="rw-more-btn" class="rw-more-card" aria-expanded="false">
-          <span class="rw-more-icon" aria-hidden="true">+{{ future.size }}</span>
-          <span class="rw-more-label rw-more-open">more upcoming session{% if future.size != 1 %}s{% endif %} <span class="rw-arrow">↓</span></span>
-          <span class="rw-more-label rw-more-close">show fewer <span class="rw-arrow">↑</span></span>
-        </button>
-      </li>
-      {%- for s in future -%}
-        {% include ringworld_card.liquid s=s today_str=today_str next_slug=next_slug far=true %}
+    <ul class="rw-strip">
+      {%- for s in upcoming -%}
+        {% include ringworld_card.liquid s=s today_str=today_str next_slug=next_slug %}
       {%- endfor -%}
-    {%- endif -%}
-
-    {%- if coming -%}
-      {% include ringworld_card.liquid s=coming today_str=today_str next_slug=next_slug %}
-    {%- endif -%}
-
-    {%- for s in past -%}
-      {% include ringworld_card.liquid s=s today_str=today_str next_slug=next_slug %}
-    {%- endfor -%}
-  </ul>
+      {%- for s in past -%}
+        {% include ringworld_card.liquid s=s today_str=today_str next_slug=next_slug %}
+      {%- endfor -%}
+    </ul>
+  </section>
 </div>
-
-<script>
-  (function () {
-    var btn = document.getElementById('rw-more-btn');
-    if (!btn) return;
-    btn.addEventListener('click', function () {
-      var grid = btn.closest('.rw-grid');
-      var open = grid.classList.toggle('rw-expanded');
-      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-  })();
-</script>

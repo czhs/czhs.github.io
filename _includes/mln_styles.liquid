@@ -28,17 +28,32 @@ body.mln-site { padding: 0; }
 }
 .mln-brand {
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.45rem;
+  align-items: center;
+  gap: 0.5rem;
   text-decoration: none;
   color: var(--global-text-color);
 }
 .mln-brand:hover { text-decoration: none; }
+/* The brand is the club's own artwork rather than type: the dot ring and the
+   MLn lettering are cut from assets/img/mln_og.png as alpha-only shapes and
+   applied as CSS masks over currentColor, so they take the theme colour and
+   invert correctly in dark mode. */
+.mln-brand-ring {
+  display: block;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  background: var(--global-theme-color);
+  -webkit-mask: url("{{ '/assets/img/mln_mark.png' | relative_url }}") center / contain no-repeat;
+  mask: url("{{ '/assets/img/mln_mark.png' | relative_url }}") center / contain no-repeat;
+}
 .mln-brand-mark {
-  font-weight: 800;
-  font-size: 1.3rem;
-  letter-spacing: -0.02em;
-  color: var(--global-theme-color);
+  display: block;
+  width: 62px;
+  height: 24px;
+  background: currentColor;
+  -webkit-mask: url("{{ '/assets/img/mln_wordmark.png' | relative_url }}") left center / contain no-repeat;
+  mask: url("{{ '/assets/img/mln_wordmark.png' | relative_url }}") left center / contain no-repeat;
 }
 .mln-brand-sub {
   font-family: var(--global-code-font-family, monospace);
@@ -61,6 +76,30 @@ body.mln-site { padding: 0; }
   transition: opacity 0.15s ease, color 0.15s ease;
 }
 .mln-topnav a:hover { opacity: 1; color: var(--global-theme-color); text-decoration: none; }
+
+/* the sibling club: carries ringworld's own drawn ring and sits as a pill, so
+   the link between the two micro-sites reads as a place to go rather than a
+   word. The ring is full-colour art, so it stays an <img> rather than a mask. */
+.mln-sibling {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.72rem 0.3rem 0.55rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 999px;
+  font-weight: 700;
+  opacity: 1;
+}
+.mln-sibling:hover {
+  border-color: var(--global-theme-color);
+  background: var(--global-card-bg-color);
+}
+.mln-sibling-ico {
+  display: block;
+  width: 26px;
+  height: auto;
+  flex: 0 0 auto;
+}
 
 /* main + footer spacing */
 .mln-main { padding-top: 1.5rem; padding-bottom: 3.5rem; min-height: 60vh; }

@@ -1,0 +1,28 @@
+{%- comment -%}
+  One post card for the /ringworld/ blog feed.
+  params: p (a document from the `ringworld` collection).
+
+  Covers come from assets/img/ringworld/posts/ — the watercolour set, not the
+  session sprites. A post without a cover simply has no thumbnail: the kawaii
+  characters carry the sessions, and putting one on a writeup undersells it.
+{%- endcomment -%}
+{%- assign p = include.p -%}
+<li>
+  <a class="rw-post-card" href="{{ p.url | relative_url }}">
+    {%- if p.cover -%}
+    <div class="rw-post-thumb">
+      <img src="{{ p.cover | relative_url }}" alt="" loading="lazy" decoding="async" />
+    </div>
+    {%- endif -%}
+    <div class="rw-post-body">
+      <h3 class="rw-post-title">{{ p.title }}</h3>
+      <p class="rw-post-meta">
+        {{ p.author }}{% if p.date %} · {{ p.date | date: "%b %-d" }}{% endif %}{% if p.session %} · session {{ p.session }}{% endif %}
+      </p>
+      {%- if p.description -%}
+      <p class="rw-post-excerpt">{{ p.description }}</p>
+      {%- endif -%}
+      <span class="rw-card-cta rw-post-cta">read it <span class="rw-arrow">→</span></span>
+    </div>
+  </a>
+</li>

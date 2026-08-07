@@ -79,7 +79,12 @@ ninja.data = [
     {%- endfor -%}
   {%- endif -%}
   {%- for collection in site.collections -%}
-    {%- if collection.label != 'posts' -%}
+    {%- comment -%}
+      `ringworld` is excluded so the maker-space micro-site stays self-contained
+      — its posts live at /ringworld/ and shouldn't pull someone out of the main
+      site's search into a different masthead. Drop the second clause to index them.
+    {%- endcomment -%}
+    {%- if collection.label != 'posts' and collection.label != 'ringworld' -%}
       {%- for item in collection.docs -%}
         {
           {%- if item.inline -%}

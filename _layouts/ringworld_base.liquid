@@ -13,7 +13,10 @@
           <span class="rw-brand-mark" aria-hidden="true"></span>
         </a>
         <nav class="rw-topnav">
-          <a href="{{ '/mln/' | relative_url }}">MLn</a>
+          <a class="rw-sibling" href="{{ '/mln/' | relative_url }}">
+            <span class="rw-sibling-ico" aria-hidden="true"></span>
+            MLn
+          </a>
           <a href="{{ site.data.ringworld.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">Luma ↗</a>
         </nav>
       </div>
@@ -28,6 +31,8 @@
         <span class="rw-foot-name">ringworld</span>
         <span class="rw-foot-dot">·</span>
         <span>Pittsburgh · Sundays 4–7pm</span>
+        <span class="rw-foot-dot">·</span>
+        <span>hosted by <a href="{{ site.data.ringworld.host_url }}" target="_blank" rel="noopener">CASI ↗</a></span>
         <a class="rw-foot-by" href="{{ '/' | relative_url }}">by Chris Shi</a>
       </div>
     </footer>
