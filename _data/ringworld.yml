@@ -24,10 +24,20 @@
 # Sitewide banner under the masthead. Delete this line when the site is done.
 under_construction: true
 
+# The hero headline cycles through these. Mechanistic interpretability leads and
+# is the one hard-coded in the markup, so it survives with JS off. Keep them all
+# shorter than it, or the headline stops fitting on one line.
+subjects:
+  - mechanistic interpretability
+  - epistemics
+  - AI safety
+  - alignment
+  - AI governance
+
 calendar_url: https://luma.com/ringworld
 time: 4–7pm
-location: 201 S Craig St, Unit 1E
-location_note: enter from the Henry St side
+location: TBD
+location_note: check the Luma once it’s settled
 host: CASI, the CMU AI Safety Initiative
 host_url: https://cmuaisafety.com/
 # How someone gets a post onto the blog. Posts are added by hand — see
@@ -36,9 +46,10 @@ share_note: send it to Chris on Luma and it goes up.
 # The club blurb. Used as the hero lead and as the page description meta, so it
 # only needs changing here.
 blurb: >-
-  A friendly community of tinkerers in Pittsburgh, PA—we meet to work on side
-  projects every Sunday near CMU! Feel free to send a message or notif through
-  Luma if you need to get in contact!
+  A friendly community of tinkerers in Pittsburgh, PA—we meet every Sunday near
+  CMU to work on side projects in AI safety and interpretability. Poets, writers,
+  artists and policy folks are every bit as welcome. Feel free to send a message
+  or notif through Luma if you need to get in contact!
 
 sessions:
   - num: 1

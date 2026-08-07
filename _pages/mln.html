@@ -22,10 +22,16 @@ nav: false
     grows the row downward without moving the summary — the same spot opens and
     closes it. No Luma link here; the masthead already has one.
   {%- endcomment -%}
+  {%- comment -%}
+    Budget: the chips are out of flow, so the layout can't stop them colliding
+    with the toggle — and the shell is capped at 940px, so no breakpoint saves
+    it either. Everything here has to fit in about 700px. The "quiet reading 7pm
+    · discussion 8pm" chip was dropped for that reason and because the hero lead
+    one line above already says it.
+  {%- endcomment -%}
   <div class="mln-metarow">
     <span class="mln-metachips">
       <span class="mln-chip">Mondays · 7–9pm</span>
-      <span class="mln-chip">quiet reading 7pm · discussion 8pm</span>
       <span class="mln-host-invite">
         <span aria-hidden="true">✋</span> Interested in cohosting?
         <a href="mailto:{{ site.data.mln.contact_email }}?subject=Cohosting%20at%20MLn">reach out!</a>

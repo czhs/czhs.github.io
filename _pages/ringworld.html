@@ -3,7 +3,7 @@ layout: ringworld_base
 permalink: /ringworld/
 title: ringworld
 standalone_title: ringworld
-description: A friendly community of tinkerers in Pittsburgh, PA — we meet to work on side projects every Sunday near CMU.
+description: A friendly community of tinkerers in Pittsburgh, PA — we meet every Sunday near CMU to work on side projects in AI safety and interpretability. Poets, writers, artists and policy folks are every bit as welcome.
 og_image: /assets/img/ringworld/og.png
 nav: false
 ---
@@ -19,7 +19,13 @@ nav: false
 
 <div class="rw-shell">
   <section class="rw-hero">
-    <h1 class="rw-hero-title">A weekly maker space for <em>mechanistic interpretability</em>.</h1>
+    {%- comment -%}
+      The subject cycles through the club's neighbouring fields. Mechanistic
+      interpretability is first and stays in the served HTML, so it is what
+      crawlers and screen readers get; the rest is progressive enhancement.
+    {%- endcomment -%}
+    <h1 class="rw-hero-title">A weekly maker space for
+      <em class="rw-rotator" data-terms="{{ site.data.ringworld.subjects | join: '|' }}">mechanistic interpretability</em>.</h1>
     <p class="rw-hero-lead">{{ site.data.ringworld.blurb }}</p>
     {%- comment -%}
       One row instead of stacked full-width bands. The toggle is in flow at the
@@ -41,7 +47,7 @@ nav: false
           <h2 class="rw-about-h">What’s this?</h2>
           <ul>
             <li>A super warm group of folks working on things we don’t normally have time for!</li>
-            <li>The project you work on can be anything! ex. building a robot, writing a poem, coding an app, making beats, painting shoes — as long as it’s something you’re not obligated to do (i.e. no school work if you’re a student, no job work if you’re employed)</li>
+            <li>The project you work on can be anything! ex. probing a model, writing a poem, coding an app, making beats, painting shoes — as long as it’s something you’re not obligated to do (i.e. no school work if you’re a student, no job work if you’re employed)</li>
             <li>At the end, we have a show-and-tell option for people to talk about what they did</li>
           </ul>
         </div>
@@ -93,7 +99,8 @@ nav: false
   {%- endcomment -%}
   <section class="rw-sec">
     <div class="rw-sec-head">
-      <h2 class="rw-sec-title">the ringworld interpretability blog</h2>
+      <h2 class="rw-sec-title">the ringworld</h2>
+      <span class="rw-sec-note">projects from the ringworld!</span>
     </div>
 
     {%- assign posts = site.ringworld | sort: "date" | reverse -%}
@@ -148,3 +155,32 @@ nav: false
     </ul>
   </section>
 </div>
+
+<script>
+  // Cycles the hero's subject through the club's neighbouring fields. The first
+  // term is already in the HTML, so with JS off (or reduced motion on) the
+  // headline just reads "mechanistic interpretability" and nothing is lost.
+  (function () {
+    var el = document.querySelector('.rw-rotator');
+    if (!el || !el.dataset.terms) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var terms = el.dataset.terms.split('|').filter(Boolean);
+    if (terms.length < 2) return;
+
+    var i = 0;
+    var FADE = 300;
+    var HOLD = 2600;
+
+    // No document.hidden guard: browsers already throttle background timers,
+    // and skipping ticks froze the word whenever the tab lost focus.
+    setInterval(function () {
+      el.classList.add('is-swapping');
+      setTimeout(function () {
+        i = (i + 1) % terms.length;
+        el.textContent = terms[i];
+        el.classList.remove('is-swapping');
+      }, FADE);
+    }, HOLD);
+  })();
+</script>

@@ -14,7 +14,7 @@ hard field to start doing *alone*. The materials are open, the compute is modest
 the feedback loops are short. What's missing, for most people who want in, is a room and
 a recurring three hours.
 
-That's ringworld. Sundays, 4–7pm, on Craig Street. Two focus blocks with a social break
+That's ringworld. Sundays, 4–7pm, venue TBD. Two focus blocks with a social break
 in the middle, and an optional show-and-tell at the end.
 
 ## The through-line

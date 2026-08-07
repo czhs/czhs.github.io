@@ -171,6 +171,12 @@ body.mln-site { padding: 0; }
   top: 0;
   right: 0;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  /* Out of flow, so nothing stops these colliding with the toggle — and the
+     shell is capped at 940px, so no breakpoint helps. Reserve the toggle's
+     width; an overrun then wraps at the right rather than sliding under it. */
+  max-width: calc(100% - 180px);
   gap: 0.5rem;
 }
 @media (max-width: 900px) {
@@ -219,15 +225,21 @@ body.mln-site { padding: 0; }
   color: var(--global-theme-color);
 }
 .mln-faq summary::-webkit-details-marker { display: none; }
+/* Drawn rather than the "›" glyph: the character's ink sits above its own
+   optical centre, so it never lined up with the label at any line-height. A
+   bordered square rotated 45° is centred by construction. */
 .mln-faq summary::before {
-  content: "›";
-  display: inline-block;
-  font-size: 1.1rem;
-  line-height: 1;
-  color: var(--global-theme-color);
+  content: "";
+  display: block;
+  width: 5px;
+  height: 5px;
+  margin-right: 0.15rem;
+  border-right: 1.5px solid var(--global-theme-color);
+  border-bottom: 1.5px solid var(--global-theme-color);
+  transform: rotate(-45deg);
   transition: transform 0.15s ease;
 }
-.mln-faq[open] summary::before { transform: rotate(90deg); }
+.mln-faq[open] summary::before { transform: rotate(45deg); }
 .mln-faq .mln-about { margin: 0; padding: 1.25rem 0 1.1rem; }
 
 /* about: the club copy, arranged as compact plain-text columns (no cards) */
