@@ -225,7 +225,11 @@ weeks:
 
       Join us at CASI for discussion at 8 pm, and (optional) quiet reading from 7 pm.
     reading:
-      - title: "Towards Monosemanticity: Decomposing Language Models With Dictionary Learning — Anthropic"
+      - title: "Towards Monosemanticity — short notes (strikingloo’s wiki)"
+        url: "https://strikingloo.github.io/wiki/monosemanticity"
+      - title: "Towards Monosemanticity: Decomposing Language Models With Dictionary Learning — LessWrong summary (shorter read)"
+        url: "https://www.lesswrong.com/posts/TDqvQFks6TWutJEKu/towards-monosemanticity-decomposing-language-models-with"
+      - title: "Towards Monosemanticity: Decomposing Language Models With Dictionary Learning — Anthropic (full technical paper)"
         url: "https://transformer-circuits.pub/2023/monosemantic-features"
   - num: 13
     slug: "5wvhx171"
