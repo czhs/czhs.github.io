@@ -176,7 +176,7 @@ weeks:
     evt: "evt-fSNsVqUMdTI9mQK"
     date: "2026-07-20"
     tags: ["paper audio", "photos", "board notes"]
-    recording: "/assets/audio/mln-week-10-global-workspace.mp3"
+    recording: "https://github.com/czhs/czhs.github.io/releases/download/mln-audio/mln-week-10-global-workspace.mp3"
     title: "A global workspace in language models"
     cover: "https://images.lumacdn.com/uploads/ul/eb843472-64fa-45b7-81a1-2ed0b7512cfd.png"
     summary: "How can we identify and understand the internal “workspace” where large language models integrate information, reason, and broadcast concepts across their networks? Can mechanistic interpretability reveal whether LLMs develop functional equivalents of global information sharing found in cognitive architectures?"
@@ -196,7 +196,7 @@ weeks:
     evt: "evt-FqbMX8pVOgTu3xT"
     date: "2026-07-27"
     tags: ["paper audio", "proof sketch", "photos"]
-    recording: "/assets/audio/mln-week-11-single-vector.mp3"
+    recording: "https://github.com/czhs/czhs.github.io/releases/download/mln-audio/mln-week-11-single-vector.mp3"
     title: "Fundamental Limitations of Single-Vector Embeddings"
     cover: "https://images.lumacdn.com/gallery-images/s0/94a98dc7-f16e-4e74-b733-4b62747a738d.png"
     summary: "Why does something as simple as “finding people who like apples” break our best models? What do alternatives like multi-vector models or cross-encoders mean for real products?"
@@ -214,7 +214,7 @@ weeks:
     evt: "evt-i086xbJX36yCLAK"
     date: "2026-08-10"
     tags: ["paper audio"]
-    recording: "/assets/audio/mln-week-12-monosemanticity.mp3"
+    recording: "https://github.com/czhs/czhs.github.io/releases/download/mln-audio/mln-week-12-monosemanticity.mp3"
     title: "Towards Monosemanticity"
     cover: "https://images.lumacdn.com/uploads/77/26bc3511-83bb-4bcb-9f9d-1c4ff2b15a01.png"
     summary: "Can we identify meaningful, human-interpretable features inside a language model when individual neurons are polysemantic and represent many unrelated concepts at once? Can sparse autoencoders recover the hidden features represented in superposition—and give us a better unit for mechanistic interpretability than neurons themselves?"
