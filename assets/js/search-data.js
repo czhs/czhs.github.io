@@ -263,7 +263,7 @@ ninja.data = [{
         title: 'LinkedIn',
         section: 'Socials',
         handler: () => {
-          window.open("https://www.linkedin.com/in/chris-shi-170293369", "_blank");
+          window.open("https://www.linkedin.com/in/chris-h-shi", "_blank");
         },
       },{
         id: 'social-orcid',
