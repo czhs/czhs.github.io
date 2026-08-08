@@ -210,6 +210,24 @@ weeks:
       - title: "On the Theoretical Limitations of Embedding-Based Retrieval — Weller et al."
         url: "https://arxiv.org/abs/2508.21038"
   - num: 12
+    slug: "j66r946c"
+    evt: "evt-i086xbJX36yCLAK"
+    date: "2026-08-10"
+    title: "Towards Monosemanticity"
+    cover: "https://images.lumacdn.com/uploads/77/26bc3511-83bb-4bcb-9f9d-1c4ff2b15a01.png"
+    summary: "Can we identify meaningful, human-interpretable features inside a language model when individual neurons are polysemantic and represent many unrelated concepts at once? Can sparse autoencoders recover the hidden features represented in superposition—and give us a better unit for mechanistic interpretability than neurons themselves?"
+    description: |-
+      Can we identify meaningful, human-interpretable features inside a language model when individual neurons are polysemantic and represent many unrelated concepts at once? Can sparse autoencoders recover the hidden features represented in superposition—and give us a better unit for mechanistic interpretability than neurons themselves?
+
+      Anthropic’s Towards Monosemanticity investigates whether sparse autoencoders can decompose a language model’s activations into interpretable features hidden by superposition. Rather than treating individual neurons as the fundamental units of computation, the authors train overcomplete sparse autoencoders to reconstruct a transformer’s MLP activations as sparse combinations of learned feature directions—revealing concepts such as Arabic script, DNA sequences, Base64, and Hebrew that may be distributed across many neurons.
+
+      The resulting features are substantially more interpretable than neurons and can also behave as causal units: artificially activating features can steer the model toward the corresponding behavior, such as generating Base64 or Arabic text. The paper also uncovers deeper structure, including feature splitting as dictionary size increases, similar features appearing across independently trained models, and groups of features interacting in ways resembling finite-state automata. Together, these results provide an early proof of concept for sparse autoencoders as a tool for mechanistic interpretability, suggesting that models may be better understood in terms of learned features rather than their raw neuron basis.
+
+      Join us at CASI for discussion at 8 pm, and (optional) quiet reading from 7 pm.
+    reading:
+      - title: "Towards Monosemanticity: Decomposing Language Models With Dictionary Learning — Anthropic"
+        url: "https://transformer-circuits.pub/2023/monosemantic-features"
+  - num: 13
     slug: "5wvhx171"
     evt: "evt-r6zcq5sAFOwiOEh"
     date: "2026-08-31"
@@ -227,7 +245,7 @@ weeks:
     reading:
       - title: "mHC: Manifold-Constrained Hyper-Connections — DeepSeek"
         url: "https://www.arxiv.org/pdf/2512.24880"
-  - num: 13
+  - num: 14
     slug: "srsz8rga"
     evt: "evt-v89wbXHXDCt5bik"
     date: "2026-09-07"
