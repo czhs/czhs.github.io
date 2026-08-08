@@ -213,6 +213,8 @@ weeks:
     slug: "j66r946c"
     evt: "evt-i086xbJX36yCLAK"
     date: "2026-08-10"
+    tags: ["paper audio"]
+    recording: "/assets/audio/mln-week-12-monosemanticity.mp3"
     title: "Towards Monosemanticity"
     cover: "https://images.lumacdn.com/uploads/77/26bc3511-83bb-4bcb-9f9d-1c4ff2b15a01.png"
     summary: "Can we identify meaningful, human-interpretable features inside a language model when individual neurons are polysemantic and represent many unrelated concepts at once? Can sparse autoencoders recover the hidden features represented in superposition—and give us a better unit for mechanistic interpretability than neurons themselves?"
