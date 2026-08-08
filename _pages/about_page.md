@@ -37,7 +37,7 @@ phenomena we observe are special cases. Concretely, that means:
 ### Elsewhere
 
 - GitHub: [czhs](https://github.com/czhs)
-- LinkedIn: [chris-shi](https://www.linkedin.com/in/chris-shi-170293369)
+- LinkedIn: [chris-h-shi](https://www.linkedin.com/in/chris-h-shi)
 - Substack: [ultrastructure](https://ultrastructure.substack.com/)
 
 ### Contact

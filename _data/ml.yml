@@ -9,7 +9,7 @@ under_construction: true
 # Sidebar links (bottom of the left column). External links open in a new tab.
 links:
   - { label: Personal Website, url: / } # the one link back to the main site
-  - { label: LinkedIn, url: "https://www.linkedin.com/in/chris-shi-170293369" }
+  - { label: LinkedIn, url: "https://www.linkedin.com/in/chris-h-shi" }
   - { label: GitHub, url: "https://github.com/czhs" }
   - { label: CV, url: /cv/ }
   - { label: Email, url: "mailto:chrisshi@andrew.cmu.edu" }
