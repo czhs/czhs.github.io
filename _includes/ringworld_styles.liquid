@@ -216,16 +216,24 @@ html:has(body.rw-site) {
 }
 /* the label is MLn's own lettering rather than the word set in type, in the
    cream it wears at home. Source art is 640x245; keep the box that ratio.
-   Sized up from 42px: the M's left stem is a Didone hairline, and below about
-   this height it thins out to nothing when the mask is downscaled. */
+
+   Sized by ink, not by box: MLn's mark is 98% caps while ringworld's script only
+   fills 91% of its box and most of that is ascender, so matching box heights
+   made the MLn side shout. 16px here is the optical match for the 17px
+   ringworld label on the other site.
+
+   It masks `mln_wordmark_small.png`, an alpha-dilated copy of the wordmark. The
+   M's left stem is a Didone hairline that scales down to nothing; the dilated
+   variant is the optical-size version of the same art, and is only for marks
+   rendered this small. */
 .rw-sibling-mark {
   display: block;
   flex: 0 0 auto;
-  width: 56px;
-  height: 21px;
+  width: 42px;
+  height: 16px;
   background: var(--mln-cream);
-  -webkit-mask: url("{{ '/assets/img/mln_wordmark.png' | relative_url }}") left center / contain no-repeat;
-  mask: url("{{ '/assets/img/mln_wordmark.png' | relative_url }}") left center / contain no-repeat;
+  -webkit-mask: url("{{ '/assets/img/mln_wordmark_small.png' | relative_url }}") left center / contain no-repeat;
+  mask: url("{{ '/assets/img/mln_wordmark_small.png' | relative_url }}") left center / contain no-repeat;
 }
 
 /* sitewide caveat strip, directly under the masthead so it can't be missed */
