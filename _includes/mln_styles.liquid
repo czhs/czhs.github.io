@@ -126,6 +126,23 @@ body.mln-site { padding: 0; }
   object-fit: contain;
   flex: 0 0 auto;
 }
+/* the label is ringworld's hand lettering rather than the word set in type,
+   masked over the pill's cornflower so it follows the hover colour. The source
+   art is 4:1; keep the box that ratio or the letters distort.
+
+   `color: inherit` is load-bearing: al-folio's main.css sets a colour on bare
+   `span`, which beats inheritance, so currentColor here resolved to the site's
+   text colour — cream on the dark theme, all but invisible on the cream pill. */
+.mln-sibling-mark {
+  display: block;
+  flex: 0 0 auto;
+  width: 68px;
+  height: 17px;
+  color: inherit;
+  background: currentColor;
+  -webkit-mask: url("{{ '/assets/img/ringworld/wordmark.png' | relative_url }}") left center / contain no-repeat;
+  mask: url("{{ '/assets/img/ringworld/wordmark.png' | relative_url }}") left center / contain no-repeat;
+}
 
 /* main + footer spacing */
 .mln-main { padding-top: 1.5rem; padding-bottom: 3.5rem; min-height: 60vh; }

@@ -20,9 +20,14 @@
         {%- endcomment -%}
         <nav class="rw-topnav">
           <a href="{{ site.data.ringworld.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">Luma ↗</a>
-          <a class="rw-sibling" href="{{ '/mln/' | relative_url }}">
+          {%- comment -%}
+            The label is MLn's own lettering, not type — same rule as both
+            brands. It is an alpha mask, so the accessible name comes from
+            aria-label rather than from text.
+          {%- endcomment -%}
+          <a class="rw-sibling" href="{{ '/mln/' | relative_url }}" aria-label="MLn Reading Club — the sibling reading group">
             <span class="rw-sibling-ico" aria-hidden="true"></span>
-            MLn
+            <span class="rw-sibling-mark" aria-hidden="true"></span>
           </a>
         </nav>
       </div>
@@ -30,7 +35,7 @@
 
     {%- comment -%}
       Sitewide, not just the landing page — the whole micro-site is still being
-      built. Remove `under_construction` from _data/ringworld.yml to drop it.
+      built. Currently off — flip `under_construction` in _data/ringworld.yml.
     {%- endcomment -%}
     {%- if site.data.ringworld.under_construction -%}
     <div class="rw-construction">

@@ -21,18 +21,9 @@
 #            rocket saturn-orange saturn-peach saturn-purple star-big
 #            star-folded star-ringed star-trail stars-twin ufo-alien ufo-bear
 #            ufo-blue ufo-eye
-# Sitewide banner under the masthead. Delete this line when the site is done.
-under_construction: true
-
-# The hero headline cycles through these. Mechanistic interpretability leads and
-# is the one hard-coded in the markup, so it survives with JS off. Keep them all
-# shorter than it, or the headline stops fitting on one line.
-subjects:
-  - mechanistic interpretability
-  - epistemics
-  - AI safety
-  - alignment
-  - AI governance
+# Sitewide banner under the masthead. Set to true to bring it back; the strip
+# itself still lives in _layouts/ringworld_base.liquid.
+under_construction: false
 
 calendar_url: https://luma.com/ringworld
 time: 4–7pm

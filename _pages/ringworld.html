@@ -20,12 +20,12 @@ nav: false
 <div class="rw-shell">
   <section class="rw-hero">
     {%- comment -%}
-      The subject cycles through the club's neighbouring fields. Mechanistic
-      interpretability is first and stays in the served HTML, so it is what
-      crawlers and screen readers get; the rest is progressive enhancement.
+      One subject, stated plainly. This used to cycle through the club's
+      neighbouring fields; the rotator and the `subjects:` list are gone. Interp
+      is still the centre of gravity — the room just isn't advertised as five
+      different rooms.
     {%- endcomment -%}
-    <h1 class="rw-hero-title">A weekly maker space for
-      <em class="rw-rotator" data-terms="{{ site.data.ringworld.subjects | join: '|' }}">mechanistic interpretability</em>.</h1>
+    <h1 class="rw-hero-title">A weekly maker space for <em>AI safety</em>.</h1>
     {%- comment -%}
       CASI is linked here but left plain in the data file, which also feeds the
       page description meta — that one has to stay markup-free.
@@ -167,32 +167,3 @@ nav: false
     </ul>
   </section>
 </div>
-
-<script>
-  // Cycles the hero's subject through the club's neighbouring fields. The first
-  // term is already in the HTML, so with JS off (or reduced motion on) the
-  // headline just reads "mechanistic interpretability" and nothing is lost.
-  (function () {
-    var el = document.querySelector('.rw-rotator');
-    if (!el || !el.dataset.terms) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    var terms = el.dataset.terms.split('|').filter(Boolean);
-    if (terms.length < 2) return;
-
-    var i = 0;
-    var FADE = 300;
-    var HOLD = 2600;
-
-    // No document.hidden guard: browsers already throttle background timers,
-    // and skipping ticks froze the word whenever the tab lost focus.
-    setInterval(function () {
-      el.classList.add('is-swapping');
-      setTimeout(function () {
-        i = (i + 1) % terms.length;
-        el.textContent = terms[i];
-        el.classList.remove('is-swapping');
-      }, FADE);
-    }, HOLD);
-  })();
-</script>

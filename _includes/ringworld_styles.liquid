@@ -207,10 +207,25 @@ html:has(body.rw-site) {
   height: 16px;
   flex: 0 0 auto;
   /* tan rather than currentColor: MLn paints its own ring in the theme accent,
-     so the mark arrives here the colour it wears at home */
+     so the mark arrives here the colour it wears at home. An explicit colour
+     also dodges al-folio's main.css, which sets a colour on bare `span` and so
+     beats inheritance — currentColor here would resolve to this page's ink. */
   background: var(--mln-tan);
   -webkit-mask: url("{{ '/assets/img/mln_mark.png' | relative_url }}") center / contain no-repeat;
   mask: url("{{ '/assets/img/mln_mark.png' | relative_url }}") center / contain no-repeat;
+}
+/* the label is MLn's own lettering rather than the word set in type, in the
+   cream it wears at home. Source art is 640x245; keep the box that ratio.
+   Sized up from 42px: the M's left stem is a Didone hairline, and below about
+   this height it thins out to nothing when the mask is downscaled. */
+.rw-sibling-mark {
+  display: block;
+  flex: 0 0 auto;
+  width: 56px;
+  height: 21px;
+  background: var(--mln-cream);
+  -webkit-mask: url("{{ '/assets/img/mln_wordmark.png' | relative_url }}") left center / contain no-repeat;
+  mask: url("{{ '/assets/img/mln_wordmark.png' | relative_url }}") left center / contain no-repeat;
 }
 
 /* sitewide caveat strip, directly under the masthead so it can't be missed */
@@ -289,15 +304,6 @@ html:has(body.rw-site) {
   font-style: normal;
   font-weight: 700;
   color: var(--rw-ring);
-}
-/* the subject cycles; it fades rather than cutting, and the line reflows around
-   it since the terms are different lengths */
-.rw-rotator {
-  transition: opacity 0.3s ease;
-}
-.rw-rotator.is-swapping { opacity: 0; }
-@media (prefers-reduced-motion: reduce) {
-  .rw-rotator { transition: none; }
 }
 .rw-hero-lead {
   font-size: 0.97rem;

@@ -20,9 +20,14 @@
         {%- endcomment -%}
         <nav class="mln-topnav">
           <a href="{{ site.data.mln.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">Luma ↗</a>
-          <a class="mln-sibling" href="{{ '/ringworld/' | relative_url }}">
+          {%- comment -%}
+            The label is ringworld's own hand lettering, not type — same rule as
+            both brands. It is an alpha mask over the pill's colour, so the
+            accessible name comes from aria-label rather than from text.
+          {%- endcomment -%}
+          <a class="mln-sibling" href="{{ '/ringworld/' | relative_url }}" aria-label="ringworld — the sibling maker space">
             <img class="mln-sibling-ico" src="{{ '/assets/img/ringworld/mark.png' | relative_url }}" alt="" aria-hidden="true" width="480" height="263" />
-            ringworld
+            <span class="mln-sibling-mark" aria-hidden="true"></span>
           </a>
         </nav>
       </div>
