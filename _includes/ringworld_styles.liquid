@@ -160,26 +160,44 @@ html:has(body.rw-site) {
 .rw-topnav a:hover { opacity: 1; color: var(--rw-ring); text-decoration: none; }
 
 /* the sibling club: carries MLn's own dot-ring mark and sits as a pill, so the
-   link between the two micro-sites reads as a place to go rather than a word */
-.rw-sibling {
+   link between the two micro-sites reads as a place to go rather than a word.
+
+   The pill is painted in MLn's palette, not this site's: deep forest filled,
+   cream lettering, tan ring — MLn's dark-mode signature, which is the face that
+   club actually shows. Solid green against this cream page makes it the one
+   obviously clickable thing in the nav. Hexes are $forest-deep / $cream-text /
+   $tan-light / $forest from _sass/_variables.scss, out of reach here; keep them
+   in sync. Selectors are .rw-topnav-qualified so they outrank the plain nav link
+   colour and its hover. */
+.rw-topnav a.rw-sibling {
+  --mln-forest-deep: #1f3329;
+  --mln-forest: #2f4a3a;
+  --mln-cream: #ece1c8;
+  --mln-tan: #d8c4a0;
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
   gap: 0.45rem;
   /* Fixed width, and last in the nav, so the pill's right edge is pinned by the
      shell and its left edge — where the mark sits — is identical on both sites.
-     Keep in sync with .mln-sibling. */
+     Keep in sync with .mln-sibling. Colour is free to differ; the box is not. */
   min-width: 132px;
   height: 32px;
   padding: 0 0.72rem 0 0.6rem;
-  border: 1px solid var(--rw-card-line);
+  border: 1px solid var(--mln-forest-deep);
   border-radius: 999px;
-  font-weight: 600;
+  background: var(--mln-forest-deep);
+  color: var(--mln-cream);
+  font-weight: 700;
   opacity: 1;
+  box-shadow: 0 1px 2px rgba(36, 48, 63, 0.2);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
-.rw-sibling:hover {
-  border-color: var(--rw-ring);
-  background: var(--rw-card);
+.rw-topnav a.rw-sibling:hover {
+  border-color: var(--mln-forest);
+  background: var(--mln-forest);
+  color: var(--mln-cream);
+  box-shadow: 0 3px 10px rgba(31, 51, 41, 0.32);
 }
 .rw-sibling-ico {
   /* fixed 24px slot, mark centred in it — the icons have different aspect
@@ -188,7 +206,9 @@ html:has(body.rw-site) {
   width: 24px;
   height: 16px;
   flex: 0 0 auto;
-  background: currentColor;
+  /* tan rather than currentColor: MLn paints its own ring in the theme accent,
+     so the mark arrives here the colour it wears at home */
+  background: var(--mln-tan);
   -webkit-mask: url("{{ '/assets/img/mln_mark.png' | relative_url }}") center / contain no-repeat;
   mask: url("{{ '/assets/img/mln_mark.png' | relative_url }}") center / contain no-repeat;
 }

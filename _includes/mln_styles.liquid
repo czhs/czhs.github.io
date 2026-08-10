@@ -79,26 +79,43 @@ body.mln-site { padding: 0; }
 
 /* the sibling club: carries ringworld's own drawn ring and sits as a pill, so
    the link between the two micro-sites reads as a place to go rather than a
-   word. The ring is full-colour art, so it stays an <img> rather than a mask. */
-.mln-sibling {
+   word. The ring is full-colour art, so it stays an <img> rather than a mask.
+
+   The pill is painted in ringworld's palette, not this site's: cream paper and
+   cornflower ink, so it reads as a scrap of the other club torn onto this page
+   — a filled button among plain nav words, and the cream is also the ground the
+   crayon ring was drawn on, so the mark stops floating on dark green. Hexes are
+   copied from body.rw-site in ringworld_styles.liquid, whose vars don't reach
+   this page; keep them in sync. Selectors are .mln-topnav-qualified so they
+   outrank the plain nav link colour and its hover. */
+.mln-topnav a.mln-sibling {
+  --rw-paper: #fef9f0;
+  --rw-card: #fffdf7;
+  --rw-ring: #3e6fb4;
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
   gap: 0.45rem;
   /* Fixed width, and last in the nav, so the pill's right edge is pinned by the
      shell and its left edge — where the mark sits — is identical on both sites.
-     Keep in sync with .rw-sibling. */
+     Keep in sync with .rw-sibling. Colour is free to differ; the box is not. */
   min-width: 132px;
   height: 32px;
   padding: 0 0.72rem 0 0.6rem;
-  border: 1px solid var(--global-divider-color);
+  border: 1px solid rgba(62, 111, 180, 0.45);
   border-radius: 999px;
-  font-weight: 600;
+  background: var(--rw-paper);
+  color: var(--rw-ring);
+  font-weight: 700;
   opacity: 1;
+  box-shadow: 0 1px 2px rgba(36, 48, 63, 0.14);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
-.mln-sibling:hover {
-  border-color: var(--global-theme-color);
-  background: var(--global-card-bg-color);
+.mln-topnav a.mln-sibling:hover {
+  border-color: var(--rw-ring);
+  background: var(--rw-card);
+  color: var(--rw-ring);
+  box-shadow: 0 3px 10px rgba(62, 111, 180, 0.3);
 }
 .mln-sibling-ico {
   /* fixed 24px slot, mark centred in it — the icons have different aspect
