@@ -155,9 +155,9 @@ body.mln-site { padding: 0; }
   opacity: 0.9;
 }
 /* One row instead of three stacked full-width bands. The toggle is in normal
-   flow at the left; the chips and the cohosting invite are pinned to the
-   top-right and out of it, which is what keeps the summary still when the panel
-   opens — the same spot opens and closes it. */
+   flow at the left; the chips are pinned to the top-right and out of it, which
+   is what keeps the summary still when the panel opens — the same spot opens
+   and closes it. */
 .mln-metarow {
   position: relative;
   margin: 0 0 1.4rem;
@@ -277,23 +277,6 @@ body.mln-site { padding: 0; }
 .mln-sched dt { flex: 0 0 4.4rem; font-weight: 700; opacity: 0.9; }
 .mln-sched dd { margin: 0; opacity: 0.82; }
 @media (max-width: 576px) { .mln-about { columns: 1; } }
-
-/* the cohosting ask, as a dashed chip in the meta row — an invitation rather
-   than another band across the page */
-.mln-host-invite {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.2rem 0.7rem;
-  border: 1px dashed var(--global-divider-color);
-  border-radius: 999px;
-}
-.mln-host-invite a {
-  color: var(--global-theme-color);
-  font-weight: 700;
-  text-decoration: none;
-}
-.mln-host-invite a:hover { text-decoration: underline; }
 
 /* week grid */
 .mln-grid {
