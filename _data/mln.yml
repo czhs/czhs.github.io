@@ -237,6 +237,8 @@ weeks:
     slug: "sahc120s"
     evt: "evt-uEhTS4XmDZbVJGy"
     date: "2026-08-17"
+    tags: ["paper audio"]
+    recording: "https://github.com/czhs/czhs.github.io/releases/download/mln-audio/mln-week-13-goedel-prover.mp3"
     title: "Goedel-Prover: A Frontier Model for Open-Source Automated Theorem Proving"
     cover: "https://images.unsplash.com/photo-1675627452858-0dd3d1df63d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjQyMjF8MHwxfHNlYXJjaHwxNnx8YXV0b21hdGVkJTIwdGhlb3JlbSUyMHByb3Zpbmd8ZW58MHx8fHwxNzg2NDY4MTA2fDA&ixlib=rb-4.1.0&q=80&w=1080"
     summary: "How do we accurately autoformalize natural language mathematics? How can we achieve a state-of-the-art model for theorem proving?"
