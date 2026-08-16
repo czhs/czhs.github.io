@@ -1,0 +1,135 @@
+---
+layout: default
+---
+{%- comment -%}
+  Password gate for research entries — the generalization of the poem page's
+  scheme (see bin/research_lock.py). The page ships only AES-GCM ciphertext
+  (page.enc_payload under assets/enc/); the body decrypts in-browser via
+  WebCrypto. One shared password unlocks every entry: on success it is kept in
+  sessionStorage and other locked entries auto-open for the rest of the tab
+  session. Plaintext never exists in this public repo.
+{%- endcomment -%}
+
+<div class="post">
+  <header class="post-header">
+    <h1 class="post-title">{{ page.title }}</h1>
+    <p class="post-meta">Created on {{ page.date | date: "%B %-d, %Y" }}</p>
+  </header>
+
+  <section class="rlock" id="rlock">
+    <form class="rlock-gate" id="rlock-gate" autocomplete="off">
+      <div class="rlock-row">
+        <input
+          class="rlock-input"
+          id="rlock-pw"
+          type="password"
+          name="rlock-pw"
+          placeholder="password"
+          aria-label="password"
+          autocomplete="off"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+        >
+        <button class="rlock-btn" type="submit">open</button>
+      </div>
+      <p class="rlock-msg" id="rlock-msg" role="status" aria-live="polite"></p>
+    </form>
+    <article class="post-content rlock-content" id="rlock-content" hidden></article>
+  </section>
+</div>
+
+<style>
+  .rlock [hidden] { display: none !important; }
+  .rlock-gate { text-align: center; padding: 2.5rem 0 3rem; }
+  .rlock-row { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+  .rlock-input {
+    width: 220px; padding: 0.55rem 0.9rem;
+    border: 1px solid var(--global-divider-color); border-radius: 8px;
+    background: var(--global-bg-color); color: var(--global-text-color); font-size: 1rem;
+  }
+  .rlock-input:focus { outline: none; border-color: var(--global-theme-color); }
+  .rlock-btn {
+    padding: 0.55rem 1.25rem; border: 1px solid var(--global-divider-color);
+    border-radius: 8px; background: transparent; color: var(--global-text-color);
+    font-size: 1rem; cursor: pointer;
+  }
+  .rlock-btn:hover { color: var(--global-theme-color); border-color: var(--global-theme-color); }
+  .rlock-msg { min-height: 1.4em; margin: 1rem 0 0; font-size: 0.9rem; opacity: 0.65; }
+</style>
+
+<script>
+  (function () {
+    var PAYLOAD_URL = "{{ page.enc_payload | relative_url }}";
+    var STORE_KEY = "research_pw";
+
+    var gate = document.getElementById("rlock-gate");
+    var pw = document.getElementById("rlock-pw");
+    var msg = document.getElementById("rlock-msg");
+    var content = document.getElementById("rlock-content");
+
+    function b64(s) {
+      return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); });
+    }
+
+    var payload = null;
+    function getPayload() {
+      if (payload) return Promise.resolve(payload);
+      return fetch(PAYLOAD_URL)
+        .then(function (r) { return r.json(); })
+        .then(function (p) { payload = p; return p; });
+    }
+
+    function decrypt(password) {
+      return getPayload().then(function (p) {
+        var subtle = window.crypto.subtle;
+        return subtle
+          .importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"])
+          .then(function (km) {
+            return subtle.deriveKey(
+              { name: "PBKDF2", salt: b64(p.salt), iterations: p.iter, hash: "SHA-256" },
+              km,
+              { name: "AES-GCM", length: 256 },
+              false,
+              ["decrypt"]
+            );
+          })
+          .then(function (key) {
+            return subtle.decrypt({ name: "AES-GCM", iv: b64(p.iv) }, key, b64(p.ct));
+          })
+          .then(function (buf) { return JSON.parse(new TextDecoder().decode(buf)); });
+      });
+    }
+
+    function unlock(password, remember) {
+      return decrypt(password).then(function (data) {
+        content.innerHTML = data.html;
+        gate.hidden = true;
+        content.hidden = false;
+        if (remember) {
+          try { sessionStorage.setItem(STORE_KEY, password); } catch (e) {}
+        }
+      });
+    }
+
+    gate.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!window.crypto || !window.crypto.subtle) {
+        msg.textContent = "this browser can't decrypt here — try https.";
+        return;
+      }
+      msg.textContent = "unlocking…";
+      unlock(pw.value, true).catch(function () {
+        msg.textContent = "not it.";
+        pw.select();
+      });
+    });
+
+    try {
+      var saved = sessionStorage.getItem(STORE_KEY);
+      if (saved && window.crypto && window.crypto.subtle) {
+        unlock(saved, false).catch(function () {});
+      }
+    } catch (e) {}
+  })();
+</script>

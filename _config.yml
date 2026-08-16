@@ -162,6 +162,12 @@ collections:
   ringworld:
     output: true
     permalink: /ringworld/:name/
+  # research blog — lab-notebook posts served under /research. Same pattern as
+  # ringworld: a separate collection, so these stay out of the main blog and its
+  # RSS feed. Listing page: _pages/research.md (orphan — not in the nav).
+  research:
+    output: true
+    permalink: /research/:name/
 
 # -----------------------------------------------------------------------------
 # Jekyll settings
