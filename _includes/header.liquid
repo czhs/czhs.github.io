@@ -25,6 +25,20 @@
       {% elsif site.enable_navbar_social %}
         <!-- Social Icons -->
         <div class="navbar-brand social">{% include social.liquid %}</div>
+      {% else %}
+        {%- comment -%}
+          Home has no brand at rest — the page's own <h1> carries the name. It
+          hands the name over to the bar as it scrolls out of sight, so the two
+          are never on screen together. Styles and script are at the foot of
+          this file, homepage-only.
+        {%- endcomment -%}
+        <a class="navbar-brand title font-weight-lighter" id="navbar-brand-scroll" href="{{ site.baseurl }}/">
+          {%- if site.navbar_brand and site.navbar_brand != '' -%}
+            {{- site.navbar_brand -}}
+          {%- else -%}
+            {{- site.title -}}
+          {%- endif -%}
+        </a>
       {% endif %}
       <!-- Navbar Toggle -->
       <button
@@ -147,6 +161,79 @@
       </div>
     </div>
   </nav>
+  {% if page.permalink == '/' %}
+    <style>
+      /* An id, because the zine skin pins `body.zine .navbar-brand` to
+         opacity 1 and would otherwise keep this visible from the start.
+         visibility (not display) is what keeps it out of the tab order and
+         the a11y tree while hidden; its transition is delayed on the way out
+         so the fade is allowed to finish first. */
+      #navbar-brand-scroll {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(0.5rem);
+        transition:
+          opacity 0.22s ease,
+          transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+          visibility 0s linear 0.34s;
+      }
+
+      #navbar-brand-scroll.is-in {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        transition:
+          opacity 0.26s ease,
+          transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+          visibility 0s;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #navbar-brand-scroll,
+        #navbar-brand-scroll.is-in {
+          transform: none;
+        }
+      }
+    </style>
+    <script>
+      // Swap the name into the bar exactly as the page's own <h1> passes
+      // behind it. The bar is fixed and covers the top strip of the page, so
+      // the line to cross is the bar's height, not 0 — "no longer visible to
+      // the reader" rather than "off the viewport".
+      (function () {
+        function init() {
+          var brand = document.getElementById('navbar-brand-scroll');
+          var title = document.querySelector('.post-header .post-title');
+          var nav = document.getElementById('navbar');
+          if (!brand || !title || !nav) return;
+
+          // Only the title's rect is read per scroll; the bar's height is
+          // cached and refreshed on resize, where it can actually change (the
+          // nav wraps taller on narrow screens). No rAF throttle: scroll
+          // events already coalesce to one a frame, and a deferred update
+          // leaves the bar a frame stale at the handover.
+          var navH = nav.getBoundingClientRect().height;
+          function update() {
+            brand.classList.toggle('is-in', title.getBoundingClientRect().bottom <= navH);
+          }
+
+          // once up front, so arriving already scrolled (a back navigation, a
+          // restored position, a #hash) starts in the right state
+          update();
+          window.addEventListener('scroll', update, { passive: true });
+          window.addEventListener('resize', function () {
+            navH = nav.getBoundingClientRect().height;
+            update();
+          });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', init);
+        } else {
+          init();
+        }
+      })();
+    </script>
+  {% endif %}
   {% if site.enable_progressbar %}
     <!-- Scrolling Progress Bar -->
     <progress id="progress" value="0">
