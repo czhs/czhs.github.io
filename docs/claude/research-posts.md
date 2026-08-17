@@ -71,6 +71,13 @@ HTML entities (`&#45;&#45;`, `&#39;`, `&quot;`).
 (normalise whitespace, split to words, `difflib.SequenceMatcher`); the target is
 zero real differences once list bullets and italic markers are discounted.
 
+### If an entry contains math
+
+MathJax is no longer loaded site-wide (it was costing every page ~1 MB for
+nothing). Other pages get it by content sniffing, but that cannot see inside an
+encrypted payload — so a research entry with math must set `math: true` in the
+**stub's** front matter, not just the plaintext master.
+
 ### The pipeline
 
 1. Extract: `pdftotext -layout <pdf> body.txt` and `pdfimages -png <pdf> img`;

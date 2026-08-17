@@ -725,8 +725,41 @@
     var SVGNS = 'http://www.w3.org/2000/svg';
     var MIN_MARGIN = 96; // px of field beside the card needed to draw an arc
 
+    // Bring the target into view with the least movement that still clears the
+    // sticky navbar.
+    //
+    // scrollIntoView({block:'nearest'}) was the obvious tool and did not work
+    // here — it left the target hundreds of px above the viewport — so the
+    // scroll is computed directly. That also makes the navbar clearance exact
+    // rather than something scroll-margin has to negotiate.
+    //
+    //   above the safe line  -> sit it just under the navbar
+    //   below the fold       -> sit it just inside the bottom edge
+    //   already visible      -> do not move at all
     function reveal(def) {
-      def.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      var nav = document.querySelector('body.zine .navbar, .navbar.sticky-top, .navbar.fixed-top');
+      var navH = nav ? nav.getBoundingClientRect().height : 0;
+      var pad = navH + 16;
+      var rect = def.getBoundingClientRect();
+      var absTop = rect.top + window.pageYOffset;
+      var target = null;
+
+      if (rect.top < pad) {
+        target = absTop - pad;
+      } else if (rect.bottom > window.innerHeight) {
+        // don't drag it further than just-under-the-navbar for tall targets
+        target = Math.min(absTop - pad, absTop + rect.height - window.innerHeight + 16);
+      }
+
+      if (target !== null) {
+        var reduce = window.matchMedia &&
+                     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({
+          top: Math.max(0, target),
+          behavior: reduce ? 'auto' : 'smooth'
+        });
+      }
+
       def.classList.remove('xref-target-flash');
       void def.offsetWidth; // restart the animation
       def.classList.add('xref-target-flash');

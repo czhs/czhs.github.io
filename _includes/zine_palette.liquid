@@ -66,9 +66,72 @@
   })();
 </script>
 
-<link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+{%- comment -%}
+  Fonts are self-hosted (both are OFL, so this is permitted) rather than pulled
+  from Google Fonts. Three reasons, in order of how much they mattered:
+
+  1. The swap reflow. A webfont arriving after first paint re-lays out every
+     line, which is the "content shifts down a few lines and re-renders as it
+     goes" effect. Preloading a same-origin file gets it there before the first
+     paint instead of two hops later (CSS on googleapis -> font on gstatic).
+  2. It removes a render-blocking third-party stylesheet from the critical path.
+  3. Latin-subset variable files: 27 KB + 31 KB covers every weight we use.
+
+  Italics are synthesised from the variable face — the italic file was dropped
+  because the notebook uses <em> sparingly and it is not worth a second
+  download.
+{%- endcomment -%}
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="{{ '/assets/fonts/plus-jakarta-sans-latin-var.woff2' | relative_url }}">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="{{ '/assets/fonts/jetbrains-mono-latin-var.woff2' | relative_url }}">
+
+<style>
+  @font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 200 800;
+    font-display: swap;
+    src: url('{{ '/assets/fonts/plus-jakarta-sans-latin-var.woff2' | relative_url }}') format('woff2');
+  }
+
+  @font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 100 800;
+    font-display: swap;
+    src: url('{{ '/assets/fonts/jetbrains-mono-latin-var.woff2' | relative_url }}') format('woff2');
+  }
+
+  /* Metric-matched fallbacks.
+     Preloading gets the real fonts in early, but if they are ever late the
+     swap must not move anything. Plus Jakarta Sans is 6.07% wider than Arial
+     and has a 1.26 line box against Arial's 1.15 — enough that text rewraps
+     to a different number of lines and everything below it jumps. These faces
+     stretch the local fallback onto Plus Jakarta Sans's metrics, so the swap
+     is invisible. Arial is the reference because it is present on macOS and
+     Windows and maps to the metric-compatible Liberation Sans on Linux.
+     Measured in-browser, not guessed. */
+  @font-face {
+    font-family: 'PJS Fallback';
+    src: local('Arial'), local('Helvetica'), local('Liberation Sans');
+    size-adjust: 106.07%;
+    /* These are relative to the SIZE-ADJUSTED em, so the target 100%/26% is
+       divided by 1.0607 — setting them directly overshot the line box by 6%. */
+    ascent-override: 94.28%;
+    descent-override: 24.51%;
+    line-gap-override: 0%;
+  }
+
+  @font-face {
+    font-family: 'JBM Fallback';
+    src: local('Menlo'), local('Consolas'), local('DejaVu Sans Mono'), local('Courier New');
+    size-adjust: 100%;
+    ascent-override: 102%;
+    descent-override: 30%;
+    line-gap-override: 0%;
+  }
+</style>
 
 <style>
   /* Default, and the no-JS fallback: seafoam. data-pal overrides it once a
@@ -146,8 +209,8 @@
 
   :root {
     --rz-claude-line: color-mix(in srgb, var(--rz-ink) 16%, transparent);
-    --rz-sans: 'Plus Jakarta Sans', 'Segoe UI', Roboto, sans-serif;
-    --rz-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --rz-sans: 'Plus Jakarta Sans', 'PJS Fallback', 'Segoe UI', Roboto, sans-serif;
+    --rz-mono: 'JetBrains Mono', 'JBM Fallback', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   }
 
   /* paint the field behind the page before body styles resolve */

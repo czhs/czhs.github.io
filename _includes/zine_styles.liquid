@@ -39,6 +39,13 @@
     color: var(--rz-ink);
   }
 
+  /* The navbar is sticky; without this, following any in-page anchor parks
+     the target underneath it. The xref script measures the bar exactly, but
+     this covers plain hash navigation too. */
+  body.zine [id] {
+    scroll-margin-top: 5.5rem;
+  }
+
   /* One palette per visitor, so a light/dark switch has nothing to say here. */
   body.zine #light-toggle {
     display: none;
@@ -50,6 +57,9 @@
     background: var(--rz-field) !important;
     border-bottom: 2px solid color-mix(in srgb, var(--rz-ink) 22%, transparent);
     font-family: var(--rz-sans);
+    /* al-folio ships the bar at opacity .95 — content ghosting through a bar
+       that things scroll under reads as a mistake here. Fully opaque. */
+    opacity: 1;
     backdrop-filter: none;
   }
 
