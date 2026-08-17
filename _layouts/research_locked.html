@@ -8,55 +8,51 @@ layout: default
   WebCrypto. One shared password unlocks every entry: on success it is kept in
   sessionStorage and other locked entries auto-open for the rest of the tab
   session. Plaintext never exists in this public repo.
+
+  Presentation lives in _includes/research_styles.liquid (the .rzine "zine
+  card" treatment). Both the lock and the decrypted body render inside the same
+  card, so unlocking swaps the contents rather than repainting the page.
 {%- endcomment -%}
 
-<div class="post">
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-meta">Created on {{ page.date | date: "%B %-d, %Y" }}</p>
-  </header>
+{% include research_styles.liquid %}
 
-  <section class="rlock" id="rlock">
-    <form class="rlock-gate" id="rlock-gate" autocomplete="off">
-      <div class="rlock-row">
-        <input
-          class="rlock-input"
-          id="rlock-pw"
-          type="password"
-          name="rlock-pw"
-          placeholder="password"
-          aria-label="password"
-          autocomplete="off"
-          autocapitalize="off"
-          autocorrect="off"
-          spellcheck="false"
-        >
-        <button class="rlock-btn" type="submit">open</button>
-      </div>
-      <p class="rlock-msg" id="rlock-msg" role="status" aria-live="polite"></p>
-    </form>
-    <article class="post-content rlock-content" id="rlock-content" hidden></article>
-  </section>
+<div class="rzine">
+  <div class="rzine-card">
+    <header class="post-header">
+      <h1 class="post-title">{{ page.title }}</h1>
+      {% if page.description %}
+        <p class="post-desc">{{ page.description }}</p>
+      {% endif %}
+      <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}</p>
+    </header>
+
+    <section class="rlock" id="rlock">
+      <form class="rzine-gate" id="rlock-gate" autocomplete="off">
+        <p class="rzine-lock">locked entry</p>
+        <div class="rzine-row">
+          <input
+            class="rzine-input"
+            id="rlock-pw"
+            type="password"
+            name="rlock-pw"
+            placeholder="password"
+            aria-label="password"
+            autocomplete="off"
+            autocapitalize="off"
+            autocorrect="off"
+            spellcheck="false"
+          >
+          <button class="rzine-btn" type="submit">open</button>
+        </div>
+        <p class="rzine-msg" id="rlock-msg" role="status" aria-live="polite"></p>
+      </form>
+      <article class="post-content rzine-content" id="rlock-content" hidden></article>
+    </section>
+  </div>
+
+  {% include research_foot.liquid %}
 </div>
 
-<style>
-  .rlock [hidden] { display: none !important; }
-  .rlock-gate { text-align: center; padding: 2.5rem 0 3rem; }
-  .rlock-row { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
-  .rlock-input {
-    width: 220px; padding: 0.55rem 0.9rem;
-    border: 1px solid var(--global-divider-color); border-radius: 8px;
-    background: var(--global-bg-color); color: var(--global-text-color); font-size: 1rem;
-  }
-  .rlock-input:focus { outline: none; border-color: var(--global-theme-color); }
-  .rlock-btn {
-    padding: 0.55rem 1.25rem; border: 1px solid var(--global-divider-color);
-    border-radius: 8px; background: transparent; color: var(--global-text-color);
-    font-size: 1rem; cursor: pointer;
-  }
-  .rlock-btn:hover { color: var(--global-theme-color); border-color: var(--global-theme-color); }
-  .rlock-msg { min-height: 1.4em; margin: 1rem 0 0; font-size: 0.9rem; opacity: 0.65; }
-</style>
 
 <script>
   (function () {

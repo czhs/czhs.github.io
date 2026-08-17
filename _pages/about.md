@@ -40,10 +40,9 @@ latest_posts:
 Hi, I'm Chris Shi (also known as Hongyi Shi), an undergraduate studying math and
 computer engineering at Carnegie Mellon University (CMU).
 
-This is a personal blog about infrastructure and math, sometimes both.
-Biodefense, interpretability, automation.
+This is a personal blog. I'm interested in infrastructure, biodefense, interpretability, automation.
 
-I’m fascinated by the geometry and hardware of thinking: mech interp and asics. I’m currently researching mechanistic interpretability for in-context learning and pretraining. I'm also interested in optimal transport and high dimensional probability. For fun, I work on animating robots (<a href="https://thewaltdisneycompany.com/news/behind-the-bdx-droids/" target="_blank" rel="noopener">like these</a>).
+I’m fascinated by the hardware of thinking. I’m currently researching mechanistic interpretability for in-context learning and pretraining. I'm also interested in optimal transport and high dimensional probability. For fun, I work on animating robots (<a href="https://thewaltdisneycompany.com/news/behind-the-bdx-droids/" target="_blank" rel="noopener">like these</a>).
 
 Reach me at chrisshi [at] andrew [dot] cmu [dot] edu.
 

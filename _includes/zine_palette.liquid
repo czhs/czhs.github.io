@@ -1,0 +1,132 @@
+{%- comment -%}
+  Palette assignment for the zine design.
+
+  Everyone starts on seafoam. A visitor who picks another palette from the
+  circles at the bottom of the homepage (_includes/zine_picker.liquid) keeps it:
+  stored in a cookie (1 year) with a localStorage mirror, refreshed each visit.
+
+  This include lives in <head> — inside _layouts/default.liquid only, so MLn,
+  ringworld and the portfolio (their own *_base.liquid shells) never see it. The
+  script runs before first paint so there is no flash of the wrong palette.
+
+  Every palette obeys one formula:
+    field  dusty mid-tone, S 18-28% / L 58-66% — the ground cards sit on
+    ink    that hue driven to near-black — text, borders, terminal ground
+    card   near-white tinted OPPOSITE the ink, so cards read as lit
+    claude Claude's insertions, inverted warm/cool against the card
+{%- endcomment -%}
+
+<script>
+  (function () {
+    var PALS = ['wisteria', 'lilac-ash', 'clay', 'puce', 'slate-teal', 'seafoam', 'denim'];
+    var KEY = 'zine-pal';
+    var DEFAULT_PAL = 'seafoam';
+
+    function readCookie(n) {
+      var m = document.cookie.match('(?:^|; )' + n + '=([^;]*)');
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+
+    var v = readCookie(KEY);
+    if (!v) { try { v = localStorage.getItem(KEY); } catch (e) {} }
+    // Everyone starts on seafoam; the picker on the homepage is what changes it.
+    if (!v || PALS.indexOf(v) < 0) { v = DEFAULT_PAL; }
+
+    // refresh the cookie on every visit so an active reader never ages out
+    document.cookie = KEY + '=' + encodeURIComponent(v) + ';path=/;max-age=31536000;samesite=lax';
+    try { localStorage.setItem(KEY, v); } catch (e) {}
+
+    document.documentElement.setAttribute('data-pal', v);
+    window.ZINE_PALS = PALS;
+  })();
+</script>
+
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+
+<style>
+  /* Default, and the no-JS fallback: seafoam. data-pal overrides it once a
+     visitor picks something else. */
+  :root,
+  html[data-pal='seafoam'] {
+    --rz-field: #8fb2a4;
+    --rz-ink: #13261f;
+    --rz-card: #fffcf2;
+    --rz-chrome: #d3e0d9;
+    --rz-accent: #0f6046;
+    --rz-claude-ink: #8a3f10;
+    --rz-claude-bg: #edf5f1;
+  }
+
+  html[data-pal='wisteria'] {
+    --rz-field: #8e9bc4;
+    --rz-ink: #141b38;
+    --rz-card: #fffcf4;
+    --rz-chrome: #d5d8e4;
+    --rz-accent: #3a4d9c;
+    --rz-claude-ink: #9c4510;
+    --rz-claude-bg: #f0f2fb;
+  }
+
+  html[data-pal='lilac-ash'] {
+    --rz-field: #a296b8;
+    --rz-ink: #221b33;
+    --rz-card: #fffcf3;
+    --rz-chrome: #dbd6e0;
+    --rz-accent: #5b4794;
+    --rz-claude-ink: #9c4510;
+    --rz-claude-bg: #f4f1f9;
+  }
+
+  html[data-pal='clay'] {
+    --rz-field: #b0897f;
+    --rz-ink: #2e1612;
+    --rz-card: #fbfdff;
+    --rz-chrome: #e2d6d2;
+    --rz-accent: #1f5f8b;
+    --rz-claude-ink: #1f5f8b;
+    --rz-claude-bg: #fdf1ec;
+  }
+
+  html[data-pal='puce'] {
+    --rz-field: #a8848f;
+    --rz-ink: #2a1420;
+    --rz-card: #fcfdff;
+    --rz-chrome: #e0d2d6;
+    --rz-accent: #1f6b53;
+    --rz-claude-ink: #1f6b53;
+    --rz-claude-bg: #fdf0f2;
+  }
+
+  html[data-pal='slate-teal'] {
+    --rz-field: #7fa2a8;
+    --rz-ink: #10262c;
+    --rz-card: #fffbf2;
+    --rz-chrome: #cfdbdd;
+    --rz-accent: #0d5f6e;
+    --rz-claude-ink: #9c4510;
+    --rz-claude-bg: #eef6f7;
+  }
+
+  html[data-pal='denim'] {
+    --rz-field: #8296ae;
+    --rz-ink: #131f2b;
+    --rz-card: #fffcf2;
+    --rz-chrome: #d3dae2;
+    --rz-accent: #1b5480;
+    --rz-claude-ink: #8a4a12;
+    --rz-claude-bg: #eef2f7;
+  }
+
+  :root {
+    --rz-claude-line: color-mix(in srgb, var(--rz-ink) 16%, transparent);
+    --rz-sans: 'Plus Jakarta Sans', 'Segoe UI', Roboto, sans-serif;
+    --rz-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  }
+
+  /* paint the field behind the page before body styles resolve */
+  html:has(body.zine) {
+    background: var(--rz-field);
+  }
+</style>

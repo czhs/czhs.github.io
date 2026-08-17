@@ -49,6 +49,14 @@ layout: page
   color: var(--global-text-color-light);
   font-style: italic;
 }
+.shelf-posts {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.shelf-posts li + li {
+  margin-top: 0.55rem;
+}
 </style>
 
 {% if page.collection and page.collection.size > 0 %}
@@ -185,6 +193,24 @@ layout: page
       </script>
     {% endif %}
 
-    <p class="shelf-recs-note">book recomendations? please feel free to reach out to me!</p>
+    <p class="shelf-recs-note">book recs? I love book recs! please reach out to me!</p>
+
+    {%- comment -%}
+      Titles are verbatim from each post's own <title>/<h1>, not the URL slug —
+      Grunewald's slug says "why-i-think" but the published title does not. The
+      second link was given as a substack.com/inbox/ URL, which is tied to the
+      reader's own inbox; it resolves to this canonical address, which is what
+      works for visitors.
+    {%- endcomment -%}
+    <hr class="shelf-divider">
+    <h2 class="shelf-posts-title">My favorite blog posts:</h2>
+    <ul class="shelf-posts">
+      <li>
+        <a href="https://www.erichgrunewald.com/posts/why-i-think-you-should-almost-never-use-ai-to-write-anything-substantive/" target="_blank" rel="noopener">Why You Should Almost Never Use AI to Write Anything Substantive</a>
+      </li>
+      <li>
+        <a href="https://www.clinicaltrialsabundance.blog/p/why-were-covid-vaccine-trials-so-fast" target="_blank" rel="noopener">Why were Covid vaccine trials so fast?</a>
+      </li>
+    </ul>
   {% endif %}
 {% endif %}

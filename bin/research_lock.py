@@ -31,10 +31,13 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 slug, password = sys.argv[1], sys.argv[2]
 site = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 html = open(f"{site}/_site/research/{slug}/index.html").read()
-i = html.find('<article class="post-content">')
+# Match the opening tag by prefix, not by an exact string: the zine layouts
+# render `class="post-content rzine-content"`, and an exact match on
+# `<article class="post-content">` silently stopped finding the body.
+m = re.search(r'<article class="post-content[^"]*"[^>]*>', html)
 j = html.rfind("</article>")
-assert i != -1 and j > i, "post-content article not found in built page"
-body = html[i + len('<article class="post-content">') : j]
+assert m and j > m.end(), "post-content article not found in built page"
+body = html[m.end() : j]
 
 MIME = {"png": "image/png", "jpg": "image/jpeg", "jpeg": "image/jpeg",
         "svg": "image/svg+xml", "webp": "image/webp", "gif": "image/gif"}

@@ -77,7 +77,12 @@
   }
 }
 
-html[data-theme="dark"] {
+// MLn is a dark venue by design and must not follow the site-wide theme
+// setting — the rest of the site now runs the light zine palette. Aliased
+// onto the real dark block rather than given its own colours, so it keeps
+// exactly the values it has always had. (ringworld pins itself the same way.)
+html[data-theme="dark"],
+html:has(body.mln-site) {
   color-scheme: dark;
   // Dark mode: deep forest bg, warm tan/cream accents.
   --global-bg-color: #{$forest-deep};

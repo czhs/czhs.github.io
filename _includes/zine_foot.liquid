@@ -1,0 +1,8 @@
+{%- comment -%}
+  Site footer for the zine skin, replacing al-folio's attribution bar.
+  /research pages use research_foot.liquid instead, inside their own field.
+{%- endcomment -%}
+<div class="zine-foot">
+  <span>&copy; {{ 'now' | date: "%Y" }} {{ site.first_name }} {{ site.last_name }}</span>
+  <span class="zf-spacer"><a href="{{ '/research/' | relative_url }}">research</a></span>
+</div>

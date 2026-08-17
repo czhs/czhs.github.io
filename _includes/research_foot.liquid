@@ -1,0 +1,11 @@
+{%- comment -%}
+  Footer for the /research zine pages, replacing al-folio's attribution bar.
+  Sits inside .rzine so it reads as part of the field. Shares .zine-foot's
+  styling with the rest of the site; .rzine-foot only narrows it to the
+  research card's 48rem measure.
+{%- endcomment -%}
+<div class="zine-foot rzine-foot">
+  <span>&copy; {{ 'now' | date: "%Y" }} {{ site.first_name }} {{ site.last_name }}</span>
+  <span><a href="{{ '/research/' | relative_url }}">research index</a></span>
+  <span class="zf-spacer"><a href="{{ '/' | relative_url }}">chrisshi.com</a></span>
+</div>

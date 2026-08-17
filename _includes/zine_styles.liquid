@@ -1,0 +1,363 @@
+{%- comment -%}
+  The zine skin, applied to every page that renders through default.liquid.
+
+  Scoped to body.zine. MLn, ringworld and the robotics/ML portfolio render
+  through their own *_base.liquid shells with their own <body>, so they never
+  receive this and keep their own designs.
+
+  Palette variables come from zine_palette.liquid (per-visitor, random on first
+  visit). Nothing here hard-codes a colour except the traffic lights.
+
+  /research brings its own card (research_styles.liquid), so pages carrying
+  .rzine-page opt out of the generic container-as-card treatment below —
+  otherwise the container cards the full-bleed band it already contains, which
+  leaves ivory bars above and below it.
+{%- endcomment -%}
+<style>
+  body.zine {
+    color-scheme: light;
+    --global-bg-color: var(--rz-field);
+    --global-text-color: var(--rz-ink);
+    --global-text-color-light: color-mix(in srgb, var(--rz-ink) 62%, transparent);
+    --global-theme-color: var(--rz-accent);
+    --global-hover-color: var(--rz-accent);
+    --global-hover-text-color: var(--rz-card);
+    --global-divider-color: color-mix(in srgb, var(--rz-ink) 18%, transparent);
+    --global-card-bg-color: var(--rz-card);
+    --global-code-bg-color: color-mix(in srgb, var(--rz-ink) 10%, transparent);
+    --global-footer-bg-color: transparent;
+    --global-footer-text-color: color-mix(in srgb, var(--rz-ink) 62%, transparent);
+    --global-footer-link-color: var(--rz-ink);
+    --global-back-to-top-bg-color: color-mix(in srgb, var(--rz-ink) 55%, transparent);
+    --global-back-to-top-text-color: var(--rz-card);
+    --global-highlight-color: var(--rz-accent);
+    --global-newsletter-bg-color: var(--rz-card);
+    --global-newsletter-text-color: var(--rz-ink);
+
+    background: var(--rz-field);
+    font-family: var(--rz-sans);
+    color: var(--rz-ink);
+  }
+
+  /* One palette per visitor, so a light/dark switch has nothing to say here. */
+  body.zine #light-toggle {
+    display: none;
+  }
+
+  /* ── top bar merged into the field ──────────────────────────── */
+  body.zine .navbar,
+  body.zine .navbar.navbar-light {
+    background: var(--rz-field) !important;
+    border-bottom: 2px solid color-mix(in srgb, var(--rz-ink) 22%, transparent);
+    font-family: var(--rz-sans);
+    backdrop-filter: none;
+  }
+
+  body.zine .navbar-brand,
+  body.zine .navbar .nav-link,
+  body.zine .navbar .navbar-nav .nav-item .nav-link {
+    color: var(--rz-ink) !important;
+    font-weight: 600;
+    opacity: 0.82;
+  }
+
+  body.zine .navbar-brand {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    opacity: 1;
+  }
+
+  body.zine .navbar .nav-link:hover,
+  body.zine .navbar .navbar-nav .nav-item.active > .nav-link {
+    color: var(--rz-card) !important;
+    opacity: 1;
+  }
+
+  body.zine .navbar-toggler .icon-bar {
+    background: var(--rz-ink);
+  }
+
+  body.zine .dropdown-menu {
+    background: var(--rz-card);
+    border: 3px solid var(--rz-ink);
+    border-radius: 0;
+  }
+
+  body.zine .dropdown-menu .dropdown-item {
+    color: var(--rz-ink);
+  }
+
+  body.zine .dropdown-menu .dropdown-item:hover {
+    background: var(--rz-field);
+    color: var(--rz-card);
+  }
+
+  /* ── main content becomes the card (except /research) ───────── */
+  body.zine:not(.rzine-page) .container[role='main'] {
+    max-width: 54rem;
+    background: var(--rz-card);
+    border: 8px solid var(--rz-ink);
+    padding: clamp(1.25rem, 4vw, 2.75rem);
+    margin-top: 2.25rem !important;
+    margin-bottom: 2.25rem;
+    color: var(--rz-ink);
+  }
+
+  /* ── type ───────────────────────────────────────────────────── */
+  body.zine .container[role='main'] h1,
+  body.zine .container[role='main'] h2,
+  body.zine .container[role='main'] h3,
+  body.zine .container[role='main'] h4,
+  body.zine .post-title,
+  body.zine .post-description {
+    font-family: var(--rz-sans);
+    color: var(--rz-ink);
+    letter-spacing: -0.022em;
+  }
+
+  body.zine .container[role='main'] h1,
+  body.zine .post-title {
+    font-weight: 800;
+    line-height: 1.06;
+  }
+
+  body.zine .container[role='main'] h2,
+  body.zine .container[role='main'] h3 {
+    font-weight: 800;
+    line-height: 1.15;
+  }
+
+  body.zine .container[role='main'] p,
+  body.zine .container[role='main'] li {
+    color: color-mix(in srgb, var(--rz-ink) 84%, transparent);
+    line-height: 1.62;
+  }
+
+  /* Underline INLINE PROSE links only.
+     Two traps here, both hit in turn. Underlining "every link in main" struck
+     card links, which underlines every line of their contents. Restricting to
+     text-level ancestors did NOT fix it, because card grids are built as
+     <li><a>…</a></li> — the card link really is inside an <li>.
+     The reliable test is what the link CONTAINS: a link wrapping block
+     content is a card, never prose, so it is excluded by :has(). */
+  body.zine .container[role='main']
+    :is(p, li, td, dd, blockquote, figcaption)
+    a:not(.btn):not(.zp-dot):not(:has(p, div, h1, h2, h3, h4, h5, ul, ol, section, article, figure, img, picture)) {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1.5px;
+    font-weight: 600;
+  }
+
+  body.zine .container[role='main']
+    :is(p, li, td, dd, blockquote, figcaption)
+    a:not(.btn):not(.zp-dot):not(:has(p, div, h1, h2, h3, h4, h5, ul, ol, section, article, figure, img, picture)):hover {
+    color: var(--rz-accent);
+  }
+
+  /* links that wrap blocks (cards, headings) take colour, never a rule */
+  body.zine .container[role='main'] :is(h1, h2, h3, h4) a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  body.zine .container[role='main'] :is(h1, h2, h3, h4) a:hover {
+    text-decoration: underline;
+  }
+
+  body.zine .container[role='main'] hr {
+    height: 5px;
+    border: 0;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--rz-ink) 68%, transparent);
+    opacity: 1;
+    margin: 2.5rem 0;
+  }
+
+  body.zine .container[role='main'] blockquote {
+    background: transparent;
+    border-left: 5px solid color-mix(in srgb, var(--rz-ink) 30%, transparent);
+    border-radius: 0;
+    padding: 0.35rem 0 0.35rem 1.15rem;
+    color: color-mix(in srgb, var(--rz-ink) 84%, transparent);
+  }
+
+  body.zine .container[role='main'] img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  body.zine .container[role='main'] table {
+    color: var(--rz-ink);
+  }
+
+  /* ── nested cards get the index-card treatment ──────────────── */
+  body.zine .card {
+    background: var(--rz-card);
+    border: 3px solid var(--rz-ink);
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  /* Shadow only, no translate: al-folio's cards sit in varied wrappers, so
+     there is no reliable static parent to hang the hover on, and moving the
+     card under the cursor makes the pointer flicker at its edge. */
+  body.zine .card:hover {
+    box-shadow: 4px 4px 0 color-mix(in srgb, var(--rz-ink) 55%, transparent);
+  }
+
+  body.zine .card .card-title,
+  body.zine .card .card-text {
+    color: var(--rz-ink);
+  }
+
+  /* ── homepage pills (Substack / MLn) ────────────────────────────
+     Squared off with a real ink border and a hard offset shadow instead of
+     al-folio's rounded chip and soft blur. The hover transform is dropped for
+     the same reason as everywhere else: moving an element under the cursor
+     cancels its own hover at the edge and the pointer flickers. */
+  body.zine .home-link {
+    border: 3px solid var(--rz-ink);
+    border-left-width: 9px;
+    border-radius: 0;
+    background: var(--rz-card);
+    color: var(--rz-ink);
+    font-family: var(--rz-sans);
+    font-weight: 700;
+    padding: 0.55rem 1rem;
+    transition:
+      box-shadow 0.12s ease,
+      background 0.12s ease;
+  }
+
+  body.zine .home-link:hover {
+    transform: none;
+    box-shadow: 4px 4px 0 color-mix(in srgb, var(--rz-ink) 55%, transparent);
+    color: var(--rz-ink);
+  }
+
+  body.zine .home-link-substack {
+    border-left-color: #ff6719;
+  }
+
+  body.zine .home-link-substack:hover {
+    border-color: var(--rz-ink);
+    border-left-color: #ff6719;
+    color: var(--rz-ink);
+  }
+
+  body.zine .home-link-mln {
+    border-left-color: var(--rz-accent);
+  }
+
+  body.zine .home-link-mln:hover {
+    border-color: var(--rz-ink);
+    border-left-color: var(--rz-accent);
+    color: var(--rz-ink);
+  }
+
+  /* al-folio's tag/category pills */
+  body.zine .badge,
+  body.zine .tag,
+  body.zine .category {
+    background: var(--rz-field) !important;
+    color: var(--rz-card) !important;
+    border-radius: 999px;
+  }
+
+  /* ── code as terminal slabs ─────────────────────────────────── */
+  body.zine .container[role='main'] :not(pre) > code {
+    font-family: var(--rz-mono);
+    font-size: 0.87em;
+    font-variant-ligatures: none;
+    background: color-mix(in srgb, var(--rz-ink) 11%, transparent);
+    color: var(--rz-ink);
+    border-radius: 4px;
+    padding: 0.12em 0.38em;
+  }
+
+  body.zine .container[role='main'] div.highlighter-rouge,
+  body.zine .container[role='main'] figure.highlight {
+    background: var(--rz-ink);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 0;
+    margin: 1.75rem 0;
+  }
+
+  body.zine .container[role='main'] div.highlighter-rouge::before,
+  body.zine .container[role='main'] figure.highlight::before {
+    content: '';
+    display: block;
+    height: 2.4rem;
+    background: var(--rz-chrome);
+    background-image: radial-gradient(circle 0.36rem at 1.15rem 1.2rem, #ff5f57 98%, transparent 100%),
+      radial-gradient(circle 0.36rem at 2.45rem 1.2rem, #febc2e 98%, transparent 100%),
+      radial-gradient(circle 0.36rem at 3.75rem 1.2rem, #28c840 98%, transparent 100%);
+    background-repeat: no-repeat;
+  }
+
+  body.zine .container[role='main'] div.highlighter-rouge pre,
+  body.zine .container[role='main'] figure.highlight pre {
+    font-family: var(--rz-mono);
+    font-size: 0.85rem;
+    font-variant-ligatures: none;
+    line-height: 1.7;
+    color: var(--rz-card);
+    background: transparent;
+    border: 0;
+    margin: 0;
+    padding: 1rem 1.25rem 1.15rem;
+    overflow-x: auto;
+  }
+
+  body.zine .container[role='main'] div.highlighter-rouge code,
+  body.zine .container[role='main'] figure.highlight code {
+    background: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    white-space: pre;
+  }
+
+  /* ── footer ─────────────────────────────────────────────────────
+     al-folio's attribution bar is dropped. The MIT LICENSE stays in the repo,
+     which is what the licence asks for; the rendered credit is not required. */
+  body.zine > footer {
+    display: none;
+  }
+
+  .zine-foot {
+    max-width: 54rem;
+    margin: 0 auto 2.25rem;
+    padding: 0 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.1rem;
+    align-items: baseline;
+    font-family: var(--rz-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--rz-ink) 62%, transparent);
+  }
+
+  .zine-foot a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1.5px solid color-mix(in srgb, var(--rz-ink) 35%, transparent);
+    padding-bottom: 1px;
+  }
+
+  .zine-foot a:hover {
+    color: var(--rz-ink);
+    border-bottom-color: var(--rz-ink);
+  }
+
+  .zine-foot .zf-spacer {
+    margin-left: auto;
+  }
+</style>

@@ -13,10 +13,21 @@
       <meta http-equiv="refresh" content="3; url={{ redirect }}">
     {% endif %}
     {% include head.liquid %}
+    {%- comment -%}
+      Both of these MUST stay in <head>. With the skin at the top of <body> the
+      browser painted al-folio's cream/green theme first and repainted to the
+      zine palette a frame later — a colour flash on every navigation.
+    {%- endcomment -%}
+    {% include zine_palette.liquid %}
+    {% include zine_styles.liquid %}
   </head>
 
   <!-- Body -->
-  <body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %}">
+  {%- comment -%}
+    rzine-page carries the /research zine treatment out to the shared chrome
+    (navbar, footer, theme toggle) — see _includes/research_styles.liquid.
+  {%- endcomment -%}
+  <body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %} zine {% if page.layout contains 'research' or page.rzine %}rzine-page{% endif %}">
     <!-- Header -->
     {% include header.liquid %}
 
@@ -49,6 +60,7 @@
 
     <!-- Footer -->
     {% include footer.liquid %}
+    {% unless page.rzine or page.layout contains 'research' %}{% include zine_foot.liquid %}{% endunless %}
 
     <!-- JavaScripts -->
     {% include scripts.liquid %}

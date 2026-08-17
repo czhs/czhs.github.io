@@ -1,0 +1,119 @@
+{%- comment -%}
+  Palette picker — colored circles, one per candidate.
+
+  Each visitor lands on a random palette (zine_palette.liquid); this lets them
+  pick a different one. Writes the same cookie + localStorage key and flips
+  data-pal on <html>, so the change is instant and sticks on the next visit.
+{%- endcomment -%}
+{%- comment -%}
+  No caption: the circles read as what they are. The radiogroup keeps an
+  aria-label so screen readers still get the affordance named.
+{%- endcomment -%}
+<div class="zine-picker">
+  <div class="zp-dots" id="zp-dots" role="radiogroup" aria-label="colour palette"></div>
+</div>
+
+<style>
+  .zine-picker {
+    margin: 2.5rem 0 0;
+    padding-top: 1.6rem;
+    border-top: 3px solid color-mix(in srgb, var(--rz-ink) 22%, transparent);
+  }
+
+  .zp-dots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+
+  /* The button is a fixed, never-moving hit area; only the ::before circle
+     inside it animates. Transforming the button itself made it slide out from
+     under the cursor, which cancelled the hover, which slid it back — the
+     pointer flickered between the link and arrow cursors at the edge. */
+  .zp-dot {
+    width: 2.6rem;
+    height: 2.6rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    line-height: 0;
+  }
+
+  .zp-dot::before {
+    content: '';
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    border: 3px solid var(--rz-ink);
+    background: var(--zp-color);
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease;
+  }
+
+  .zp-dot:hover::before {
+    transform: translate(-2px, -2px);
+    box-shadow: 3px 3px 0 color-mix(in srgb, var(--rz-ink) 55%, transparent);
+  }
+
+  /* the active one gets a ring of the card colour punched inside the border */
+  .zp-dot[aria-checked='true']::before {
+    box-shadow:
+      inset 0 0 0 3px var(--rz-card),
+      2px 2px 0 color-mix(in srgb, var(--rz-ink) 55%, transparent);
+  }
+
+  .zp-dot:focus-visible {
+    outline: 3px solid var(--rz-accent);
+    outline-offset: 0;
+    border-radius: 50%;
+  }
+</style>
+
+<script>
+  (function () {
+    // field colour per palette — kept in sync with zine_palette.liquid
+    var SWATCH = {
+      'wisteria': '#8e9bc4',
+      'lilac-ash': '#a296b8',
+      'clay': '#b0897f',
+      'puce': '#a8848f',
+      'slate-teal': '#7fa2a8',
+      'seafoam': '#8fb2a4',
+      'denim': '#8296ae'
+    };
+    var KEY = 'zine-pal';
+    var wrap = document.getElementById('zp-dots');
+    if (!wrap) return;
+
+    var names = window.ZINE_PALS || Object.keys(SWATCH);
+
+    function select(name) {
+      document.documentElement.setAttribute('data-pal', name);
+      document.cookie = KEY + '=' + encodeURIComponent(name) + ';path=/;max-age=31536000;samesite=lax';
+      try { localStorage.setItem(KEY, name); } catch (e) {}
+      [].forEach.call(wrap.children, function (d) {
+        d.setAttribute('aria-checked', d.dataset.pal === name ? 'true' : 'false');
+      });
+    }
+
+    var active = document.documentElement.getAttribute('data-pal');
+
+    names.forEach(function (name) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'zp-dot';
+      b.dataset.pal = name;
+      b.style.setProperty('--zp-color', SWATCH[name]);
+      b.setAttribute('role', 'radio');
+      b.setAttribute('aria-label', name);
+      b.setAttribute('title', name);
+      b.setAttribute('aria-checked', name === active ? 'true' : 'false');
+      b.addEventListener('click', function () { select(name); });
+      wrap.appendChild(b);
+    });
+  })();
+</script>

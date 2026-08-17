@@ -1,0 +1,43 @@
+---
+layout: default
+---
+{%- comment -%}
+  /research listing — the same field the entries sit on. The masthead is one
+  card; each entry is its own card on the field below it, so the index reads as
+  a stack of notebooks rather than a list inside a page. Titles, descriptions
+  and dates are public by design; bodies are not (see research_locked.html).
+{%- endcomment -%}
+
+{% include research_styles.liquid %}
+
+<div class="rzine">
+  <div class="rzine-card rzine-masthead">
+    <h1 class="post-title">{{ page.title }}</h1>
+    {% if page.description %}
+      <p class="post-desc">{{ page.description }}</p>
+    {% endif %}
+    {{ content }}
+  </div>
+
+  <ul class="rzine-list">
+    {% assign docs = site.research | sort: "date" | reverse %}
+    {% for entry in docs %}
+      <li>
+        <a class="rzine-entry" href="{{ entry.url | relative_url }}">
+          <p class="re-title">{{ entry.title }}</p>
+          {% if entry.description %}
+            <p class="re-desc">{{ entry.description }}</p>
+          {% endif %}
+          <p class="re-meta">
+            <span>{{ entry.date | date: "%B %-d, %Y" }}</span>
+            {% if entry.enc_payload %}
+              <span class="re-lock">locked</span>
+            {% endif %}
+          </p>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% include research_foot.liquid %}
+</div>
