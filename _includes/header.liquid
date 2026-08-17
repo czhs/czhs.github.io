@@ -49,9 +49,15 @@
           {% endfor %}
 
           <!-- About -->
+          {%- comment -%}
+            The nav item reads "home" while the top-left brand carries the name.
+            about_title is still assigned above because the homepage's own <h1>
+            uses the page title ("Chris Shi") — reusing it here would put the
+            name in both slots.
+          {%- endcomment -%}
           <li class="nav-item {% if page.permalink == '/' %}active{% endif %}">
             <a class="nav-link" href="{{ '/' | relative_url }}">
-              {{- about_title }}
+              {{- 'home' }}
               {% if page.permalink == '/' %}
                 <span class="sr-only">(current)</span>
               {% endif %}

@@ -1,6 +1,11 @@
+{%- comment -%}
+  The empty state keyed off page.latest_posts (the CONFIG block), not off
+  whether any posts exist — so with the feature enabled and zero posts it
+  rendered a heading above an empty table. Both conditions are checked now.
+{%- endcomment -%}
+{% assign latest_posts_size = site.posts | size %}
 <div class="news">
-  {% if page.latest_posts != blank %}
-    {% assign latest_posts_size = site.posts | size %}
+  {% if page.latest_posts != blank and latest_posts_size > 0 %}
     <div
       class="table-responsive"
       {% if page.latest_posts.scrollable and latest_posts_size > 3 %}
@@ -43,6 +48,22 @@
       </table>
     </div>
   {% else %}
-    <p>No posts so far...</p>
+    <p class="news-soon">coming soon</p>
   {% endif %}
 </div>
+
+<style>
+  .news-soon {
+    display: inline-block;
+    margin: 0.35rem 0 0;
+    padding: 0.55rem 1.1rem;
+    border: 2px dashed color-mix(in srgb, currentColor 35%, transparent);
+    border-radius: 0;
+    font-family: var(--rz-mono, ui-monospace, monospace);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+</style>
