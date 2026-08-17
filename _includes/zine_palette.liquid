@@ -38,6 +38,21 @@
 
     document.documentElement.setAttribute('data-pal', v);
     window.ZINE_PALS = PALS;
+
+    // Suppress every transition/animation until the first frame is painted, so
+    // arriving on a page is a cut, not a drift. Anything that would otherwise
+    // animate from its initial value on load (back-to-top sliding up, elements
+    // easing in as scripts initialise) simply starts where it belongs. Removed
+    // straight after paint, so hover and click motion still work normally.
+    var root = document.documentElement;
+    root.classList.add('zine-preload');
+    function settle() {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { root.classList.remove('zine-preload'); });
+      });
+    }
+    if (document.readyState === 'complete') settle();
+    else window.addEventListener('load', settle, { once: true });
   })();
 </script>
 
@@ -128,5 +143,20 @@
   /* paint the field behind the page before body styles resolve */
   html:has(body.zine) {
     background: var(--rz-field);
+  }
+
+  /* see zine-preload in the script above — no entry animations */
+  html.zine-preload *,
+  html.zine-preload *::before,
+  html.zine-preload *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* The scrollbar appears on long pages and not on short ones, so navigating
+     between them shifted the centred content sideways. Reserving the gutter
+     keeps the measure fixed. */
+  html {
+    scrollbar-gutter: stable;
   }
 </style>

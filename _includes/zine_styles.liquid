@@ -267,7 +267,10 @@
   }
 
   /* ── code as terminal slabs ─────────────────────────────────── */
-  body.zine .container[role='main'] :not(pre) > code {
+  /* :not(.claude-insert):not(.claude-block) — a chip supplies its own fill,
+     and this rule outranks the chip's own code styling, so excluding it here
+     is cleaner than escalating specificity in research_styles. */
+  body.zine .container[role='main'] :not(pre):not(.claude-insert):not(.claude-block) > code {
     font-family: var(--rz-mono);
     font-size: 0.87em;
     font-variant-ligatures: none;

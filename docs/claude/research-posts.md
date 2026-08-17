@@ -35,6 +35,42 @@ implementation; commit `fd3181e` shows the final state.
 6. **Never write the shared password anywhere in this repo** (it would defeat the
    encryption — the repo is public). Ask Chris for it at encrypt time.
 
+### Chris's markup conventions in the notebook PDF
+
+Read these off the PDF *pages* (`Read` the file with `pages:`), not just the text
+layer — the text layer loses highlighting, bold/italic, and image placement.
+
+- **Orange/amber highlight = Claude's material.** Everything highlighted in the
+  notebook is text Claude produced; render it as `.claude-insert` (inline) or
+  `.claude-block` (block). Unhighlighted prose is Chris's, verbatim.
+- **Bracketed tags like `[Claude1]` are Chris's OWN cross-references**, not a
+  Claude marker — the name is coincidental and it confused this workflow once.
+  One site defines the tag (it prefixes the block being labelled), and any number
+  of other lines reference it. Mark them up as:
+  - definition: `<span class="xref xref-def">[Tag]</span>` on an element carrying
+    `id="xref-<tag-lowercased>"`
+  - reference: `<a class="xref xref-ref" href="#xref-<tag>">[Tag]</a>`
+
+  `research_styles.liquid` then draws an arc through the field margin from each
+  reference to its definition (grows on hover, arrowhead lands last, arc itself
+  clickable, minimum scroll to reveal). Narrow screens get no arc — the tag just
+  scrolls. **Expect more of these; ask if a tag's target is ambiguous.**
+- **Notes addressed to Claude are not always insertion points.** "*I need to dig
+  into this carefully later Claude, remind me!*" is a note to self — leave it
+  verbatim. A marker only earns an insertion when it asks for content
+  ("cite number here for me please").
+
+### kramdown will rewrite his punctuation
+
+Smart typography turns `--` into an en-dash and straight quotes/apostrophes
+curly, silently breaking the byte-exact rule — it mangled `stuff--`, `I've`,
+`swarm's` and `top-1 = " February"` on the second entry. Write those spans as
+HTML entities (`&#45;&#45;`, `&#39;`, `&quot;`).
+
+**Always diff the rendered body against the PDF text layer before encrypting**
+(normalise whitespace, split to words, `difflib.SequenceMatcher`); the target is
+zero real differences once list bullets and italic markers are discounted.
+
 ### The pipeline
 
 1. Extract: `pdftotext -layout <pdf> body.txt` and `pdfimages -png <pdf> img`;
