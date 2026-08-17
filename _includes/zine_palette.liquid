@@ -42,17 +42,27 @@
     // Suppress every transition/animation until the first frame is painted, so
     // arriving on a page is a cut, not a drift. Anything that would otherwise
     // animate from its initial value on load (back-to-top sliding up, elements
-    // easing in as scripts initialise) simply starts where it belongs. Removed
-    // straight after paint, so hover and click motion still work normally.
+    // easing in as scripts initialise) simply starts where it belongs.
+    //
+    // The removal must NOT depend on requestAnimationFrame alone: rAF does not
+    // run in a backgrounded tab, so a page opened in the background kept the
+    // class forever and every transition on the site stayed dead — including
+    // hover effects — even after the reader switched to it. rAF is still the
+    // preferred path (it lands on the very next frame); the timeout is a
+    // backstop that always fires.
     var root = document.documentElement;
     root.classList.add('zine-preload');
+    var settled = false;
     function settle() {
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () { root.classList.remove('zine-preload'); });
-      });
+      if (settled) return;
+      settled = true;
+      root.classList.remove('zine-preload');
     }
-    if (document.readyState === 'complete') settle();
-    else window.addEventListener('load', settle, { once: true });
+    function settleSoon() { requestAnimationFrame(settle); }
+    if (document.readyState === 'complete') settleSoon();
+    else window.addEventListener('load', settleSoon, { once: true });
+    document.addEventListener('DOMContentLoaded', settleSoon, { once: true });
+    setTimeout(settle, 500);
   })();
 </script>
 

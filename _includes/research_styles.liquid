@@ -416,14 +416,24 @@
   .rzine-arcs .arc-hit {
     fill: none;
     stroke: transparent;
-    stroke-width: 14;
+    stroke-width: 15;
     pointer-events: stroke;
     cursor: pointer;
   }
 
-  /* Drawn in on hover: the line is dashed by exactly its own length and the
-     offset animates to zero, so it appears to grow from the reference toward
-     the target. The head is held back until the line lands. */
+  /* ── the draw-in ────────────────────────────────────────────────
+     The line is dashed by exactly its own length, so animating the offset to
+     zero grows it from the reference toward the target. Entry and exit are
+     deliberately NOT mirror images:
+
+       in   slow, eased-out, so it accelerates away from the tag and settles
+       out  quicker and eased-in, so dismissing feels light rather than sticky
+
+     Each state carries its own transition, which is what lets the two
+     directions differ. The head and the origin dot are separate beats: the dot
+     lands first (the arc has somewhere to come from), the head last and only
+     once the line has actually arrived. */
+
   .rzine-arcs .arc-line {
     fill: none;
     stroke: var(--rz-accent);
@@ -432,39 +442,70 @@
     stroke-dasharray: var(--len);
     stroke-dashoffset: var(--len);
     opacity: 0;
+    /* exit: retract, then fade at the very end so the retraction is visible */
     transition:
-      stroke-dashoffset 0.42s cubic-bezier(0.33, 0.9, 0.4, 1),
-      opacity 0.12s ease;
+      stroke-dashoffset 0.3s cubic-bezier(0.55, 0, 0.85, 0.35),
+      opacity 0.1s linear 0.22s;
+  }
+
+  .rzine-arcs .arc-dot {
+    fill: var(--rz-accent);
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0);
+    transition:
+      opacity 0.1s linear,
+      transform 0.14s ease-in;
   }
 
   .rzine-arcs .arc-head {
     fill: var(--rz-accent);
-    stroke: none;
     opacity: 0;
     transform-box: fill-box;
-    transform-origin: center;
-    transform: scale(0.4);
+    transform-origin: 100% 50%;
+    transform: scale(0.35);
+    /* exit: gone immediately, no lingering arrowhead */
     transition:
-      opacity 0.16s ease 0.34s,
-      transform 0.22s cubic-bezier(0.2, 1.6, 0.4, 1) 0.34s;
+      opacity 0.09s linear,
+      transform 0.09s ease-in;
   }
 
   .rzine-arcs g.is-on .arc-line {
-    opacity: 0.9;
+    opacity: 0.92;
     stroke-dashoffset: 0;
+    transition:
+      stroke-dashoffset 0.54s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.07s linear;
   }
 
+  .rzine-arcs g.is-on .arc-dot {
+    opacity: 0.9;
+    transform: scale(1);
+    transition:
+      opacity 0.09s linear,
+      transform 0.32s cubic-bezier(0.2, 1.7, 0.45, 1);
+  }
+
+  /* delay ≈ the line's travel time, so the head lands as the line arrives */
   .rzine-arcs g.is-on .arc-head {
     opacity: 0.95;
     transform: scale(1);
+    transition:
+      opacity 0.12s ease 0.44s,
+      transform 0.34s cubic-bezier(0.2, 1.75, 0.4, 1) 0.44s;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .rzine-arcs .arc-line,
-    .rzine-arcs .arc-head {
-      transition: opacity 0.12s ease;
+    .rzine-arcs .arc-dot,
+    .rzine-arcs .arc-head,
+    .rzine-arcs g.is-on .arc-line,
+    .rzine-arcs g.is-on .arc-dot,
+    .rzine-arcs g.is-on .arc-head {
       stroke-dashoffset: 0;
       transform: none;
+      transition: opacity 0.12s ease;
     }
   }
 
@@ -731,34 +772,54 @@
         var x = margin - 10;
         var y0 = rb.top - fieldBox.top + rb.height / 2;
         var y1 = db.top - fieldBox.top + db.height / 2;
+        // bow further out the longer the jump, but never past the field edge
         var bow = Math.min(margin - 14, 28 + Math.abs(y1 - y0) * 0.16);
         var d = 'M ' + x + ' ' + y0 +
                 ' C ' + (x - bow) + ' ' + y0 + ', ' + (x - bow) + ' ' + y1 + ', ' + x + ' ' + y1;
 
         var g = document.createElementNS(SVGNS, 'g');
 
-        var line = document.createElementNS(SVGNS, 'path');
-        line.setAttribute('class', 'arc-line');
-        line.setAttribute('d', d);
-
         var hit = document.createElementNS(SVGNS, 'path');
         hit.setAttribute('class', 'arc-hit');
         hit.setAttribute('d', d);
 
-        var dir = y1 > y0 ? 1 : -1;
-        var head = document.createElementNS(SVGNS, 'path');
-        head.setAttribute('class', 'arc-head');
-        head.setAttribute('d', 'M ' + x + ' ' + y1 +
-                               ' l -8 ' + (-6 * dir) + ' l 2 ' + (8 * dir) + ' Z');
+        var line = document.createElementNS(SVGNS, 'path');
+        line.setAttribute('class', 'arc-line');
+        line.setAttribute('d', d);
+
+        // small dot where the arc leaves the reference, so it reads as
+        // emanating from the tag rather than appearing out of nowhere
+        var dot = document.createElementNS(SVGNS, 'circle');
+        dot.setAttribute('class', 'arc-dot');
+        dot.setAttribute('cx', x);
+        dot.setAttribute('cy', y0);
+        dot.setAttribute('r', 2.6);
 
         g.appendChild(hit);
         g.appendChild(line);
-        g.appendChild(head);
+        g.appendChild(dot);
         svg.appendChild(g);
 
         // dash the line by its own length so it can be drawn in
         var len = line.getTotalLength();
         line.style.setProperty('--len', len);
+
+        // Point the head along the curve's tangent at its end. Sampling the
+        // last couple of px is what stops it looking like a triangle dropped
+        // near the line — it arrives travelling in the arc's own direction.
+        var pEnd = line.getPointAtLength(len);
+        var pPrev = line.getPointAtLength(Math.max(0, len - 3));
+        var angle = Math.atan2(pEnd.y - pPrev.y, pEnd.x - pPrev.x) * 180 / Math.PI;
+
+        var headWrap = document.createElementNS(SVGNS, 'g');
+        headWrap.setAttribute('transform',
+          'translate(' + pEnd.x + ',' + pEnd.y + ') rotate(' + angle + ')');
+        var head = document.createElementNS(SVGNS, 'path');
+        head.setAttribute('class', 'arc-head');
+        // drawn pointing along +x; the wrapper rotates it onto the tangent
+        head.setAttribute('d', 'M 0 0 L -9 -4 L -6.5 0 L -9 4 Z');
+        headWrap.appendChild(head);
+        g.appendChild(headWrap);
 
         function on() { g.classList.add('is-on'); }
         function off() { g.classList.remove('is-on'); }
