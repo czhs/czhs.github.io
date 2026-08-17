@@ -253,9 +253,14 @@ ninja.data = [{
               window.location.href = "/projects/9_project/";
             },},{id: "research-ih-engineering-notebook",
           title: 'IH Engineering Notebook',
-          description: "raw notes from a day of VPD experiments — five decompositions of one model",
+          description: "exploring new techniques",
           section: "Research",handler: () => {
               window.location.href = "/research/ih-engineering-notebook-2026-08-15/";
+            },},{id: "research-ih-engineering-notebook",
+          title: 'IH Engineering Notebook',
+          description: "working with a toy model",
+          section: "Research",handler: () => {
+              window.location.href = "/research/ih-engineering-notebook-2026-08-16/";
             },},{
         id: 'social-github',
         title: 'GitHub',
