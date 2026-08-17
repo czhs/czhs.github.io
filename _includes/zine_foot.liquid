@@ -4,5 +4,12 @@
 {%- endcomment -%}
 <div class="zine-foot">
   <span>&copy; {{ 'now' | date: "%Y" }} {{ site.first_name }} {{ site.last_name }}</span>
+  {%- comment -%}
+    Credit for the design this site's look is built on, homepage only — it is a
+    site-level credit, not a per-page one.
+  {%- endcomment -%}
+  {% if page.permalink == '/' %}
+    <span>design inspired by <a href="https://www.ayush.digital" target="_blank" rel="noopener">ayush.digital</a></span>
+  {% endif %}
   <span class="zf-spacer"><a href="{{ '/research/' | relative_url }}">research</a></span>
 </div>
