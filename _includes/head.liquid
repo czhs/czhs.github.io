@@ -21,15 +21,40 @@
   >
 {% endif %}
 
+{%- comment -%}
+  Every stylesheet below is render-blocking, and three of them sit on other
+  origins (fonts.googleapis.com, fonts.gstatic.com, cdn.jsdelivr.net). Without
+  these hints the browser pays a fresh DNS + TCP + TLS round trip per origin
+  before it can even start downloading, on every cold navigation.
+{%- endcomment -%}
+{% include prefetch.liquid %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
 <!-- Fonts & Icons -->
 <link defer rel="stylesheet" href="{{ '/assets/css/academicons.min.css' | relative_url | bust_file_cache }}">
 <link defer rel="stylesheet" href="{{ '/assets/css/scholar-icons.css' | relative_url | bust_file_cache }}">
-<link
-  defer
-  rel="stylesheet"
-  type="text/css"
-  href="{{ site.third_party_libraries.google_fonts.url.fonts }}"
->
+{%- comment -%}
+  Roboto / Roboto Slab / Material Icons are only needed by the micro-sites,
+  which still inherit al-folio's base typography (mdb.min.css sets Roboto as
+  the body face). The zine pages set their own family on every element, so on
+  those this request downloads three unused families and blocks rendering
+  while it does. Emitted for the micro-site shells only.
+{%- endcomment -%}
+{% assign micro = false %}
+{% if page.layout contains 'mln' or page.layout contains 'ringworld' or page.layout contains 'portfolio' %}
+  {% assign micro = true %}
+{% endif %}
+{% if micro %}
+  <link
+    defer
+    rel="stylesheet"
+    type="text/css"
+    href="{{ site.third_party_libraries.google_fonts.url.fonts }}"
+  >
+{% endif %}
 
 <!-- Code Syntax Highlighting -->
 <link

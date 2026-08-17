@@ -1,0 +1,88 @@
+{%- comment -%}
+  Make page-to-page navigation feel instant.
+
+  This is a static site, so a page switch is just "fetch some HTML" — the delay
+  is almost entirely the round trip, which can start while the pointer is still
+  travelling toward the link.
+
+  Two mechanisms, because no single one covers every browser:
+    1. Speculation Rules (Chromium) — declarative, "moderate" eagerness starts
+       the prefetch on hover/pointerdown. No JS involved.
+    2. A small hover listener emitting <link rel="prefetch"> for everything else
+       (Safari, Firefox).
+
+  Both are same-origin only, both skip anything that is not a plain document
+  navigation, and both stand down on save-data or 2g connections so the hint
+  never costs a metered visitor.
+
+  This is behaviour, not presentation — the micro-sites get it too without any
+  change to how they look.
+{%- endcomment -%}
+
+<script type="speculationrules">
+  {
+    "prefetch": [
+      {
+        "where": {
+          "and": [
+            { "href_matches": "/*" },
+            { "not": { "href_matches": "/assets/*" } },
+            { "not": { "selector_matches": "[download]" } },
+            { "not": { "selector_matches": "[rel~=nofollow]" } }
+          ]
+        },
+        "eagerness": "moderate"
+      }
+    ]
+  }
+</script>
+
+<script>
+  (function () {
+    // Chromium handles this above; don't prefetch twice.
+    if (HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules')) return;
+
+    var c = navigator.connection;
+    if (c && (c.saveData || /2g/.test(c.effectiveType || ''))) return;
+
+    var seen = new Set();
+    var timer = null;
+
+    function prefetch(href) {
+      if (seen.has(href)) return;
+      seen.add(href);
+      var l = document.createElement('link');
+      l.rel = 'prefetch';
+      l.href = href;
+      l.as = 'document';
+      document.head.appendChild(l);
+    }
+
+    function candidate(a) {
+      if (!a || !a.href || a.target === '_blank' || a.hasAttribute('download')) return null;
+      var u;
+      try { u = new URL(a.href); } catch (e) { return null; }
+      if (u.origin !== location.origin) return null;
+      if (u.pathname === location.pathname) return null;      // same page / hash link
+      if (/^\/assets\//.test(u.pathname)) return null;
+      return u.href.split('#')[0];
+    }
+
+    document.addEventListener('mouseover', function (e) {
+      var a = e.target.closest && e.target.closest('a');
+      var href = candidate(a);
+      if (!href) return;
+      clearTimeout(timer);
+      timer = setTimeout(function () { prefetch(href); }, 65);
+    }, { passive: true });
+
+    document.addEventListener('mouseout', function () { clearTimeout(timer); }, { passive: true });
+
+    // touch: commit immediately, there is no hover to wait on
+    document.addEventListener('touchstart', function (e) {
+      var a = e.target.closest && e.target.closest('a');
+      var href = candidate(a);
+      if (href) prefetch(href);
+    }, { passive: true });
+  })();
+</script>
