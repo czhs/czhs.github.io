@@ -2,6 +2,21 @@
  * Content
  ******************************************************************************/
 
+// The fixed navbar's height, as one constant: 8px of padding top and bottom, a
+// 40px content row (the brand and the nav links are both 40px), and a 2px
+// bottom border. Everything that has to clear the bar reads this, and .navbar
+// pins itself to it.
+//
+// It is a stylesheet fact rather than something JS measures because
+// progress-bar.js used to do exactly that — measure #navbar on load and write
+// the result back into body's padding-top. The reserved 56px was never the real
+// height, so ~50ms after load every page dropped 2px (and the homepage, which
+// has no brand and so collapses to a 44px bar at phone widths, jumped 12px the
+// other way). That was the "panel shifts down on load".
+:root {
+  --navbar-height: 58px;
+}
+
 body {
   padding-bottom: 70px;
   color: var(--global-text-color);
@@ -13,13 +28,13 @@ body {
   h4,
   h5,
   h6 {
-    scroll-margin-top: 66px;
+    scroll-margin-top: calc(var(--navbar-height) + 8px);
   }
 }
 
 body.fixed-top-nav {
   // Add some padding for the nav-bar.
-  padding-top: 56px;
+  padding-top: var(--navbar-height);
 }
 
 body.sticky-bottom-footer {

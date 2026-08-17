@@ -257,6 +257,11 @@ ul.task-list input[type="checkbox"] {
   border-bottom: 1px solid var(--global-divider-color);
   background-color: var(--global-bg-color);
   opacity: 0.95;
+  // Hold the bar to the height the layout reserves for it. The homepage has no
+  // brand, so below the sm breakpoint only the 26px toggler sets the row and
+  // the bar shrank to 44px while the body still padded for a full one.
+  // min-height rather than height, so the collapsed menu can still open.
+  min-height: var(--navbar-height);
 }
 
 .navbar .dropdown-menu,
@@ -990,7 +995,7 @@ progress {
   /* Positioning */
   position: fixed;
   left: 0;
-  top: 56px;
+  top: var(--navbar-height);
   z-index: 10;
 
   /* Dimensions */
@@ -1028,7 +1033,7 @@ progress::-moz-progress-bar {
   width: 100%;
   background-color: transparent;
   position: fixed;
-  top: 56px;
+  top: var(--navbar-height);
   left: 0;
   height: 5px;
   display: block;

@@ -45,11 +45,15 @@ function getCurrentScrollPosition() {
   return $(window).scrollTop();
 }
 
+/*
+ * Only the bar's own range is set here. This used to measure #navbar and write
+ * the height into body's padding-top and the bar's top — which ran on load plus
+ * a 50ms delay, so the whole page visibly jumped once the real height replaced
+ * the 56px the stylesheet had reserved. The navbar height is now the
+ * --navbar-height custom property, which both the body padding and this bar's
+ * `top` read from CSS, so there is nothing left to measure and no shift.
+ */
 function initializeProgressElement() {
-  let navbarHeight = $("#navbar").outerHeight(true);
-  $("body").css({ "padding-top": navbarHeight });
-  $("progress-container").css({ "padding-top": navbarHeight });
-  progressBar.css({ top: navbarHeight });
   progressBar.attr({
     max: getDistanceToScroll(),
     value: getCurrentScrollPosition(),
