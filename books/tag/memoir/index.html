@@ -15,7 +15,71 @@
         "name": "Chris Shi",
         "@context": "https://schema.org"
     }
-  </script> <link rel="stylesheet" href="/assets/css/bootstrap.min.css?a4b3f509e79c54a512b890d73235ef04"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="/assets/css/academicons.min.css?f0b7046b84e425c55f3463ac249818f5"> <link defer rel="stylesheet" href="/assets/css/scholar-icons.css?62b2ac103a88034e6882a5be5f3e2772"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="/assets/img/prof_pic.jpg?a893237aa91e52d7fec7196c326da894"> <link rel="stylesheet" href="/assets/css/main.css?d41d8cd98f00b204e9800998ecf8427e"> <link rel="canonical" href="https://chrisshi.com/books/tag/memoir/"> <script src="/assets/js/theme.js?a81d82887dd692e91686b43de4542f18"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+  </script> <link rel="stylesheet" href="/assets/css/bootstrap.min.css?a4b3f509e79c54a512b890d73235ef04"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous"> <script type="speculationrules">
+  {
+    "prefetch": [
+      {
+        "where": {
+          "and": [
+            { "href_matches": "/*" },
+            { "not": { "href_matches": "/assets/*" } },
+            { "not": { "selector_matches": "[download]" } },
+            { "not": { "selector_matches": "[rel~=nofollow]" } }
+          ]
+        },
+        "eagerness": "moderate"
+      }
+    ]
+  }
+</script> <script>
+  (function () {
+    // Chromium handles this above; don't prefetch twice.
+    if (HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules')) return;
+
+    var c = navigator.connection;
+    if (c && (c.saveData || /2g/.test(c.effectiveType || ''))) return;
+
+    var seen = new Set();
+    var timer = null;
+
+    function prefetch(href) {
+      if (seen.has(href)) return;
+      seen.add(href);
+      var l = document.createElement('link');
+      l.rel = 'prefetch';
+      l.href = href;
+      l.as = 'document';
+      document.head.appendChild(l);
+    }
+
+    function candidate(a) {
+      if (!a || !a.href || a.target === '_blank' || a.hasAttribute('download')) return null;
+      var u;
+      try { u = new URL(a.href); } catch (e) { return null; }
+      if (u.origin !== location.origin) return null;
+      if (u.pathname === location.pathname) return null;      // same page / hash link
+      if (/^\/assets\//.test(u.pathname)) return null;
+      return u.href.split('#')[0];
+    }
+
+    document.addEventListener('mouseover', function (e) {
+      var a = e.target.closest && e.target.closest('a');
+      var href = candidate(a);
+      if (!href) return;
+      clearTimeout(timer);
+      timer = setTimeout(function () { prefetch(href); }, 65);
+    }, { passive: true });
+
+    document.addEventListener('mouseout', function () { clearTimeout(timer); }, { passive: true });
+
+    // touch: commit immediately, there is no hover to wait on
+    document.addEventListener('touchstart', function (e) {
+      var a = e.target.closest && e.target.closest('a');
+      var href = candidate(a);
+      if (href) prefetch(href);
+    }, { passive: true });
+  })();
+</script> <link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin> <link defer rel="stylesheet" href="/assets/css/academicons.min.css?f0b7046b84e425c55f3463ac249818f5"> <link defer rel="stylesheet" href="/assets/css/scholar-icons.css?62b2ac103a88034e6882a5be5f3e2772"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="/assets/img/prof_pic.jpg?a893237aa91e52d7fec7196c326da894"> <link rel="stylesheet" href="/assets/css/main.css?d41d8cd98f00b204e9800998ecf8427e"> <link rel="canonical" href="https://chrisshi.com/books/tag/memoir/"> <script src="/assets/js/theme.js?a81d82887dd692e91686b43de4542f18"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
     initTheme();
   </script> <script>
   (function () {
