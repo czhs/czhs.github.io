@@ -113,6 +113,36 @@ the group photo first); slides may be img / linked img / `<video controls
 preload="none">` (▶ badge via `.mln-thumb-play`). CSS covers up to 6 slides — radios,
 slides, thumbs are matched by `nth-of-type`, keep counts in sync.
 
+## Season recap reel (the band above the grid on `/mln/`)
+
+The archive spans more than one season, so a season that has ended must be labelled
+or its weeks read as the current one. Driven entirely by two keys at the top of
+`_data/mln.yml`: `season_now` (the season running) and `season_recap`
+(`season, from, until, line, length, video, poster`). Markup is `.mln-season` in
+`_pages/mln.html`; CSS is the `season recap band` block in `mln_styles.liquid`.
+
+- The rail pairs **`{season} — wrapped`** with **`{season_now} — now`**. That pairing
+  is the point — drop `season_now` and the recap silently reads as current.
+- `from`/`until` are the season's first and last meeting dates; the numbered week
+  strip is filtered out of `weeks:` by that range, so it can't drift from the archive.
+- **All strings are the reel's own on-screen copy** ([content-rules](content-rules.md)) —
+  `line` is the reel's caption card verbatim. Don't write new copy for the band.
+- Sources are ~1080x1920 and enormous (77 MB happened). Encode
+  `-vf scale=810:1440 -crf 25 -preset slow -movflags +faststart`, aac 96k → ~13 MB.
+  Keep crf ≤ 26: the dark paper **grain is the look**, and crf 28 halves the file but
+  flattens it to banding. Committed to `assets/video/mln/` (published, unlike the
+  audio) with `preload="none"`; poster is a still of the reel's own end card
+  (`ffmpeg -ss <t> … -vf scale=810:1440` → `magick -quality 82 -strip`).
+- Band colours are **sampled from the reel, not the theme** — the micro-site's pinned
+  green is close enough to the reel's that the video would have no visible edge, so
+  the panel is a mat one step darker (`--mln-mat`) with the reel on its true ground
+  (`--mln-ground`). It deliberately doesn't track the theme vars; don't "fix" that.
+- Seeking won't work against `python3 -m http.server` (it ignores `Range`) — that's
+  the preview server, not the file. Pages serves Range fine.
+
+Next season: swap `season_now`, then swap the whole `season_recap` block once its
+reel exists.
+
 ## Adding a brand-new week, end to end
 
 1. Sync from Luma (above) → new block in `_data/mln.yml` (verbatim copy) with the
