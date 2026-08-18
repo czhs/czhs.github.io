@@ -6,12 +6,14 @@
   floating on it behind a heavy ink border, big bold headings, code shown as a
   terminal window.
 
-  These pages no longer follow the visitor's palette (they did until
-  2026-08-18) — by request they now run the reference's own three colours and
-  its typeface, so the card matches the layout it copies rather than
-  approximating it. The picker still governs every other page. The three
-  remaining values keep the formula every palette obeys, and are taken from
-  puce, the existing palette nearest this hue:
+  The palette stays the visitor's, the same as every other page — the picker
+  governs these too. Two things are fixed: the typeface (Figtree, the face the
+  card's proportions were set against) and the ink used for TEXT, which is
+  neutral near-black rather than the palette's hue. The hue still paints the
+  card border and the terminal ground, where it reads as design; at paragraph
+  size it read as tinted prose.
+
+  The formula every palette obeys:
     field  dusty mid-tone, S 18-28% / L 58-66% — the ground the card sits on
     ink    that hue driven to near-black — text, card border, terminal ground
     card   near-white tinted OPPOSITE the ink, so the card reads as lit
@@ -32,28 +34,24 @@
     --rz-claude-mark: url("data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20248%20248'><path%20d='M52.4285%20162.873L98.7844%20136.879L99.5485%20134.602L98.7844%20133.334H96.4921L88.7237%20132.862L62.2346%20132.153L39.3113%20131.207L17.0249%20130.026L11.4214%20128.844L6.2%20121.873L6.7094%20118.447L11.4214%20115.257L18.171%20115.847L33.0711%20116.911L55.485%20118.447L71.6586%20119.392L95.728%20121.873H99.5485L100.058%20120.337L98.7844%20119.392L97.7656%20118.447L74.5877%20102.732L49.4995%2086.1905L36.3823%2076.62L29.3779%2071.7757L25.8121%2067.2858L24.2839%2057.3608L30.6515%2050.2716L39.3113%2050.8623L41.4763%2051.4531L50.2636%2058.1879L68.9842%2072.7209L93.4357%2090.6804L97.0015%2093.6343L98.4374%2092.6652L98.6571%2091.9801L97.0015%2089.2625L83.757%2065.2772L69.621%2040.8192L63.2534%2030.6579L61.5978%2024.632C60.9565%2022.1032%2060.579%2020.0111%2060.579%2017.4246L67.8381%207.49965L71.9133%206.19995L81.7193%207.49965L85.7946%2011.0443L91.9074%2024.9865L101.714%2046.8451L116.996%2076.62L121.453%2085.4816L123.873%2093.6343L124.764%2096.1155H126.292V94.6976L127.566%2077.9197L129.858%2057.3608L132.15%2030.8942L132.915%2023.4505L136.608%2014.4708L143.994%209.62643L149.725%2012.344L154.437%2019.0788L153.8%2023.4505L150.998%2041.6463L145.522%2070.1215L141.957%2089.2625H143.994L146.414%2086.7813L156.093%2074.0206L172.266%2053.698L179.398%2045.6635L187.803%2036.802L193.152%2032.5484H203.34L210.726%2043.6549L207.415%2055.1159L196.972%2068.3492L188.312%2079.5739L175.896%2096.2095L168.191%20109.585L168.882%20110.689L170.738%20110.53L198.755%20104.504L213.91%20101.787L231.994%2098.7149L240.144%20102.496L241.036%20106.395L237.852%20114.311L218.495%20119.037L195.826%20123.645L162.07%20131.592L161.696%20131.893L162.137%20132.547L177.36%20133.925L183.855%20134.279H199.774L229.447%20136.524L237.215%20141.605L241.8%20147.867L241.036%20152.711L229.065%20158.737L213.019%20154.956L175.45%20145.977L162.587%20142.787H160.805V143.85L171.502%20154.366L191.242%20172.089L215.82%20195.011L217.094%20200.682L213.91%20205.172L210.599%20204.699L188.949%20188.394L180.544%20181.069L161.696%20165.118H160.422V166.772L164.752%20173.152L187.803%20207.771L188.949%20218.405L187.294%20221.832L181.308%20223.959L174.813%20222.777L161.187%20203.754L147.305%20182.486L136.098%20163.345L134.745%20164.2L128.075%20235.42L125.019%20239.082L117.887%20241.8L111.902%20237.31L108.718%20229.984L111.902%20215.452L115.722%20196.547L118.779%20181.541L121.58%20162.873L123.291%20156.636L123.14%20156.219L121.773%20156.449L107.699%20175.752L86.304%20204.699L69.3663%20222.777L65.291%20224.431L58.2867%20220.768L58.9235%20214.27L62.8713%20208.48L86.304%20178.705L100.44%20160.155L109.551%20149.507L109.462%20147.967L108.959%20147.924L46.6977%20188.512L35.6182%20189.93L30.7788%20185.44L31.4156%20178.115L33.7079%20175.752L52.4285%20162.873Z'%20fill='%23000'/></svg>");
   }
 
-  /* ── the reference's palette and face, pinned ───────────────────
-     Set on the body, not on .rzine, so the shared chrome that reads these
-     variables — the navbar, the page background behind the field, the footer
-     — moves with the card instead of staying on the visitor's palette and
-     framing it in the wrong colour. */
-  body.rzine-page {
-    --rz-field: #a788af;
-    --rz-ink: #2f0a28;
-    --rz-card: #f2fdff;
-    /* terminal chrome, accent and chip: from puce, the nearest existing
-       palette — the reference sets none of these */
-    --rz-chrome: #e0d2d6;
-    --rz-accent: #1f6b53;
-    --rz-claude-ink: #1f6b53;
-    --rz-claude-bg: #fdf0f2;
-    --rz-sans: 'Figtree', 'Figtree Fallback', 'Segoe UI', Roboto, sans-serif;
-  }
+  /* ── the face, and a neutral text ink ───────────────────────────
+     The palette is the visitor's, exactly as everywhere else on the site —
+     field, card, borders and chips all still come from the picker. Two things
+     are fixed here:
 
-  /* the overscroll ground above and below the page, painted from :root in
-     zine_palette.liquid and so untouched by the rebind above */
-  html:has(body.rzine-page) {
-    background: #a788af;
+     --rz-sans   Figtree, the face the card's proportions were set against. A
+                 face is not a size: its x-height is 500/1000 against Plus
+                 Jakarta Sans's 536, so the same 20px rendered noticeably
+                 larger and the card never matched the scale it was drawn to.
+
+     --rz-text   the ink for TEXT only. --rz-ink stays the palette's own hue
+                 and keeps painting the card border and the terminal ground,
+                 which is where the tint belongs; at paragraph size that same
+                 tint read as dark-seafoam-coloured prose rather than as dark
+                 prose. Near-black, and deliberately not pure #000. */
+  body.rzine-page {
+    --rz-sans: 'Figtree', 'Figtree Fallback', 'Segoe UI', Roboto, sans-serif;
+    --rz-text: #1a1a1a;
   }
 
   /* ── the field ──────────────────────────────────────────────── */
@@ -83,9 +81,10 @@
     padding: clamp(1.5rem, 4vw, 2.5rem);
     font-family: var(--rz-sans);
     /* al-folio sets the site in 300; at this size that reads thin and washed
-       out next to the reference, which sets its body copy in 400 */
+       out at the scale this card is drawn to */
     font-weight: 400;
-    color: var(--rz-ink);
+    /* text only — the border above stays the palette's ink */
+    color: var(--rz-text);
   }
 
   /* ── masthead ──────────────────────────────────────────────── */
@@ -140,6 +139,9 @@
     font-weight: 700;
     line-height: 1.25;
     letter-spacing: normal;
+    /* the skin colours headings with the palette ink; headings are text, so
+       they take the neutral one like the prose under them */
+    color: var(--rz-text);
   }
 
   body.zine .container[role='main'] .rzine-content :is(p, li) {
@@ -633,6 +635,9 @@
   }
 
   .rzine-gate .rzine-lock {
+    /* the gate is the first text a reader meets on these pages — same neutral
+       ink as the entry behind it, not the skin's tinted prose colour */
+    color: var(--rz-text);
     font-family: var(--rz-mono);
     font-size: 0.72rem;
     font-weight: 500;
@@ -725,7 +730,7 @@
     background: var(--rz-card);
     border: 5px solid var(--rz-ink);
     padding: 1.15rem 1.35rem 1.25rem;
-    color: var(--rz-ink);
+    color: var(--rz-text);
     text-decoration: none;
     transition: transform 0.12s ease;
   }
@@ -739,7 +744,7 @@
   }
 
   .rzine-entry:hover {
-    color: var(--rz-ink);
+    color: var(--rz-text);
     text-decoration: none;
   }
 
