@@ -18,7 +18,11 @@ implementation; commit `fd3181e` shows the final state.
    himself ("Haven't really examined", "I should be careful about this tomorrow")
    are NOT insertion points. A "(fact check me here please)" that checks out is
    simply removed, no insertion (his preference, 2026-08-15). **If any marker is
-   ambiguous, ask before proceeding** — he expects the question.
+   ambiguous, ask before proceeding** — he expects the question. One standing
+   exception to "only where the text directs it": when he names a paper or an
+   author in passing ("It seems like I rediscovered ROME by Bau"), he wants the
+   citation even with no marker asking for it — offer it, and verify title and
+   author order against the source, never from memory (2026-08-17).
 3. **Claude-inserted material must be unmissable**: orange, monospace, grey chip
    background — `.claude-insert` (inline) / `.claude-block` (block) classes, styled
    for both themes (`html[data-theme="dark"]` variants), plus a self-identifying
@@ -55,6 +59,19 @@ layer — the text layer loses highlighting, bold/italic, and image placement.
   reference to its definition (grows on hover, arrowhead lands last, arc itself
   clickable, minimum scroll to reveal). Narrow screens get no arc — the tag just
   scrolls. **Expect more of these; ask if a tag's target is ambiguous.**
+
+- **A leading `Aug NN description: …` line is the front matter, not body text.**
+  Since 2026-08-17 he opens the notebook with e.g. "Aug 17 description: I
+  reinvented ROME & pivot". That string becomes the post's `description:` and is
+  dropped from the body — do not reproduce it as prose. It stays PUBLIC on the
+  /research listing under the title (he confirmed that is what he wants; earlier
+  entries used deliberately vague descriptions instead, so ask if a day's line
+  looks like something he would not want in the clear).
+- **An entry can carry no highlighting at all.** Check before assuming: render
+  the pages and scan for non-grey pixels outside the image boxes rather than
+  eyeballing it. When nothing is highlighted, the legend line still goes in, worded
+  for what is actually there ("text in this style was inserted by Claude (one
+  citation) — everything else is verbatim from the notebook").
 - **Notes addressed to Claude are not always insertion points.** "*I need to dig
   into this carefully later Claude, remind me!*" is a note to self — leave it
   verbatim. A marker only earns an insertion when it asks for content
@@ -82,8 +99,9 @@ encrypted payload — so a research entry with math must set `math: true` in the
 
 1. Extract: `pdftotext -layout <pdf> body.txt` and `pdfimages -png <pdf> img`;
    clean zero-width chars from the text.
-2. Draft the plaintext post at `_research/<slug>.md` (front matter: `layout: post`,
-   title, date — never future-dated, description, `related_posts: false`), with the
+2. Draft the plaintext post at `_research/<slug>.md` (front matter:
+   `layout: research_preview` for the local review build, title, date — never
+   future-dated, description, `related_posts: false`), with the
    claude-insert style block, legend line, verbatim body, styled insertions,
    screenshots under `assets/img/research/`, and any generated figures as
    `{% include research/fig_*.svg %}` (figure generators live in the VPD repo:
