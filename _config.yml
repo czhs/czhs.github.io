@@ -19,6 +19,7 @@ footer_text: >
 keywords: Chris Shi, Hongyi Shi, Carnegie Mellon University, CMU, infrastructure, biodefense, interpretability, optimal transport
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
 icon: prof_pic.jpg # favicon: the Morisot painting
+timezone: America/New_York # Actions builds in UTC; without this, a doc dated 23:59 -0400 renders as the NEXT day live while showing correctly on a local serve (it shifted every /research entry a day)
 
 url: https://chrisshi.com # the base hostname & protocol for your site
 baseurl:  # the subpath of your site, e.g. /blog/. Leave blank for root
