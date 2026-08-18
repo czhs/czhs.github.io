@@ -8,20 +8,30 @@ contact_url: https://forms.gle/Vr6gxhKGjhsEnwPC7
 # Where the "interested in hosting a week?" banner points. Same address already
 # used by the runbook and the ML/robotics pages.
 contact_email: chrisshi@andrew.cmu.edu
-# The season now running, and the recap reel that closes out the season before
-# it — rendered as the band above the grid on /mln/ (`.mln-season`). The two are
-# a pair: `season_now` is what makes the recap read as PAST rather than current,
-# so a season that has wrapped never sits on the page unlabelled. Every string
-# below is the reel's own on-screen copy — don't reword it. Next season: swap
-# `season_now`, then swap the whole `season_recap` block when its reel exists.
-season_now: "Fall 2026"
+# The club's seasons, NEWEST FIRST. `start` is the date a season opens on, and
+# a week belongs to the newest season that opened on or before it — so a season
+# needs no end date and the ranges can never overlap or leave a gap. `start` is
+# the season boundary, not necessarily a meeting: Fall 2026 opens on Aug 24, a
+# Monday with no session, because that is where the summer/fall break falls.
+#
+# Two things read this and both are about the club visibly changing phase: the
+# dividers that split the /mln/ grid into seasons, and the recap band above it.
+# Neither hard-codes which season is current — that is derived as the season of
+# the NEXT meeting, so it turns over on its own. Adding a season is one entry
+# here; nothing else needs touching.
+seasons:
+  - name: "Fall 2026"
+    start: "2026-08-24"
+  - name: "Summer 2026"
+    start: "2026-05-18"
+# The reel that closes out a wrapped season, rendered as the band above the grid
+# (`.mln-season`). `season` must match a name in `seasons:` above — the band's
+# numbered week strip is derived from that season's range, so it can't drift out
+# of step with the archive. Every string here is the reel's own on-screen copy;
+# don't reword it. Next season: add the season above, then swap this block once
+# its reel exists.
 season_recap:
   season: "Summer 2026"
-  # `from`/`until` are the season's own first and last meeting dates, and they
-  # are what the band's week strip is built from — every week in the range gets
-  # a numbered link. Keep them in step with the dates in `line`.
-  from: "2026-05-18"
-  until: "2026-08-17"
   line: "13 Mondays · May 18 — Aug 17 · Pittsburgh"
   length: "1:26"
   video: "/assets/video/mln/summer-2026-recap.mp4"

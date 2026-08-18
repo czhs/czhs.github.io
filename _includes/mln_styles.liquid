@@ -477,6 +477,67 @@ body.mln-site { padding: 0; }
   .mln-season-title { font-size: 1.75rem; }
 }
 
+/* ── season divider in the week grid ──────────────────────────────────────
+   A full-width row that heads every card under it. Spans the whole grid rather
+   than sitting in a column, so the archive reads as labelled runs of weeks
+   instead of one undifferentiated wall of cards.
+
+   The li itself is a plain block with a flex inner: `.mln-far-week` is toggled
+   with `display: block`, so a flex li would lose its layout the moment the
+   dropdown revealed it. */
+.mln-grid-season {
+  grid-column: 1 / -1;
+  margin: 1.15rem 0 0.1rem;
+}
+.mln-grid-season:first-child { margin-top: 0.15rem; }
+.mln-grid-season-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+/* set like the cards' own WEEK slug, so the heading reads as part of the grid's
+   language rather than as page furniture dropped between rows */
+.mln-grid-season-name {
+  margin: 0;
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--global-text-color);
+}
+.mln-grid-season-line {
+  flex: 1 1 auto;
+  height: 1px;
+  min-width: 1rem;
+  background: var(--global-divider-color);
+}
+.mln-grid-season-state {
+  flex: 0 0 auto;
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+/* the running season carries the same lit dot the recap band's rail uses — one
+   marker for "this is the phase the club is in", used in both places */
+.mln-grid-season-state.is-now {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  color: var(--global-theme-color);
+  opacity: 1;
+}
+.mln-grid-season-state.is-now::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--global-theme-color);
+}
+
 /* week grid */
 .mln-grid {
   list-style: none;

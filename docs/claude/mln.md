@@ -116,15 +116,38 @@ slides, thumbs are matched by `nth-of-type`, keep counts in sync.
 ## Season recap reel (the band above the grid on `/mln/`)
 
 The archive spans more than one season, so a season that has ended must be labelled
-or its weeks read as the current one. Driven entirely by two keys at the top of
-`_data/mln.yml`: `season_now` (the season running) and `season_recap`
-(`season, from, until, line, length, video, poster`). Markup is `.mln-season` in
-`_pages/mln.html`; CSS is the `season recap band` block in `mln_styles.liquid`.
+or its weeks read as the current one. **One recap band is not enough** — asked for
+just the band, the club still didn't read as being in a new phase, because the grid
+below it was an undifferentiated run of cards. It takes both: the band, and season
+dividers inside the grid.
 
-- The rail pairs **`{season} — wrapped`** with **`{season_now} — now`**. That pairing
-  is the point — drop `season_now` and the recap silently reads as current.
-- `from`/`until` are the season's first and last meeting dates; the numbered week
-  strip is filtered out of `weeks:` by that range, so it can't drift from the archive.
+Everything derives from `seasons:` at the top of `_data/mln.yml` — **newest first**,
+each entry just `name` + `start`. A week belongs to the newest season that opened on
+or before it, so seasons need no end date and can't overlap or leave a gap. `start`
+is the boundary, **not necessarily a meeting**: Fall 2026 opens Mon Aug 24, a Monday
+with no session, because that is where the summer/fall break falls. Adding a season
+is one entry; nothing else needs touching.
+
+- **Which season is current is derived, never a key**: it is the season of the NEXT
+  meeting, not of today's date. That difference is the whole point at a break — for
+  the week between the last summer Monday and the first fall one, a date lookup still
+  answers "Summer" while the club is plainly already in fall. It also means nothing
+  has to be flipped by hand when a season turns over.
+- **Dividers** (`_includes/mln_season_divider.liquid`, `.mln-grid-season`): full-width
+  rows in the grid, `{season} ──── now | wrapped`. `_includes/mln_season_of.liquid`
+  resolves a date to a season and leaks `season_of` to the caller (Jekyll includes
+  share page scope) — that is what lets the grid's three passes share one
+  `shown_season` pointer. The whole run is strictly newest→oldest, so one pointer is
+  enough. The lead divider goes before the dropdown card and is NOT collapsible (the
+  dropdown stands in for the weeks it hides); dividers inside the future run take
+  `far=true`. The row is a block wrapping a flex inner — `.mln-far-week` is toggled
+  with `display: block`, so a flex `li` loses its layout when revealed.
+- **Band** (`.mln-season` in `_pages/mln.html`, `season recap band` in
+  `mln_styles.liquid`): `season_recap` is `season, line, length, video, poster`, and
+  `season` must match a name in `seasons:`. The rail pairs
+  **`{season} — wrapped`** with **`{current} — now`**. The numbered week strip's range
+  is read back out of `seasons:` (walking newest-first, the entry before the recap's
+  is the one that ended it), so no dates are restated and it can't drift.
 - **All strings are the reel's own on-screen copy** ([content-rules](content-rules.md)) —
   `line` is the reel's caption card verbatim. Don't write new copy for the band.
 - Sources are ~1080x1920 and enormous (77 MB happened). Encode
@@ -140,8 +163,8 @@ or its weeks read as the current one. Driven entirely by two keys at the top of
 - Seeking won't work against `python3 -m http.server` (it ignores `Range`) — that's
   the preview server, not the file. Pages serves Range fine.
 
-Next season: swap `season_now`, then swap the whole `season_recap` block once its
-reel exists.
+Next season: add its entry to `seasons:` (the dividers and the "now" marker follow on
+their own), then swap the whole `season_recap` block once its reel exists.
 
 ## Adding a brand-new week, end to end
 

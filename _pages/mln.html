@@ -85,6 +85,29 @@ nav: false
 </section>
 
 {%- comment -%}
+  Everything below — the recap band AND the grid — is ordered off these, so they
+  are worked out once, up here, rather than twice.
+
+  `now_season` is the season of the NEXT meeting, not the season today's date
+  falls in. That difference matters exactly at a season break: between the last
+  summer Monday and the first fall one the club is already in its new phase, and
+  a date lookup would still answer "Summer". Deriving it from the coming week
+  also means no key has to be flipped by hand when a season turns over.
+{%- endcomment -%}
+{%- assign today_str = site.time | date: "%Y-%m-%d" -%}
+{%- assign upcoming = site.data.mln.weeks | where_exp: "w", "w.date >= today_str" | sort: "date" -%}
+{%- assign past = site.data.mln.weeks | where_exp: "w", "w.date < today_str" | sort: "date" | reverse -%}
+{%- assign coming = upcoming | first -%}
+{%- assign current_slug = coming.slug -%}
+{%- assign future = upcoming | where_exp: "w", "w.slug != current_slug" | sort: "date" | reverse -%}
+{%- if coming -%}
+  {% include mln_season_of.liquid date=coming.date %}
+  {%- assign now_season = season_of -%}
+{%- else -%}
+  {%- assign now_season = site.data.mln.seasons.first.name -%}
+{%- endif -%}
+
+{%- comment -%}
   Season recap. It sits between the hero and the grid because that is the seam
   it explains: everything below is one archive, but it spans two seasons, and
   without a marker the summer weeks read as if the club were still in them.
@@ -105,8 +128,8 @@ nav: false
   <section class="mln-season" aria-labelledby="mln-season-h">
     <p class="mln-season-rail">
       <span class="mln-season-was">{{ recap.season }} — wrapped</span>
-      {%- if site.data.mln.season_now -%}
-        <span class="mln-season-now">{{ site.data.mln.season_now }} — now</span>
+      {%- if now_season and now_season != recap.season -%}
+        <span class="mln-season-now">{{ now_season }} — now</span>
       {%- endif -%}
     </p>
     <div class="mln-season-body">
@@ -140,11 +163,25 @@ nav: false
           The week strip is the other half of "which season is this?": it names,
           in numbers, exactly which weeks below belong to the season that just
           ended, and gives the band somewhere to go — every tick is the week's
-          own page. Built from the season's first and last meeting dates, so it
-          can't drift out of step with the archive.
+          own page.
+
+          Its range is read out of `seasons:` rather than restated here. Walking
+          newest-first, the entry BEFORE the recap's season is the one that ended
+          it, so by the time we match we are holding its start — the recap covers
+          [own start, next season's start). Nothing to keep in sync by hand.
         {%- endcomment -%}
-        {%- assign in_season = site.data.mln.weeks | where_exp: "w", "w.date >= recap.from" -%}
-        {%- assign in_season = in_season | where_exp: "w", "w.date <= recap.until" | sort: "date" -%}
+        {%- assign recap_from = "" -%}
+        {%- assign recap_until = "9999-12-31" -%}
+        {%- assign next_start = "9999-12-31" -%}
+        {%- for s in site.data.mln.seasons -%}
+          {%- if s.name == recap.season -%}
+            {%- assign recap_from = s.start -%}
+            {%- assign recap_until = next_start -%}
+          {%- endif -%}
+          {%- assign next_start = s.start -%}
+        {%- endfor -%}
+        {%- assign in_season = site.data.mln.weeks | where_exp: "w", "w.date >= recap_from" -%}
+        {%- assign in_season = in_season | where_exp: "w", "w.date < recap_until" | sort: "date" -%}
         {%- if in_season.size > 0 -%}
           <nav class="mln-season-strip" aria-label="{{ recap.season }} — every week">
             {%- for w in in_season -%}
@@ -167,13 +204,24 @@ nav: false
     (left of the coming week). Past weeks follow, most recent first. Layout when
     collapsed: [dropdown] [this week] [past…]; expanded inserts the future weeks
     (newest first) between the dropdown and the coming week.
+
+    Season dividers ride along that same order. `shown_season` tracks the season
+    last printed; each of the three passes below prints a divider the moment its
+    week belongs to a different one. Because the whole run is strictly newest→
+    oldest, one pointer is enough — a season can never come back around.
+
+    The lead divider is emitted before the dropdown card and is NOT collapsible:
+    the dropdown stands in for the weeks it hides, so it belongs under the same
+    heading they do. Dividers inside the future run are marked `far` so they
+    hide and reveal with the cards they head.
   {%- endcomment -%}
-  {%- assign today_str = site.time | date: "%Y-%m-%d" -%}
-  {%- assign upcoming = site.data.mln.weeks | where_exp: "w", "w.date >= today_str" | sort: "date" -%}
-  {%- assign past = site.data.mln.weeks | where_exp: "w", "w.date < today_str" | sort: "date" | reverse -%}
-  {%- assign coming = upcoming | first -%}
-  {%- assign current_slug = coming.slug -%}
-  {%- assign future = upcoming | where_exp: "w", "w.slug != current_slug" | sort: "date" | reverse -%}
+  {%- assign shown_season = "" -%}
+
+  {%- if future.size > 0 -%}
+    {% include mln_season_of.liquid date=future.first.date %}
+    {% include mln_season_divider.liquid name=season_of now=now_season %}
+    {%- assign shown_season = season_of -%}
+  {%- endif -%}
 
   {%- if future.size > 0 -%}
     <li class="mln-more-li">
@@ -201,15 +249,30 @@ nav: false
       </button>
     </li>
     {%- for w in future -%}
+      {% include mln_season_of.liquid date=w.date %}
+      {%- if season_of != shown_season -%}
+        {% include mln_season_divider.liquid name=season_of now=now_season far=true %}
+        {%- assign shown_season = season_of -%}
+      {%- endif -%}
       {% include mln_card.liquid w=w today_str=today_str current_slug=current_slug far=true %}
     {%- endfor -%}
   {%- endif -%}
 
   {%- if coming -%}
+    {% include mln_season_of.liquid date=coming.date %}
+    {%- if season_of != shown_season -%}
+      {% include mln_season_divider.liquid name=season_of now=now_season %}
+      {%- assign shown_season = season_of -%}
+    {%- endif -%}
     {% include mln_card.liquid w=coming today_str=today_str current_slug=current_slug %}
   {%- endif -%}
 
   {%- for w in past -%}
+    {% include mln_season_of.liquid date=w.date %}
+    {%- if season_of != shown_season -%}
+      {% include mln_season_divider.liquid name=season_of now=now_season %}
+      {%- assign shown_season = season_of -%}
+    {%- endif -%}
     {% include mln_card.liquid w=w today_str=today_str current_slug=current_slug %}
   {%- endfor -%}
 </ul>

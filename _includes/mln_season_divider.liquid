@@ -1,0 +1,30 @@
+{%- comment -%}
+  A season divider: a full-width row in the /mln/ week grid that heads every
+  card below it until the next divider. This is what makes the club's change of
+  phase visible in the archive itself — without it the summer weeks sit in the
+  same undifferentiated run as the fall ones and read as if the season were
+  still going.
+
+  The state word is derived, not passed in as copy: the season of the next
+  meeting is "now", every older season is "wrapped". Same two words the recap
+  band's rail uses, so the page has one vocabulary for this.
+
+  The row is a plain block wrapping a flex inner, NOT a flex li — `.mln-far-week`
+  is toggled with `display: block`, and a flex li would lose its layout the
+  moment it was revealed.
+
+  params: name (season), now (name of the season running), far (bool — sits in
+          the collapsed "more upcoming" region and must hide along with it)
+{%- endcomment -%}
+{%- if include.name == include.now -%}
+  {%- assign season_state = 'now' -%}
+{%- else -%}
+  {%- assign season_state = 'wrapped' -%}
+{%- endif -%}
+<li class="mln-grid-season{% if include.far %} mln-far-week{% endif %}">
+  <div class="mln-grid-season-inner">
+    <h2 class="mln-grid-season-name">{{ include.name }}</h2>
+    <span class="mln-grid-season-line" aria-hidden="true"></span>
+    <span class="mln-grid-season-state is-{{ season_state }}">{{ season_state }}</span>
+  </div>
+</li>

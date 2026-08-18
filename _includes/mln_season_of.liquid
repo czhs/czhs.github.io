@@ -1,0 +1,18 @@
+{%- comment -%}
+  Sets `season_of` to the name of the season a date falls in: the newest season
+  that opened on or before it. `seasons:` in _data/mln.yml is ordered newest
+  first, so the first match wins and no season needs an end date.
+
+  The assign deliberately leaks to the caller — Jekyll includes share the page's
+  scope — which is what lets the grid compare each week against the season it
+  last printed a divider for. Read `season_of` immediately; the next include
+  overwrites it.
+
+  params: date ("%Y-%m-%d")
+{%- endcomment -%}
+{%- assign season_of = '' -%}
+{%- for s in site.data.mln.seasons -%}
+  {%- if season_of == '' and include.date >= s.start -%}
+    {%- assign season_of = s.name -%}
+  {%- endif -%}
+{%- endfor -%}
