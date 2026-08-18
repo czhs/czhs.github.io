@@ -312,169 +312,209 @@ body.mln-site { padding: 0; }
 .mln-sched dd { margin: 0; opacity: 0.82; }
 @media (max-width: 576px) { .mln-about { columns: 1; } }
 
-/* ── season recap band ────────────────────────────────────────────────────
-   The reel is 9:16 dark-green paper, and this micro-site is pinned to a dark
-   green too (`html:has(body.mln-site)` in _themes.scss) — near enough to the
-   reel's that the video would otherwise float on the page with no edge at all.
-   So the band is a mat: one step DARKER than the page (#172820, the reel's own
-   deeper green), with the reel sitting on it at its true ground (#1b2f24). The
-   video's letterbox then matches its own frame exactly and the frame reads as
-   a print resting on the board. Hexes are sampled from the file — the ground,
-   the cream and the khaki are the artwork's colours, not the theme's, so this
-   block deliberately does not track the theme vars. */
-.mln-season {
+/* ── season recap bar ─────────────────────────────────────────────────────
+   The reel, as a strip under its season's divider rather than a panel above the
+   grid. One mat panel holding two rows: the clickable bar (which opens the reel
+   below it) and the season's weeks as a row of covers in polaroid frames.
+
+   Namespaced `mln-reel-`, NOT `mln-recap-`: `.mln-recap` is already the week
+   pages' full-width photo figure further down this file, and `.mln-recap img`
+   rounds every image inside it to 12px — which reached in here and rounded the
+   corners clean off 46px prints.
+
+   Painted in the reel's own palette, not the theme's — this micro-site is pinned
+   to a green close enough to the reel's that the video would have no visible
+   edge, so the panel is a mat one step darker (#172820, the reel's deeper green)
+   with the reel on its true ground (#1b2f24). Hexes are sampled from the file;
+   this block deliberately does not track the theme vars. */
+.mln-reel-li {
+  grid-column: 1 / -1;
+  margin: 0.1rem 0 0.35rem;
+}
+.mln-reel {
   --mln-mat: #172820;
   --mln-ground: #1b2f24;
   --mln-ink: #e9e3d2;
   --mln-khaki: #b6a893;
-  margin: 0 0 1.4rem;
-  padding: 1.05rem 1.15rem 1.15rem;
   border: 1px solid var(--global-divider-color);
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--mln-mat);
   color: var(--mln-ink);
 }
-/* The rail is what answers "which season is this?" before the video plays:
-   the wrapped season and the running one on one line, so the recap can never
-   be mistaken for the current season. It stays a row on narrow screens — two
-   short mono strings fit, and stacking them would lose the pairing. */
-.mln-season-rail {
+.mln-reel-bar {
+  cursor: pointer;
+  list-style: none;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.4rem 1rem;
-  margin: 0 0 1rem;
-  padding-bottom: 0.6rem;
-  border-bottom: 1px solid rgba(233, 227, 210, 0.22);
-  font-family: var(--global-code-font-family, monospace);
-  font-size: 0.72rem;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
+  gap: 1rem;
+  padding: 0.75rem 0.95rem;
+  border-radius: 12px 12px 0 0;
+  transition: background 0.15s ease;
 }
-.mln-season-was { color: var(--mln-ink); opacity: 0.9; }
-/* the running season is the one dot of colour in the band, so the eye lands on
-   "now" rather than on the season that just ended */
-.mln-season-now {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.42rem;
-  color: var(--mln-khaki);
+.mln-reel-bar::-webkit-details-marker { display: none; }
+.mln-reel-bar:hover { background: #1c3428; }
+.mln-reel-bar:focus-visible {
+  outline: 2px solid var(--mln-khaki);
+  outline-offset: -2px;
 }
-.mln-season-now::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--mln-khaki);
+.mln-reel-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  min-width: 0;
+  flex: 1 1 auto;
 }
-.mln-season-body {
-  display: grid;
-  grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
-  gap: 1.35rem;
-  align-items: center;
-}
-.mln-season-reel { margin: 0; }
-.mln-season-reel video {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 9 / 16;
-  border-radius: 10px;
-  /* the reel's own ground, so the poster and the letterbox are the same colour
-     and the frame has no visible edge against the band */
-  background: var(--mln-ground);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-}
-.mln-season-kicker {
+.mln-reel-kicker {
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  margin: 0 0 0.3rem;
   font-family: var(--global-code-font-family, monospace);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--mln-khaki);
 }
-/* runtime rides on the kicker rather than sitting in the chip row — it is a
-   fact about the video, not about the season */
-.mln-season-len {
+/* runtime rides on the kicker — it is a fact about the video, not the season */
+.mln-reel-len {
   padding-left: 0.55rem;
   border-left: 1px solid rgba(233, 227, 210, 0.25);
   letter-spacing: 0.08em;
   opacity: 0.8;
 }
-.mln-season-title {
-  margin: 0 0 0.45rem;
-  font-size: 2.1rem;
+.mln-reel-title {
+  font-size: 1.4rem;
   font-weight: 800;
   letter-spacing: -0.02em;
-  line-height: 1.02;
+  line-height: 1.1;
   color: var(--mln-ink);
 }
-/* the reel's own caption card, set the way the reel sets it. Balanced because
-   it is one mono sentence of fixed length: left to wrap normally it orphans
-   "Pittsburgh" on its own line at phone widths. */
-.mln-season-line {
-  margin: 0 0 0.9rem;
-  font-family: var(--global-code-font-family, monospace);
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
-  line-height: 1.5;
-  text-wrap: balance;
-  color: var(--mln-ink);
-  opacity: 0.82;
-}
-/* the season's weeks as numbered ticks — set the way the reel sets "WEEK 03",
-   so the strip reads as a run of the reel's own slates rather than as a menu */
-.mln-season-strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.32rem;
-  margin: 0;
-}
-.mln-season-strip a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 2.05rem;
-  min-height: 1.85rem;
-  padding: 0 0.3rem;
-  border: 1px solid rgba(233, 227, 210, 0.22);
-  border-radius: 6px;
+/* the reel's own caption card, set the way the reel sets it */
+.mln-reel-line {
   font-family: var(--global-code-font-family, monospace);
   font-size: 0.76rem;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
+  line-height: 1.45;
   color: var(--mln-ink);
-  text-decoration: none;
-  opacity: 0.72;
-  transition: opacity 0.15s ease, border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  opacity: 0.78;
 }
-.mln-season-strip a:hover,
-.mln-season-strip a:focus-visible {
-  border-color: var(--mln-khaki);
-  background: var(--mln-ground);
+.mln-reel-cta {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
   color: var(--mln-khaki);
-  text-decoration: none;
-  opacity: 1;
+  white-space: nowrap;
 }
-/* Stacked, the reel would run past a phone screen at 9:16, so cap it by height
-   and let the width follow — the type block then sits under it, still legible. */
+.mln-reel-cta-close { display: none; }
+.mln-reel-fold[open] .mln-reel-cta-open { display: none; }
+.mln-reel-fold[open] .mln-reel-cta-close { display: inline-flex; align-items: center; gap: 0.4rem; }
+.mln-reel-bar:hover .mln-reel-cta { color: var(--mln-ink); }
+.mln-reel-cta .mln-arrow { transition: transform 0.15s ease; }
+.mln-reel-bar:hover .mln-reel-cta .mln-arrow { transform: translateY(2px); }
+.mln-reel-fold[open] .mln-reel-bar:hover .mln-reel-cta .mln-arrow { transform: translateY(-2px); }
+
+.mln-reel-body {
+  display: flex;
+  justify-content: center;
+  padding: 0.35rem 0.95rem 1.1rem;
+}
+.mln-reel-frame { margin: 0; }
+.mln-reel-frame video {
+  display: block;
+  width: auto;
+  /* 9:16 capped by HEIGHT — the panel spans the whole grid, so a width-driven
+     reel would be enormous on a wide screen */
+  height: min(62vh, 520px);
+  max-width: 100%;
+  aspect-ratio: 9 / 16;
+  border-radius: 10px;
+  background: var(--mln-ground);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* The season's weeks, as prints laid along the bottom of the mat: each is the
+   week's own Luma cover — the same art as its card below, so the row is an
+   index you can recognise rather than decoration — with the week number in the
+   polaroid's chin, where a print carries its label.
+
+   Its own row, clear of the bar above it, and outside the <summary> so these
+   links stay clickable without toggling the reel. */
+.mln-reel-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding: 0.85rem 0.95rem 0.95rem;
+  border-top: 1px solid rgba(233, 227, 210, 0.14);
+}
+.mln-reel-pola {
+  display: block;
+  flex: 0 0 auto;
+  width: 52px;
+  /* only the chin — the cover runs the full width of the print, edge to edge */
+  padding: 0 0 2px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--mln-ink);
+  text-decoration: none;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.4);
+  /* a print dropped on a board, not a thumbnail in a grid — every other one
+     leans the other way so the row reads as hand-laid */
+  transform: rotate(-2deg);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.mln-reel-pola:nth-child(even) { transform: rotate(2deg); }
+.mln-reel-pola:hover,
+.mln-reel-pola:focus-visible {
+  text-decoration: none;
+  transform: rotate(0deg) translateY(-3px) scale(1.06);
+  box-shadow: 0 7px 16px rgba(0, 0, 0, 0.45);
+}
+.mln-reel-pola-img {
+  display: block;
+  overflow: hidden;
+  background: var(--mln-ground);
+  aspect-ratio: 1 / 1;
+}
+/* Two things this has to undo, both from al-folio's global stylesheet:
+
+   `border-radius` — bare `img` is rounded to 12px site-wide, which on a 46px
+   print rounds the corners clean off. A photograph has square corners.
+
+   The ratio is carried by the img ITSELF, not just the box: `height: 100%`
+   against a parent sized only by `aspect-ratio` collapsed for some covers and
+   the prints came out at mixed heights. */
+.mln-reel-pola-img img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 0;
+}
+/* the chin — a polaroid's white strip is where the label goes, so the week
+   number lives there rather than as a tick of its own */
+.mln-reel-pola-num {
+  display: block;
+  padding-top: 2px;
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.6rem;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  text-align: center;
+  /* ink on the print, not on the mat — this sits on the cream chin */
+  color: #4a4436;
+}
+
+/* Narrow: the cta drops (open/shut is legible from the reel itself) and the
+   prints shrink so a phone still gets more than two to a row. */
 @media (max-width: 640px) {
-  .mln-season-body {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1.1rem;
-    justify-items: center;
-    text-align: center;
-  }
-  .mln-season-reel {
-    width: 100%;
-    max-width: min(100%, 56vh);
-  }
-  .mln-season-kicker,
-  .mln-season-strip { justify-content: center; }
-  .mln-season-title { font-size: 1.75rem; }
+  .mln-reel-cta { display: none; }
+  .mln-reel-title { font-size: 1.2rem; }
+  .mln-reel-strip { gap: 0.4rem; }
+  .mln-reel-pola { width: 46px; }
 }
 
 /* ── season divider in the week grid ──────────────────────────────────────

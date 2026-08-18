@@ -142,23 +142,36 @@ is one entry; nothing else needs touching.
   dropdown stands in for the weeks it hides); dividers inside the future run take
   `far=true`. The row is a block wrapping a flex inner — `.mln-far-week` is toggled
   with `display: block`, so a flex `li` loses its layout when revealed.
-- **Band** (`.mln-season` in `_pages/mln.html`, `season recap band` in
-  `mln_styles.liquid`): `season_recap` is `season, line, length, video, poster`, and
-  `season` must match a name in `seasons:`. The rail pairs
-  **`{season} — wrapped`** with **`{current} — now`**. The numbered week strip's range
-  is read back out of `seasons:` (walking newest-first, the entry before the recap's
-  is the one that ended it), so no dates are restated and it can't drift.
+- **Recap bar** (`_includes/mln_season_recap.liquid`, `.mln-reel-*`): emitted by the
+  divider include, so a season's heading and its reel arrive together. `season_recap`
+  is `season, line, length, video, poster`; `season` must match a name in `seasons:`.
+  It is a **bar, not a panel** — ~185px shut. One mat holding two rows: the clickable
+  bar (a `<details>`, same device as the hero's "About the club" — no JS, keyboard
+  free) and the season's weeks as a row of **Luma covers in polaroid frames**, one per
+  week, linked, with the week number in the print's chin. The covers are the index —
+  same art as each week's card below — and they replaced a row of numbered ticks.
+  That row sits **outside `<summary>`** on purpose: a summary is one click target, and
+  links nested in it both follow and toggle. Its range is read back out of `seasons:`
+  (walking newest-first, the entry before the recap's is the one that ended it), so no
+  dates are restated and it can't drift.
+- **The bar is `mln-reel-`, NOT `mln-recap-`** — `.mln-recap` is already the week pages'
+  full-width photo figure, and its `.mln-recap img { border-radius: 12px }` reached into
+  the bar and rounded the corners clean off 46px prints. Two more traps in the same
+  spot: al-folio rounds bare `img` site-wide (the prints set `border-radius: 0`), and
+  the ratio must be on the `<img>` itself — `height: 100%` against a parent sized only
+  by `aspect-ratio` collapsed for some covers and the prints came out mixed heights.
 - **All strings are the reel's own on-screen copy** ([content-rules](content-rules.md)) —
-  `line` is the reel's caption card verbatim. Don't write new copy for the band.
+  `line` is the reel's caption card verbatim. Don't write new copy for the bar.
 - Sources are ~1080x1920 and enormous (77 MB happened). Encode
   `-vf scale=810:1440 -crf 25 -preset slow -movflags +faststart`, aac 96k → ~13 MB.
   Keep crf ≤ 26: the dark paper **grain is the look**, and crf 28 halves the file but
   flattens it to banding. Committed to `assets/video/mln/` (published, unlike the
-  audio) with `preload="none"`; poster is a still of the reel's own end card
+  audio) with `preload="none"` behind the shut bar — nothing is fetched until it is
+  opened; poster is a still of the reel's own end card
   (`ffmpeg -ss <t> … -vf scale=810:1440` → `magick -quality 82 -strip`).
-- Band colours are **sampled from the reel, not the theme** — the micro-site's pinned
+- Bar colours are **sampled from the reel, not the theme** — the micro-site's pinned
   green is close enough to the reel's that the video would have no visible edge, so
-  the panel is a mat one step darker (`--mln-mat`) with the reel on its true ground
+  the mat is one step darker (`--mln-mat`) with the reel on its true ground
   (`--mln-ground`). It deliberately doesn't track the theme vars; don't "fix" that.
 - Seeking won't work against `python3 -m http.server` (it ignores `Range`) — that's
   the preview server, not the file. Pages serves Range fine.

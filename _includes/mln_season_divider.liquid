@@ -7,7 +7,11 @@
 
   The state word is derived, not passed in as copy: the season of the next
   meeting is "now", every older season is "wrapped". Same two words the recap
-  band's rail uses, so the page has one vocabulary for this.
+  recap bar's own kicker uses, so the page has one vocabulary for this.
+
+  A season that has a recap reel gets it immediately below its divider — the two
+  are emitted together here because a season's heading and its recap are one
+  thing, and the divider is already called from every place a season can start.
 
   The row is a plain block wrapping a flex inner, NOT a flex li — `.mln-far-week`
   is toggled with `display: block`, and a flex li would lose its layout the
@@ -28,3 +32,4 @@
     <span class="mln-grid-season-state is-{{ season_state }}">{{ season_state }}</span>
   </div>
 </li>
+{% include mln_season_recap.liquid season=include.name %}
