@@ -261,6 +261,11 @@ ninja.data = [{
           description: "working with a toy model",
           section: "Research",handler: () => {
               window.location.href = "/research/ih-engineering-notebook-2026-08-16/";
+            },},{id: "research-ih-engineering-notebook",
+          title: 'IH Engineering Notebook',
+          description: "I reinvented ROME &amp; pivot",
+          section: "Research",handler: () => {
+              window.location.href = "/research/ih-engineering-notebook-2026-08-17/";
             },},{
         id: 'social-github',
         title: 'GitHub',
