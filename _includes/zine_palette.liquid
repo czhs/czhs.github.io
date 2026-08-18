@@ -86,6 +86,45 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin
       href="{{ '/assets/fonts/jetbrains-mono-latin-var.woff2' | relative_url }}">
 
+{%- comment -%}
+  Figtree (OFL, same terms as the two above) is the face the /research card's
+  design is taken from — see the credit in the site footer. Same nominal sizes
+  in a different face do not read as the same size: Figtree's x-height is
+  500/1000 against Plus Jakarta Sans's 536, so the card was rendering visibly
+  larger than the layout it copies. Emitted on /research only; every other page
+  would download it for nothing.
+{%- endcomment -%}
+{% assign rzine_page = false %}
+{% if page.layout contains 'research' or page.rzine %}
+  {% assign rzine_page = true %}
+{% endif %}
+{% if rzine_page %}
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="{{ '/assets/fonts/figtree-latin-var.woff2' | relative_url }}">
+  <style>
+    @font-face {
+      font-family: 'Figtree';
+      font-style: normal;
+      font-weight: 300 900;
+      font-display: swap;
+      src: url('{{ '/assets/fonts/figtree-latin-var.woff2' | relative_url }}') format('woff2');
+    }
+
+    /* Metric-matched fallback, measured in-browser against Arial the same way
+       the two faces below were: Figtree runs 100.25% of Arial's advance width,
+       so the overrides are its own 950/250 ascent and descent divided by that
+       size adjustment. */
+    @font-face {
+      font-family: 'Figtree Fallback';
+      src: local('Arial'), local('Helvetica'), local('Liberation Sans');
+      size-adjust: 100.25%;
+      ascent-override: 94.76%;
+      descent-override: 24.94%;
+      line-gap-override: 0%;
+    }
+  </style>
+{% endif %}
+
 <style>
   @font-face {
     font-family: 'Plus Jakarta Sans';
