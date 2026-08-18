@@ -312,6 +312,171 @@ body.mln-site { padding: 0; }
 .mln-sched dd { margin: 0; opacity: 0.82; }
 @media (max-width: 576px) { .mln-about { columns: 1; } }
 
+/* ── season recap band ────────────────────────────────────────────────────
+   The reel is 9:16 dark-green paper, and this micro-site is pinned to a dark
+   green too (`html:has(body.mln-site)` in _themes.scss) — near enough to the
+   reel's that the video would otherwise float on the page with no edge at all.
+   So the band is a mat: one step DARKER than the page (#172820, the reel's own
+   deeper green), with the reel sitting on it at its true ground (#1b2f24). The
+   video's letterbox then matches its own frame exactly and the frame reads as
+   a print resting on the board. Hexes are sampled from the file — the ground,
+   the cream and the khaki are the artwork's colours, not the theme's, so this
+   block deliberately does not track the theme vars. */
+.mln-season {
+  --mln-mat: #172820;
+  --mln-ground: #1b2f24;
+  --mln-ink: #e9e3d2;
+  --mln-khaki: #b6a893;
+  margin: 0 0 1.4rem;
+  padding: 1.05rem 1.15rem 1.15rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 14px;
+  background: var(--mln-mat);
+  color: var(--mln-ink);
+}
+/* The rail is what answers "which season is this?" before the video plays:
+   the wrapped season and the running one on one line, so the recap can never
+   be mistaken for the current season. It stays a row on narrow screens — two
+   short mono strings fit, and stacking them would lose the pairing. */
+.mln-season-rail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+  margin: 0 0 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(233, 227, 210, 0.22);
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.mln-season-was { color: var(--mln-ink); opacity: 0.9; }
+/* the running season is the one dot of colour in the band, so the eye lands on
+   "now" rather than on the season that just ended */
+.mln-season-now {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  color: var(--mln-khaki);
+}
+.mln-season-now::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mln-khaki);
+}
+.mln-season-body {
+  display: grid;
+  grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+  gap: 1.35rem;
+  align-items: center;
+}
+.mln-season-reel { margin: 0; }
+.mln-season-reel video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 9 / 16;
+  border-radius: 10px;
+  /* the reel's own ground, so the poster and the letterbox are the same colour
+     and the frame has no visible edge against the band */
+  background: var(--mln-ground);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.mln-season-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 0.3rem;
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--mln-khaki);
+}
+/* runtime rides on the kicker rather than sitting in the chip row — it is a
+   fact about the video, not about the season */
+.mln-season-len {
+  padding-left: 0.55rem;
+  border-left: 1px solid rgba(233, 227, 210, 0.25);
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+}
+.mln-season-title {
+  margin: 0 0 0.45rem;
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  color: var(--mln-ink);
+}
+/* the reel's own caption card, set the way the reel sets it. Balanced because
+   it is one mono sentence of fixed length: left to wrap normally it orphans
+   "Pittsburgh" on its own line at phone widths. */
+.mln-season-line {
+  margin: 0 0 0.9rem;
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  text-wrap: balance;
+  color: var(--mln-ink);
+  opacity: 0.82;
+}
+/* the season's weeks as numbered ticks — set the way the reel sets "WEEK 03",
+   so the strip reads as a run of the reel's own slates rather than as a menu */
+.mln-season-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.32rem;
+  margin: 0;
+}
+.mln-season-strip a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.05rem;
+  min-height: 1.85rem;
+  padding: 0 0.3rem;
+  border: 1px solid rgba(233, 227, 210, 0.22);
+  border-radius: 6px;
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  color: var(--mln-ink);
+  text-decoration: none;
+  opacity: 0.72;
+  transition: opacity 0.15s ease, border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+.mln-season-strip a:hover,
+.mln-season-strip a:focus-visible {
+  border-color: var(--mln-khaki);
+  background: var(--mln-ground);
+  color: var(--mln-khaki);
+  text-decoration: none;
+  opacity: 1;
+}
+/* Stacked, the reel would run past a phone screen at 9:16, so cap it by height
+   and let the width follow — the type block then sits under it, still legible. */
+@media (max-width: 640px) {
+  .mln-season-body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.1rem;
+    justify-items: center;
+    text-align: center;
+  }
+  .mln-season-reel {
+    width: 100%;
+    max-width: min(100%, 56vh);
+  }
+  .mln-season-kicker,
+  .mln-season-strip { justify-content: center; }
+  .mln-season-title { font-size: 1.75rem; }
+}
+
 /* week grid */
 .mln-grid {
   list-style: none;

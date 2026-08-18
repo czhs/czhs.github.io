@@ -84,6 +84,81 @@ nav: false
   </div>
 </section>
 
+{%- comment -%}
+  Season recap. It sits between the hero and the grid because that is the seam
+  it explains: everything below is one archive, but it spans two seasons, and
+  without a marker the summer weeks read as if the club were still in them.
+
+  The band paints its own ground — the reel's paper green and cream, sampled
+  from the file — rather than following the site theme, so the video's letterbox
+  disappears into the panel and the whole thing reads as one page torn out of
+  the reel. That also makes it identical in light and dark, which is correct
+  here: the reel is dark green either way.
+
+  The rail is the load-bearing part of the brief: "Summer 2026 — wrapped" and
+  "Fall 2026 — now" sit on one line, so which season the video belongs to is
+  answered before anyone presses play. All copy comes from the reel's own
+  cards or from _data/mln.yml — none of it is written for the page.
+{%- endcomment -%}
+{%- assign recap = site.data.mln.season_recap -%}
+{%- if recap -%}
+  <section class="mln-season" aria-labelledby="mln-season-h">
+    <p class="mln-season-rail">
+      <span class="mln-season-was">{{ recap.season }} — wrapped</span>
+      {%- if site.data.mln.season_now -%}
+        <span class="mln-season-now">{{ site.data.mln.season_now }} — now</span>
+      {%- endif -%}
+    </p>
+    <div class="mln-season-body">
+      {%- comment -%}
+        preload="none" — this is 13 MB and most visitors came for the grid, so
+        nothing but the poster loads until someone presses play. The poster is
+        the reel's own end card, which already carries the season and the dates:
+        the band still says what it is with the video never started, and with
+        images off the caption below carries it.
+      {%- endcomment -%}
+      <figure class="mln-season-reel">
+        <video
+          controls
+          playsinline
+          preload="none"
+          width="810"
+          height="1440"
+          poster="{{ recap.poster | relative_url }}"
+          aria-label="{{ recap.season }} recap reel — {{ recap.line }}"
+        >
+          <source src="{{ recap.video | relative_url }}" type="video/mp4" />
+        </video>
+      </figure>
+      <div class="mln-season-meta">
+        <p class="mln-season-kicker">
+          Season recap{% if recap.length %} <span class="mln-season-len">{{ recap.length }}</span>{% endif %}
+        </p>
+        <h2 class="mln-season-title" id="mln-season-h">{{ recap.season }}</h2>
+        <p class="mln-season-line">{{ recap.line }}</p>
+        {%- comment -%}
+          The week strip is the other half of "which season is this?": it names,
+          in numbers, exactly which weeks below belong to the season that just
+          ended, and gives the band somewhere to go — every tick is the week's
+          own page. Built from the season's first and last meeting dates, so it
+          can't drift out of step with the archive.
+        {%- endcomment -%}
+        {%- assign in_season = site.data.mln.weeks | where_exp: "w", "w.date >= recap.from" -%}
+        {%- assign in_season = in_season | where_exp: "w", "w.date <= recap.until" | sort: "date" -%}
+        {%- if in_season.size > 0 -%}
+          <nav class="mln-season-strip" aria-label="{{ recap.season }} — every week">
+            {%- for w in in_season -%}
+              <a href="{{ '/mln/week-' | append: w.num | append: '/' | relative_url }}" aria-label="Week {{ w.num }}">
+                {{ w.num | prepend: "0" | slice: -2, 2 }}
+              </a>
+            {%- endfor -%}
+          </nav>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
 <ul class="mln-grid">
   {%- comment -%}
     Ordered by real meeting date, newest→oldest (left→right), not `num`. Only the
