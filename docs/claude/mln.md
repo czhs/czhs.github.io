@@ -147,7 +147,10 @@ is one entry; nothing else needs touching.
   is `season, line, length, video, poster`; `season` must match a name in `seasons:`.
   It is a **bar, not a panel** — ~185px shut. One mat holding two rows: the clickable
   bar (a `<details>`, same device as the hero's "About the club" — no JS, keyboard
-  free) and the season's weeks as a row of **Luma covers in polaroid frames**, one per
+  free; its toggle is a filled **pill button** — as plain type with an arrow it read as
+  a caption and people didn't know the bar opened, and it must stay decorative markup,
+  never a real `<button>`, since the whole `<summary>` is the click target) and the
+  season's weeks as a row of **Luma covers in polaroid frames**, one per
   week, linked, with the week number in the print's chin. The covers are the index —
   same art as each week's card below — and they replaced a row of numbered ticks.
   That row sits **outside `<summary>`** on purpose: a summary is one click target, and
@@ -162,13 +165,18 @@ is one entry; nothing else needs touching.
   by `aspect-ratio` collapsed for some covers and the prints came out mixed heights.
 - **All strings are the reel's own on-screen copy** ([content-rules](content-rules.md)) —
   `line` is the reel's caption card verbatim. Don't write new copy for the bar.
-- Sources are ~1080x1920 and enormous (77 MB happened). Encode
-  `-vf scale=810:1440 -crf 25 -preset slow -movflags +faststart`, aac 96k → ~13 MB.
-  Keep crf ≤ 26: the dark paper **grain is the look**, and crf 28 halves the file but
-  flattens it to banding. Committed to `assets/video/mln/` (published, unlike the
-  audio) with `preload="none"` behind the shut bar — nothing is fetched until it is
-  opened; poster is a still of the reel's own end card
-  (`ffmpeg -ss <t> … -vf scale=810:1440` → `magick -quality 82 -strip`).
+- Chris cuts the reel more than one way (a 1080x1920 vertical, a 1920x1080 wide) and
+  the sources are enormous — 77 MB and 132 MB have both landed. **The bar runs the
+  wide cut.** Encode `-vf scale=1280:720 -crf 25 -preset slow -movflags +faststart`,
+  aac 96k → ~10 MB. Keep crf ≤ 26: the dark paper **grain is the look**, and crf 28
+  halves the file but flattens it to banding. Committed to `assets/video/mln/`
+  (published, unlike the audio) with `preload="none"` behind the shut bar — nothing is
+  fetched until it is opened; poster is a still of the reel's own end card
+  (`ffmpeg -ss <t> … -vf scale=1280:720` → `magick -quality 82 -strip`).
+- **Keep the `<video>` `width`/`height` attributes in step with the file.** Swapping
+  the vertical cut for the wide one left a stale `810x1440` pair on the element, and
+  that intrinsic ratio beat the CSS `aspect-ratio` — the frame rendered square. The
+  attributes are what carry the ratio; CSS just sets `width: 100%; height: auto`.
 - Bar colours are **sampled from the reel, not the theme** — the micro-site's pinned
   green is close enough to the reel's that the video would have no visible edge, so
   the mat is one step darker (`--mln-mat`) with the reel on its true ground

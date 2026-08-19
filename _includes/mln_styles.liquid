@@ -397,21 +397,53 @@ body.mln-site { padding: 0; }
   color: var(--mln-ink);
   opacity: 0.78;
 }
+/* A filled button, not a line of text with an arrow: as plain khaki type it read
+   as a caption and people didn't know the bar opened. It is decorative markup —
+   the whole <summary> is the real click target — so it must never be a <button>
+   (nested interactives) and never take the focus ring, which belongs to the bar. */
 .mln-reel-cta {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
+  min-height: 34px;
+  padding: 0 0.9rem;
+  border: 1px solid var(--mln-khaki);
+  border-radius: 999px;
+  background: transparent;
   font-family: var(--global-code-font-family, monospace);
-  font-size: 0.72rem;
+  font-size: 0.74rem;
+  font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--mln-khaki);
   white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+/* hover is driven off the BAR, not the pill — the whole bar is the hit area, so
+   the button has to light up wherever on it the pointer actually is */
+.mln-reel-bar:hover .mln-reel-cta,
+.mln-reel-bar:focus-visible .mln-reel-cta {
+  background: var(--mln-khaki);
+  border-color: var(--mln-khaki);
+  color: #17281f;
+  transform: translateY(-1px);
 }
 .mln-reel-cta-close { display: none; }
 .mln-reel-fold[open] .mln-reel-cta-open { display: none; }
-.mln-reel-fold[open] .mln-reel-cta-close { display: inline-flex; align-items: center; gap: 0.4rem; }
-.mln-reel-bar:hover .mln-reel-cta { color: var(--mln-ink); }
+.mln-reel-fold[open] .mln-reel-cta-close { display: inline-flex; align-items: center; gap: 0.45rem; }
+/* the play glyph is the other half of "this opens something". The label is a
+   plain span, so the pill's own flex gap doesn't apply between glyph and text —
+   inline-flex it and give it its own. */
+.mln-reel-cta-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.mln-reel-cta-open::before {
+  content: "▶";
+  font-size: 0.62rem;
+  line-height: 1;
+}
 .mln-reel-cta .mln-arrow { transition: transform 0.15s ease; }
 .mln-reel-bar:hover .mln-reel-cta .mln-arrow { transform: translateY(2px); }
 .mln-reel-fold[open] .mln-reel-bar:hover .mln-reel-cta .mln-arrow { transform: translateY(-2px); }
@@ -421,15 +453,23 @@ body.mln-site { padding: 0; }
   justify-content: center;
   padding: 0.35rem 0.95rem 1.1rem;
 }
-.mln-reel-frame { margin: 0; }
+.mln-reel-fold[open] .mln-reel-bar { border-bottom: 1px solid rgba(233, 227, 210, 0.14); }
+.mln-reel-frame {
+  margin: 0;
+  width: 100%;
+}
+/* The wide cut, so this is width-driven and 16:9 — it fills the mat the way the
+   bar above it does. The ratio comes from the element's own width/height attrs
+   (keep them in step with the file: a stale 9:16 pair there beat `aspect-ratio`
+   here and the frame came out square). Height is still capped for short
+   landscape windows, with object-fit so that cap letterboxes rather than
+   stretches. */
 .mln-reel-frame video {
   display: block;
-  width: auto;
-  /* 9:16 capped by HEIGHT — the panel spans the whole grid, so a width-driven
-     reel would be enormous on a wide screen */
-  height: min(62vh, 520px);
-  max-width: 100%;
-  aspect-ratio: 9 / 16;
+  width: 100%;
+  height: auto;
+  max-height: 74vh;
+  object-fit: contain;
   border-radius: 10px;
   background: var(--mln-ground);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
@@ -510,8 +550,14 @@ body.mln-site { padding: 0; }
 
 /* Narrow: the cta drops (open/shut is legible from the reel itself) and the
    prints shrink so a phone still gets more than two to a row. */
+/* Narrow: the button stays — it is the affordance — and wraps under the type
+   rather than being dropped. */
 @media (max-width: 640px) {
-  .mln-reel-cta { display: none; }
+  .mln-reel-bar {
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+  .mln-reel-cta { width: 100%; justify-content: center; }
   .mln-reel-title { font-size: 1.2rem; }
   .mln-reel-strip { gap: 0.4rem; }
   .mln-reel-pola { width: 46px; }
