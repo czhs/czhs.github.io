@@ -6,6 +6,9 @@
 - Chris deploys by **pushing to `main`** (GitHub Actions builds and publishes). When he
   says "push," commit to `main` and push — do not branch (a branch wouldn't deploy).
   He says "push" explicitly when he wants it live.
+- **Exception: MLn syncs push themselves.** "Update the MLn" means sync → preview →
+  commit → push → verify, without waiting for a separate "push" — see
+  [mln.md](mln.md). Everything else on this repo follows the rule above.
 - **Verify the deploy, not just the push.** The live URL is CDN-cached; a fresh
   `curl https://czhs.github.io/...` can show the previous build for minutes after
   `Deploy site` goes green. Confirm against `git show origin/gh-pages:<path>` (the

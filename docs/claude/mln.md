@@ -124,9 +124,9 @@ dividers inside the grid.
 Everything derives from `seasons:` at the top of `_data/mln.yml` — **newest first**,
 each entry just `name` + `start`. A week belongs to the newest season that opened on
 or before it, so seasons need no end date and can't overlap or leave a gap. `start`
-is the boundary, **not necessarily a meeting**: Fall 2026 opens Mon Aug 24, a Monday
-with no session, because that is where the summer/fall break falls. Adding a season
-is one entry; nothing else needs touching.
+is the boundary, **not necessarily a meeting** — it is just the Monday the new
+season starts from: Fall 2026 opens Mon Aug 24, the first Monday after the
+summer/fall break. Adding a season is one entry; nothing else needs touching.
 
 - **Which season is current is derived, never a key**: it is the season of the NEXT
   meeting, not of today's date. That difference is the whole point at a break — for
@@ -193,5 +193,7 @@ their own), then swap the whole `season_recap` block once its reel exists.
    Monday `date`.
 2. Add `_pages/mln_weekN.md` stub.
 3. Audio/photos when they exist (above), with matching tags.
-4. Local preview, then push; verify the deploy per
-   [site-basics.md](site-basics.md).
+4. Local preview, then commit and push — **an MLn update is not finished until it
+   is live**, so this push does not wait on Chris saying "push" (the one carve-out
+   from the rule in [site-basics.md](site-basics.md)). Verify the deploy per that
+   same file.

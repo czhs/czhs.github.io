@@ -11,8 +11,9 @@ contact_email: chrisshi@andrew.cmu.edu
 # The club's seasons, NEWEST FIRST. `start` is the date a season opens on, and
 # a week belongs to the newest season that opened on or before it — so a season
 # needs no end date and the ranges can never overlap or leave a gap. `start` is
-# the season boundary, not necessarily a meeting: Fall 2026 opens on Aug 24, a
-# Monday with no session, because that is where the summer/fall break falls.
+# the season boundary, not necessarily a meeting — it is just the Monday the
+# new season starts from: Fall 2026 opens on Aug 24, the first Monday after
+# the summer/fall break.
 #
 # Two things read this and both are about the club visibly changing phase: the
 # dividers that split the /mln/ grid into seasons, and the recap band above it.
@@ -282,6 +283,24 @@ weeks:
       - title: "Goedel-Prover: A Frontier Model for Open-Source Automated Theorem Proving — Lin, Tang, et al. (Princeton)"
         url: "https://arxiv.org/pdf/2502.07640"
   - num: 14
+    slug: "b097uf0r"
+    evt: "evt-IpxvBcDJUrVWthr"
+    date: "2026-08-24"
+    title: "Inside vLLM: Anatomy of a High-Throughput LLM Inference System"
+    cover: "https://images.lumacdn.com/uploads/yl/5d199919-dc23-4f73-91a3-7a2b858fad7f.png"
+    summary: "How do modern LLM inference engines turn inherently sequential autoregressive generation into a high-throughput serving system? What systems bottlenecks emerge between a single model forward pass and serving thousands of concurrent requests across GPUs and machines?"
+    description: |-
+      How do modern LLM inference engines turn inherently sequential autoregressive generation into a high-throughput serving system? What systems bottlenecks emerge between a single model forward pass and serving thousands of concurrent requests across GPUs and machines?
+
+      Aleksa Gordić’s Inside vLLM is a ground-up tour of the systems machinery behind modern LLM inference. Starting from a single-GPU engine, it explains how vLLM coordinates continuous batching, PagedAttention, and dynamic scheduling to keep GPUs saturated while efficiently managing the rapidly growing KV cache. Requests can enter and leave the batch between decoding steps, while their KV states are stored in fixed-size blocks rather than contiguous memory, allowing the engine to pack many sequences together without padding or large amounts of wasted memory.
+
+      The article then builds outward into the techniques required for production-scale serving: chunked prefills, prefix caching, speculative decoding, prefill/decode disaggregation, tensor and data parallelism, load balancing, and asynchronous serving. Along the way, it exposes a central tension in inference systems: maximizing throughput by batching work together while keeping time-to-first-token and inter-token latency low. The result is a concrete look beneath the abstraction of an LLM API—showing how memory management, GPU kernels, scheduling, parallelism, and distributed-systems design combine to make large-scale model serving possible.
+
+      Join us at CASI for discussion at 8 pm, and (optional) quiet reading from 7 pm.
+    reading:
+      - title: "Inside vLLM: Anatomy of a High-Throughput LLM Inference System — Aleksa Gordić"
+        url: "https://www.aleksagordic.com/blog/vllm"
+  - num: 15
     slug: "5wvhx171"
     evt: "evt-r6zcq5sAFOwiOEh"
     date: "2026-08-31"
@@ -299,7 +318,7 @@ weeks:
     reading:
       - title: "mHC: Manifold-Constrained Hyper-Connections — DeepSeek"
         url: "https://www.arxiv.org/pdf/2512.24880"
-  - num: 15
+  - num: 16
     slug: "srsz8rga"
     evt: "evt-v89wbXHXDCt5bik"
     date: "2026-09-07"
@@ -317,3 +336,21 @@ weeks:
     reading:
       - title: "Attention Residuals: Rethinking Information Flow in LLMs — Kimi Team"
         url: "https://arxiv.org/pdf/2603.15031"
+  - num: 17
+    slug: "4uzwjunv"
+    evt: "evt-yKmrA4UWyIo1FT1"
+    date: "2026-09-14"
+    title: "Goedel-Prover-V2: Scaling Formal Theorem Proving"
+    cover: "https://images.unsplash.com/photo-1675627453075-0f170b02186a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjQyMjF8MHwxfHNlYXJjaHw1MXx8dGhlb3JlbSUyMHByb3Zpbmd8ZW58MHx8fHwxNzg3MDY5MTI2fDA&ixlib=rb-4.1.0&q=80&w=1080"
+    summary: "How does pairing scaffolded data synthesis with verifier-guided self-correction overcome data scarcity in formal theorem proving? Can structured compiler feedback and subproblem generation outperform sheer parameter scaling in complex mathematical reasoning?"
+    description: |-
+      How does pairing scaffolded data synthesis with verifier-guided self-correction overcome data scarcity in formal theorem proving? Can structured compiler feedback and subproblem generation outperform sheer parameter scaling in complex mathematical reasoning?
+
+      Goedel-Prover-V2 addresses data scarcity and output homogenization in Lean 4 formal reasoning through three key innovations: scaffolded data synthesis, verifier-guided self-correction, and weight averaging. Rather than relying on brute-force scaling, it extracts unsolved subgoals from failed proofs to build a progressive synthetic curriculum, while using real-time Lean compiler feedback to iteratively repair incorrect proof steps.
+
+      Empirically, this framework delivers exceptional sample efficiency. The compact 8B model achieves an 84.6% pass@32 on MiniF2F—matching the 80× larger DeepSeek-Prover-V2-671B—while the 32B model sets a new state-of-the-art with 90.4% on MiniF2F and leads PutnamBench with 86 solved problems. The work reframes formal automated reasoning from a parameter-scaling challenge into an interactive, verifier-guided data problem.
+
+      Join us at CASI for discussion at 8 pm, and (optional) quiet reading from 7 pm.
+    reading:
+      - title: "Goedel-Prover-V2: Scaling Formal Theorem Proving with Scaffolded Data Synthesis and Self-Correction — Lin, Tang, et al. (Princeton)"
+        url: "https://arxiv.org/pdf/2508.03613"
