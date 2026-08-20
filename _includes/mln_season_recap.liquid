@@ -6,7 +6,8 @@
   Two rows in one mat panel:
     1. the bar — season, dates, runtime, and the toggle. Click it and the reel
        drops in below. A <details> does that: same device as the hero's "About
-       the club", no JS, keyboard-operable for free.
+       the club", no JS, keyboard-operable for free. The reel itself is a
+       YouTube embed, built on first open (see the body below).
     2. the season's weeks as a row of Luma covers in polaroid frames, one per
        week, each linking to its page. The covers ARE the index — the same art
        the week's card carries below, so the row is recognisable rather than
@@ -60,22 +61,32 @@
         </summary>
         <div class="mln-reel-body">
           {%- comment -%}
-            preload="none" — 13 MB behind a closed bar. Nothing is fetched until
-            the bar is opened, and then only the poster, which is the reel's own
-            end card and already carries the season and the dates.
+            The reel plays from YouTube — the repo doesn't carry the file. The
+            embed is NOT in the markup: a closed <details> hides its children
+            with display:none, and a hidden iframe is fetched anyway (that is
+            exactly the case `loading="lazy"` refuses to defer), so a plain
+            src would pull YouTube's player on every /mln/ load. The script
+            below builds the frame the first time the bar is opened, which
+            keeps the property `preload="none"` gave the local file: nothing
+            goes out until someone asks for the reel. The empty frame is not
+            empty-looking meanwhile — its poster is the CSS background.
+
+            Without JS the <noscript> poster stands in, linking out to the
+            video, so the reel is still reachable — the bar itself stays no-JS.
           {%- endcomment -%}
-          <figure class="mln-reel-frame">
-            <video
-              controls
-              playsinline
-              preload="none"
-              width="1280"
-              height="720"
-              poster="{{ recap.poster | relative_url }}"
-              aria-label="{{ recap.season }} recap reel — {{ recap.line }}"
-            >
-              <source src="{{ recap.video | relative_url }}" type="video/mp4">
-            </video>
+          <figure
+            class="mln-reel-frame"
+            data-embed="https://www.youtube-nocookie.com/embed/{{ recap.youtube }}?rel=0"
+            data-embed-title="{{ recap.season }} recap reel — {{ recap.line }}"
+          >
+            <noscript>
+              <a href="https://www.youtube.com/watch?v={{ recap.youtube }}">
+                <img
+                  src="{{ recap.poster | relative_url }}"
+                  alt="{{ recap.season }} recap reel — {{ recap.line }}"
+                >
+              </a>
+            </noscript>
           </figure>
         </div>
       </details>
@@ -112,5 +123,35 @@
         </nav>
       {%- endif -%}
     </div>
+    {%- comment -%}
+      Build the embed on first open, drop it on close. Two reasons it creates
+      the element instead of filling in a `src` that is already on the page:
+      navigating an existing iframe adds a session-history entry (Back would
+      land on the reel instead of the previous page), while an iframe inserted
+      with its src already set does not; and removing the frame on close stops
+      the reel, where a hidden <video>/player just keeps playing out of sight.
+    {%- endcomment -%}
+    <script>
+      (function () {
+        var fold = document.currentScript.parentNode.querySelector('.mln-reel-fold');
+        var frame = fold && fold.querySelector('.mln-reel-frame');
+        if (!frame) return;
+        fold.addEventListener('toggle', function () {
+          var embed = frame.querySelector('iframe');
+          if (!fold.open) {
+            if (embed) embed.remove();
+            return;
+          }
+          if (embed) return;
+          embed = document.createElement('iframe');
+          embed.title = frame.dataset.embedTitle;
+          embed.allow = 'accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+          embed.referrerPolicy = 'strict-origin-when-cross-origin';
+          embed.allowFullscreen = true;
+          embed.src = frame.dataset.embed;
+          frame.appendChild(embed);
+        });
+      })();
+    </script>
   </li>
 {%- endif -%}

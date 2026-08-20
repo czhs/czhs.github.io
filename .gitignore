@@ -27,3 +27,7 @@ _config_local.yml
 /assets/video/robotics/
 /assets/img/ml/
 /assets/video/ml/
+
+# Season recap reels play from YouTube (see docs/claude/mln.md) — the repo only
+# carries the poster still. The local encode stays on disk, uncommitted.
+/assets/video/mln/*-recap.mp4

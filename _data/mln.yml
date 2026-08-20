@@ -35,7 +35,7 @@ season_recap:
   season: "Summer 2026"
   line: "13 Mondays · May 18 — Aug 17 · Pittsburgh"
   length: "1:26"
-  video: "/assets/video/mln/summer-2026-recap.mp4"
+  youtube: "5vM8lx6F-a8"
   poster: "/assets/img/mln/summer-2026-recap-poster.jpg"
 weeks:
   - num: 1

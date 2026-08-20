@@ -144,7 +144,7 @@ summer/fall break. Adding a season is one entry; nothing else needs touching.
   with `display: block`, so a flex `li` loses its layout when revealed.
 - **Recap bar** (`_includes/mln_season_recap.liquid`, `.mln-reel-*`): emitted by the
   divider include, so a season's heading and its reel arrive together. `season_recap`
-  is `season, line, length, video, poster`; `season` must match a name in `seasons:`.
+  is `season, line, length, youtube, poster`; `season` must match a name in `seasons:`.
   It is a **bar, not a panel** — ~185px shut. One mat holding two rows: the clickable
   bar (a `<details>`, same device as the hero's "About the club" — no JS, keyboard
   free; its toggle is a filled **pill button** — as plain type with an arrow it read as
@@ -165,27 +165,39 @@ summer/fall break. Adding a season is one entry; nothing else needs touching.
   by `aspect-ratio` collapsed for some covers and the prints came out mixed heights.
 - **All strings are the reel's own on-screen copy** ([content-rules](content-rules.md)) —
   `line` is the reel's caption card verbatim. Don't write new copy for the bar.
-- Chris cuts the reel more than one way (a 1080x1920 vertical, a 1920x1080 wide) and
-  the sources are enormous — 77 MB and 132 MB have both landed. **The bar runs the
-  wide cut.** Encode `-vf scale=1280:720 -crf 25 -preset slow -movflags +faststart`,
-  aac 96k → ~10 MB. Keep crf ≤ 26: the dark paper **grain is the look**, and crf 28
-  halves the file but flattens it to banding. Committed to `assets/video/mln/`
-  (published, unlike the audio) with `preload="none"` behind the shut bar — nothing is
-  fetched until it is opened; poster is a still of the reel's own end card
-  (`ffmpeg -ss <t> … -vf scale=1280:720` → `magick -quality 82 -strip`).
-- **Keep the `<video>` `width`/`height` attributes in step with the file.** Swapping
-  the vertical cut for the wide one left a stale `810x1440` pair on the element, and
-  that intrinsic ratio beat the CSS `aspect-ratio` — the frame rendered square. The
-  attributes are what carry the ratio; CSS just sets `width: 100%; height: auto`.
+- **The reel plays from YouTube — the repo does not carry the file.** Chris cuts it
+  more than one way (a 1080x1920 vertical, a 1920x1080 wide) and the sources are
+  enormous — 77 MB and 132 MB have both landed. **The bar runs the wide cut**, so
+  upload that one and put its id in `youtube:` (id only, not the watch URL). Nothing
+  else is committed but the poster — a still of the reel's own end card
+  (`ffmpeg -ss <t> … -vf scale=1280:720` → `magick -quality 82 -strip`), which is the
+  frame's CSS background while the player paints and the `<noscript>` fallback image.
+  `assets/video/mln/*-recap.mp4` is gitignored so a local encode can't drift back in.
+  A self-hosted 10 MB cut is what this replaced; don't re-add one.
+- **The embed is built in JS on first open, and torn down on close — don't "simplify"
+  it to a plain `<iframe src>` in the markup.** Three reasons, each learned the hard
+  way: a closed `<details>` hides its children with `display: none`, and a hidden
+  iframe is fetched anyway (that is the one case `loading="lazy"` refuses to defer),
+  so a static src would pull YouTube's player on every `/mln/` load — the deferral is
+  what keeps the property `preload="none"` gave the local file. Navigating an iframe
+  that is already on the page adds a session-history entry, so Back would land on the
+  reel instead of the previous page; an iframe inserted with its src already set does
+  not. And removing it on close stops playback, where a hidden player just keeps
+  going out of sight. The `<summary>` toggle itself is still no-JS; without JS the
+  `<noscript>` poster links out to the video.
+- **The frame carries the 16:9 itself** (`aspect-ratio` on `.mln-reel-frame`, iframe
+  at `width/height: 100%`). An iframe has no intrinsic ratio — the old `<video>` read
+  one off its `width`/`height` attrs, and a stale `810x1440` pair there once beat the
+  CSS and rendered the frame square. The tall-window cap runs through the frame's
+  `max-width` (`calc(74vh * 16 / 9)`): a `max-height` fights `aspect-ratio` and wins.
 - Bar colours are **sampled from the reel, not the theme** — the micro-site's pinned
   green is close enough to the reel's that the video would have no visible edge, so
   the mat is one step darker (`--mln-mat`) with the reel on its true ground
   (`--mln-ground`). It deliberately doesn't track the theme vars; don't "fix" that.
-- Seeking won't work against `python3 -m http.server` (it ignores `Range`) — that's
-  the preview server, not the file. Pages serves Range fine.
 
 Next season: add its entry to `seasons:` (the dividers and the "now" marker follow on
-their own), then swap the whole `season_recap` block once its reel exists.
+their own), then upload that season's wide cut and swap the whole `season_recap`
+block once its reel exists.
 
 ## Adding a brand-new week, end to end
 

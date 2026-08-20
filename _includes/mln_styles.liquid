@@ -454,25 +454,34 @@ body.mln-site { padding: 0; }
   padding: 0.35rem 0.95rem 1.1rem;
 }
 .mln-reel-fold[open] .mln-reel-bar { border-bottom: 1px solid rgba(233, 227, 210, 0.14); }
+/* The wide cut, so this is width-driven and 16:9 — it fills the mat the way the
+   bar above it does. The frame carries the ratio itself now: the embed is an
+   iframe built in JS on first open, and an iframe has no intrinsic ratio to
+   read one off (the local file's width/height attrs used to supply it). Height
+   is still capped for short landscape windows — against `aspect-ratio` the cap
+   has to run through max-width, or it fights the ratio and wins.
+   The poster shows through until the player paints, so the frame doesn't open
+   on a black box; it is also what the <noscript> fallback image lies on. */
 .mln-reel-frame {
   margin: 0;
   width: 100%;
+  max-width: calc(74vh * 16 / 9);
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--mln-ground) center / cover no-repeat;
+  {%- assign recap_poster = site.data.mln.season_recap.poster -%}
+  {%- if recap_poster %}
+  background-image: url("{{ recap_poster | relative_url }}");
+  {%- endif %}
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
-/* The wide cut, so this is width-driven and 16:9 — it fills the mat the way the
-   bar above it does. The ratio comes from the element's own width/height attrs
-   (keep them in step with the file: a stale 9:16 pair there beat `aspect-ratio`
-   here and the frame came out square). Height is still capped for short
-   landscape windows, with object-fit so that cap letterboxes rather than
-   stretches. */
-.mln-reel-frame video {
+.mln-reel-frame iframe,
+.mln-reel-frame img {
   display: block;
   width: 100%;
-  height: auto;
-  max-height: 74vh;
-  object-fit: contain;
-  border-radius: 10px;
-  background: var(--mln-ground);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  height: 100%;
+  border: 0;
 }
 
 /* The season's weeks, as prints laid along the bottom of the mat: each is the
