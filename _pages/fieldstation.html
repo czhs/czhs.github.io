@@ -1,0 +1,141 @@
+---
+layout: default
+permalink: /fieldstation/
+title: Field Station
+description: A local-first research notebook that runs coding agents against its own repository, and the containment built around them.
+date: 2026-08-19
+nav: false
+sitemap: false
+rzine: true
+standalone_title: "Field Station"
+---
+{%- comment -%}
+  Orphan, password-gated page. Not in the nav, not in the sitemap, not in site
+  search (search.liquid.js indexes only `nav: true` pages), and not on the
+  /research listing (research_index iterates site.research, and this lives in
+  _pages). Nothing links to it.
+
+  Self-contained rather than reusing _layouts/research_locked.html for one
+  reason: that layout keeps the shared /research password in sessionStorage
+  under `research_pw` and auto-attempts it on load. This page has its OWN
+  password, so reusing that key would (a) auto-fail here with the shared one and
+  (b) overwrite the visitor's stored shared password with this page's, silently
+  breaking auto-unlock across every /research entry for the rest of the tab
+  session. One page, one gate, no persistence.
+
+  `rzine: true` switches on the zine treatment in _layouts/default.liquid and
+  _includes/zine_palette.liquid (Figtree + the .rzine palette), and suppresses
+  zine_foot.liquid — hence the local footer below, which also drops the
+  "research index" link that research_foot.liquid carries.
+
+  Plaintext lives OUTSIDE this repo. Master: see docs/claude/research-posts.md
+  for the archive location convention.
+{%- endcomment -%}
+
+{% include research_styles.liquid %}
+
+<div class="rzine">
+  <div class="rzine-card">
+    <header class="post-header">
+      <h1 class="post-title">{{ page.title }}</h1>
+      {% if page.description %}
+        <p class="post-desc">{{ page.description }}</p>
+      {% endif %}
+      <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}</p>
+    </header>
+
+    <section class="rlock" id="rlock">
+      <form class="rzine-gate" id="rlock-gate" autocomplete="off">
+        <p class="rzine-lock">locked</p>
+        <div class="rzine-row">
+          <input
+            class="rzine-input"
+            id="rlock-pw"
+            type="password"
+            name="rlock-pw"
+            placeholder="password"
+            aria-label="password"
+            autocomplete="off"
+            autocapitalize="off"
+            autocorrect="off"
+            spellcheck="false"
+          >
+          <button class="rzine-btn" type="submit">open</button>
+        </div>
+        <p class="rzine-msg" id="rlock-msg" role="status" aria-live="polite"></p>
+      </form>
+      <article class="post-content rzine-content" id="rlock-content" hidden></article>
+    </section>
+  </div>
+
+  <div class="zine-foot rzine-foot">
+    <span>&copy; {{ 'now' | date: "%Y" }} {{ site.first_name }} {{ site.last_name }}</span>
+    <span class="zf-spacer"><a href="{{ '/' | relative_url }}">chrisshi.com</a></span>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var PAYLOAD_URL = "{{ '/assets/enc/fieldstation.json' | relative_url }}";
+
+    var gate = document.getElementById("rlock-gate");
+    var pw = document.getElementById("rlock-pw");
+    var msg = document.getElementById("rlock-msg");
+    var content = document.getElementById("rlock-content");
+
+    function b64(s) {
+      return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); });
+    }
+
+    var payload = null;
+    function getPayload() {
+      if (payload) return Promise.resolve(payload);
+      return fetch(PAYLOAD_URL)
+        .then(function (r) { return r.json(); })
+        .then(function (p) { payload = p; return p; });
+    }
+
+    function decrypt(password) {
+      return getPayload().then(function (p) {
+        var subtle = window.crypto.subtle;
+        return subtle
+          .importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"])
+          .then(function (km) {
+            return subtle.deriveKey(
+              { name: "PBKDF2", salt: b64(p.salt), iterations: p.iter, hash: "SHA-256" },
+              km,
+              { name: "AES-GCM", length: 256 },
+              false,
+              ["decrypt"]
+            );
+          })
+          .then(function (key) {
+            return subtle.decrypt({ name: "AES-GCM", iv: b64(p.iv) }, key, b64(p.ct));
+          })
+          .then(function (buf) { return JSON.parse(new TextDecoder().decode(buf)); });
+      });
+    }
+
+    gate.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!window.crypto || !window.crypto.subtle) {
+        msg.textContent = "this browser can't decrypt here — try https.";
+        return;
+      }
+      // The payload is a few megabytes and PBKDF2 runs 300k iterations, so the
+      // gap between submit and paint is seconds, not milliseconds. Say so.
+      msg.textContent = "decrypting…";
+      decrypt(pw.value).then(
+        function (data) {
+          content.innerHTML = data.html;
+          gate.hidden = true;
+          content.hidden = false;
+        },
+        function () {
+          msg.textContent = "not it.";
+          pw.select();
+        }
+      );
+    });
+  })();
+</script>

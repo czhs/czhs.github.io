@@ -15,7 +15,10 @@ Workflow to (re)publish an entry:
   4. restore the locked stub .md (layout: research_locked + enc_payload path),
   5. commit assets/enc/research-<slug>.json + the stub. Never commit plaintext.
 
-Usage: python3 bin/research_lock.py <slug> <password>
+Usage: python3 bin/research_lock.py <slug> <password> [src_html] [dest_json]
+
+src_html/dest_json default to the /research collection paths above; pass them to
+gate a one-off page that lives outside the collection.
 """
 
 import base64
@@ -30,7 +33,12 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 slug, password = sys.argv[1], sys.argv[2]
 site = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-html = open(f"{site}/_site/research/{slug}/index.html").read()
+# Both paths are overridable so a one-off gated page outside the _research
+# collection (an orphan under _pages/ with its own password) can reuse this
+# encryptor unchanged. Omit them and the /research defaults apply exactly as
+# before — every existing 2-arg invocation is byte-for-byte unaffected.
+src = sys.argv[3] if len(sys.argv) > 3 else f"{site}/_site/research/{slug}/index.html"
+html = open(src).read()
 # Match the opening tag by prefix, not by an exact string: the zine layouts
 # render `class="post-content rzine-content"`, and an exact match on
 # `<article class="post-content">` silently stopped finding the body.
@@ -72,6 +80,6 @@ out = {
     "ct": base64.b64encode(ct).decode(),
 }
 os.makedirs(f"{site}/assets/enc", exist_ok=True)
-dest = f"{site}/assets/enc/research-{slug}.json"
+dest = sys.argv[4] if len(sys.argv) > 4 else f"{site}/assets/enc/research-{slug}.json"
 json.dump(out, open(dest, "w"))
 print(f"wrote {dest} ({len(ct)} ct bytes, body {len(body)} chars)")

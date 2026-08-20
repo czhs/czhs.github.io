@@ -344,15 +344,32 @@
     font-size: 0.85rem;
     line-height: 1.7;
     color: var(--rz-card);
-    background: transparent;
     border: 0;
-    margin: 0;
     padding: 1rem 1.25rem 1.15rem;
     overflow-x: auto;
   }
 
+  /* `background`/`margin` reset only the INNER pre of a rouge wrapper. A
+     pre.rz-term IS the wrapper, so applying them to it too (same specificity,
+     later in the sheet) blanked its dark slab and its vertical rhythm —
+     near-white text on the card, i.e. invisible. Kept separate. */
+  .rzine-content div.highlighter-rouge pre,
+  .rzine-content figure.highlight pre {
+    background: transparent;
+    margin: 0;
+  }
+
   .rzine-content pre.rz-term {
     padding-top: 0;
+  }
+
+  /* A div.highlighter-rouge carries its padding on the inner <pre>, so the
+     chrome bar reaches the slab edges for free. A pre.rz-term IS the padded
+     box, so its ::before is inset by that same 1.25rem on both sides and the
+     bar floats with dark gutters either side. Pull it back out. */
+  .rzine-content pre.rz-term::before {
+    margin-left: -1.25rem;
+    margin-right: -1.25rem;
   }
 
   /* al-folio's global `code` rule sets white-space:normal and its own mono
