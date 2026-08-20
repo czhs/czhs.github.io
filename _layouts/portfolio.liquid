@@ -26,12 +26,24 @@ layout: portfolio_base
     {% if r.about and r.about != '' %}
       <p class="rbx-about">{{ r.about }}</p>
     {% endif %}
-    {% if r.about2 and r.about2 != '' %}
-      <p class="rbx-about">{{ r.about2 }}</p>
-    {% endif %}
     {% if r.under_construction -%}
       <span class="rbx-uc">Under construction</span>
     {%- endif %}
+
+    {% comment %}
+      What this person can do, stated once. Run-in labels rather than a list, so
+      four areas cost four lines of column instead of a screenful.
+    {% endcomment %}
+    {% if r.skills and r.skills != empty %}
+      <dl class="rbx-skills">
+        {% for s in r.skills %}
+          <div class="rbx-skill">
+            <dt class="rbx-skill-label">{{ s.label }}</dt>
+            <dd class="rbx-skill-items">{{ s.items }}</dd>
+          </div>
+        {% endfor %}
+      </dl>
+    {% endif %}
 
     {% comment %}
       The page no longer fits one screen, so the sidebar carries a

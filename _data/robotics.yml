@@ -16,17 +16,23 @@ about: >-
   I'm fascinated by the hardware of thinking. For fun, I work on animating robots
   (<a href="https://thewaltdisneycompany.com/news/behind-the-bdx-droids/"
   target="_blank" rel="noopener">like these</a>).
-# Assembled from real phrases on this site: the duck blurb ("bare servos"),
-# the pie specs ("self-designed 3D-printed mounts"), the gantry page
-# (steppers/breadboard), the TartanIMU page ("learned inertial odometry",
-# AirLab), and MLn paper titles (Transformer Circuits, Towards Monosemanticity,
-# Inside vLLM, Goedel-Prover). Chris's to reword.
-about2: >-
-  The projects here start at bare servos — soldering, wiring, self-designed
-  3D-printed mounts, steppers on a breadboard — and run up to learned inertial
-  odometry in the AirLab at Carnegie Mellon. Every week I also read ML papers
-  with a reading group: lately transformer circuits, monosemanticity, the
-  anatomy of vLLM, and formal theorem proving.
+# Sidebar capability summary — this site is shared with people hiring, so it
+# states the range plainly instead of burying it in the write-ups. EVERY item is
+# backed by a project page here: MuJoCo/expressive motion and the servo-limit
+# check from the Duck renders, teleoperation and biped bring-up from the Duck
+# build, the quadruped from Robot Dog, training/metrics/demo from TartanIMU,
+# electronics from the Gantry and Pie pages, CAD and drives from the Gantry.
+# Nothing claims more than the portfolio shows. Order = what to read first.
+# Chris's to reword; keep each `items` to about two lines at 300px.
+skills:
+  - label: Robot behavior
+    items: expressive motion in MuJoCo, teleoperation, biped and quadruped bring-up
+  - label: Machine learning
+    items: LSTM and transformer training in Python, dataset pipelines, a live public demo
+  - label: Electronics
+    items: soldering, ESP32 and Raspberry Pi, servo and stepper drive, IMUs
+  - label: Mechanical
+    items: self-designed CAD through to printed, assembled parts; V-slot machines
 under_construction: false
 # Sidebar links (bottom of the left column). External links open in a new tab.
 links:

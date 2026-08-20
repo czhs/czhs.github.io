@@ -32,8 +32,16 @@
     padding: 2.75rem 2.75rem 4.5rem;
   }
 
-  /* ── sidebar ──────────────────────────────────────────────────── */
+  /* ── sidebar ──────────────────────────────────────────────────────
+     The column carries the whole identity — name, capabilities, an index of
+     the grid, and the links — and it has to do that inside one screen without
+     a scrollbar of its own. So its vertical rhythm is measured in vh: every
+     gap and the display sizes shrink with the viewport instead of stacking up
+     past the fold. `overflow-y: auto` stays only as a floor for genuinely tiny
+     windows and large accessibility text sizes, where clipping the links would
+     be worse than a scrollbar. */
   .rbx-side {
+    --sgap: clamp(0.85rem, 2.1vh, 1.9rem);
     position: sticky;
     top: 2.25rem;
     align-self: start;
@@ -46,7 +54,7 @@
   .rbx-mark-link {
     display: inline-flex;
     color: var(--global-theme-color);
-    margin-bottom: 1.9rem;
+    margin-bottom: var(--sgap);
   }
   .rbx-mark {
     display: block;
@@ -58,25 +66,25 @@
   .rbx-name {
     font-family: var(--mono);
     font-weight: 800;
-    font-size: 2.45rem;
+    font-size: clamp(1.85rem, 3.9vh, 2.45rem);
     line-height: 1.05;
     letter-spacing: -0.02em;
-    margin: 0 0 0.9rem;
+    margin: 0 0 0.55rem;
     color: var(--global-text-color);
   }
   .rbx-sub {
-    font-size: 0.96rem;
-    line-height: 1.5;
+    font-size: 0.94rem;
+    line-height: 1.45;
     color: var(--global-text-color);
     opacity: 0.62;
     margin: 0;
     max-width: 22rem;
   }
   .rbx-about {
-    font-size: 0.86rem;
-    line-height: 1.62;
+    font-size: 0.84rem;
+    line-height: 1.55;
     opacity: 0.6;
-    margin: 0.9rem 0 0;
+    margin: 0.6rem 0 0;
   }
   .rbx-about a {
     color: inherit;
@@ -99,25 +107,57 @@
     opacity: 0.85;
   }
 
+  /* capabilities: run-in labels, so each area costs one paragraph, not a block */
+  .rbx-skills {
+    margin: var(--sgap) 0 0;
+  }
+  .rbx-skill {
+    font-size: clamp(0.73rem, 1.6vh, 0.78rem);
+    line-height: 1.45;
+    margin-bottom: clamp(0.24rem, 0.55vh, 0.34rem);
+  }
+  .rbx-skill:last-child {
+    margin-bottom: 0;
+  }
+  .rbx-skill-label {
+    display: inline;
+    margin-right: 0.4rem;
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--global-theme-color);
+    opacity: 0.95;
+  }
+  html[data-theme='dark'] .rbx-skill-label {
+    opacity: 0.85;
+  }
+  .rbx-skill-items {
+    display: inline;
+    margin: 0;
+    opacity: 0.58;
+  }
+
   /* numbered index of the page — the grid outgrew one screen */
   .rbx-manifest {
-    margin-top: 2.1rem;
+    margin-top: var(--sgap);
   }
   .rbx-manifest-h,
   .rbx-tocrail-h {
     font-family: var(--mono);
-    font-size: 0.64rem;
+    font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     opacity: 0.45;
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.35rem;
   }
   .rbx-manifest-row {
     display: grid;
     grid-template-columns: 1.9rem minmax(0, 1fr);
     align-items: baseline;
-    padding: 0.42rem 0;
+    padding: clamp(0.22rem, 0.5vh, 0.42rem) 0;
     color: var(--global-text-color);
     text-decoration: none;
   }
@@ -130,7 +170,7 @@
       opacity 0.15s ease;
   }
   .rbx-manifest-title {
-    font-size: 0.92rem;
+    font-size: clamp(0.83rem, 1.8vh, 0.89rem);
     font-weight: 500;
     opacity: 0.82;
     transition:
@@ -151,22 +191,28 @@
     opacity: 1;
   }
 
-  /* link list */
+  /* Links in two columns: five stacked rows cost a fifth of the column height,
+     which is the difference between this sidebar fitting a laptop screen and
+     not. An odd last link spans the pair so the hairline rules stay even. */
   .rbx-links {
-    display: flex;
-    flex-direction: column;
-    margin-top: 2.1rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.1rem;
+    margin-top: var(--sgap);
   }
   .rbx-link {
-    padding: 0.8rem 0;
+    padding: clamp(0.38rem, 0.85vh, 0.72rem) 0;
     border-top: 1px solid var(--global-divider-color);
     color: var(--global-text-color);
     text-decoration: none;
-    font-size: 0.94rem;
+    font-size: clamp(0.83rem, 1.85vh, 0.9rem);
     opacity: 0.85;
     transition:
       opacity 0.15s ease,
       color 0.15s ease;
+  }
+  .rbx-link:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
   .rbx-link:hover {
     opacity: 1;
