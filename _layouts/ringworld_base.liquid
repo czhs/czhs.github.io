@@ -19,7 +19,11 @@
           under your cursor again.
         {%- endcomment -%}
         <nav class="rw-topnav">
-          <a href="{{ site.data.ringworld.calendar_url }}?utm_source=czhs" target="_blank" rel="noopener">Luma ↗</a>
+          {%- comment -%}
+            STATIC-LANDING MODE: the Luma link is dropped for now — the pill is
+            the only nav item, and it is still LAST, so the pixel contract with
+            MLn's masthead holds.
+          {%- endcomment -%}
           {%- comment -%}
             The label is MLn's own lettering, not type — same rule as both
             brands. It is an alpha mask, so the accessible name comes from
@@ -56,7 +60,7 @@
         <span class="rw-foot-dot">·</span>
         <span>Pittsburgh · Sundays 4–7pm</span>
         <span class="rw-foot-dot">·</span>
-        <span>hosted by <a href="{{ site.data.ringworld.host_url }}" target="_blank" rel="noopener">CASI ↗</a></span>
+        <span>a <a href="{{ site.data.ringworld.socratica_url }}" target="_blank" rel="noopener">Socratica node ↗</a></span>
         <a class="rw-foot-by" href="{{ '/' | relative_url }}">by Chris Shi</a>
       </div>
     </footer>

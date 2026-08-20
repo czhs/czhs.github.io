@@ -322,13 +322,11 @@ html:has(body.rw-site) {
   margin: 0 0 1rem;
 }
 
-/* One row instead of stacked full-width bands. The toggle is in normal flow at
-   the left; the chips are pinned to the top-right and out of it. That is what
-   keeps the summary still when the panel opens — in a flex row the toggle got
-   pushed to another line, so the spot that opened the panel was not the spot
-   that closed it. */
+/* Chips, then the always-open About grid, one hairline under the whole block.
+   The "About ringworld" <details> toggle — and the absolute chip pinning that
+   existed to keep its summary still — was retired 2026-08-20: the page is
+   info-only now, so there is nothing to expand. */
 .rw-metarow {
-  position: relative;
   margin: 0 0 1.7rem;
   padding-bottom: 0.55rem;
   border-bottom: 1px solid var(--rw-line);
@@ -336,24 +334,9 @@ html:has(body.rw-site) {
   font-size: 0.79rem;
 }
 .rw-metachips {
-  position: absolute;
-  top: 0;
-  right: 0;
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
-  /* Out of flow, so nothing stops these colliding with the toggle — and the
-     shell is capped at 940px, so no breakpoint helps. Reserve the toggle's
-     width; an overrun then wraps at the right rather than sliding under it. */
-  max-width: calc(100% - 180px);
   gap: 0.5rem;
-}
-@media (max-width: 760px) {
-  .rw-metachips {
-    position: static;
-    flex-wrap: wrap;
-    margin-top: 0.65rem;
-  }
 }
 .rw-chip {
   display: inline-flex;
@@ -372,52 +355,7 @@ html:has(body.rw-site) {
 }
 .rw-metarow a:hover { text-decoration: underline; }
 
-/* ── "What's this?" ───────────────────────────────────────── */
-.rw-faq {
-  margin: 0;
-  border: none;
-}
-/* Styled as a pill so it reads as something you press — as bare text with a
-   chevron, people didn't see there was anything to open. */
-.rw-faq summary {
-  cursor: pointer;
-  list-style: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  /* matches the chip height so the toggle and the chips share one band */
-  min-height: 28px;
-  padding: 0.2rem 0.85rem 0.2rem 0.7rem;
-  border: 1px solid var(--rw-card-line);
-  border-radius: 999px;
-  background: var(--rw-card);
-  font-family: var(--rw-display);
-  font-weight: 600;
-  font-size: 0.84rem;
-  transition: border-color 0.15s ease, color 0.15s ease;
-}
-.rw-faq summary:hover,
-.rw-faq[open] summary {
-  border-color: var(--rw-ring);
-  color: var(--rw-ring);
-}
-.rw-faq summary::-webkit-details-marker { display: none; }
-/* Drawn rather than the "›" glyph: the character's ink sits above its own
-   optical centre, so it never lined up with the label at any line-height. A
-   bordered square rotated 45° is centred by construction. */
-.rw-faq summary::before {
-  content: "";
-  display: block;
-  width: 5px;
-  height: 5px;
-  margin-right: 0.15rem;
-  border-right: 1.5px solid var(--rw-ring);
-  border-bottom: 1.5px solid var(--rw-ring);
-  transform: rotate(-45deg);
-  transition: transform 0.15s ease;
-}
-.rw-faq[open] summary::before { transform: rotate(45deg); }
-
+/* ── "What's this?" — the always-open About grid ───────────── */
 .rw-about {
   columns: 3 230px;
   column-gap: 2.1rem;

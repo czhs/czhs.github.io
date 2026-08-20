@@ -3,7 +3,7 @@ layout: ringworld_base
 permalink: /ringworld/
 title: ringworld
 standalone_title: ringworld
-description: A friendly community of tinkerers in Pittsburgh, PA — we meet every Sunday near CMU to work on side projects in AI safety and interpretability, hosted by CASI. Poets, writers, artists and policy folks are every bit as welcome.
+description: A friendly community of tinkerers in Pittsburgh, PA — we meet every Sunday near CMU to work on the things we don't normally have time for. A Socratica node.
 og_image: /assets/img/ringworld/og.png
 nav: false
 ---
@@ -20,24 +20,16 @@ nav: false
 <div class="rw-shell">
   <section class="rw-hero">
     {%- comment -%}
-      One subject, stated plainly. This used to cycle through the club's
-      neighbouring fields; the rotator and the `subjects:` list are gone. Interp
-      is still the centre of gravity — the room just isn't advertised as five
-      different rooms.
+      One identity, stated plainly. The hero stays plain text — Socratica is
+      linked from the About panel and the footer, not from the title.
     {%- endcomment -%}
-    <h1 class="rw-hero-title">A weekly maker space for <em>AI safety</em>.</h1>
+    <h1 class="rw-hero-title">A <em>Socratica node</em> in Pittsburgh.</h1>
+    <p class="rw-hero-lead">{{ site.data.ringworld.blurb }}</p>
     {%- comment -%}
-      CASI is linked here but left plain in the data file, which also feeds the
-      page description meta — that one has to stay markup-free.
-    {%- endcomment -%}
-    {%- capture casi_link -%}<a href="{{ site.data.ringworld.host_url }}" target="_blank" rel="noopener">CASI</a>{%- endcapture -%}
-    <p class="rw-hero-lead">{{ site.data.ringworld.blurb | replace: 'CASI', casi_link }}</p>
-    {%- comment -%}
-      One row instead of stacked full-width bands. The toggle is in flow at the
-      left and the chips are pinned to the top-right, so opening the panel grows
-      the row downward without moving the summary — the same spot opens and
-      closes it. No Luma link here; the masthead already has one, and it had
-      reached three on this page.
+      Info-only page, so the About content is always in view — the
+      "About ringworld" <details> toggle was retired 2026-08-20 with the
+      static-landing rework (the info IS the page now; nothing to expand).
+      Chips first, then the panel, one hairline under the whole block.
     {%- endcomment -%}
     <div class="rw-metarow">
       <span class="rw-metachips">
@@ -45,23 +37,21 @@ nav: false
         <span class="rw-chip">location: {{ site.data.ringworld.location }}</span>
       </span>
 
-    <details class="rw-faq">
-      <summary>About ringworld</summary>
-      <div class="rw-about">
+      <section class="rw-about" aria-label="About ringworld">
         <div class="rw-about-sec">
           <h2 class="rw-about-h">What’s this?</h2>
           <ul>
             <li>A super warm group of folks working on things we don’t normally have time for!</li>
-            <li>The project you work on can be anything! ex. probing a model, writing a poem, coding an app, making beats, painting shoes — as long as it’s something you’re not obligated to do (i.e. no school work if you’re a student, no job work if you’re employed)</li>
+            <li>The project you work on can be anything! ex. building a robot, writing a poem, coding an app, making beats, painting shoes — as long as it’s something you’re not obligated to do (i.e. no school work if you’re a student, no job work if you’re employed)</li>
             <li>At the end, we have a show-and-tell option for people to talk about what they did</li>
           </ul>
         </div>
         <div class="rw-about-sec">
           <h2 class="rw-about-h">When / Where</h2>
           <ul>
-            <li>{{ site.data.ringworld.location }} — {{ site.data.ringworld.location_note }}</li>
+            <li>{{ site.data.ringworld.location }}{% if site.data.ringworld.location_note != "" %} — {{ site.data.ringworld.location_note }}{% endif %}</li>
             <li>4 PM, every Sunday</li>
-            <li>Hosted by <a href="{{ site.data.ringworld.host_url }}" target="_blank" rel="noopener">{{ site.data.ringworld.host }} ↗</a></li>
+            <li>A <a href="{{ site.data.ringworld.socratica_url }}" target="_blank" rel="noopener">Socratica node ↗</a></li>
           </ul>
         </div>
         <div class="rw-about-sec">
@@ -93,77 +83,16 @@ nav: false
             <li>Bring snacks if you’re feeling kind!</li>
           </ul>
         </div>
-      </div>
-    </details>
+      </section>
     </div>
   </section>
 
   {%- comment -%}
-    The blog is the page. Everything above is context for it; the sessions strip
-    below is the invitation to come make the next one.
+    STATIC-LANDING MODE (2026-08-20): the page stops at the hero. The blog feed
+    and the Luma sessions strip that used to render here are parked — their
+    markup is in git history (this file, pre-2026-08-20), the includes and
+    layouts are still in the repo, and the data still lives in
+    _data/ringworld.yml. Restore the sections when the club is running publicly
+    again.
   {%- endcomment -%}
-  <section class="rw-sec">
-    {%- assign posts = site.ringworld | sort: "date" | reverse -%}
-    <div class="rw-sec-head">
-      <h2 class="rw-sec-title">the ringworld</h2>
-      <span class="rw-sec-note">projects from the ringworld!</span>
-      {%- if posts.size > 3 -%}
-      <a class="rw-sec-link" href="{{ '/ringworld/projects/' | relative_url }}">go to the ringworld →</a>
-      {%- endif -%}
-    </div>
-
-    {%- if posts.size > 0 -%}
-      {%- comment -%}
-        Three across, one row. The rest live on /ringworld/projects/ — the row is
-        a taste of the range, not the archive.
-      {%- endcomment -%}
-      <ul class="rw-feed is-row">
-        {%- for p in posts limit: 3 -%}
-          {% include ringworld_post_card.liquid p=p %}
-        {%- endfor -%}
-      </ul>
-    {%- else -%}
-      <div class="rw-empty">
-        <img class="rw-empty-art" src="{{ '/assets/img/ringworld/sprites/crystal.png' | relative_url }}" alt="" aria-hidden="true" decoding="async" />
-        <div>
-          <p class="rw-empty-lead">Nothing here yet — the first session hasn’t happened.</p>
-          <p class="rw-empty-note">
-            Whatever you make at ringworld can go up here: a writeup, a plot, a demo, a
-            couple of paragraphs about what didn’t work. {{ site.data.ringworld.share_note }}
-          </p>
-        </div>
-      </div>
-    {%- endif -%}
-  </section>
-
-  <section class="rw-sec">
-    {%- comment -%}
-      The flip hint belongs here, not on each card: it applies to the whole row.
-      Only shown when a session actually has a photo to flip to.
-    {%- endcomment -%}
-    {%- assign with_photo = site.data.ringworld.sessions | where_exp: "s", "s.photo" -%}
-    <div class="rw-sec-head">
-      <h2 class="rw-sec-title">sessions</h2>
-      <span class="rw-sec-note">click to open on Luma{% if with_photo.size > 0 %}<span class="is-hover-only"> · hover to see photos</span>{% endif %}</span>
-    </div>
-
-    {%- comment -%}
-      Next session first, then the rest of the upcoming ones, then past sessions
-      newest-first. The strip scrolls sideways rather than wrapping, so a long
-      history never pushes the blog off the top of the page.
-    {%- endcomment -%}
-    {%- assign today_str = site.time | date: "%Y-%m-%d" -%}
-    {%- assign upcoming = site.data.ringworld.sessions | where_exp: "s", "s.date >= today_str" | sort: "date" -%}
-    {%- assign past = site.data.ringworld.sessions | where_exp: "s", "s.date < today_str" | sort: "date" | reverse -%}
-    {%- assign next_slug = upcoming.first.slug -%}
-
-    <ul class="rw-strip">
-      {%- for s in upcoming -%}
-        {% include ringworld_card.liquid s=s today_str=today_str next_slug=next_slug %}
-      {%- endfor -%}
-      {%- for s in past -%}
-        {% include ringworld_card.liquid s=s today_str=today_str next_slug=next_slug %}
-      {%- endfor -%}
-    </ul>
-  </section>
 </div>

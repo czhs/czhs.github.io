@@ -1,8 +1,26 @@
 # ringworld — design
 
-A micro-site for **ringworld**, a weekly mechanistic-interpretability maker space in
-Pittsburgh, hosted by CASI. It sits beside the MLn Reading Club micro-site and shares its
-machinery: a Jekyll layout pair, a YAML data file, and card grids.
+A micro-site for **ringworld**, a weekly maker space in Pittsburgh and a **Socratica
+node**. It sits beside the MLn Reading Club micro-site and shares its machinery: a
+Jekyll layout pair, a YAML data file, and card grids.
+
+> **2026-08-20 rework.** The site now presents the club as what it is on Luma: a
+> general weekly maker space — a Socratica node (socratica.info, linked from the About
+> panel and footer) — with no AI-safety/interp framing and no CASI affiliation (the
+> Luma event is hosted by Chris Shi). Hero: *A Socratica node in Pittsburgh.* At the
+> same time the site dropped to **static-landing mode**, to show the club exists and
+> nothing more: no Luma links anywhere, no sessions strip, no blog, and the About
+> panel is always open — the `About ringworld` toggle and the meta-row chip pinning
+> it required are retired (§6's meta-row mechanics now describe MLn only). Location:
+> CUC Fishbowl, 3rd Floor. The machinery is
+> parked, not deleted — the feed/strip markup lives in this repo's history
+> (`_pages/ringworld.html` pre-2026-08-20), the includes/layouts/data survive in place,
+> and `_pages/rw_projects.html` + `_ringworld/what-ringworld-is-for.md` carry
+> `published: false`. The homepage's `.home-links` block carries both clubs as a
+> stacked index of zine-boxed rows — club identity in the spine colour and the
+> mask-art marks only (fully-painted foreign pills were tried and rejected as not
+> fitting the zine). Sections below describe the full site as designed 2026-08-06;
+> where they conflict with this note, this note wins.
 
 This document was written before implementation and has been updated to describe what
 actually shipped. Where the built site diverged from the original plan, the reason is

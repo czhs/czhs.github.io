@@ -113,11 +113,15 @@ layout: default
 {% endif %}
 
 <style>
+  /* A stacked index, not a wrapping row: three geometry-identical rows so the
+     block reads as one device. Capped near the prose measure — full-width rows
+     were mostly empty space. */
   .home-links {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
+    flex-direction: column;
+    gap: 0.65rem;
     margin: 1.5rem 0;
+    max-width: 30rem;
   }
   .home-link {
     display: inline-flex;
@@ -140,12 +144,63 @@ layout: default
     transform: translateY(-1px);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   }
-  .home-link .home-link-arrow { transition: transform 0.15s ease; }
+  .home-link .home-link-arrow {
+    margin-left: auto;
+    transition: transform 0.15s ease;
+  }
   .home-link:hover .home-link-arrow { transform: translateX(2px); }
   .home-link-substack { border-left-color: #ff6719; }
   .home-link-substack:hover { border-color: #ff6719; color: #ff6719; }
-  .home-link-mln { border-left-color: var(--global-theme-color); }
-  .home-link-mln:hover { border-color: var(--global-theme-color); color: var(--global-theme-color); }
+
+  /* The two club pills wear the palettes and hand-lettered marks of the
+     micro-sites they go to — same rule as the sibling pills on /mln/ and
+     /ringworld/. Hexes are copied literals (the micro-sites' vars don't reach
+     this page); keep in sync with mln_styles / ringworld_styles. The wordmarks
+     are artwork as alpha masks, so each link's accessible name lives in its
+     aria-label. al-folio's main.css sets a colour on bare `span`, which beats
+     inheritance — hence the explicit colours on every piece. */
+  .home-link.home-club { gap: 0.5rem; border-width: 1px; }
+  .home-club .home-link-arrow,
+  .home-club .home-club-text { color: inherit; }
+  .home-club-ico,
+  .home-club-ring {
+    display: block;
+    width: 24px;
+    height: 16px;
+    flex: 0 0 auto;
+  }
+  .home-club-wordmark { display: block; flex: 0 0 auto; }
+
+  /* The rows all take the page's own box (the zine reskins it in
+     zine_styles.liquid — body.zine .home-link outranks these); the clubs are
+     identified only by their marks and wordmarks, painted in each club's own
+     ink, and by the spine colour the zine file adds. Hexes are copied
+     literals from mln_styles / ringworld_styles; keep in sync. */
+  .home-club-mln .home-club-ico {
+    background: #1f3329;
+    -webkit-mask: url("{{ '/assets/img/mln_mark.png' | relative_url }}") center / contain no-repeat;
+    mask: url("{{ '/assets/img/mln_mark.png' | relative_url }}") center / contain no-repeat;
+  }
+  /* mln_wordmark_small is the alpha-dilated cut — the plain wordmark's Didone
+     hairline vanishes at this size. Keep the box's ~2.6:1 ratio. */
+  .home-club-mln .home-club-wordmark {
+    width: 42px;
+    height: 16px;
+    background: #1f3329;
+    -webkit-mask: url("{{ '/assets/img/mln_wordmark_small.png' | relative_url }}") left center / contain no-repeat;
+    mask: url("{{ '/assets/img/mln_wordmark_small.png' | relative_url }}") left center / contain no-repeat;
+  }
+
+  /* the ring is full-colour crayon art, so it stays an <img>, not a mask */
+  .home-club-ring { object-fit: contain; border-radius: 0; }
+  /* the script wordmark's source art is 4:1; keep the box that ratio */
+  .home-club-rw .home-club-wordmark {
+    width: 64px;
+    height: 16px;
+    background: #3e6fb4;
+    -webkit-mask: url("{{ '/assets/img/ringworld/wordmark.png' | relative_url }}") left center / contain no-repeat;
+    mask: url("{{ '/assets/img/ringworld/wordmark.png' | relative_url }}") left center / contain no-repeat;
+  }
 
   .home-banner-restore-wrap { margin: 2.5rem 0 0; text-align: center; }
   .home-banner-restore[hidden] { display: none; }

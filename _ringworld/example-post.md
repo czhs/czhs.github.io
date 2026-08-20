@@ -1,15 +1,15 @@
 ---
 # TEMPLATE — `published: false` keeps this out of the built site. To add a real
 # post, copy this file to _ringworld/<slug>.md, delete the `published` line, and
-# fill in the front matter. The URL comes from the filename: my-sae-viz.md
-# becomes /ringworld/my-sae-viz/.
+# fill in the front matter. The URL comes from the filename: my-flip-clock.md
+# becomes /ringworld/my-flip-clock/.
 #
 # GOTCHA: a post dated in the future is listed in the feed but its page is never
 # written, so the card 404s. Jekyll's `future` defaults to false and applies to
 # collection docs. Date posts today or earlier.
 published: false
 
-title: What I found poking at SAE features
+title: What I found building a split-flap clock
 # Who made it. Free text — however they want to be credited.
 author: Jane Doe
 # Optional link on the author's name: personal site, GitHub, wherever.
@@ -19,7 +19,7 @@ date: 2026-08-30
 # Optional: which session it came out of, matching `num` in _data/ringworld.yml.
 session: 1
 # One or two sentences. Shown on the feed card, and used as the page description.
-description: Two hours of staring at feature 4207 and a plot that finally made sense.
+description: Two hours of fighting one stubborn hinge and a flap that finally flipped.
 # Optional cover, shown on the feed card and above the post. Pick one of the
 # watercolours in assets/img/ringworld/posts/ — campus-lawn, craig-street-sunset,
 # dish, green-roof, oculus — or add a new image to that folder. These are the

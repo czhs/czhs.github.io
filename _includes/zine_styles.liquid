@@ -257,13 +257,29 @@
     color: var(--rz-ink);
   }
 
-  body.zine .home-link-mln {
-    border-left-color: var(--rz-accent);
+  /* The two club rows (markup in _pages/about.md, marks in about.liquid)
+     take the zine's box like every other pill — ivory card, ink text, ink
+     border. The club shows only in its spine colour here and in its mark and
+     wordmark art, painted in the club's own ink over in about.liquid. Same
+     device as the Substack pill's orange spine; hexes are copied literals
+     from the micro-sites; keep in sync. */
+  body.zine .home-club-mln {
+    border-left-color: #d8c4a0;
   }
 
-  body.zine .home-link-mln:hover {
+  body.zine .home-club-mln:hover {
     border-color: var(--rz-ink);
-    border-left-color: var(--rz-accent);
+    border-left-color: #d8c4a0;
+    color: var(--rz-ink);
+  }
+
+  body.zine .home-club-rw {
+    border-left-color: #3e6fb4;
+  }
+
+  body.zine .home-club-rw:hover {
+    border-color: var(--rz-ink);
+    border-left-color: #3e6fb4;
     color: var(--rz-ink);
   }
 
