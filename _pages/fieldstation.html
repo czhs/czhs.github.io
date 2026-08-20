@@ -9,37 +9,23 @@ sitemap: false
 rzine: true
 standalone_title: "Field Station"
 ---
-{%- comment -%}
-  Orphan, password-gated page. Not in the nav, not in the sitemap, not in site
-  search (search.liquid.js indexes only `nav: true` pages), and not on the
-  /research listing (research_index iterates site.research, and this lives in
-  _pages). Nothing links to it.
 
-  Self-contained rather than reusing _layouts/research_locked.html for one
-  reason: that layout keeps the shared /research password in sessionStorage
-  under `research_pw` and auto-attempts it on load. This page has its OWN
-  password, so reusing that key would (a) auto-fail here with the shared one and
-  (b) overwrite the visitor's stored shared password with this page's, silently
-  breaking auto-unlock across every /research entry for the rest of the tab
-  session. One page, one gate, no persistence.
-
-  `rzine: true` switches on the zine treatment in _layouts/default.liquid and
-  _includes/zine_palette.liquid (Figtree + the .rzine palette), and suppresses
-  zine_foot.liquid — hence the local footer below, which also drops the
-  "research index" link that research_foot.liquid carries.
-
-  Plaintext lives OUTSIDE this repo. Master: see docs/claude/research-posts.md
-  for the archive location convention.
-{%- endcomment -%}
-
-{% include research_styles.liquid %}
+{%- comment -%} Orphan, password-gated page. Not in the nav, not in the sitemap, not in site search (search.liquid.js indexes only `nav: true` pages),
+and not on the /research listing (research_index iterates site.research, and this lives in _pages). Nothing links to it. Self-contained rather than
+reusing _layouts/research_locked.html for one reason: that layout keeps the shared /research password in sessionStorage under `research_pw` and
+auto-attempts it on load. This page has its OWN password, so reusing that key would (a) auto-fail here with the shared one and (b) overwrite the
+visitor's stored shared password with this page's, silently breaking auto-unlock across every /research entry for the rest of the tab session. One
+page, one gate, no persistence. `rzine: true` switches on the zine treatment in _layouts/default.liquid and _includes/zine_palette.liquid (Figtree +
+the .rzine palette), and suppresses zine_foot.liquid — hence the local footer below, which also drops the "research index" link that
+research_foot.liquid carries. Plaintext lives OUTSIDE this repo. Master: see docs/claude/research-posts.md for the archive location convention. {%-
+endcomment -%} {% include research_styles.liquid %}
 
 <div class="rzine">
   <div class="rzine-card">
     <header class="post-header">
       <h1 class="post-title">{{ page.title }}</h1>
       {% if page.description %}
-        <p class="post-desc">{{ page.description }}</p>
+      <p class="post-desc">{{ page.description }}</p>
       {% endif %}
       <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}</p>
     </header>
@@ -59,7 +45,7 @@ standalone_title: "Field Station"
             autocapitalize="off"
             autocorrect="off"
             spellcheck="false"
-          >
+          />
           <button class="rzine-btn" type="submit">open</button>
         </div>
         <p class="rzine-msg" id="rlock-msg" role="status" aria-live="polite"></p>
@@ -84,15 +70,22 @@ standalone_title: "Field Station"
     var content = document.getElementById("rlock-content");
 
     function b64(s) {
-      return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); });
+      return Uint8Array.from(atob(s), function (c) {
+        return c.charCodeAt(0);
+      });
     }
 
     var payload = null;
     function getPayload() {
       if (payload) return Promise.resolve(payload);
       return fetch(PAYLOAD_URL)
-        .then(function (r) { return r.json(); })
-        .then(function (p) { payload = p; return p; });
+        .then(function (r) {
+          return r.json();
+        })
+        .then(function (p) {
+          payload = p;
+          return p;
+        });
     }
 
     function decrypt(password) {
@@ -112,7 +105,9 @@ standalone_title: "Field Station"
           .then(function (key) {
             return subtle.decrypt({ name: "AES-GCM", iv: b64(p.iv) }, key, b64(p.ct));
           })
-          .then(function (buf) { return JSON.parse(new TextDecoder().decode(buf)); });
+          .then(function (buf) {
+            return JSON.parse(new TextDecoder().decode(buf));
+          });
       });
     }
 
