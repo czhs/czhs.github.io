@@ -17,20 +17,26 @@ about: >-
   (<a href="https://thewaltdisneycompany.com/news/behind-the-bdx-droids/"
   target="_blank" rel="noopener">like these</a>).
 # Sidebar capability summary — this site is shared with people hiring, so it
-# states the range plainly instead of burying it in the write-ups. EVERY item is
-# backed by a project page here: MuJoCo/expressive motion and the servo-limit
-# check from the Duck renders, teleoperation and biped bring-up from the Duck
-# build, the quadruped from Robot Dog, training/metrics/demo from TartanIMU,
-# electronics from the Gantry and Pie pages, CAD and drives from the Gantry.
-# Nothing claims more than the portfolio shows. Order = what to read first.
+# states the range plainly instead of burying it in the write-ups. EVERY item
+# traces to something real: MuJoCo/expressive motion from the Duck renders,
+# teleoperation and biped bring-up from the Duck build, the quadruped from
+# Robot Dog, training and the demo from TartanIMU, power/soldering/drivers from
+# the Gantry, Duck and Pie pages, CAD and drives from the Gantry. The research
+# line is verbatim from the main site's about page ("currently researching
+# mechanistic interpretability for in-context learning and pretraining") and is
+# backed by the gated IH notebook posts under /research/; the ML topics are
+# reading-group subjects Chris confirmed he knows (2026-08-20).
+# Nothing claims more than that. Order = what to read first.
 # Chris's to reword; keep each `items` to about two lines at 300px.
 skills:
   - label: Robot behavior
     items: expressive motion in MuJoCo, teleoperation, biped and quadruped bring-up
   - label: Machine learning
-    items: LSTM and transformer training in Python, dataset pipelines, a live public demo
+    items: transformer internals, LLM inference, training in Python, a live demo
+  - label: Research
+    items: mechanistic interpretability of in-context learning and pretraining
   - label: Electronics
-    items: soldering, ESP32 and Raspberry Pi, servo and stepper drive, IMUs
+    items: soldering, power delivery, ESP32 and Raspberry Pi, servo and stepper drive
   - label: Mechanical
     items: self-designed CAD through to printed, assembled parts; V-slot machines
 under_construction: false

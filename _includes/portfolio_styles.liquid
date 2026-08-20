@@ -54,7 +54,8 @@
   .rbx-mark-link {
     display: inline-flex;
     color: var(--global-theme-color);
-    margin-bottom: var(--sgap);
+    /* the mark needs less air than the gaps between content blocks */
+    margin-bottom: clamp(0.7rem, 1.5vh, 1.6rem);
   }
   .rbx-mark {
     display: block;
@@ -73,7 +74,7 @@
     color: var(--global-text-color);
   }
   .rbx-sub {
-    font-size: 0.94rem;
+    font-size: clamp(0.87rem, 1.9vh, 0.94rem);
     line-height: 1.45;
     color: var(--global-text-color);
     opacity: 0.62;
@@ -81,10 +82,10 @@
     max-width: 22rem;
   }
   .rbx-about {
-    font-size: 0.84rem;
-    line-height: 1.55;
+    font-size: clamp(0.78rem, 1.7vh, 0.84rem);
+    line-height: 1.5;
     opacity: 0.6;
-    margin: 0.6rem 0 0;
+    margin: 0.55rem 0 0;
   }
   .rbx-about a {
     color: inherit;
@@ -112,9 +113,9 @@
     margin: var(--sgap) 0 0;
   }
   .rbx-skill {
-    font-size: clamp(0.73rem, 1.6vh, 0.78rem);
-    line-height: 1.45;
-    margin-bottom: clamp(0.24rem, 0.55vh, 0.34rem);
+    font-size: clamp(0.72rem, 1.55vh, 0.77rem);
+    line-height: 1.4;
+    margin-bottom: clamp(0.2rem, 0.48vh, 0.3rem);
   }
   .rbx-skill:last-child {
     margin-bottom: 0;
@@ -157,7 +158,8 @@
     display: grid;
     grid-template-columns: 1.9rem minmax(0, 1fr);
     align-items: baseline;
-    padding: clamp(0.22rem, 0.5vh, 0.42rem) 0;
+    padding: clamp(0.2rem, 0.46vh, 0.4rem) 0;
+    line-height: 1.35;
     color: var(--global-text-color);
     text-decoration: none;
   }
