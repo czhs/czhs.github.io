@@ -10,12 +10,13 @@ subtitle: Math and computer engineering at Carnegie Mellon University.
 # Locally the same paths serve straight from the gitignored assets dirs.
 # Upload: gh release upload robotics-media <files>
 media_base: "https://github.com/czhs/czhs.github.io/releases/download/robotics-media/"
-# Verbatim from the main site (_pages/about.md), trimmed to the two sentences
-# that apply here. Do not reword — see docs/claude/content-rules.md.
+# From the main site (_pages/about.md), trimmed to the two sentences that apply
+# here, with the second one reworded by Chris (2026-08-20): "for fun" undersold
+# it. His wording — do not re-edit it back. The main site still says "For fun".
 about: >-
-  I'm fascinated by the hardware of thinking. For fun, I work on animating robots
+  I'm fascinated by the hardware of thinking. I love animating robots
   (<a href="https://thewaltdisneycompany.com/news/behind-the-bdx-droids/"
-  target="_blank" rel="noopener">like these</a>).
+  target="_blank" rel="noopener">like these</a>), and it makes me happy.
 # Sidebar capability summary — this site is shared with people hiring, so it
 # states the range plainly instead of burying it in the write-ups. EVERY item
 # traces to something real: MuJoCo/expressive motion from the Duck renders,
