@@ -27,9 +27,12 @@ nav: false
     <p class="rw-hero-lead">{{ site.data.ringworld.blurb }}</p>
     {%- comment -%}
       Info-only page, so the About content is always in view — the
-      "About ringworld" <details> toggle was retired 2026-08-20 with the
-      static-landing rework (the info IS the page now; nothing to expand).
-      Chips first, then the panel, one hairline under the whole block.
+      "About ringworld" details/summary toggle was retired 2026-08-20 with
+      the static-landing rework (the info IS the page now; nothing to
+      expand). Chips first, then the panel, one hairline under the whole
+      block. NB: never write a literal angle-bracket tag inside a Liquid
+      comment here — Liquid strips it from the build, but Prettier parses
+      the source as HTML and an unclosed tag breaks its whole parse.
     {%- endcomment -%}
     <div class="rw-metarow">
       <span class="rw-metachips">
