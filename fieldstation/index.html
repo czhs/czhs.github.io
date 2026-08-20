@@ -310,15 +310,22 @@ body.zine .home-link:hover{transform:none;box-shadow:4px 4px 0 color-mix(in srgb
     var content = document.getElementById("rlock-content");
 
     function b64(s) {
-      return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); });
+      return Uint8Array.from(atob(s), function (c) {
+        return c.charCodeAt(0);
+      });
     }
 
     var payload = null;
     function getPayload() {
       if (payload) return Promise.resolve(payload);
       return fetch(PAYLOAD_URL)
-        .then(function (r) { return r.json(); })
-        .then(function (p) { payload = p; return p; });
+        .then(function (r) {
+          return r.json();
+        })
+        .then(function (p) {
+          payload = p;
+          return p;
+        });
     }
 
     function decrypt(password) {
@@ -338,7 +345,9 @@ body.zine .home-link:hover{transform:none;box-shadow:4px 4px 0 color-mix(in srgb
           .then(function (key) {
             return subtle.decrypt({ name: "AES-GCM", iv: b64(p.iv) }, key, b64(p.ct));
           })
-          .then(function (buf) { return JSON.parse(new TextDecoder().decode(buf)); });
+          .then(function (buf) {
+            return JSON.parse(new TextDecoder().decode(buf));
+          });
       });
     }
 
