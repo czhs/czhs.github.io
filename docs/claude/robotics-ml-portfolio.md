@@ -170,6 +170,15 @@ Provenance for every published clip, so any of them can be re-cut or re-trimmed:
 | `duck-stands-free`   | gbBtn4WpPdw     | 0:54:04–0:54:21 |
 | `duck-walk` (hero)   | P7CkNshfkWI     | 1:05:16–1:05:31 |
 
+Two clips are published **cropped**, so a re-cut has to re-apply the crop. Chris is
+seated in both shots with his legs, feet and the controller in frame (cropped out
+2026-08-20). `duck-walk` uses `crop=370:570:230:150`: his socks start at y≈570 and
+the robot's own sweep runs down to y≈660, so no full-width bottom cut can lose the
+legs without clipping the robot — only a tight crop onto the sweep does both.
+`duck-surge-topple` uses `crop=600:672:0:0` plus `-t 12.2`; full width works there,
+but a hand reaches in to pick the robot up from ~12.3s and rises above any usable
+crop line, so the clip now ends on the landing instead of the pickup.
+
 **The robot moving under its own power is in `P7CkNshfkWI` ("Test Runs")**,
 and nowhere else. It is a **teleoperation** session — a game controller with a
 lit blue LED is in Chris's hand from 0:10:01 — driven in five bouts, of which
