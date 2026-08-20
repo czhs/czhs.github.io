@@ -3,9 +3,31 @@
 # Add a project: append to `projects` and create _pages/robotics_<slug>.md (layout: robotics_post).
 name: Chris Shi
 url: /robotics/
+site_label: Robotics
 subtitle: Math and computer engineering at Carnegie Mellon University.
-under_construction: true
-
+# Production builds serve every media path below from this GitHub release
+# (basename only), so the bytes never enter git — the MLn paper-audio trick.
+# Locally the same paths serve straight from the gitignored assets dirs.
+# Upload: gh release upload robotics-media <files>
+media_base: "https://github.com/czhs/czhs.github.io/releases/download/robotics-media/"
+# Verbatim from the main site (_pages/about.md), trimmed to the two sentences
+# that apply here. Do not reword — see docs/claude/content-rules.md.
+about: >-
+  I'm fascinated by the hardware of thinking. For fun, I work on animating robots
+  (<a href="https://thewaltdisneycompany.com/news/behind-the-bdx-droids/"
+  target="_blank" rel="noopener">like these</a>).
+# Assembled from real phrases on this site: the duck blurb ("bare servos"),
+# the pie specs ("self-designed 3D-printed mounts"), the gantry page
+# (steppers/breadboard), the TartanIMU page ("learned inertial odometry",
+# AirLab), and MLn paper titles (Transformer Circuits, Towards Monosemanticity,
+# Inside vLLM, Goedel-Prover). Chris's to reword.
+about2: >-
+  The projects here start at bare servos — soldering, wiring, self-designed
+  3D-printed mounts, steppers on a breadboard — and run up to learned inertial
+  odometry in the AirLab at Carnegie Mellon. Every week I also read ML papers
+  with a reading group: lately transformer circuits, monosemanticity, the
+  anatomy of vLLM, and formal theorem proving.
+under_construction: false
 # Sidebar links (bottom of the left column). External links open in a new tab.
 links:
   - { label: Personal Website, url: / } # the one link back to the main site
@@ -14,16 +36,288 @@ links:
   - { label: CV, url: /cv/ }
   - { label: Email, url: "mailto:chrisshi@andrew.cmu.edu" }
 
-# Grid order = list order. Drop a cover image into assets/img/robotics/<slug>.jpg and set
-# `cover: assets/img/robotics/<slug>.jpg`; fill `date` when ready. Blank = placeholder.
+# Grid order = list order. Per project:
+#   cover   4:3 still used for the grid card
+#   poster  still matching the hero video's own aspect ratio
+#   video   hero clip; also plays on hover on the grid card
+#   media   the rest of the footage/stills, shown as a gallery on the detail page
+#           each entry is {video, poster} or {image}, plus caption and optional wide: true
+#   date    term/year on the card and detail page — LEFT BLANK ON PURPOSE, fill these in
+#   links   optional row of buttons on the detail page, e.g.
+#             links:
+#               - { label: Code, url: "https://github.com/..." }
+#
+# Media lives in assets/img/robotics/ and assets/video/robotics/, which are
+# gitignored — see docs/claude/site-basics.md before committing any of it.
+# Captions come verbatim from the source filenames where one existed, and are
+# blank otherwise — nothing here is written for you. Fill the blanks in.
 projects:
-  # NOTE: published as under-construction placeholders for now — covers/videos are
-  # blank on purpose so every card shows the "under construction" state. The processed
-  # media exists locally (gitignored: assets/img|video/robotics/) — restore a project by
-  # setting cover/video/poster back to those paths once it's ready to go public.
-  - { slug: pie-robot, title: Pie Robot, date: "", cover: "" }
-  - { slug: gantry, title: Hack 100 Gantry, date: "", cover: "" }
-  - { slug: robot-dog, title: Robot Dog, date: "", cover: "" }
-  - { slug: duck, title: Duck, date: "", cover: "" }
-  - { slug: dice-arms, title: Dice Arms, date: "", cover: "" }
-  - { slug: tartanimu, title: TartanIMU, date: "", cover: "" }
+  - slug: robot-dog
+    title: Robot Dog
+    blurb: >-
+      A printed quadruped, from a single leg test to dancing on all fours.
+    date: ""
+    cover: assets/img/robotics/robot-dog.jpg
+    poster: assets/img/robotics/robot-dog-poster.jpg
+    video: assets/video/robotics/robot-dog.mp4
+    media:
+      - video: assets/video/robotics/robot-dog-dance.mp4
+        poster: assets/img/robotics/robot-dog-dance-poster.jpg
+        caption: Final dancing
+        wide: true
+      - video: assets/video/robotics/robot-dog-leg.mp4
+        poster: assets/img/robotics/robot-dog-leg-poster.jpg
+        caption: Leg test
+
+  - slug: duck
+    title: Open Duck Mini
+    blurb: >-
+      An open-source biped built from bare servos up: soldered, wired, and driven until it walked and picked itself up off the floor.
+    date: ""
+    # Real build footage leads; the MuJoCo renders of the reference design sit at
+    # the bottom of the gallery. Renders are NOT the physical build — keep them
+    # labelled as renders and keep the upstream credit in `links`.
+    # Clip provenance (source recording + in-point) is in
+    # docs/claude/robotics-ml-portfolio.md so any clip can be re-cut.
+    cover: assets/img/robotics/duck-cover.jpg
+    poster: assets/img/robotics/duck-rights-itself-poster.jpg
+    video: assets/video/robotics/duck-rights-itself.mp4
+    # ── Yours to write. Left empty on purpose; the layout hides empty ones. ──
+    build_title: The build
+    tagline: "" # yours to write
+    intro: ""
+    specs: []
+    build_notes: ""
+    links:
+      - { label: Open Duck Mini, url: "https://github.com/apirrone/Open_Duck_Mini" }
+    # The path. Unlike the Pie Robot this is not a routine the robot performs —
+    # it is the build in the order it happened, one station per recording session,
+    # ending on the robot driving itself. `desc` and `tech` are his to write.
+    # Labels are Chris's own recording titles verbatim, with ONE exception: the
+    # 2025-07-17 session is uploaded as "Soldering IMU and Breakout Board pt.1"
+    # but is actually soldering the microphone (his correction), so the label
+    # says microphone and the YouTube title stays in the docs for lookup.
+    run:
+      - label: Disassembling Arms and Configuring Servos
+        video: assets/video/robotics/duck-servos-row.mp4
+        poster: assets/img/robotics/duck-servos-row-poster.jpg
+      - label: Soldering Pi0 2W
+        video: assets/video/robotics/duck-solder-pi.mp4
+        poster: assets/img/robotics/duck-solder-pi-poster.jpg
+      - label: Soldering Microphone
+        video: assets/video/robotics/duck-plate-held.mp4
+        poster: assets/img/robotics/duck-plate-held-poster.jpg
+      - label: Assembling Battery Pack
+        video: assets/video/robotics/duck-pack-dressing.mp4
+        poster: assets/img/robotics/duck-pack-dressing-poster.jpg
+      - label: Test Runs
+        video: assets/video/robotics/duck-rights-itself.mp4
+        poster: assets/img/robotics/duck-rights-itself-poster.jpg
+    # Everything outside the run. Station clips are deliberately not repeated here.
+    media:
+      - video: assets/video/robotics/duck-servo-lens.mp4
+        poster: assets/img/robotics/duck-servo-lens-poster.jpg
+        caption: ""
+      - video: assets/video/robotics/duck-cable-taut.mp4
+        poster: assets/img/robotics/duck-cable-taut-poster.jpg
+        caption: ""
+      - video: assets/video/robotics/duck-solder-board.mp4
+        poster: assets/img/robotics/duck-solder-board-poster.jpg
+        caption: ""
+      - video: assets/video/robotics/duck-face-mounted.mp4
+        poster: assets/img/robotics/duck-face-mounted-poster.jpg
+        caption: ""
+      - video: assets/video/robotics/duck-stands-free.mp4
+        poster: assets/img/robotics/duck-stands-free-poster.jpg
+        caption: ""
+        wide: true
+      - video: assets/video/robotics/duck-walk.mp4
+        poster: assets/img/robotics/duck-walk-poster.jpg
+        caption: ""
+      - video: assets/video/robotics/duck-surge-topple.mp4
+        poster: assets/img/robotics/duck-surge-topple-poster.jpg
+        caption: ""
+    # The renders are their own piece of work, not more footage of the build,
+    # so they sit in a separate part with its own heading and TOC entry.
+    # `note` is Chris's to write.
+    sections:
+      - title: Duck renders as an HCI project
+        anchor: renders
+        note: ""
+        media:
+          - video: assets/video/robotics/duck-curious-tilt.mp4
+            poster: assets/img/robotics/duck-curious-tilt-poster.jpg
+            caption: MuJoCo render
+          - video: assets/video/robotics/duck-nod-yes.mp4
+            poster: assets/img/robotics/duck-nod-yes-poster.jpg
+            caption: MuJoCo render
+          - video: assets/video/robotics/duck-waddle-sway.mp4
+            poster: assets/img/robotics/duck-waddle-sway-poster.jpg
+            caption: MuJoCo render
+          - video: assets/video/robotics/duck-scan-around.mp4
+            poster: assets/img/robotics/duck-scan-around-poster.jpg
+            caption: MuJoCo render
+          - video: assets/video/robotics/duck-perk-alert.mp4
+            poster: assets/img/robotics/duck-perk-alert-poster.jpg
+            caption: MuJoCo render
+
+  - slug: pie-robot
+    title: Pi Day Pie Robot
+    blurb: >-
+      A borrowed microwave, a printed arm, and a great deal of orange tape.
+    date: ""
+    # Gated b-roll at the bottom of the post. Ciphertext only in the repo; the
+    # password is never written here (public repo). Re-encrypt with:
+    #   python3 bin/research_lock.py pie-broll <password> <plain.html> assets/enc/robotics-pie-broll.json
+    broll_title: "B-roll"
+    broll_enc: /assets/enc/robotics-pie-broll.json
+    # Hero is the two-part door open — the signature move. cover is a 4:3 crop of
+    # the same frame (a raw portrait still cropped to the card loses the subject).
+    cover: assets/img/robotics/pie-robot.jpg
+    poster: assets/img/robotics/pie-robot-poster.jpg
+    video: assets/video/robotics/pie-open.mp4
+    tagline: "A borrowed microwave, a printed arm, and a great deal of orange tape."
+    intro: >-
+      A Pi Day hackathon sprint. Each cup is a pie assembled ahead of time — a crumb
+      base of crushed crackers under pumpkin pie filling — so it only needs heating.
+      Everything after that is the robot's job: the door, the cup, the start button,
+      and the whipped cream on top.
+    specs:
+      - Pi Day hackathon
+      - ESP32
+      - Self-designed 3D-printed mounts
+      - Servo actuation
+      - Two-stage door open
+    # Chris's build notes. Facts are his; do not embellish them.
+    build_notes: >-
+      The microwave is stock hardware with no electrical interface, so every input
+      had to be made mechanically. Servos driven by an ESP32 work the door and the
+      start button, and every bracket holding them — along with the fixture that
+      clamps the whipped cream can upside down above the plate — is self-designed
+      and 3D printed. The first door mechanism was a geared motor turning a printed
+      spur gear against the door; it never produced the torque needed to break the
+      latch, and that assembly is still taped to the top of the machine in the
+      footage, no longer turning. What replaced it is the two-move open in step one:
+      pull the handle until the latch pops, then push a clear acrylic bar taped
+      upright along the door's top edge. The bar is a lever, and it buys back the
+      reach and leverage a short arm does not have.
+    # The path. This is the robot's actual routine in order, so the sequence is
+    # information: each station is a step, and the rail fills as the run plays.
+    # `branch: true` hangs a station off the previous one as a dashed detour.
+    run:
+      - label: Open
+        note: two moves
+        video: assets/video/robotics/pie-open.mp4
+        poster: assets/img/robotics/pie-robot-poster.jpg
+        desc: "The gripper pulls the handle until the latch pops, then reaches up and shoves the acrylic bar taped to the top of the door. The arm is too short to swing the door itself, so the door was given a longer handle."
+        tech: "Two actuations, because one will not do. The latch needs a sharp pull right at the door's edge; the swing needs leverage from a point the arm cannot physically reach. The first attempt was a geared motor driving a printed spur gear, which never broke the latch, so the problem was moved from torque to geometry by fixing a rigid bar to the door and pushing that instead."
+      - label: Load
+        note: cup in
+        video: assets/video/robotics/pie-cup-in.mp4
+        poster: assets/img/robotics/pie-cup-in-poster.jpg
+        desc: "Cup off the top of the microwave and onto the turntable."
+        tech: "A paper cup is an awkward payload: the gripper has to close hard enough to carry it and not hard enough to crumple it. The place is the harder half, since the cup has to go through a door opening and land flat on a turntable with the arm working near full extension."
+      - label: Close
+        note: door shut
+        video: assets/video/robotics/pie-door-close.mp4
+        poster: assets/img/robotics/pie-door-close-poster.jpg
+        desc: "The arm rises to near-vertical, reaches the top of the open door and pushes it until the latch catches."
+        tech: "The same lever driven the other way. A latch only catches if the push lands near the door's free edge, so the arm has to reach past the hinge side rather than shove the middle of the door, where the force would just flex it."
+      - label: Retry
+        note: the tape gave up
+        branch: true
+        video: assets/video/robotics/pie-door-fail.mp4
+        poster: assets/img/robotics/pie-door-fail-poster.jpg
+        desc: "The same close, twenty-three seconds earlier. The door swings almost shut, rebounds, and the tape holding the acrylic bar peels off. Someone re-tapes it and the next attempt holds."
+        tech: "Worth showing because the failure is a fixturing problem, not a control one. The tape holding the lever peeled under repeated load and the bar slid down the door. The trajectory was fine; the mount was not, which is the failure mode you actually get on a hackathon timeline."
+      - label: Start
+        note: servo
+        video: assets/video/robotics/pie-servo-start.mp4
+        poster: assets/img/robotics/pie-servo-start-poster.jpg
+        desc: "A servo on a printed bracket presses the panel."
+        tech: "The microwave has no electrical interface and was never going to be rewired, so pressing start stays a mechanical problem: an ESP32-driven servo on a printed bracket has to land on one membrane button, repeatably, from a fixed mount."
+      - label: Unload
+        note: cup out
+        video: assets/video/robotics/pie-cup-out.mp4
+        poster: assets/img/robotics/pie-cup-out-poster.jpg
+        desc: "Back out and onto the paper plate, which is parked under the nozzle for a reason."
+        tech: "The pick is routine; the placement is the point. The cup has to come to rest under the dispenser nozzle, so this step's tolerance decides whether the next step can work at all."
+      - label: Top
+        note: whipped cream
+        video: assets/video/robotics/pie-cream.mp4
+        poster: assets/img/robotics/pie-cream-poster.jpg
+        desc: "The reason. The gripper tips the lever on an upside-down can and the cup fills from empty."
+        tech: "Actuating a consumer aerosol valve with a robot gripper. The can is clamped inverted in a printed fixture so it will dispense at all, and the lever needs a steady push held for about a second rather than a tap."
+    media:
+      # Everything here sits OUTSIDE the run — the path above already shows the
+      # routine, so repeating those clips down here would just be the same footage
+      # twice.
+      - video: assets/video/robotics/pie-training-data.mp4
+        poster: assets/img/robotics/pie-training-data-poster.jpg
+        caption: "Collecting training data: walking the arm through the motion by hand, repeatedly, so it can do it on its own."
+      # Bench-cam stills from the same Pi Day session, sitting with the training
+      # clip they came from. Source: 2026-03-14 01-56-27.mp4 on tp64 at 0:50 and
+      # 1:30 — pillarboxed and 90 deg CCW, so rotated CW and cropped. Only two:
+      # the 0:57 frame was the same hand-over-a-closed-microwave shot as 0:50.
+      - image: assets/img/robotics/pie-training-1.jpg
+        caption: ""
+      - image: assets/img/robotics/pie-training-3.jpg
+        caption: ""
+      - video: assets/video/robotics/pie-full-run.mp4
+        poster: assets/img/robotics/pie-full-run-poster.jpg
+        caption: "The last stretch of one session, uncut."
+
+  - slug: gantry
+    title: Hack 100 Gantry
+    blurb: >-
+      Built at Hack 100 — self-designed CAD through to the first limit-switch test.
+    date: Spring 2026
+    cover: assets/img/robotics/gantry.jpg
+    poster: assets/img/robotics/gantry-poster.jpg
+    video: assets/video/robotics/gantry.mp4
+    media:
+      - video: assets/video/robotics/gantry-limit.mp4
+        poster: assets/img/robotics/gantry-limit-poster.jpg
+        caption: Limit switch test
+      - image: assets/img/robotics/gantry-cad-1.jpg
+        caption: ""
+      - image: assets/img/robotics/gantry-cad-2.jpg
+        caption: ""
+
+  - slug: tartanimu
+    title: TartanIMU
+    blurb: >-
+      Inertial odometry: a trajectory estimated from IMU alone, with a live demo on Hugging Face.
+    date: "Fall 2025 – Summer 2026"
+    # Figures are real output from the demo's own model + bundled example
+    # (LIN_ios_2022-01-19), run on the 4090 because the Space is on free-tier
+    # CPU. ATE 1.4684 m, translational RTE 0.2044 m, inference 0.35 s.
+    # tartanimu-traj.jpg is the page's lead figure, placed by
+    # _pages/robotics_tartanimu.md itself (same pattern as the gantry hero), so
+    # it is deliberately absent from `media`.
+    cover: assets/img/robotics/tartanimu.jpg
+    links:
+      - { label: HuggingFace Demo, url: "https://huggingface.co/spaces/HongyiShi/TartanIMU-Demo" }
+    media:
+      - image: assets/img/robotics/tartanimu-imu.jpg
+        caption: "The other half of the demo's output: the accelerometer and gyroscope stream the model is given."
+        wide: true
+      # From Chris's OWN visualizer (~/Desktop/visualization on tp64), generated
+      # by his visualize_npz.py on Helmet_Poser_Aligned/A_c (40,244 samples,
+      # 201.2s). Not a screenshot of anyone else's tool. The companion
+      # visualize_live.py is a Foxglove-style 3D web viewer; it only serves a
+      # live UI and can export a self-contained HTML, so it produces no video.
+      - image: assets/img/robotics/tartanimu-viz-dashboard.jpg
+        caption: "One processed HelmetPoser sequence — 40,244 samples, 201.2 seconds — in the npz dashboard. The last panel is the built-in gravity check: accelerometer magnitude against a dashed line at 9.81."
+        wide: true
+      - image: assets/img/robotics/tartanimu-viz-traj.jpg
+        caption: "The same sequence top-down, coloured by time."
+
+  - slug: dice-arms
+    title: Dice Arms
+    blurb: >-
+      A dice mosaic generated from the Duck render — each cell is one die, pip count tracking local tone.
+    date: Video coming soon
+    # Dice mosaic generated from the Duck render: each cell is one die, pip count
+    # tracks local tone, error-diffused across black and white dice.
+    cover: assets/img/robotics/dice-arms.jpg

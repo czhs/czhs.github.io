@@ -3,18 +3,10 @@ layout: portfolio_post
 portfolio: robotics
 permalink: /robotics/pie-robot/
 project: pie-robot
-standalone_title: "Pie Robot — Chris Shi"
+standalone_title: "Pi Day Pie Robot — Chris Shi"
 nav: false
 ---
 
-*Under construction.*
-
-<!-- Fill in the real write-up and drop media into assets/img/robotics/. Suggested sections: -->
-
-## Overview
-
-## Approach
-
-## Hardware
-
-## Software
+<!-- The write-up goes here, in your own words. The hero clip, the gallery and
+     the prev/next links all come from _data/robotics.yml — nothing below this
+     line is required for the page to look finished. -->

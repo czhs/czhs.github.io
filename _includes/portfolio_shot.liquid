@@ -1,0 +1,33 @@
+{%- comment -%}
+  One gallery tile. Shared by the main gallery and by any extra `sections:`, so the
+  two stay identical — natural aspect, no forced height, poster-only until played.
+    include.item   {video, poster} or {image}, plus caption and optional wide
+    include.title  project title, used as the image alt fallback
+    include.base   media URL prefix for release-hosted builds ('' = serve from repo)
+{%- endcomment -%}
+<figure class="rbx-shot{% if include.item.wide %} is-wide{% endif %}">
+  {% if include.item.video and include.item.video != '' %}
+    <video
+      class="rbx-shot-media"
+      controls
+      loop
+      playsinline
+      preload="none"
+      {% if include.item.poster and include.item.poster != '' %}
+        poster="{% include portfolio_src.liquid path=include.item.poster base=include.base %}"
+      {% endif %}
+    >
+      <source src="{% include portfolio_src.liquid path=include.item.video base=include.base %}" type="video/mp4">
+    </video>
+  {% else %}
+    <img
+      class="rbx-shot-media"
+      src="{% include portfolio_src.liquid path=include.item.image base=include.base %}"
+      alt="{{ include.item.caption | default: include.title }}"
+      loading="lazy"
+    >
+  {% endif %}
+  {% if include.item.caption and include.item.caption != '' %}
+    <figcaption class="rbx-shot-cap">{{ include.item.caption }}</figcaption>
+  {% endif %}
+</figure>

@@ -1,37 +1,694 @@
 ---
 layout: portfolio_base
 ---
-
 {% assign data = site.data[page.portfolio] %}
-{% assign p = data.projects | where: "slug", page.project | first %}
+{% assign p = data.projects | where: 'slug', page.project | first %}
+{% if jekyll.environment == 'production' and data.media_base %}
+  {% assign media_base = data.media_base %}
+{% else %}
+  {% assign media_base = '' %}
+{% endif %}
 
-<div class="rbx-postwrap">
-  <a class="rbx-back" href="{{ data.url | default: '/' | relative_url }}">← Home</a>
+{%- comment -%}
+  The page is a shell grid: a slim masthead across the top, a sticky table of
+  contents down the left, and everything else in the main column. The TOC is
+  built by script from what actually rendered (stations, section headings, the
+  write-up's own h2s), so every project gets the rail its content deserves.
 
-  <article class="rbx-post">
-    <header class="rbx-post-head">
-      <h1 class="rbx-post-title">{{ p.title | default: page.title }}</h1>
-      {% if p.date and p.date != '' %}<p class="rbx-post-meta">{{ p.date }}</p>{% endif %}
+  The path ("run") is unchanged in spirit: stations down a rail, arrows between
+  them, playback that runs down the stream on its own. A station with
+  `branch: true` hangs off the previous one as a dashed detour.
+{%- endcomment -%}
+<div class="rbx-shell">
+  <header class="rbx-mast">
+    <a class="rbx-mast-brand" href="{{ data.url | default: '/' | relative_url }}">
+      <svg class="rbx-mark is-small" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <line x1="12" y1="2.5" x2="12" y2="21.5" />
+          <line x1="2.5" y1="12" x2="21.5" y2="12" />
+          <line x1="5.3" y1="5.3" x2="18.7" y2="18.7" />
+          <line x1="18.7" y1="5.3" x2="5.3" y2="18.7" />
+        </g>
+      </svg>
+      <span class="rbx-mast-name">{{ data.name }}</span>
+      {% if data.site_label and data.site_label != '' %}
+        <span class="rbx-mast-sep" aria-hidden="true">/</span>
+        <span class="rbx-mast-site">{{ data.site_label }}</span>
+      {% endif %}
+    </a>
+  </header>
+
+  <nav class="rbx-tocrail" id="rbx-tocrail" aria-label="On this page"></nav>
+
+  <div class="rbx-main">
+    <header class="rbx-flow-head">
+      <h1 class="rbx-flow-title">{{ p.title | default: page.title }}</h1>
+      {% if p.tagline and p.tagline != '' %}
+        <p class="rbx-flow-tag">{{ p.tagline }}</p>
+      {% endif %}
+
+      {% if p.intro and p.intro != '' %}
+        <p class="rbx-flow-intro">{{ p.intro }}</p>
+      {% endif %}
+
+      {% if p.specs and p.specs != empty %}
+        <ul class="rbx-specs">
+          {% for sp in p.specs %}
+            <li class="rbx-spec">{{ sp }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if p.build_notes and p.build_notes != '' %}
+        <p class="rbx-flow-notes">{{ p.build_notes }}</p>
+      {% endif %}
+
+      {% comment %}
+        Chip TOC for narrow screens; the rail takes over when there
+        is room for it. Only rendered once a project has more than one part.
+      {% endcomment %}
+      {% if p.sections and p.sections != empty %}
+        <nav class="rbx-toc" aria-label="Contents">
+          {% if p.build_title and p.build_title != '' %}
+            <a class="rbx-toc-link" href="#build">{{ p.build_title }}</a>
+          {% endif %}
+          {% for sec in p.sections %}
+            <a class="rbx-toc-link" href="#{{ sec.anchor }}">{{ sec.title }}</a>
+          {% endfor %}
+        </nav>
+      {% endif %}
+
+      {% if p.run and p.run != empty %}
+        <div class="rbx-flow-ctl">
+          <button type="button" class="rbx-flow-play" id="rbx-flow-play" aria-pressed="false">
+            <span class="rbx-flow-play-ico" aria-hidden="true"></span>
+            <span class="rbx-flow-play-txt">Play the run</span>
+          </button>
+          <p class="rbx-flow-hint">Plays each step in order.</p>
+        </div>
+      {% endif %}
     </header>
 
-    {% if p.video and p.video != '' %}
-    <video class="rbx-post-video" controls autoplay muted loop playsinline preload="metadata"{% if p.poster and p.poster != '' %} poster="{{ p.poster | relative_url }}"{% endif %}>
-      <source src="{{ p.video | relative_url }}" type="video/mp4" />
-    </video>
-    {% elsif p.cover and p.cover != '' %}
-    <img class="rbx-post-hero" src="{{ p.cover | relative_url }}" alt="{{ p.title }}" />
+    {% if p.build_title and p.build_title != '' %}
+      <h2 class="rbx-sec-title is-build" id="build">{{ p.build_title }}</h2>
     {% endif %}
 
-    {% if p.links and p.links != empty %}
-    <div class="rbx-post-links">
-      {% for l in p.links %}
-      <a class="rbx-post-link" href="{{ l.url }}" target="_blank" rel="noopener">{{ l.label }}</a>
+    {% if p.run and p.run != empty %}
+      <ol class="rbx-flow" id="rbx-flow">
+        {% assign stn = 0 %}
+        {% for step in p.run %}
+          {% unless step.branch %}{% assign stn = stn | plus: 1 %}{% endunless %}
+          <li class="rbx-stn{% if step.branch %} is-branch{% endif %}" data-i="{{ forloop.index0 }}">
+            <div class="rbx-stn-rail" aria-hidden="true">
+              <span class="rbx-stn-dot">
+                {%- unless step.branch %}{{ stn }}{% endunless -%}
+              </span>
+              {% unless forloop.last %}<span class="rbx-stn-line"></span>{% endunless %}
+            </div>
+
+            <div class="rbx-stn-card">
+              <div class="rbx-stn-media">
+                <video
+                  class="rbx-stn-video"
+                  data-i="{{ forloop.index0 }}"
+                  playsinline
+                  muted
+                  {% if forloop.first %}
+                    preload="metadata"
+                  {% else %}
+                    preload="none"
+                  {% endif %}
+                  {% if step.poster %}
+                    poster="{% include portfolio_src.liquid path=step.poster base=media_base %}"
+                  {% endif %}
+                >
+                  <source src="{% include portfolio_src.liquid path=step.video base=media_base %}" type="video/mp4">
+                </video>
+                <button type="button" class="rbx-stn-tap" data-i="{{ forloop.index0 }}" aria-label="Play {{ step.label }}"></button>
+              </div>
+              <div class="rbx-stn-text">
+                <p class="rbx-stn-kicker">
+                  {% if step.branch -%}
+                    <span class="rbx-stn-branchtag">detour</span>
+                  {%- else -%}
+                    <span class="rbx-stn-num">{{ stn }}</span>
+                  {%- endif %}
+                  <span class="rbx-stn-label">{{ step.label }}</span>
+                  {% if step.note -%}
+                    <span class="rbx-stn-note">{{ step.note }}</span>
+                  {%- endif %}
+                </p>
+                {% if step.desc %}
+                  <p class="rbx-stn-desc">{{ step.desc }}</p>
+                {% endif %}
+                {% if step.tech %}
+                  <div class="rbx-stn-tech">
+                    <p class="rbx-stn-tech-h">Engineering</p>
+                    <p class="rbx-stn-tech-b">{{ step.tech }}</p>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ol>
+    {% endif %}
+
+    <article class="rbx-post">
+      {% if p.links and p.links != empty %}
+        <div class="rbx-post-links">
+          {% for l in p.links %}
+            <a class="rbx-post-link" href="{{ l.url }}" target="_blank" rel="noopener">{{ l.label }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {{ content }}
+
+      {% comment %} Everything shot on the project that sits outside the run. {% endcomment %}
+      {% if p.media and p.media != empty %}
+        <section class="rbx-gallery" id="gallery">
+          {% for item in p.media %}
+            {% include portfolio_shot.liquid item=item title=p.title base=media_base %}
+          {% endfor %}
+        </section>
+      {% endif %}
+
+      {%- comment -%}
+        Extra galleries that are their own part of the project rather than more
+        footage of the same one — e.g. the Duck's MuJoCo renders, which are a
+        separate piece of work from the physical build. Each gets a heading and a
+        TOC entry. Projects without `sections:` are unaffected.
+      {%- endcomment -%}
+      {% for sec in p.sections %}
+        <section class="rbx-sec" id="{{ sec.anchor }}">
+          <h2 class="rbx-sec-title">{{ sec.title }}</h2>
+          {% if sec.note and sec.note != '' %}
+            <p class="rbx-sec-note">{{ sec.note }}</p>
+          {% endif %}
+          {% if sec.media and sec.media != empty %}
+            <div class="rbx-gallery is-sec">
+              {% for item in sec.media %}
+                {% include portfolio_shot.liquid item=item title=p.title base=media_base %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </section>
       {% endfor %}
-    </div>
+    </article>
+
+    {%- comment -%}
+      Optional gated b-roll, rendered after the gallery so it sits at the bottom of the
+      post. Self-contained rather than reusing the /research gate: that one parks the
+      shared research password in sessionStorage under `research_pw` and auto-attempts
+      it on load, so borrowing it here would auto-fail with the wrong password AND
+      overwrite the visitor's stored one. One page, one gate, no persistence.
+
+      The ciphertext (AES-GCM, PBKDF2-SHA256 300k — bin/research_lock.py) is the only
+      thing in the repo; the password lives nowhere in it. NOTE the clips themselves are
+      ordinary files (repo paths locally, release assets in production), so this gate
+      hides the links, not the bytes — it is a speed bump for fun, not real protection.
+    {%- endcomment -%}
+    {% if p.broll_enc and p.broll_enc != '' %}
+      <section class="rbx-broll" id="rbx-broll">
+        <div class="rbx-broll-head">
+          <h2 class="rbx-broll-title">{{ p.broll_title | default: 'B-roll' }}</h2>
+          <span class="rbx-broll-lock" id="rbx-broll-lock">locked</span>
+        </div>
+        <form class="rbx-broll-gate" id="rbx-broll-gate" autocomplete="off">
+          <div class="rbx-broll-row">
+            <input
+              class="rbx-broll-input"
+              id="rbx-broll-pw"
+              type="password"
+              name="rbx-broll-pw"
+              placeholder="password"
+              aria-label="b-roll password"
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+            >
+            <button class="rbx-broll-btn" type="submit">open</button>
+          </div>
+          <p class="rbx-broll-msg" id="rbx-broll-msg" role="status" aria-live="polite"></p>
+        </form>
+        <div class="rbx-broll-out" id="rbx-broll-out" hidden></div>
+      </section>
+
+      <script>
+        (function () {
+          var PAYLOAD_URL = '{{ p.broll_enc | relative_url }}';
+          // The decrypted markup was authored against repo media paths. When
+          // this build serves media from the release instead, remap those
+          // paths onto the release by basename after injection.
+          var MEDIA_BASE = '{{ media_base }}';
+          var gate = document.getElementById('rbx-broll-gate');
+          var pw = document.getElementById('rbx-broll-pw');
+          var msg = document.getElementById('rbx-broll-msg');
+          var out = document.getElementById('rbx-broll-out');
+          var lock = document.getElementById('rbx-broll-lock');
+
+          function b64(s) {
+            return Uint8Array.from(atob(s), function (c) {
+              return c.charCodeAt(0);
+            });
+          }
+
+          function remap(root) {
+            if (!MEDIA_BASE) return;
+            root.querySelectorAll('[src], [poster], [href]').forEach(function (el) {
+              ['src', 'poster', 'href'].forEach(function (attr) {
+                var v = el.getAttribute(attr);
+                if (v && /^\/?assets\/(img|video)\/robotics\//.test(v)) {
+                  el.setAttribute(attr, MEDIA_BASE + v.split('/').pop());
+                }
+              });
+            });
+            root.querySelectorAll('video').forEach(function (v) {
+              v.load();
+            });
+          }
+
+          var payload = null;
+          function getPayload() {
+            if (payload) return Promise.resolve(payload);
+            return fetch(PAYLOAD_URL)
+              .then(function (r) {
+                return r.json();
+              })
+              .then(function (j) {
+                payload = j;
+                return j;
+              });
+          }
+
+          function decrypt(password) {
+            return getPayload().then(function (j) {
+              var subtle = window.crypto.subtle;
+              return subtle
+                .importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey'])
+                .then(function (km) {
+                  return subtle.deriveKey(
+                    { name: 'PBKDF2', salt: b64(j.salt), iterations: j.iter, hash: 'SHA-256' },
+                    km,
+                    { name: 'AES-GCM', length: 256 },
+                    false,
+                    ['decrypt']
+                  );
+                })
+                .then(function (key) {
+                  return subtle.decrypt({ name: 'AES-GCM', iv: b64(j.iv) }, key, b64(j.ct));
+                })
+                .then(function (buf) {
+                  return JSON.parse(new TextDecoder().decode(buf));
+                });
+            });
+          }
+
+          gate.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (!window.crypto || !window.crypto.subtle) {
+              msg.textContent = "this browser can't decrypt here — try https.";
+              return;
+            }
+            msg.textContent = 'decrypting…';
+            decrypt(pw.value).then(
+              function (data) {
+                out.innerHTML = data.html;
+                remap(out);
+                gate.hidden = true;
+                out.hidden = false;
+                if (lock) lock.textContent = 'open';
+                msg.textContent = '';
+                document.dispatchEvent(new CustomEvent('rbx:toc-refresh'));
+              },
+              function () {
+                msg.textContent = 'not it.';
+                pw.select();
+              }
+            );
+          });
+        })();
+      </script>
     {% endif %}
 
-    {{ content }}
-  </article>
+    {% comment %} Move to the next project without going back to the grid. {% endcomment %}
+    {% assign all = data.projects %}
+    {% assign idx = 0 %}
+    {% for q in all -%}
+      {%- if q.slug == page.project %}{% assign idx = forloop.index0 %}{% endif -%}
+    {%- endfor %}
+    {% assign prev_i = idx | minus: 1 %}
+    {% assign next_i = idx | plus: 1 %}
+    {% if prev_i < 0 %}{% assign prev_i = all.size | minus: 1 %}{% endif %}
+    {% if next_i >= all.size %}{% assign next_i = 0 %}{% endif %}
+    {% assign prev = all[prev_i] %}
+    {% assign next = all[next_i] %}
 
-  <footer class="rbx-post-foot">© {{ data.name }}</footer>
+    {% if all.size > 1 %}
+      <nav class="rbx-pager">
+        <a class="rbx-pager-link" href="{{ data.url | append: prev.slug | append: '/' | relative_url }}">
+          {% if prev.cover and prev.cover != '' %}
+            <img
+              class="rbx-pager-thumb"
+              src="{% include portfolio_src.liquid path=prev.cover base=media_base %}"
+              alt=""
+              loading="lazy"
+              aria-hidden="true"
+            >
+          {% endif %}
+          <span class="rbx-pager-text">
+            <span class="rbx-pager-dir">← Previous</span>
+            <span class="rbx-pager-title">{{ prev.title }}</span>
+          </span>
+        </a>
+        <a class="rbx-pager-link is-next" href="{{ data.url | append: next.slug | append: '/' | relative_url }}">
+          <span class="rbx-pager-text">
+            <span class="rbx-pager-dir">Next →</span>
+            <span class="rbx-pager-title">{{ next.title }}</span>
+          </span>
+          {% if next.cover and next.cover != '' %}
+            <img
+              class="rbx-pager-thumb"
+              src="{% include portfolio_src.liquid path=next.cover base=media_base %}"
+              alt=""
+              loading="lazy"
+              aria-hidden="true"
+            >
+          {% endif %}
+        </a>
+      </nav>
+    {% endif %}
+
+    <footer class="rbx-post-foot">© {{ data.name }}</footer>
+  </div>
 </div>
+
+{% if p.run and p.run != empty %}
+  <script>
+    (function () {
+      var flow = document.getElementById('rbx-flow');
+      if (!flow) return;
+      var stns = [].slice.call(flow.querySelectorAll('.rbx-stn'));
+      var vids = stns.map(function (s) {
+        return s.querySelector('.rbx-stn-video');
+      });
+      var playBtn = document.getElementById('rbx-flow-play');
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var chaining = false;
+      var cur = -1;
+
+      function stopAll() {
+        vids.forEach(function (v) {
+          try {
+            v.pause();
+          } catch (e) {}
+        });
+        stns.forEach(function (s) {
+          s.classList.remove('is-on');
+        });
+      }
+      function setPlayBtn(on) {
+        if (!playBtn) return;
+        playBtn.classList.toggle('is-on', on);
+        playBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        playBtn.querySelector('.rbx-flow-play-txt').textContent = on ? 'Stop' : 'Play the run';
+      }
+      function play(i, chain) {
+        if (i < 0 || i >= vids.length) return;
+        stopAll();
+        cur = i;
+        chaining = !!chain;
+        var st = stns[i],
+          v = vids[i];
+        st.classList.add('is-on');
+        if (chain && !reduce) {
+          var r = st.getBoundingClientRect();
+          if (r.top < 60 || r.bottom > window.innerHeight - 40) {
+            st.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+        // Rewind only a clip that has actually played. On a fresh station the
+        // seek forced a load mid-poster, which could blink black before the
+        // first frame -- the flash the page kept getting blamed for.
+        if (v.currentTime > 0) {
+          try {
+            v.currentTime = 0;
+          } catch (e) {}
+        }
+        var pr = v.play();
+        if (pr && pr.catch) pr.catch(function () {});
+        return pr;
+      }
+      function done(i) {
+        stns[i].classList.remove('is-on');
+        stns[i].classList.add('is-done');
+      }
+
+      vids.forEach(function (v, i) {
+        v.addEventListener('ended', function () {
+          done(i);
+          // run down the stream; the branch is a detour, so it plays in place
+          if (chaining && i + 1 < vids.length) {
+            play(i + 1, true);
+          } else if (chaining) {
+            chaining = false;
+            setPlayBtn(false);
+          }
+        });
+      });
+
+      [].slice.call(flow.querySelectorAll('.rbx-stn-tap')).forEach(function (b) {
+        b.addEventListener('click', function () {
+          var i = parseInt(b.getAttribute('data-i'), 10);
+          if (cur === i && !vids[i].paused) {
+            vids[i].pause();
+            stns[i].classList.remove('is-on');
+            return;
+          }
+          chaining = false;
+          setPlayBtn(false);
+          vids[i].muted = false;
+          play(i, false);
+        });
+      });
+
+      if (playBtn) {
+        playBtn.addEventListener('click', function () {
+          if (chaining) {
+            chaining = false;
+            stopAll();
+            setPlayBtn(false);
+            return;
+          }
+          stns.forEach(function (s) {
+            s.classList.remove('is-done');
+          });
+          // an explicit press is a user gesture, so this run may carry sound
+          vids.forEach(function (v) {
+            v.muted = false;
+          });
+          setPlayBtn(true);
+          play(0, true);
+        });
+      }
+
+      // Auto-run down the stream once the path reaches the viewport. Autoplay is
+      // only permitted while muted, so the passive pass is silent; pressing play
+      // or a station is a gesture and unmutes. Skipped under reduced-motion.
+      var started = false;
+      function nearlyInView(el) {
+        var r = el.getBoundingClientRect();
+        return r.top < window.innerHeight * 0.7 && r.bottom > 0;
+      }
+      function maybeStart() {
+        if (started || reduce || !stns.length) return;
+        if (!nearlyInView(stns[0])) return;
+        started = true;
+        setPlayBtn(true);
+        var pr = play(0, true);
+        // autoplay can still be refused; hand control back rather than latching
+        // `started` on a run that never actually began
+        if (pr && pr.catch) {
+          pr.catch(function () {
+            started = false;
+            chaining = false;
+            stns[0].classList.remove('is-on');
+            setPlayBtn(false);
+          });
+        }
+      }
+      if (!reduce) {
+        // Scroll events alone are not enough: if the path is already in view on
+        // arrival, or the reader lands mid-page, no scroll ever fires. Poll for a
+        // few seconds as well, and stop as soon as the run starts.
+        window.addEventListener('scroll', maybeStart, { passive: true });
+        window.addEventListener('resize', maybeStart, { passive: true });
+        window.addEventListener('load', maybeStart);
+        var tries = 0;
+        var poll = setInterval(function () {
+          maybeStart();
+          if (started || ++tries > 30) clearInterval(poll);
+        }, 400);
+        maybeStart();
+      }
+    })();
+  </script>
+{% endif %}
+
+<script>
+  // The left rail: a table of contents assembled from what actually rendered —
+  // run stations, part headings, the write-up's own h2s, the gallery, the
+  // b-roll — with a scroll-spy marker. While the run plays, station rows mirror
+  // the rail's is-on/is-done state, so the TOC doubles as a miniature of the
+  // pipeline.
+  (function () {
+    var rail = document.getElementById('rbx-tocrail');
+    if (!rail) return;
+
+    var slugCount = {};
+    function slugify(t) {
+      var s =
+        t
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '')
+          .slice(0, 48) || 'part';
+      if (slugCount[s]) {
+        slugCount[s] += 1;
+        s = s + '-' + slugCount[s];
+      } else {
+        slugCount[s] = 1;
+      }
+      return s;
+    }
+
+    var entries = [];
+    function collect() {
+      var nodes = document.querySelectorAll(
+        '.rbx-stn, .rbx-sec-title.is-build, .rbx-post h2:not(.rbx-sec-title), .rbx-sec, .rbx-gallery:not(.is-sec), .rbx-broll'
+      );
+      var list = [];
+      nodes.forEach(function (el) {
+        // the unlocked b-roll injects its own gallery markup; the b-roll row
+        // already covers that section, so don't give its innards rows too
+        if (el.closest && el.closest('.rbx-broll-out')) return;
+        var label = '',
+          kind = 'plain',
+          num = '';
+        if (el.classList.contains('rbx-stn')) {
+          var lab = el.querySelector('.rbx-stn-label');
+          if (!lab) return;
+          label = lab.textContent;
+          if (el.classList.contains('is-branch')) {
+            kind = 'branch';
+          } else {
+            kind = 'step';
+            var dot = el.querySelector('.rbx-stn-dot');
+            num = dot ? dot.textContent : '';
+          }
+        } else if (el.classList.contains('rbx-sec')) {
+          var h = el.querySelector('.rbx-sec-title');
+          label = h ? h.textContent : '';
+        } else if (el.classList.contains('rbx-gallery')) {
+          label = 'Gallery';
+        } else if (el.classList.contains('rbx-broll')) {
+          var bt = el.querySelector('.rbx-broll-title');
+          label = bt ? bt.textContent : 'B-roll';
+        } else {
+          label = el.textContent;
+        }
+        label = (label || '').replace(/\s+/g, ' ').trim();
+        if (!label) return;
+        if (!el.id) el.id = slugify(label);
+        list.push({ el: el, label: label, kind: kind, num: (num || '').trim() });
+      });
+      return list;
+    }
+
+    var active = -1;
+    function build() {
+      entries = collect();
+      rail.textContent = '';
+      active = -1;
+      if (entries.length < 2) {
+        rail.hidden = true;
+        return;
+      }
+      rail.hidden = false;
+
+      var head = document.createElement('p');
+      head.className = 'rbx-tocrail-h';
+      head.textContent = 'On this page';
+      rail.appendChild(head);
+
+      var ol = document.createElement('ol');
+      ol.className = 'rbx-tocrail-list';
+      entries.forEach(function (en) {
+        var li = document.createElement('li');
+        li.className = 'rbx-tocrail-item is-' + en.kind;
+        var a = document.createElement('a');
+        a.className = 'rbx-tocrail-link';
+        a.href = '#' + en.el.id;
+        var marker = document.createElement('span');
+        marker.className = 'rbx-tocrail-marker';
+        marker.textContent = en.kind === 'step' ? en.num : '';
+        var label = document.createElement('span');
+        label.className = 'rbx-tocrail-label';
+        label.textContent = en.label;
+        a.appendChild(marker);
+        a.appendChild(label);
+        li.appendChild(a);
+        ol.appendChild(li);
+        en.li = li;
+      });
+      rail.appendChild(ol);
+      spy();
+    }
+
+    function spy() {
+      if (!entries.length) return;
+      var line = window.innerHeight * 0.3;
+      var idx = 0;
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].el.getBoundingClientRect().top <= line) idx = i;
+      }
+      if (idx !== active) {
+        if (active >= 0 && entries[active].li) entries[active].li.classList.remove('is-here');
+        if (entries[idx].li) entries[idx].li.classList.add('is-here');
+        active = idx;
+      }
+    }
+
+    var raf = 0;
+    function onScroll() {
+      if (!raf)
+        raf = requestAnimationFrame(function () {
+          raf = 0;
+          spy();
+        });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+
+    // Mirror the run's flow state onto the rail.
+    function mirror() {
+      entries.forEach(function (en) {
+        if (en.kind !== 'step' && en.kind !== 'branch') return;
+        en.li.classList.toggle('is-live', en.el.classList.contains('is-on'));
+        en.li.classList.toggle('is-played', en.el.classList.contains('is-done'));
+      });
+    }
+    if (window.MutationObserver) {
+      var mo = new MutationObserver(mirror);
+      document.querySelectorAll('.rbx-stn').forEach(function (el) {
+        mo.observe(el, { attributes: true, attributeFilter: ['class'] });
+      });
+    }
+
+    // Unlocking the b-roll swaps new markup in; rebuild so the rail keeps up.
+    document.addEventListener('rbx:toc-refresh', build);
+    build();
+  })();
+</script>

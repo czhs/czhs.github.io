@@ -1,0 +1,15 @@
+{%- comment -%}
+  Emits the URL for one portfolio media path. In production builds, when the
+  site's data file carries `media_base` (a GitHub release download prefix), the
+  path's basename is served from that release so the bytes never enter git —
+  same trick as MLn's paper audio. Locally, and on sites without `media_base`,
+  the path serves from the repo as before.
+    include.path  assets/... path from the data file
+    include.base  the resolved prefix for this render ('' = serve from repo)
+{%- endcomment -%}
+{%- if include.base and include.base != '' -%}
+  {{- include.base -}}
+  {{- include.path | split: '/' | last -}}
+{%- else -%}
+  {{- include.path | relative_url -}}
+{%- endif -%}

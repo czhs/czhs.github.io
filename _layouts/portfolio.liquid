@@ -1,8 +1,12 @@
 ---
 layout: portfolio_base
 ---
-
 {% assign r = site.data[page.portfolio] %}
+{% if jekyll.environment == 'production' and r.media_base %}
+  {% assign media_base = r.media_base %}
+{% else %}
+  {% assign media_base = '' %}
+{% endif %}
 
 <div class="rbx-wrap">
   <aside class="rbx-side">
@@ -19,7 +23,29 @@ layout: portfolio_base
 
     <h1 class="rbx-name">{{ r.name }}</h1>
     <p class="rbx-sub">{{ r.subtitle }}</p>
-    {% if r.under_construction %}<span class="rbx-uc">Under construction</span>{% endif %}
+    {% if r.about and r.about != '' %}
+      <p class="rbx-about">{{ r.about }}</p>
+    {% endif %}
+    {% if r.about2 and r.about2 != '' %}
+      <p class="rbx-about">{{ r.about2 }}</p>
+    {% endif %}
+    {% if r.under_construction -%}
+      <span class="rbx-uc">Under construction</span>
+    {%- endif %}
+
+    {% comment %}
+      The page no longer fits one screen, so the sidebar carries a
+      numbered index of it. Rows scroll to the card rather than leaving the page.
+    {% endcomment %}
+    <nav class="rbx-manifest" aria-label="Projects on this page">
+      <p class="rbx-manifest-h">Index</p>
+      {% for p in r.projects %}
+        <a class="rbx-manifest-row" href="#p-{{ p.slug }}">
+          <span class="rbx-manifest-num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+          <span class="rbx-manifest-title">{{ p.title }}</span>
+        </a>
+      {% endfor %}
+    </nav>
 
     <nav class="rbx-links">
       {% for l in r.links %}
@@ -27,24 +53,207 @@ layout: portfolio_base
         {% if l.url contains '://' %}{% assign is_url = true %}{% endif %}
         {% assign is_ext = is_url %}
         {% if l.url contains 'mailto:' %}{% assign is_ext = true %}{% endif %}
-        <a class="rbx-link" href="{% if is_ext %}{{ l.url }}{% else %}{{ l.url | relative_url }}{% endif %}"{% if is_url %} target="_blank" rel="noopener"{% endif %}>{{ l.label }}</a>
+        <a
+          class="rbx-link"
+          href="{% if is_ext %}{{ l.url }}{% else %}{{ l.url | relative_url }}{% endif %}"
+          {% if is_url %}
+            target="_blank" rel="noopener"
+          {% endif %}
+        >
+          {{- l.label -}}
+        </a>
       {% endfor %}
     </nav>
   </aside>
 
   <main class="rbx-grid">
     {% for p in r.projects %}
-    <a class="rbx-card" href="{{ page.url | append: p.slug | append: '/' | relative_url }}">
-      {% if p.cover and p.cover != '' %}
-      <img class="rbx-cover" src="{{ p.cover | relative_url }}" alt="{{ p.title }}" loading="lazy" />
-      {% else %}
-      <span class="rbx-cover rbx-cover-empty" aria-hidden="true"></span>
-      {% endif %}
-      <span class="rbx-cap">
-        <span class="rbx-card-title">{{ p.title }}</span>
-        {% if p.date and p.date != '' %}<span class="rbx-card-date">{{ p.date }}</span>{% endif %}
-      </span>
-    </a>
+      {% comment %} cover is framed for the 4:3 card; poster matches the video's own aspect {% endcomment %}
+      {% assign still = p.cover | default: p.poster %}
+      {% comment %}
+        Liquid treats "" as truthy, so `unless p.cover` is not enough -- a project
+        with cover: "" would keep the hover lift and card background it has no
+        artwork to fill.
+      {% endcomment %}
+      {% assign has_media = false %}
+      {% if p.cover and p.cover != '' %}{% assign has_media = true %}{% endif %}
+      {% if p.video and p.video != '' %}{% assign has_media = true %}{% endif %}
+      <a
+        class="rbx-card{% unless has_media %} is-empty{% endunless %}"
+        id="p-{{ p.slug }}"
+        href="{{ page.url | append: p.slug | append: '/' | relative_url }}"
+      >
+        <span class="rbx-frame">
+          {% if still and still != '' %}
+            <img class="rbx-cover" src="{% include portfolio_src.liquid path=still base=media_base %}" alt="{{ p.title }}" loading="lazy">
+          {% else %}
+            <span class="rbx-cover rbx-cover-empty" aria-hidden="true"></span>
+          {% endif %}
+
+          {% comment %}
+            Hover preview. src is held in data-src so nothing downloads until the
+            pointer actually lands on the card -- six autoplaying clips would
+            otherwise cost several MB on first paint.
+          {% endcomment %}
+          {% if p.video and p.video != '' %}
+            <video
+              class="rbx-preview"
+              muted
+              loop
+              playsinline
+              preload="none"
+              tabindex="-1"
+              aria-hidden="true"
+              data-src="{% include portfolio_src.liquid path=p.video base=media_base %}"
+            ></video>
+            <span class="rbx-badge" aria-hidden="true">
+              <svg viewBox="0 0 12 12" width="9" height="9">
+                <path d="M3 2l7 4-7 4z" fill="currentColor" />
+              </svg>
+            </span>
+          {% endif %}
+        </span>
+
+        <span class="rbx-cap">
+          <span class="rbx-card-head">
+            <span class="rbx-card-num" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <span class="rbx-card-title">{{ p.title }}</span>
+            {% if p.date and p.date != '' -%}
+              <span class="rbx-card-date">{{ p.date }}</span>
+            {%- endif %}
+          </span>
+          {% if p.blurb and p.blurb != '' -%}
+            <span class="rbx-card-blurb">{{ p.blurb }}</span>
+          {%- endif %}
+        </span>
+      </a>
     {% endfor %}
   </main>
 </div>
+
+<script>
+  // Card previews play two ways: on hover/focus, and on their own at random so
+  // the grid always has a little life in it. (These are muted mp4 rather than
+  // animated GIF: a GIF cannot be started or stopped from script -- it loops
+  // from the moment it loads -- so the ambient behaviour would be impossible,
+  // and the same clip as GIF is roughly forty times the bytes.)
+  (function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var cards = [];
+    document.querySelectorAll('.rbx-card').forEach(function (card) {
+      var vid = card.querySelector('.rbx-preview');
+      if (!vid) return;
+
+      var entry = { card: card, vid: vid, hovered: false, ambient: false, timer: 0 };
+
+      // Hold the poster up until the video can actually paint a frame. Adding
+      // is-playing in the same tick as setting src hides the cover while the
+      // clip still has nothing decoded, so the very first play of each card
+      // flashes an empty box.
+      entry.reveal = function () {
+        if (entry.hovered || entry.ambient) card.classList.add('is-playing');
+      };
+      entry.start = function () {
+        if (!vid.getAttribute('src')) {
+          vid.setAttribute('src', vid.dataset.src);
+        } else if (!card.classList.contains('is-playing') && vid.currentTime > 0) {
+          // Rewind here, while the clip is invisible. Rewinding in stop()
+          // snapped the visible frame back to the first one mid-fade-out,
+          // which read as a flash on every hover-end and ambient stop.
+          try {
+            vid.currentTime = 0;
+          } catch (e) {}
+        }
+        if (vid.readyState >= 2) card.classList.add('is-playing');
+        var p = vid.play();
+        if (p) p.catch(function () {});
+      };
+      // Always release the ambient slot here. stop() is also reached from
+      // mouseleave and blur, and if those left the flag set the "one clip at a
+      // time" gate would stay closed forever and ambient play would die out.
+      entry.stop = function () {
+        clearTimeout(entry.timer);
+        entry.ambient = false;
+        card.classList.remove('is-playing');
+        vid.pause();
+      };
+
+      card.addEventListener('mouseenter', function () {
+        entry.hovered = true;
+        clearTimeout(entry.timer);
+        entry.ambient = false;
+        entry.start();
+      });
+      // The preview carries `loop`, so `ended` never fires -- swap in the event
+      // that does: the first decoded frame, which is when it is safe to hide
+      // the poster.
+      vid.addEventListener('loadeddata', entry.reveal);
+      vid.addEventListener('playing', entry.reveal);
+      card.addEventListener('mouseleave', function () {
+        entry.hovered = false;
+        entry.stop();
+      });
+      card.addEventListener('focus', function () {
+        entry.hovered = true;
+        entry.start();
+      });
+      card.addEventListener('blur', function () {
+        entry.hovered = false;
+        entry.stop();
+      });
+
+      cards.push(entry);
+    });
+
+    if (!cards.length) return;
+
+    // Is the card actually on screen right now? Measured at the moment we want
+    // to know, rather than tracked with an IntersectionObserver: the observer
+    // only delivers on a change, so a page first painted in a background tab can
+    // end up with every card stuck marked off-screen and never play at all.
+    var onScreen = function (el) {
+      var r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return false;
+      return r.bottom > 0 && r.top < (window.innerHeight || 0);
+    };
+
+    // One ambient clip at a time, at an irregular cadence, so the grid reads as
+    // alive rather than as a wall of looping video.
+    var last = null;
+    var tick = function () {
+      var wait = 2600 + Math.random() * 4200;
+      setTimeout(function () {
+        tick();
+        if (document.hidden) return;
+        var idle = cards.filter(function (c) {
+          return onScreen(c.card) && !c.hovered && !c.ambient;
+        });
+        var busy = cards.some(function (c) {
+          return c.ambient;
+        });
+        if (busy || !idle.length) return;
+
+        // Don't take the same card twice running -- picking purely at random
+        // clusters visibly on a grid this small.
+        if (idle.length > 1) {
+          idle = idle.filter(function (c) {
+            return c !== last;
+          });
+        }
+        var pick = idle[Math.floor(Math.random() * idle.length)];
+        last = pick;
+        pick.ambient = true;
+        pick.start();
+        pick.timer = setTimeout(
+          function () {
+            pick.ambient = false;
+            if (!pick.hovered) pick.stop();
+          },
+          3200 + Math.random() * 2600
+        );
+      }, wait);
+    };
+    tick();
+  })();
+</script>
