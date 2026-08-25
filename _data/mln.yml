@@ -286,6 +286,7 @@ weeks:
     slug: "b097uf0r"
     evt: "evt-IpxvBcDJUrVWthr"
     date: "2026-08-24"
+    tags: ["photos"]
     title: "Inside vLLM: Anatomy of a High-Throughput LLM Inference System"
     cover: "https://images.lumacdn.com/uploads/yl/5d199919-dc23-4f73-91a3-7a2b858fad7f.png"
     summary: "How do modern LLM inference engines turn inherently sequential autoregressive generation into a high-throughput serving system? What systems bottlenecks emerge between a single model forward pass and serving thousands of concurrent requests across GPUs and machines?"
