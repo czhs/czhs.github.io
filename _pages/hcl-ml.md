@@ -1,6 +1,7 @@
 ---
 layout: hcl_locked
-title: Sensor Context Encoder Challenge
+title: ML Challenge
+author: Chris Shi
 date: 2026-08-21 01:30:00-0400
 permalink: /HCL-ML/
 nav: false

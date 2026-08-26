@@ -19,7 +19,7 @@ layout: default
       {% if page.description %}
         <p class="post-desc">{{ page.description }}</p>
       {% endif %}
-      <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}</p>
+      <p class="post-meta">{% if page.author %}by <a href="{{ '/' | relative_url }}">{{ page.author }}</a> · {% endif %}{{ page.date | date: "%B %-d, %Y" }}</p>
     </header>
 
     <article class="post-content rzine-content" id="hcl-content">
