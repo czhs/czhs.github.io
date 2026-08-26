@@ -96,6 +96,16 @@ layout: portfolio_base
           <p class="rbx-flow-hint">Plays each step in order.</p>
         </div>
       {% endif %}
+
+      {% comment %} A titled gallery gets a jump button up here where it can be seen. {% endcomment %}
+      {% if titled_gallery %}
+        <div class="rbx-flow-ctl">
+          <a class="rbx-flow-play rbx-jump" href="#gallery">
+            <span class="rbx-jump-ico" aria-hidden="true"></span>
+            <span>Jump to the {{ p.gallery_title | downcase }}</span>
+          </a>
+        </div>
+      {% endif %}
     </header>
 
     {% if p.build_title and p.build_title != '' %}

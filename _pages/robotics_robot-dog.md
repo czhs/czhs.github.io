@@ -25,8 +25,7 @@ nav: false
 A printed quadruped. All structural parts are self-designed and 3D printed. Each
 leg is driven by two servos mounted in the body, through pushrod linkages, from a
 PCA9685 servo controller on a Raspberry Pi. On the bench it stands and runs an
-authored dance routine on all four legs, powered over a tether. Video of the
-dance and the leg test is [at the bottom of the page](#gallery).
+authored dance routine on all four legs, powered over a tether.
 
 The sensing is designed but not brought up. The RPLIDAR A1 on the top plate and
 the RealSense depth camera behind the front panel are in the CAD, with mounting
