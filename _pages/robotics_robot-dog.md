@@ -29,27 +29,25 @@ tether.
 
 The sensing is designed and not brought up. The RPLIDAR A1 on the top plate and the
 RealSense depth camera behind the front panel are in the CAD and in the power and
-mounting budget; nothing autonomous ran. That split is worth stating up front,
-because most of what this build taught me sits on either side of it: the mechanical
-and electrical half is finished hardware, and the perception half is a set of
-decisions made before parts get bought.
+mounting budget; nothing autonomous ran. The mechanical and electrical half is
+finished hardware. The perception half is design work.
 
 ## CAD, and where the mass goes
 
 The whole machine was modelled before anything was printed: body shells, top plate,
 leg links, servo pockets, standoffs for the lidar. Printing is what makes that
-worthwhile. A printed part is nearly free to redesign and expensive to redesign
-badly, so the model has to carry the real constraints, which on this robot means
-servo mounting geometry, link lengths and where the wiring runs.
+worthwhile. A printed part is nearly free to redesign.
+The model just has to carry the real constraints: servo mounting geometry, link
+lengths, and where the wiring runs.
 
 The load-bearing decision is that no servo lives on the leg. Both actuators for a leg
 sit in the body, and the lower link is driven through a pushrod, so what swings is
 printed plastic and a couple of bearings.
 
-That is a decision about inertia rather than packaging. A leg is a lever swung at the
-hip, and the moment of inertia of anything on it scales with the square of its
-distance from the joint, so a servo hung at the knee costs several times what the
-same mass costs at the hip. On position-controlled hobby servos, which
+That is a decision about inertia rather than packaging. A leg is a lever swung at the hip.
+The moment of inertia of anything on it scales with the square of its distance from
+the joint, so a servo at the knee costs several times what the same mass costs at
+the hip. On position-controlled hobby servos, which
 have a fixed torque budget and no way to be told about the load, that difference
 shows up directly as how fast a leg can be commanded to move before it stops tracking.
 
@@ -64,9 +62,8 @@ the time it reaches the foot.
 The single leg test came first: one leg, one servo, bolted to a vertical extrusion on
 a plywood stand, driven from a breadboard with a dev board and a bench power module.
 
-Doing it that way was the right call for the same reason it always is. On the bench a
-leg is one degree of freedom with the frame holding everything else still, so
-anything that goes wrong has one cause. Once four legs are on a body that can fall
+On the bench a leg is one degree of freedom with the frame holding everything else
+still, so anything that goes wrong has one cause. Once four legs are on a body that can fall
 over, a leg that binds at the top of its stroke and a leg whose servo is browning out
 look identical from the outside.
 
@@ -92,10 +89,8 @@ pulse widths hold whatever they were last set to and the Pi is free to be late.
 The arithmetic is worth knowing before trusting the resolution. The counter is 12 bit
 across the whole frame, so at a 50 Hz frame rate one count is about 4.9 microseconds,
 and the 1000 microsecond band a servo actually uses is only about 205 counts wide.
-For 180 degrees of travel that is a little under one degree per count. It is plenty
-for walking gaits and it is not the 4096 steps the datasheet number suggests, and the
-difference is the sort of thing that is much cheaper to notice in arithmetic than in
-a motion that will not smooth out.
+For 180 degrees of travel that is a little under one degree per count. Plenty for
+walking gaits, but not the 4096 steps the datasheet suggests.
 
 Two other properties of the part shape the design. The prescaler is shared, so all
 sixteen channels run at one frame rate and there is no mixing servos that want
@@ -117,9 +112,8 @@ down with it.
 
 So the pack feeds a buck converter sized for the servo rail, the Pi is fed
 separately, and the two share a ground so the PCA9685's logic side and the servos it
-commands agree on what zero volts means. The value of separating them is that the
-worst thing the legs can do, which is all pull at once, is contained on the rail that
-expects it.
+commands agree on what zero volts means. The worst case, every servo pulling at
+once, stays on the rail sized for it.
 
 The bench supply in the dance footage is doing more than powering the robot. A supply
 with a current readout is an instrument: it shows what the machine draws standing
@@ -129,9 +123,8 @@ turns a stalled servo from a smoke event into a motion that simply stops.
 
 ## Animating it
 
-The dance is authored motion, not a learned or planned gait. That makes it a specific
-kind of engineering problem, and the constraints come from what the actuators can
-actually accept.
+The dance is authored motion, not a learned or planned gait. The constraints come
+from what the actuators accept.
 
 Every joint on this robot takes a position and nothing else. There is no velocity
 command, no torque command, and no feedback coming back. So motion has to be written
@@ -139,10 +132,8 @@ as a sequence of poses and then as the interpolation between them, and the
 interpolation is the part that matters. The pose list is what the robot looks like;
 the timing between poses is what it looks like it is doing.
 
-Three limits govern all of it. A servo has a maximum slew rate, and asking it to
-cross a large angle in a small time does not produce a fast move, it produces a
-command the servo ignores and a leg that arrives late and out of phase with the
-others. A quadruped on the ground is a closed chain, so the feet in contact cannot be
+Three limits govern all of it. A servo has a maximum slew rate. Command a large
+angle in a small time and the leg arrives late, out of phase with the others. A quadruped on the ground is a closed chain, so the feet in contact cannot be
 moved independently of the body without the floor pushing back, and any authored
 motion that forgets this is asking the servos to fight the ground. And a routine that
 loops has to close: the last pose has to be the first pose, in every joint, or the
@@ -153,8 +144,7 @@ the additional constraint that hardware cannot be talked out of physics.
 
 ## The lidar and the depth camera
 
-Both sensors were chosen and packaged before anything was mounted, and choosing them
-was most of the exercise.
+Both sensors were chosen and packaged in CAD before anything was mounted.
 
 The RPLIDAR A1 is a spinning 2D lidar and it goes on standoffs above the top plate
 for a physical reason: it measures one horizontal plane through 360 degrees, so
