@@ -20,6 +20,9 @@ layout: default
         <p class="post-desc">{{ page.description }}</p>
       {% endif %}
       <p class="post-meta">{% if page.author %}by <a href="{{ '/' | relative_url }}">{{ page.author }}</a> · {% endif %}{{ page.date | date: "%B %-d, %Y" }}</p>
+      {% if page.repo %}
+        <p class="post-meta">code: <a href="{{ page.repo }}">{{ page.repo | replace: "https://", "" }}</a></p>
+      {% endif %}
     </header>
 
     <article class="post-content rzine-content" id="hcl-content">

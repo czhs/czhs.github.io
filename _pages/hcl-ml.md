@@ -2,6 +2,7 @@
 layout: hcl_locked
 title: ML Challenge
 author: Chris Shi
+repo: https://github.com/czhs/HCL-ML
 date: 2026-08-21 01:30:00-0400
 permalink: /HCL-ML/
 nav: false
