@@ -67,7 +67,13 @@ layout: portfolio_base
         Chip TOC for narrow screens; the rail takes over when there
         is room for it. Only rendered once a project has more than one part.
       {% endcomment %}
-      {% if p.sections and p.sections != empty %}
+      {% assign titled_gallery = false %}
+      {% if p.gallery_title and p.gallery_title != '' and p.media and p.media != empty %}
+        {% assign titled_gallery = true %}
+      {% endif %}
+      {% assign show_chips = titled_gallery %}
+      {% if p.sections and p.sections != empty %}{% assign show_chips = true %}{% endif %}
+      {% if show_chips %}
         <nav class="rbx-toc" aria-label="Contents">
           {% if p.build_title and p.build_title != '' %}
             <a class="rbx-toc-link" href="#build">{{ p.build_title }}</a>
@@ -75,6 +81,9 @@ layout: portfolio_base
           {% for sec in p.sections %}
             <a class="rbx-toc-link" href="#{{ sec.anchor }}">{{ sec.title }}</a>
           {% endfor %}
+          {% if titled_gallery %}
+            <a class="rbx-toc-link" href="#gallery">{{ p.gallery_title }}</a>
+          {% endif %}
         </nav>
       {% endif %}
 
@@ -165,13 +174,29 @@ layout: portfolio_base
 
       {{ content }}
 
-      {% comment %} Everything shot on the project that sits outside the run. {% endcomment %}
+      {% comment %}
+        Everything shot on the project that sits outside the run. A project can
+        name this block with `gallery_title` (e.g. "Footage"): the gallery then
+        renders as a titled section, so the heading, the chip TOC and the rail
+        all point at it. Untitled galleries render as before.
+      {% endcomment %}
       {% if p.media and p.media != empty %}
-        <section class="rbx-gallery" id="gallery">
-          {% for item in p.media %}
-            {% include portfolio_shot.liquid item=item title=p.title base=media_base %}
-          {% endfor %}
-        </section>
+        {% if p.gallery_title and p.gallery_title != '' %}
+          <section class="rbx-sec" id="gallery">
+            <h2 class="rbx-sec-title">{{ p.gallery_title }}</h2>
+            <div class="rbx-gallery is-sec">
+              {% for item in p.media %}
+                {% include portfolio_shot.liquid item=item title=p.title base=media_base %}
+              {% endfor %}
+            </div>
+          </section>
+        {% else %}
+          <section class="rbx-gallery" id="gallery">
+            {% for item in p.media %}
+              {% include portfolio_shot.liquid item=item title=p.title base=media_base %}
+            {% endfor %}
+          </section>
+        {% endif %}
       {% endif %}
 
       {%- comment -%}

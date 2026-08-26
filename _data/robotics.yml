@@ -73,6 +73,7 @@ projects:
     cover: assets/img/robotics/robot-dog.jpg
     poster: assets/img/robotics/robot-dog-poster.jpg
     video: assets/video/robotics/robot-dog.mp4
+    gallery_title: Footage
     media:
       - video: assets/video/robotics/robot-dog-dance.mp4
         poster: assets/img/robotics/robot-dog-dance-poster.jpg

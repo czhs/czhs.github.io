@@ -23,6 +23,7 @@ Per project in the data file:
 | `video`         | hero clip; **also plays on hover** on the grid card                                                                                  |
 | `media`         | gallery on the detail page — list of `{video, poster}` or `{image}`, each with `caption`, optional `wide: true` for a full-width row |
 | `date`, `links` | card/detail metadata; `links` renders the pill row                                                                                   |
+| `gallery_title` | optional heading over the gallery (e.g. "Footage"); also adds the chip-TOC/rail entry pointing at it                                 |
 
 A project with no `cover`/`video` renders as an "under construction" placeholder card.
 `under_construction: true` at the top of the data file adds the sidebar badge.
