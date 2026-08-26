@@ -2,10 +2,24 @@
 <html lang="{{ site.lang }}">
   <head>
     {% include head.liquid %}
+    <!-- Self-hosted fonts (same files as the main site) — preloaded so the
+         metric-matched fallback swap in portfolio_styles is invisible. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ '/assets/fonts/plus-jakarta-sans-latin-var.woff2' | relative_url }}">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ '/assets/fonts/jetbrains-mono-latin-var.woff2' | relative_url }}">
     {% include portfolio_styles.liquid %}
   </head>
 
   <body class="rbx-site">
+    <script>
+      // Arm the reveal choreography before first paint — and only when motion
+      // is allowed, so without JS or with reduced motion nothing is hidden.
+      (function () {
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.classList.add('rbx-armed');
+        }
+      })();
+    </script>
+
     {{ content }}
 
     <!-- Hidden theme toggle: al-folio's theme.js wires listeners to these IDs on load.
@@ -16,6 +30,35 @@
       <i class="ti ti-moon-filled" id="light-toggle-dark"></i>
       <i class="ti ti-sun-filled" id="light-toggle-light"></i>
     </button>
+
+    <script>
+      // Reveal-on-scroll, shared by the index and the detail pages. Elements
+      // rise in once as they reach the viewport; the index's signature intro
+      // holds the whole run back (rbx-ready) until its curtain lifts.
+      (function () {
+        var doc = document.documentElement;
+        if (!doc.classList.contains('rbx-armed')) return;
+        if (!document.getElementById('rbx-intro')) doc.classList.add('rbx-ready');
+        var els = [].slice.call(document.querySelectorAll('[data-rv], .rbx-stn, .rbx-shot, .rbx-pager'));
+        if (!els.length || !('IntersectionObserver' in window)) {
+          doc.classList.remove('rbx-armed');
+          return;
+        }
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (en) {
+              if (!en.isIntersecting) return;
+              en.target.classList.add('is-in');
+              io.unobserve(en.target);
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.05 }
+        );
+        els.forEach(function (el) {
+          io.observe(el);
+        });
+      })();
+    </script>
 
     {% include scripts.liquid %}
   </body>

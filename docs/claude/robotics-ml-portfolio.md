@@ -32,18 +32,43 @@ Grid cards lazy-load their preview: the clip URL sits in `data-src` and is only
 fetched on hover, so the grid costs one poster image per card on first paint. The
 script no-ops under `prefers-reduced-motion` and on touch.
 
-## Layout notes (2026-08-20 design pass)
+## Design language (2026-08-26 zine re-skin; structure from the 2026-08-20 pass)
 
+Both micro-sites now wear the **main site's zine skin**: one ivory sheet with an
+8px ink border on the seafoam field, Plus Jakarta Sans for prose/display (name and
+titles at weight 800), JetBrains Mono strictly for machine labelling. Fonts are
+the same self-hosted files as the zine (preloaded in `portfolio_base.liquid`;
+head.liquid no longer emits Google Fonts for `portfolio` layouts). The palette is
+the zine's **seafoam, fixed** — literals copied from `zine_palette.liquid` into
+`portfolio_styles.liquid` (keep in sync), no dark mode, `--global-*` remapped on
+`body.rbx-site` so strays track it. Zine shape rules apply: squared corners, hard
+offset shadows, **no transform under the cursor**. Orange stays reserved for flow
+state.
+
+- **Signature intro** (index pages): full-screen field overlay; "Chris Shi" draws
+  itself (per-stroke `stroke-dashoffset`, duration ∝ length), then the curtain
+  lifts. Once per tab session (`sessionStorage rbx-sig-seen`), any click/key
+  skips, reduced-motion and noscript both bypass it. The SVG is
+  `_includes/portfolio_sig.liquid` — public-domain Hershey Script Simplex
+  letterforms, laid out/smoothed by `sig_gen.py` (session scratchpad; jhf parser
+  + Catmull-Rom). **Dash gotcha:** park both path endpoints strictly INSIDE the
+  dash gap while hidden (oversized gap + overshot offset) — an endpoint exactly
+  on a dash boundary paints a round-cap dot at every stroke start.
+- **Capability ticker**: ink strip across the sheet top, skill labels verbatim
+  from the data file + orange ✳ marks, 4 copies for a seamless −50% loop,
+  `aria-hidden` (sidebar repeats the content), static under reduced motion.
+  Renders only when the data file has `skills:` (ml.yml doesn't).
+- **Reveals**: `html.rbx-armed` lands pre-paint (only when motion allowed), an
+  IntersectionObserver in `portfolio_base.liquid` stamps `.is-in`; `.rbx-ready`
+  gates the start until the intro lifts. `[data-rv]`+`--rv` = per-element stagger.
 - Detail pages are a shell grid: masthead across the top, sticky TOC rail on the
   left (≥1080px), content in `.rbx-main`. The rail is **built client-side** from
   whatever rendered — stations, section headings, the write-up's own `h2`s, the
   gallery, the b-roll — so pages need no per-page TOC data. It scroll-spies, and
-  mirrors the run's `is-on`/`is-done` onto its rows (orange = flow state, per the
-  design language). The chip TOC still renders under 1080px.
+  mirrors the run's `is-on`/`is-done` onto its rows (orange = flow state). The
+  chip TOC still renders under 1080px.
 - The index sidebar carries a numbered project manifest (anchors to `#p-<slug>`
   cards). Card numbers = grid order = curation order.
-- Design tokens (`--tape`, `--rail`, `--mono`) live on `body.rbx-site`; all other
-  color comes off the `--global-*` theme vars, so both themes track the main site.
 
 ## Gotchas that cost time
 

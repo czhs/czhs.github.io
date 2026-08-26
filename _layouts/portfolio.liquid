@@ -8,9 +8,135 @@ layout: portfolio_base
   {% assign media_base = '' %}
 {% endif %}
 
+{% comment %}
+  Full-screen signature intro: the name writes itself, then the curtain lifts
+  to reveal the sheet. Runs once per tab session, is skippable with any click
+  or key, and is skipped entirely under reduced motion — the CSS also hides
+  it there, so even without JS it cannot trap the page.
+{% endcomment %}
+<div class="rbx-intro" id="rbx-intro" aria-hidden="true">
+  {% include portfolio_sig.liquid %}
+</div>
+<noscript>
+  <style>
+    /* the drawing needs script; without it the overlay must never cover the page */
+    .rbx-intro {
+      display: none;
+    }
+  </style>
+</noscript>
+<script>
+  (function () {
+    var el = document.getElementById('rbx-intro');
+    var doc = document.documentElement;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var seen = false;
+    try {
+      seen = sessionStorage.getItem('rbx-sig-seen') === '1';
+    } catch (e) {}
+    if (reduce || seen) {
+      el.parentNode.removeChild(el);
+      doc.classList.add('rbx-ready');
+      return;
+    }
+    try {
+      sessionStorage.setItem('rbx-sig-seen', '1');
+    } catch (e) {}
+    doc.classList.add('rbx-lock');
+
+    // Each stroke draws for a time proportional to its length, chained in
+    // writing order, so the whole signature takes DRAW ms however it is cut.
+    var paths = [].slice.call(el.querySelectorAll('.rbx-sig-p'));
+    var total = 0;
+    var lens = paths.map(function (p) {
+      var l = p.getTotalLength();
+      total += l;
+      return l;
+    });
+    var DRAW = 1700;
+    var t = 280;
+    paths.forEach(function (p, i) {
+      var d = Math.max(70, (lens[i] / total) * DRAW);
+      // The gap is oversized and the start offset overshoots the dash by a
+      // few units, so both path endpoints sit strictly INSIDE the gap while
+      // hidden — parking a round-cap stroke exactly on a dash boundary paints
+      // a dot at every stroke start before anything has drawn.
+      p.style.strokeDasharray = (lens[i] + 2).toFixed(1) + ' ' + (lens[i] * 2 + 22).toFixed(1);
+      p.style.strokeDashoffset = (lens[i] + 12).toFixed(1);
+      p.style.transition = 'stroke-dashoffset ' + d.toFixed(0) + 'ms cubic-bezier(0.45, 0.05, 0.55, 0.95) ' + t.toFixed(0) + 'ms';
+      t += d + 35;
+    });
+
+    var lifted = false;
+    function lift() {
+      if (lifted) return;
+      lifted = true;
+      window.removeEventListener('keydown', lift);
+      el.classList.add('is-lift');
+      doc.classList.remove('rbx-lock');
+      doc.classList.add('rbx-ready');
+      setTimeout(function () {
+        if (el.parentNode) el.parentNode.removeChild(el);
+      }, 800);
+    }
+    // Double rAF so the dash start state is painted before the transitions arm;
+    // the timeout below fires regardless, so a backgrounded tab still lifts.
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        paths.forEach(function (p) {
+          p.style.strokeDashoffset = '0';
+        });
+      });
+    });
+    setTimeout(lift, t + 430);
+    el.addEventListener('click', lift);
+    el.addEventListener('touchstart', lift, { passive: true });
+    window.addEventListener('keydown', lift);
+  })();
+</script>
+
 <div class="rbx-wrap">
-  <aside class="rbx-side">
-    <a class="rbx-mark-link" href="{{ page.url | relative_url }}" aria-label="{{ r.name }}">
+  {% comment %}
+    Capability ticker — the sidebar's skill labels verbatim, separated by the
+    site mark. Two copies of the sequence make the loop seamless; decorative,
+    so it is hidden from readers (the sidebar already lists the same labels).
+  {% endcomment %}
+  {% if r.skills and r.skills != empty %}
+  <div class="rbx-tick" aria-hidden="true">
+    <div class="rbx-tick-track">
+      {% comment %} four copies: one sequence is narrower than the sheet, and a
+         seamless -50% loop needs the track to cover the width at every offset {% endcomment %}
+      {% for i in (1..4) %}
+        <div class="rbx-tick-seq">
+          {% for s in r.skills %}
+            <span class="rbx-tick-item">{{ s.label }}</span>
+            {% unless forloop.last %}
+              <svg class="rbx-tick-mark" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">
+                <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+                  <line x1="12" y1="2.5" x2="12" y2="21.5" />
+                  <line x1="2.5" y1="12" x2="21.5" y2="12" />
+                  <line x1="5.3" y1="5.3" x2="18.7" y2="18.7" />
+                  <line x1="18.7" y1="5.3" x2="5.3" y2="18.7" />
+                </g>
+              </svg>
+            {% endunless %}
+          {% endfor %}
+          <svg class="rbx-tick-mark" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">
+            <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+              <line x1="12" y1="2.5" x2="12" y2="21.5" />
+              <line x1="2.5" y1="12" x2="21.5" y2="12" />
+              <line x1="5.3" y1="5.3" x2="18.7" y2="18.7" />
+              <line x1="18.7" y1="5.3" x2="5.3" y2="18.7" />
+            </g>
+          </svg>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <aside class="rbx-side" data-rv style="--rv: 0ms">
+    <a class="rbx-mark-link" href="{{ page.url | relative_url }}" aria-label="{{ r.name }}" data-rv style="--rv: 0ms">
       <svg class="rbx-mark" viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
         <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
           <line x1="12" y1="2.5" x2="12" y2="21.5" />
@@ -21,10 +147,10 @@ layout: portfolio_base
       </svg>
     </a>
 
-    <h1 class="rbx-name">{{ r.name }}</h1>
-    <p class="rbx-sub">{{ r.subtitle }}</p>
+    <h1 class="rbx-name" data-rv style="--rv: 40ms">{{ r.name }}<span class="rbx-name-dot">.</span></h1>
+    <p class="rbx-sub" data-rv style="--rv: 90ms">{{ r.subtitle }}</p>
     {% if r.about and r.about != '' %}
-      <p class="rbx-about">{{ r.about }}</p>
+      <p class="rbx-about" data-rv style="--rv: 140ms">{{ r.about }}</p>
     {% endif %}
     {% if r.under_construction -%}
       <span class="rbx-uc">Under construction</span>
@@ -35,7 +161,7 @@ layout: portfolio_base
       four areas cost four lines of column instead of a screenful.
     {% endcomment %}
     {% if r.skills and r.skills != empty %}
-      <dl class="rbx-skills">
+      <dl class="rbx-skills" data-rv style="--rv: 200ms">
         {% for s in r.skills %}
           <div class="rbx-skill">
             <dt class="rbx-skill-label">{{ s.label }}</dt>
@@ -49,7 +175,7 @@ layout: portfolio_base
       The page no longer fits one screen, so the sidebar carries a
       numbered index of it. Rows scroll to the card rather than leaving the page.
     {% endcomment %}
-    <nav class="rbx-manifest" aria-label="Projects on this page">
+    <nav class="rbx-manifest" aria-label="Projects on this page" data-rv style="--rv: 260ms">
       <p class="rbx-manifest-h">Index</p>
       {% for p in r.projects %}
         <a class="rbx-manifest-row" href="#p-{{ p.slug }}">
@@ -59,7 +185,7 @@ layout: portfolio_base
       {% endfor %}
     </nav>
 
-    <nav class="rbx-links">
+    <nav class="rbx-links" data-rv style="--rv: 320ms">
       {% for l in r.links %}
         {% assign is_url = false %}
         {% if l.url contains '://' %}{% assign is_url = true %}{% endif %}
@@ -94,6 +220,8 @@ layout: portfolio_base
         class="rbx-card{% unless has_media %} is-empty{% endunless %}"
         id="p-{{ p.slug }}"
         href="{{ page.url | append: p.slug | append: '/' | relative_url }}"
+        data-rv
+        style="--rv: {{ forloop.index0 | modulo: 2 | times: 90 | plus: 120 }}ms"
       >
         <span class="rbx-frame">
           {% if still and still != '' %}

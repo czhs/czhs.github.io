@@ -31,10 +31,11 @@
 
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 {%- comment -%}
-  Only the micro-sites still fetch from Google Fonts; the zine pages self-host
-  (see zine_palette.liquid), so these two hints would be dead weight there.
+  Only MLn and ringworld still fetch from Google Fonts; the zine pages and the
+  robotics/ML portfolio self-host (see zine_palette.liquid and
+  portfolio_styles.liquid), so these two hints would be dead weight there.
 {%- endcomment -%}
-{% if page.layout contains 'mln' or page.layout contains 'ringworld' or page.layout contains 'portfolio' %}
+{% if page.layout contains 'mln' or page.layout contains 'ringworld' %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 {% endif %}
@@ -43,14 +44,14 @@
 <link defer rel="stylesheet" href="{{ '/assets/css/academicons.min.css' | relative_url | bust_file_cache }}">
 <link defer rel="stylesheet" href="{{ '/assets/css/scholar-icons.css' | relative_url | bust_file_cache }}">
 {%- comment -%}
-  Roboto / Roboto Slab / Material Icons are only needed by the micro-sites,
-  which still inherit al-folio's base typography (mdb.min.css sets Roboto as
-  the body face). The zine pages set their own family on every element, so on
-  those this request downloads three unused families and blocks rendering
-  while it does. Emitted for the micro-site shells only.
+  Roboto / Roboto Slab / Material Icons are only needed by the micro-sites
+  that still inherit al-folio's base typography (mdb.min.css sets Roboto as
+  the body face). The zine pages and the portfolio set their own family on
+  every element, so on those this request downloads three unused families and
+  blocks rendering while it does. Emitted for MLn and ringworld only.
 {%- endcomment -%}
 {% assign micro = false %}
-{% if page.layout contains 'mln' or page.layout contains 'ringworld' or page.layout contains 'portfolio' %}
+{% if page.layout contains 'mln' or page.layout contains 'ringworld' %}
   {% assign micro = true %}
 {% endif %}
 {% if micro %}
