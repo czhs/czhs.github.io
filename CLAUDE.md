@@ -18,6 +18,7 @@ on that area**:
 | [research-posts](docs/claude/research-posts.md) | turning an uploaded notebook PDF into a password-gated /research post |
 | [ringworld](docs/claude/ringworld.md) | the /ringworld/ micro-site: posts, sessions, design decisions not to undo |
 | [robotics-ml-portfolio](docs/claude/robotics-ml-portfolio.md) | /robotics/ + /ml/ shells; the never-link-to-robotics rule |
+| [hcl-ml](docs/claude/hcl-ml.md) | the gated /HCL-ML page: unified write-up, inline co-drafting editor + save server, publishing |
 | [domain](docs/claude/domain.md) | chrisshi.com DNS / cutover |
 
 Keep this file small: new workflows get their own file in `docs/claude/` plus one

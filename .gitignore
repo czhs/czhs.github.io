@@ -31,3 +31,8 @@ _config_local.yml
 # Season recap reels play from YouTube (see docs/claude/mln.md) — the repo only
 # carries the poster still. The local encode stays on disk, uncommitted.
 /assets/video/mln/*-recap.mp4
+
+# /HCL-ML plaintext sources: figure includes + images render locally into the
+# body, which ships only encrypted (assets/enc/hcl-ml.json). Never publish.
+/_includes/research/
+/assets/img/research/

@@ -191,6 +191,7 @@ kramdown:
 include: ["_pages", "_scripts"]
 exclude:
   - bin/
+  - local/
   - CLAUDE.md
   - docs/claude/
   - CONTRIBUTING.md

@@ -1,0 +1,406 @@
+{%- comment -%}
+  Inline co-drafting editor for the /HCL-ML preview. Included ONLY by
+  _layouts/hcl_preview.html, so none of it ships on the published page.
+
+  Every prose block (p, li, h2, h3, td, th …) becomes contenteditable. On
+  blur, the changed block is POSTed to local/hcl_edit.py, which rewrites that
+  element in _pages/hcl-ml.md in place — so whoever reads the source next
+  (Claude, git, the encryptor) sees the edit. Blocks are matched to the source
+  by tag + normalised text, in document order; figure includes that render
+  inside a block travel as a [[HCL_INCLUDE]] token and are put back as the
+  original {% raw %}{% include %}{% endraw %} tag.
+
+  Enter splits a paragraph, Shift+Enter is a line break, Backspace in an empty
+  paragraph removes it, Esc leaves the block. Paste is plain text.
+{%- endcomment -%}
+<style>
+  .hcl-ed {
+    outline: 0;
+    border-radius: 4px;
+    cursor: text;
+    transition: box-shadow 0.12s ease, background 0.12s ease;
+  }
+  .hcl-ed:hover {
+    box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--rz-accent) 40%, transparent);
+  }
+  .hcl-ed:focus {
+    box-shadow: 0 0 0 2px var(--rz-accent);
+    background: color-mix(in srgb, var(--rz-accent) 5%, transparent);
+  }
+  .hcl-ed.hcl-ed-dirty {
+    box-shadow: 0 0 0 2px var(--rz-claude-ink);
+  }
+  .hcl-ed.hcl-ed-stash {
+    box-shadow: 0 0 0 2px var(--rz-claude-ink);
+    background: var(--rz-claude-bg);
+  }
+
+  .hcl-edbar {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: min(92vw, 620px);
+    padding: 8px 12px;
+    font-family: var(--rz-mono, ui-monospace, Menlo, monospace);
+    font-size: 0.74rem;
+    line-height: 1.4;
+    color: var(--rz-text, #1a1a1a);
+    background: var(--rz-card, #fff);
+    border: 2px solid color-mix(in srgb, var(--rz-text, #1a1a1a) 30%, transparent);
+    border-radius: 999px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  }
+  .hcl-edbar .k {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .hcl-edbar .hint {
+    opacity: 0.6;
+    white-space: nowrap;
+  }
+  .hcl-edbar .st {
+    margin-left: auto;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--rz-text, #1a1a1a) 8%, transparent);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+  .hcl-edbar .st.ok {
+    background: color-mix(in srgb, var(--rz-accent, #0f6046) 16%, transparent);
+  }
+  .hcl-edbar .st.err {
+    background: var(--rz-claude-bg, #fbe9e0);
+    color: var(--rz-claude-ink, #8a3f10);
+    white-space: normal;
+  }
+  .hcl-edbar button {
+    font: inherit;
+    padding: 2px 9px;
+    border: 1.5px solid currentColor;
+    border-radius: 999px;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+  .hcl-edbar button[hidden] {
+    display: none;
+  }
+  @media (max-width: 1100px) {
+    .hcl-edbar .hint {
+      display: none;
+    }
+  }
+</style>
+<script>
+  (function () {
+    var SERVER = "http://127.0.0.1:4031";
+    var TOKEN = "[[HCL_INCLUDE]]";
+    var EDITABLE = "p, li, h2, h3, h4, td, th, figcaption, blockquote";
+    var INLINE = { A: 1, EM: 1, STRONG: 1, CODE: 1, SPAN: 1, B: 1, I: 1, SUP: 1, SUB: 1, BR: 1,
+      SMALL: 1, KBD: 1, ABBR: 1, MARK: 1, DEL: 1, INS: 1, U: 1, S: 1, Q: 1, CITE: 1, TIME: 1,
+      VAR: 1, WBR: 1 };
+    var STASH_KEY = "hcl_edit_stash";
+
+    var bar = document.createElement("div");
+    bar.className = "hcl-edbar";
+    bar.innerHTML =
+      '<span class="k">&#9998; inline editing</span>' +
+      '<span class="hint">click any paragraph &middot; Enter splits &middot; Esc leaves</span>' +
+      '<span class="st" id="hcl-edst">connecting&hellip;</span>' +
+      '<button type="button" id="hcl-edretry" hidden>retry</button>';
+    document.body.appendChild(bar);
+    var st = bar.querySelector("#hcl-edst");
+    var retry = bar.querySelector("#hcl-edretry");
+
+    function setStatus(text, cls) {
+      st.textContent = text;
+      st.className = "st" + (cls ? " " + cls : "");
+    }
+    function clock() {
+      var d = new Date();
+      return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+    }
+
+    /* ── matching the DOM to the source ─────────────────────────── */
+    function norm(s) {
+      return s.normalize("NFC").replace(/[​‌‍﻿]/g, "").replace(/\s+/g, " ").trim();
+    }
+    function isForeign(n) {
+      return n.nodeType === 1 && !INLINE[n.tagName];
+    }
+    // the block's own text, ignoring anything a figure include rendered into it
+    function keyOf(el) {
+      var c = el.cloneNode(true);
+      Array.prototype.slice.call(c.children).forEach(function (ch) { if (isForeign(ch)) ch.remove(); });
+      return norm(c.textContent);
+    }
+    // the block's html for the source, with each run of include output as one token
+    function htmlOf(el) {
+      var c = el.cloneNode(true);
+      var run = false;
+      Array.prototype.slice.call(c.childNodes).forEach(function (n) {
+        if (isForeign(n)) {
+          if (!run) c.insertBefore(document.createTextNode(TOKEN), n);
+          run = true;
+          n.remove();
+        } else if (run && n.nodeType === 3 && !n.textContent.trim()) {
+          n.remove();
+        } else {
+          run = false;
+        }
+      });
+      return c.innerHTML.replace(/(\s*<br\s*\/?>)+\s*$/i, "");
+    }
+    function isEmpty(el) {
+      return keyOf(el) === "" && !el.querySelector("svg, img, iframe, table");
+    }
+
+    var doc = null;          // last /doc answer from the server
+    var info = new Map();    // el -> {i, tag, key, html}
+
+    function candidates() {
+      var out = [];
+      Array.prototype.forEach.call(document.querySelectorAll(".hcl-doc, .hcl-mode"), function (pane) {
+        Array.prototype.forEach.call(pane.querySelectorAll(EDITABLE), function (el) {
+          if (el.closest("svg, iframe, pre")) return;
+          out.push(el);
+        });
+      });
+      return out;
+    }
+
+    function bind() {
+      info.forEach(function (_, el) { el.removeAttribute("data-hcl-i"); });
+      info.clear();
+      var src = doc.elements, j = 0, missed = [];
+      candidates().forEach(function (el) {
+        if (j >= src.length) return;
+        if (el.dataset.hclNew) return;
+        if (el.parentElement && el.parentElement.closest("[data-hcl-i]")) return;
+        var tag = el.tagName.toLowerCase(), key = keyOf(el);
+        if (src[j].tag === tag && src[j].key === key) {
+          el.setAttribute("data-hcl-i", j);
+          info.set(el, { i: j, tag: tag, key: key, html: htmlOf(el) });
+          wire(el);
+          j++;
+        } else if (src[j].tag === tag) {
+          missed.push([src[j].key, key]);
+        }
+      });
+      if (j < src.length) {
+        console.warn("hcl-edit: bound " + j + " of " + src.length + " source blocks; first unmatched:", src[j], missed.slice(0, 3));
+      }
+      return j;
+    }
+
+    /* ── editing behaviour ──────────────────────────────────────── */
+    function placeCaret(el, atEnd) {
+      var r = document.createRange();
+      r.selectNodeContents(el);
+      r.collapse(!atEnd);
+      var s = window.getSelection();
+      s.removeAllRanges();
+      s.addRange(r);
+    }
+    function editables() {
+      return Array.prototype.filter.call(document.querySelectorAll(".hcl-ed"), function (e) {
+        return !e.closest("[hidden]");
+      });
+    }
+
+    function wire(el) {
+      if (el.__hclWired) return;
+      el.__hclWired = true;
+      el.classList.add("hcl-ed");
+      el.contentEditable = "true";
+
+      el.addEventListener("input", function () { el.classList.add("hcl-ed-dirty"); });
+      el.addEventListener("paste", function (e) {
+        e.preventDefault();
+        var t = (e.clipboardData || window.clipboardData).getData("text/plain");
+        document.execCommand("insertText", false, t);
+      });
+      el.addEventListener("keydown", function (e) {
+        var tag = el.tagName.toLowerCase();
+        if (e.key === "Escape") { e.preventDefault(); el.blur(); return; }
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          if (tag === "p" || tag === "li") split(el);
+          return;
+        }
+        if (e.key === "Backspace" && (tag === "p" || tag === "li") && isEmpty(el)) {
+          e.preventDefault();
+          removeBlock(el);
+        }
+      });
+      el.addEventListener("blur", function () { commit(el); });
+    }
+
+    function split(el) {
+      var tag = el.tagName;
+      var n = document.createElement(tag);
+      var sel = window.getSelection();
+      var before = false;
+      if (sel && sel.rangeCount && el.contains(sel.anchorNode)) {
+        var r = sel.getRangeAt(0);
+        var tail = document.createRange();
+        tail.selectNodeContents(el);
+        tail.setStart(r.endContainer, r.endOffset);
+        var head = document.createRange();
+        head.selectNodeContents(el);
+        head.setEnd(r.startContainer, r.startOffset);
+        if (norm(head.toString()) === "" && norm(tail.toString()) !== "") {
+          before = true;          // caret at the start: open a blank block above instead
+        } else {
+          n.appendChild(tail.extractContents());
+        }
+      }
+      if (!n.textContent.trim() && !n.querySelector("*:not(br)")) n.innerHTML = "<br>";
+      if (!el.textContent.trim() && !el.querySelector("*:not(br)")) el.innerHTML = "<br>";
+      n.dataset.hclNew = "1";
+      n.__anchor = el;
+      n.__where = before ? "before" : "after";
+      el.insertAdjacentElement(before ? "beforebegin" : "afterend", n);
+      wire(n);
+      if (before) { el.focus(); placeCaret(el, false); }
+      else { n.focus(); placeCaret(n, false); }
+    }
+
+    function removeBlock(el) {
+      var list = editables();
+      var k = list.indexOf(el);
+      var prev = k > 0 ? list[k - 1] : null;
+      el.__gone = true;
+      var rec = info.get(el);
+      el.remove();
+      if (rec) send({ op: "delete", i: rec.i, tag: rec.tag, key: rec.key }, null);
+      if (prev) { prev.focus(); placeCaret(prev, true); }
+    }
+
+    function commit(el) {
+      if (el.__gone) return;
+      el.classList.remove("hcl-ed-dirty");
+      var tag = el.tagName.toLowerCase();
+      if (el.dataset.hclNew) {
+        if (isEmpty(el)) { el.__gone = true; el.remove(); return; }
+        var anchor = el.__anchor && info.get(el.__anchor);
+        if (!anchor) { setStatus("could not place the new block — reload", "err"); return; }
+        send({ op: "insert", where: el.__where, i: anchor.i, tag: anchor.tag, key: anchor.key,
+               newtag: tag, html: htmlOf(el) }, el);
+        return;
+      }
+      var rec = info.get(el);
+      if (!rec) return;
+      if ((tag === "p" || tag === "li") && isEmpty(el)) {
+        el.__gone = true;
+        el.remove();
+        send({ op: "delete", i: rec.i, tag: rec.tag, key: rec.key }, null);
+        return;
+      }
+      var html = htmlOf(el);
+      if (html === rec.html) return;
+      send({ op: "replace", i: rec.i, tag: rec.tag, key: rec.key, html: html }, el);
+    }
+
+    /* ── talking to the save server ─────────────────────────────── */
+    var queue = Promise.resolve();
+    function send(op, el) {
+      queue = queue.then(function () { return post(op, el); });
+    }
+    function post(op, el) {
+      setStatus("saving…");
+      return fetch(SERVER + "/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ops: [op] })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          if (!res.ok) {
+            setStatus("✗ " + res.error, "err");
+            if (el) el.classList.add("hcl-ed-stash");
+            return;
+          }
+          if (el) { delete el.dataset.hclNew; el.classList.remove("hcl-ed-stash"); }
+          doc = res;
+          bind();
+          if (window.__hclRefresh) window.__hclRefresh();
+          setStatus("saved " + clock(), "ok");
+        })
+        .catch(function () {
+          stash(op);
+          if (el) el.classList.add("hcl-ed-stash");
+          setStatus("edit server offline — start “hcl-edit”, then retry", "err");
+          retry.hidden = false;
+        });
+    }
+
+    // edits made while the server is down wait in localStorage
+    function stash(op) {
+      var s = loadStash();
+      s.ops.push(op);
+      try { localStorage.setItem(STASH_KEY, JSON.stringify(s)); } catch (e) {}
+    }
+    function loadStash() {
+      try { return JSON.parse(localStorage.getItem(STASH_KEY)) || { ops: [] }; }
+      catch (e) { return { ops: [] }; }
+    }
+    function flush(reloadAfter) {
+      var s = loadStash();
+      if (!s.ops.length) return Promise.resolve();
+      setStatus("saving " + s.ops.length + " waiting edit" + (s.ops.length > 1 ? "s" : "") + "…");
+      return fetch(SERVER + "/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ops: s.ops })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          var done = res.ok ? s.ops.length : res.applied || 0;
+          s.ops.splice(0, done);
+          try { localStorage.setItem(STASH_KEY, JSON.stringify(s)); } catch (e) {}
+          if (!res.ok) { setStatus("✗ " + res.error, "err"); return; }
+          retry.hidden = true;
+          if (reloadAfter) { location.reload(); return; }
+          doc = res;
+          bind();
+          document.querySelectorAll(".hcl-ed-stash").forEach(function (e) { e.classList.remove("hcl-ed-stash"); });
+          setStatus("saved " + clock(), "ok");
+        });
+    }
+    retry.addEventListener("click", function () {
+      flush(false).catch(function () {
+        setStatus("still offline — start “hcl-edit” (python3 local/hcl_edit.py)", "err");
+      });
+    });
+
+    function boot() {
+      fetch(SERVER + "/doc")
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          doc = d;
+          // edits stranded by an earlier page load apply first, then the page reloads
+          var waiting = loadStash().ops.length;
+          if (waiting) return flush(true);
+          var n = bind();
+          setStatus(n === d.elements.length
+            ? "connected · " + n + " blocks editable"
+            : "connected · " + n + " of " + d.elements.length + " blocks matched (see console)",
+            n === d.elements.length ? "ok" : "err");
+        })
+        .catch(function () {
+          setStatus("edit server offline — start “hcl-edit”, then reload", "err");
+        });
+    }
+    boot();
+  })();
+</script>

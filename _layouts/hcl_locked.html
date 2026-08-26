@@ -1,0 +1,132 @@
+---
+layout: default
+---
+{%- comment -%}
+  Password gate for the /HCL-ML page. Same at-rest scheme as /research
+  (bin/research_lock.py: PBKDF2-SHA256 300k -> AES-256-GCM) but its OWN
+  password and sessionStorage key, deliberately separate from the shared
+  /research password. The decrypted body is a single unified document; the
+  public layout ships only the chrome, and the contents rail is built from
+  the DOM after unlock so no section heading exists in the clear.
+{%- endcomment -%}
+
+{% include research_styles.liquid %}
+{% include hcl_tab_chrome.liquid %}
+
+<div class="rzine">
+  <div class="rzine-card">
+    <header class="post-header">
+      <h1 class="post-title">{{ page.title }}</h1>
+      {% if page.description %}
+        <p class="post-desc">{{ page.description }}</p>
+      {% endif %}
+      <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}</p>
+    </header>
+
+    <section class="rlock" id="rlock">
+      <form class="rzine-gate" id="rlock-gate" autocomplete="off">
+        <p class="rzine-lock">locked entry</p>
+        <div class="rzine-row">
+          <input
+            class="rzine-input"
+            id="rlock-pw"
+            type="password"
+            name="rlock-pw"
+            placeholder="password"
+            aria-label="password"
+            autocomplete="off"
+            autocapitalize="off"
+            autocorrect="off"
+            spellcheck="false"
+          >
+          <button class="rzine-btn" type="submit">open</button>
+        </div>
+        <p class="rzine-msg" id="rlock-msg" role="status" aria-live="polite"></p>
+      </form>
+      <article class="post-content rzine-content" id="rlock-content" hidden></article>
+    </section>
+
+    {% include hcl_ends.liquid %}
+  </div>
+
+  {% include research_foot.liquid %}
+</div>
+
+<nav class="hcl-toc" id="hcl-toc" aria-label="table of contents"></nav>
+
+<script>
+  (function () {
+    var PAYLOAD_URL = "{{ page.enc_payload | relative_url }}";
+    var STORE_KEY = "hcl_pw";
+
+    var gate = document.getElementById("rlock-gate");
+    var pw = document.getElementById("rlock-pw");
+    var msg = document.getElementById("rlock-msg");
+    var content = document.getElementById("rlock-content");
+
+    function b64(s) {
+      return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); });
+    }
+
+    var payload = null;
+    function getPayload() {
+      if (payload) return Promise.resolve(payload);
+      return fetch(PAYLOAD_URL)
+        .then(function (r) { return r.json(); })
+        .then(function (p) { payload = p; return p; });
+    }
+
+    function decrypt(password) {
+      return getPayload().then(function (p) {
+        var subtle = window.crypto.subtle;
+        return subtle
+          .importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"])
+          .then(function (km) {
+            return subtle.deriveKey(
+              { name: "PBKDF2", salt: b64(p.salt), iterations: p.iter, hash: "SHA-256" },
+              km,
+              { name: "AES-GCM", length: 256 },
+              false,
+              ["decrypt"]
+            );
+          })
+          .then(function (key) {
+            return subtle.decrypt({ name: "AES-GCM", iv: b64(p.iv) }, key, b64(p.ct));
+          })
+          .then(function (buf) { return JSON.parse(new TextDecoder().decode(buf)); });
+      });
+    }
+
+    function unlock(password, remember) {
+      return decrypt(password).then(function (data) {
+        content.innerHTML = data.html;
+        gate.hidden = true;
+        content.hidden = false;
+        window.__hclBind();
+        if (remember) {
+          try { sessionStorage.setItem(STORE_KEY, password); } catch (e) {}
+        }
+      });
+    }
+
+    gate.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!window.crypto || !window.crypto.subtle) {
+        msg.textContent = "decryption requires a secure (https) connection.";
+        return;
+      }
+      msg.textContent = "unlocking…";
+      unlock(pw.value, true).catch(function () {
+        msg.textContent = "incorrect password.";
+        pw.select();
+      });
+    });
+
+    try {
+      var saved = sessionStorage.getItem(STORE_KEY);
+      if (saved && window.crypto && window.crypto.subtle) {
+        unlock(saved, false).catch(function () {});
+      }
+    } catch (e) {}
+  })();
+</script>

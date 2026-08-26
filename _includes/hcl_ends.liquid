@@ -1,0 +1,17 @@
+{%- comment -%}
+  The /HCL-ML end rail: the robotics portfolio. The card lists the projects
+  straight from _data/robotics.yml so it never goes stale.
+
+  This is the one place the main site links to /robotics/ — the never-link
+  rule in docs/claude/robotics-ml-portfolio.md is about the public personal
+  site; /HCL-ML is an orphan, gated page shared with the same audience the
+  portfolio is built for (Chris, 2026-08-21).
+{%- endcomment -%}
+<nav class="hcl-ends" aria-label="read next">
+  <p class="hcl-ends-lead">read next</p>
+  <a class="hcl-end" href="{{ '/robotics/' | relative_url }}">
+    <span class="hcl-end-k">portfolio</span>
+    <span class="hcl-end-t">Robotics portfolio</span>
+    <span class="hcl-end-d">{% for p in site.data.robotics.projects %}{{ p.title }}{% unless forloop.last %} · {% endunless %}{% endfor %}</span>
+  </a>
+</nav>

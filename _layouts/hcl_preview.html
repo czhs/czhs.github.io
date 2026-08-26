@@ -1,0 +1,40 @@
+---
+layout: default
+---
+{%- comment -%}
+  LOCAL-ONLY preview layout for the /HCL-ML gated page — the analogue of
+  research_preview. Renders the plaintext master for review and for
+  bin/research_lock.py extraction, and (only here) switches on the inline
+  co-drafting editor: hcl_editor.liquid + local/hcl_edit.py write edits
+  straight back into _pages/hcl-ml.md. Never deployed with plaintext content.
+{%- endcomment -%}
+
+{% include research_styles.liquid %}
+{% include hcl_tab_chrome.liquid %}
+
+<div class="rzine">
+  <div class="rzine-card">
+    <header class="post-header">
+      <h1 class="post-title">{{ page.title }}</h1>
+      {% if page.description %}
+        <p class="post-desc">{{ page.description }}</p>
+      {% endif %}
+      <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}</p>
+    </header>
+
+    <article class="post-content rzine-content" id="hcl-content">
+      {{ content }}
+    </article>
+
+    {% include hcl_ends.liquid %}
+  </div>
+
+  {% include research_foot.liquid %}
+</div>
+
+<nav class="hcl-toc" id="hcl-toc" aria-label="table of contents"></nav>
+
+<script>
+  window.__hclBind();
+</script>
+{% include hcl_editor.liquid %}
