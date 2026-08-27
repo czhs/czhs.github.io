@@ -46,6 +46,9 @@ layout: portfolio_base
 
     // Each stroke draws for a time proportional to its length, chained in
     // writing order, so the whole signature takes DRAW ms however it is cut.
+    // Easing is LINEAR on purpose: the pen moves at one constant speed across
+    // the whole signature. Per-stroke ease-in-out made it accelerate and brake
+    // on every stroke, which read as pulsing rather than writing.
     var paths = [].slice.call(el.querySelectorAll('.rbx-sig-p'));
     var total = 0;
     var lens = paths.map(function (p) {
@@ -63,8 +66,8 @@ layout: portfolio_base
       // a dot at every stroke start before anything has drawn.
       p.style.strokeDasharray = (lens[i] + 2).toFixed(1) + ' ' + (lens[i] * 2 + 22).toFixed(1);
       p.style.strokeDashoffset = (lens[i] + 12).toFixed(1);
-      p.style.transition = 'stroke-dashoffset ' + d.toFixed(0) + 'ms cubic-bezier(0.45, 0.05, 0.55, 0.95) ' + t.toFixed(0) + 'ms';
-      t += d + 35;
+      p.style.transition = 'stroke-dashoffset ' + d.toFixed(0) + 'ms linear ' + t.toFixed(0) + 'ms';
+      t += d + 25;
     });
 
     var lifted = false;
@@ -96,45 +99,6 @@ layout: portfolio_base
 </script>
 
 <div class="rbx-wrap">
-  {% comment %}
-    Capability ticker — the sidebar's skill labels verbatim, separated by the
-    site mark. Two copies of the sequence make the loop seamless; decorative,
-    so it is hidden from readers (the sidebar already lists the same labels).
-  {% endcomment %}
-  {% if r.skills and r.skills != empty %}
-  <div class="rbx-tick" aria-hidden="true">
-    <div class="rbx-tick-track">
-      {% comment %} four copies: one sequence is narrower than the sheet, and a
-         seamless -50% loop needs the track to cover the width at every offset {% endcomment %}
-      {% for i in (1..4) %}
-        <div class="rbx-tick-seq">
-          {% for s in r.skills %}
-            <span class="rbx-tick-item">{{ s.label }}</span>
-            {% unless forloop.last %}
-              <svg class="rbx-tick-mark" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">
-                <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
-                  <line x1="12" y1="2.5" x2="12" y2="21.5" />
-                  <line x1="2.5" y1="12" x2="21.5" y2="12" />
-                  <line x1="5.3" y1="5.3" x2="18.7" y2="18.7" />
-                  <line x1="18.7" y1="5.3" x2="5.3" y2="18.7" />
-                </g>
-              </svg>
-            {% endunless %}
-          {% endfor %}
-          <svg class="rbx-tick-mark" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">
-            <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
-              <line x1="12" y1="2.5" x2="12" y2="21.5" />
-              <line x1="2.5" y1="12" x2="21.5" y2="12" />
-              <line x1="5.3" y1="5.3" x2="18.7" y2="18.7" />
-              <line x1="18.7" y1="5.3" x2="5.3" y2="18.7" />
-            </g>
-          </svg>
-        </div>
-      {% endfor %}
-    </div>
-  </div>
-  {% endif %}
-
   <aside class="rbx-side" data-rv style="--rv: 0ms">
     <a class="rbx-mark-link" href="{{ page.url | relative_url }}" aria-label="{{ r.name }}" data-rv style="--rv: 0ms">
       <svg class="rbx-mark" viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">

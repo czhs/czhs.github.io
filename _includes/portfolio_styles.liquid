@@ -128,12 +128,15 @@
      portfolio_base.liquid stamps .is-in as things reach the viewport. */
   html.rbx-armed :is([data-rv], .rbx-stn, .rbx-shot, .rbx-pager) {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(10px);
   }
   html.rbx-armed.rbx-ready :is([data-rv], .rbx-stn, .rbx-shot, .rbx-pager) {
+    /* a short rise on a long expo-out tail: most of the distance is covered
+       early, the settle is gentle — a bigger translate on a snappier curve
+       read as choppy */
     transition:
-      opacity 0.6s ease,
-      transform 0.6s cubic-bezier(0.22, 0.9, 0.3, 1);
+      opacity 0.55s ease,
+      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
     transition-delay: var(--rv, 0ms);
   }
   html.rbx-armed.rbx-ready :is([data-rv], .rbx-stn, .rbx-shot, .rbx-pager).is-in {
@@ -159,52 +162,6 @@
     border: 8px solid var(--rbx-ink);
   }
 
-  /* capability ticker: an ink strip across the top of the sheet. Labels come
-     verbatim from the data file's skills; the ✳ separators are the site mark
-     in tape orange. Slow, pausable, and static under reduced motion. */
-  .rbx-tick {
-    grid-column: 1 / -1;
-    overflow: hidden;
-    margin: calc(var(--shp) * -1) calc(var(--shp) * -1) 0;
-    background: var(--rbx-ink);
-    color: var(--rbx-card);
-  }
-  .rbx-tick-track {
-    display: flex;
-    width: max-content;
-    animation: rbx-tick 42s linear infinite;
-  }
-  .rbx-tick:hover .rbx-tick-track {
-    animation-play-state: paused;
-  }
-  .rbx-tick-seq {
-    display: flex;
-    align-items: center;
-    gap: 2.4rem;
-    padding: 0.6rem 1.2rem 0.6rem 1.2rem;
-    flex-shrink: 0;
-  }
-  .rbx-tick-item {
-    /* explicit: a base-theme rule recolors bare spans to the text color,
-       which is ink-on-ink here */
-    color: var(--rbx-card);
-    font-family: var(--rbx-mono);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .rbx-tick-mark {
-    color: var(--tape);
-    flex-shrink: 0;
-  }
-  @keyframes rbx-tick {
-    to {
-      transform: translateX(-50%);
-    }
-  }
-
   /* ── sidebar ──────────────────────────────────────────────────────
      The column carries the whole identity — name, capabilities, an index of
      the grid, and the links — and it has to do that inside one screen without
@@ -212,7 +169,8 @@
      gap and the display sizes shrink with the viewport instead of stacking up
      past the fold. `overflow-y: auto` stays only as a floor for genuinely tiny
      windows and large accessibility text sizes, where clipping the links would
-     be worse than a scrollbar. */
+     be worse; the rail itself is hidden (still scrollable) so the column never
+     shows a scrollbar. */
   .rbx-side {
     --sgap: clamp(0.8rem, 1.95vh, 1.9rem);
     position: sticky;
@@ -220,9 +178,12 @@
     align-self: start;
     max-height: calc(100vh - 4.5rem);
     overflow-y: auto;
-    scrollbar-width: thin;
+    scrollbar-width: none;
     display: flex;
     flex-direction: column;
+  }
+  .rbx-side::-webkit-scrollbar {
+    display: none;
   }
   .rbx-mark-link {
     display: inline-flex;
@@ -612,8 +573,12 @@
       align-self: start;
       max-height: calc(100vh - 3.8rem);
       overflow-y: auto;
-      scrollbar-width: thin;
+      /* scrollable, but no visible rail of its own */
+      scrollbar-width: none;
       padding-right: 0.4rem;
+    }
+    .rbx-tocrail::-webkit-scrollbar {
+      display: none;
     }
     /* the rail replaces the chip TOC where both would render (extra specificity:
        the chip TOC's own display:flex rule sits later in the cascade) */
@@ -1420,9 +1385,6 @@
     .rbx-mark-link:hover .rbx-mark,
     .rbx-mast-brand:hover .rbx-mark {
       transform: none;
-    }
-    .rbx-tick-track {
-      animation: none;
     }
     .rbx-intro {
       display: none;
