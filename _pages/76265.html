@@ -1,0 +1,233 @@
+---
+layout: default
+permalink: /76265/
+title: 76265
+nav: false
+sitemap: false
+---
+
+<section class="poemlock" id="poemlock">
+  <form class="poemlock-gate" id="poemlock-gate" autocomplete="off">
+    <div class="poemlock-row">
+      <input
+        class="poemlock-input"
+        id="poemlock-pw"
+        type="password"
+        name="poemlock-pw"
+        placeholder="password"
+        aria-label="password"
+        autocomplete="off"
+        autocapitalize="off"
+        autocorrect="off"
+        spellcheck="false"
+      >
+      <button class="poemlock-btn" type="submit">open</button>
+    </div>
+    <p class="poemlock-msg" id="poemlock-msg" role="status" aria-live="polite"></p>
+  </form>
+
+  <div class="poemlock-content" id="poemlock-content" hidden>
+    <div class="poemlock-view" id="poemlock-view"></div>
+  </div>
+</section>
+
+<style>
+  .poemlock {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 3rem 0 4rem;
+  }
+  .poemlock [hidden] {
+    display: none !important;
+  }
+
+  /* gate */
+  .poemlock-gate {
+    text-align: center;
+  }
+  .poemlock-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .poemlock-input {
+    width: 220px;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--global-divider-color);
+    border-radius: 8px;
+    background: var(--global-bg-color);
+    color: var(--global-text-color);
+    font-size: 1rem;
+  }
+  .poemlock-input:focus {
+    outline: none;
+    border-color: var(--global-theme-color);
+  }
+  .poemlock-btn {
+    padding: 0.55rem 1.25rem;
+    border: 1px solid var(--global-divider-color);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--global-text-color);
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  .poemlock-btn:hover {
+    color: var(--global-theme-color);
+    border-color: var(--global-theme-color);
+  }
+  .poemlock-msg {
+    min-height: 1.4em;
+    margin: 1rem 0 0;
+    font-size: 0.9rem;
+    opacity: 0.65;
+  }
+
+  /* directory */
+  .poemlock-index {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .poemlock-index li {
+    margin: 0 0 0.9rem;
+  }
+  .poemlock-index a {
+    font-size: 1.05rem;
+  }
+
+  /* poem */
+  .poemlock-back {
+    display: inline-block;
+    margin: 0 0 1.75rem;
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+  .poemlock-view h1 {
+    margin: 0 0 2rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  .poemlock-view p {
+    margin: 0 0 1.5rem;
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+  .poemlock-view p:last-child {
+    margin-bottom: 0;
+  }
+</style>
+
+<script>
+  (function () {
+    var PAYLOAD_URL = "{{ '/assets/enc/76265.json' | relative_url }}";
+
+    var gate = document.getElementById("poemlock-gate");
+    var pw = document.getElementById("poemlock-pw");
+    var msg = document.getElementById("poemlock-msg");
+    var content = document.getElementById("poemlock-content");
+    var view = document.getElementById("poemlock-view");
+    var data = null;
+
+    function b64(s) {
+      return Uint8Array.from(atob(s), function (c) {
+        return c.charCodeAt(0);
+      });
+    }
+
+    var payload = null;
+    function getPayload() {
+      if (payload) return Promise.resolve(payload);
+      return fetch(PAYLOAD_URL)
+        .then(function (r) {
+          return r.json();
+        })
+        .then(function (p) {
+          payload = p;
+          return p;
+        });
+    }
+
+    function decrypt(password) {
+      return getPayload().then(function (p) {
+        var subtle = window.crypto.subtle;
+        return subtle
+          .importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"])
+          .then(function (km) {
+            return subtle.deriveKey(
+              { name: "PBKDF2", salt: b64(p.salt), iterations: p.iter, hash: "SHA-256" },
+              km,
+              { name: "AES-GCM", length: 256 },
+              false,
+              ["decrypt"]
+            );
+          })
+          .then(function (key) {
+            return subtle.decrypt({ name: "AES-GCM", iv: b64(p.iv) }, key, b64(p.ct));
+          })
+          .then(function (buf) {
+            return JSON.parse(new TextDecoder().decode(buf));
+          });
+      });
+    }
+
+    function renderIndex() {
+      var list = document.createElement("ul");
+      list.className = "poemlock-index";
+      data.poems.forEach(function (p) {
+        var li = document.createElement("li");
+        var a = document.createElement("a");
+        a.href = "#" + p.slug;
+        a.textContent = p.title;
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+      view.innerHTML = "";
+      view.appendChild(list);
+    }
+
+    function renderPoem(p) {
+      view.innerHTML = p.html;
+      var back = document.createElement("a");
+      back.className = "poemlock-back";
+      back.href = "#";
+      back.textContent = "← index";
+      view.insertBefore(back, view.firstChild);
+    }
+
+    function route() {
+      if (!data) return;
+      var slug = location.hash.replace(/^#/, "");
+      var match = null;
+      data.poems.forEach(function (p) {
+        if (p.slug === slug) match = p;
+      });
+      if (match) renderPoem(match);
+      else renderIndex();
+    }
+
+    window.addEventListener("hashchange", route);
+
+    gate.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!window.crypto || !window.crypto.subtle) {
+        msg.textContent = "this browser can't decrypt here — try https.";
+        return;
+      }
+      msg.textContent = "unlocking…";
+      decrypt(pw.value).then(
+        function (d) {
+          data = d;
+          gate.hidden = true;
+          content.hidden = false;
+          route();
+        },
+        function () {
+          msg.textContent = "not it.";
+          pw.select();
+        }
+      );
+    });
+  })();
+</script>
