@@ -7,26 +7,37 @@ sitemap: false
 ---
 
 <section class="poemlock" id="poemlock">
-  <form class="poemlock-gate" id="poemlock-gate" autocomplete="off">
-    <div class="poemlock-row">
-      <input
-        class="poemlock-input"
-        id="poemlock-pw"
-        type="password"
-        name="poemlock-pw"
-        placeholder="password"
-        aria-label="password"
-        autocomplete="off"
-        autocapitalize="off"
-        autocorrect="off"
-        spellcheck="false"
-      >
-      <button class="poemlock-btn" type="submit">open</button>
-    </div>
-    <p class="poemlock-msg" id="poemlock-msg" role="status" aria-live="polite"></p>
-  </form>
+  <ul class="poemlock-index" id="poemlock-index">
+    {% for p in site.data.poems_76265 %}
+    <li><a href="#{{ p.slug }}">{{ p.title }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <div class="poemlock-locked" id="poemlock-locked" hidden>
+    <a class="poemlock-back" href="#">← index</a>
+    <p class="poemlock-which" id="poemlock-which"></p>
+    <form class="poemlock-gate" id="poemlock-gate" autocomplete="off">
+      <div class="poemlock-row">
+        <input
+          class="poemlock-input"
+          id="poemlock-pw"
+          type="password"
+          name="poemlock-pw"
+          placeholder="password"
+          aria-label="password"
+          autocomplete="off"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+        >
+        <button class="poemlock-btn" type="submit">open</button>
+      </div>
+      <p class="poemlock-msg" id="poemlock-msg" role="status" aria-live="polite"></p>
+    </form>
+  </div>
 
   <div class="poemlock-content" id="poemlock-content" hidden>
+    <a class="poemlock-back" href="#">← index</a>
     <div class="poemlock-view" id="poemlock-view"></div>
   </div>
 </section>
@@ -41,9 +52,27 @@ sitemap: false
     display: none !important;
   }
 
+  /* directory */
+  .poemlock-index {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .poemlock-index li {
+    margin: 0 0 0.9rem;
+  }
+  .poemlock-index a {
+    font-size: 1.05rem;
+  }
+
   /* gate */
   .poemlock-gate {
     text-align: center;
+  }
+  .poemlock-which {
+    margin: 2rem 0 1.5rem;
+    text-align: center;
+    font-size: 1.05rem;
   }
   .poemlock-row {
     display: flex;
@@ -84,19 +113,6 @@ sitemap: false
     opacity: 0.65;
   }
 
-  /* directory */
-  .poemlock-index {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .poemlock-index li {
-    margin: 0 0 0.9rem;
-  }
-  .poemlock-index a {
-    font-size: 1.05rem;
-  }
-
   /* poem */
   .poemlock-back {
     display: inline-block;
@@ -121,14 +137,26 @@ sitemap: false
 
 <script>
   (function () {
-    var PAYLOAD_URL = "{{ '/assets/enc/76265.json' | relative_url }}";
+    var PAYLOAD_BASE = "{{ '/assets/enc/' | relative_url }}";
+    var PW_KEY = "poems76265_pw";
 
+    var index = document.getElementById("poemlock-index");
+    var locked = document.getElementById("poemlock-locked");
+    var which = document.getElementById("poemlock-which");
     var gate = document.getElementById("poemlock-gate");
     var pw = document.getElementById("poemlock-pw");
     var msg = document.getElementById("poemlock-msg");
     var content = document.getElementById("poemlock-content");
     var view = document.getElementById("poemlock-view");
-    var data = null;
+
+    var titles = {};
+    [].slice.call(index.querySelectorAll("a")).forEach(function (a) {
+      titles[a.getAttribute("href").slice(1)] = a.textContent;
+    });
+
+    var current = null;
+    var cache = {};
+    var payloads = {};
 
     function b64(s) {
       return Uint8Array.from(atob(s), function (c) {
@@ -136,21 +164,20 @@ sitemap: false
       });
     }
 
-    var payload = null;
-    function getPayload() {
-      if (payload) return Promise.resolve(payload);
-      return fetch(PAYLOAD_URL)
+    function getPayload(slug) {
+      if (payloads[slug]) return Promise.resolve(payloads[slug]);
+      return fetch(PAYLOAD_BASE + "76265-" + slug + ".json")
         .then(function (r) {
           return r.json();
         })
         .then(function (p) {
-          payload = p;
+          payloads[slug] = p;
           return p;
         });
     }
 
-    function decrypt(password) {
-      return getPayload().then(function (p) {
+    function decrypt(slug, password) {
+      return getPayload(slug).then(function (p) {
         var subtle = window.crypto.subtle;
         return subtle
           .importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"])
@@ -172,42 +199,75 @@ sitemap: false
       });
     }
 
-    function renderIndex() {
-      var list = document.createElement("ul");
-      list.className = "poemlock-index";
-      data.poems.forEach(function (p) {
-        var li = document.createElement("li");
-        var a = document.createElement("a");
-        a.href = "#" + p.slug;
-        a.textContent = p.title;
-        li.appendChild(a);
-        list.appendChild(li);
+    function unlock(slug, password) {
+      return decrypt(slug, password).then(function (d) {
+        cache[slug] = d.html;
       });
-      view.innerHTML = "";
-      view.appendChild(list);
     }
 
-    function renderPoem(p) {
-      view.innerHTML = p.html;
-      var back = document.createElement("a");
-      back.className = "poemlock-back";
-      back.href = "#";
-      back.textContent = "← index";
-      view.insertBefore(back, view.firstChild);
+    function storedPw() {
+      try {
+        return sessionStorage.getItem(PW_KEY);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function storePw(v) {
+      try {
+        sessionStorage.setItem(PW_KEY, v);
+      } catch (e) {}
+    }
+
+    function showIndex() {
+      index.hidden = false;
+      locked.hidden = true;
+      content.hidden = true;
+    }
+
+    function showGate(slug) {
+      index.hidden = true;
+      content.hidden = true;
+      which.textContent = titles[slug];
+      msg.textContent = "";
+      pw.value = "";
+      locked.hidden = false;
+      pw.focus();
+    }
+
+    function showPoem(slug) {
+      view.innerHTML = cache[slug];
+      index.hidden = true;
+      locked.hidden = true;
+      content.hidden = false;
     }
 
     function route() {
-      if (!data) return;
       var slug = location.hash.replace(/^#/, "");
-      var match = null;
-      data.poems.forEach(function (p) {
-        if (p.slug === slug) match = p;
-      });
-      if (match) renderPoem(match);
-      else renderIndex();
+      if (!slug || !(slug in titles)) {
+        current = null;
+        showIndex();
+        return;
+      }
+      current = slug;
+      if (cache[slug]) {
+        showPoem(slug);
+        return;
+      }
+      showGate(slug);
+      var saved = storedPw();
+      if (saved && window.crypto && window.crypto.subtle) {
+        msg.textContent = "unlocking…";
+        unlock(slug, saved).then(
+          function () {
+            if (current === slug) showPoem(slug);
+          },
+          function () {
+            if (current === slug) msg.textContent = "";
+          }
+        );
+      }
     }
-
-    window.addEventListener("hashchange", route);
 
     gate.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -215,13 +275,13 @@ sitemap: false
         msg.textContent = "this browser can't decrypt here — try https.";
         return;
       }
+      var slug = current;
+      var entered = pw.value;
       msg.textContent = "unlocking…";
-      decrypt(pw.value).then(
-        function (d) {
-          data = d;
-          gate.hidden = true;
-          content.hidden = false;
-          route();
+      unlock(slug, entered).then(
+        function () {
+          storePw(entered);
+          if (current === slug) showPoem(slug);
         },
         function () {
           msg.textContent = "not it.";
@@ -229,5 +289,8 @@ sitemap: false
         }
       );
     });
+
+    window.addEventListener("hashchange", route);
+    route();
   })();
 </script>
