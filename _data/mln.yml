@@ -305,20 +305,22 @@ weeks:
     slug: "5wvhx171"
     evt: "evt-r6zcq5sAFOwiOEh"
     date: "2026-08-31"
-    title: "Manifold-Constrained Hyper-Connections"
-    cover: "https://images.lumacdn.com/gallery-images/wx/3b0a8406-85d0-426f-a10d-f00084982b88.png"
-    summary: "How does constraining residual connections to a geometric manifold restore identity mappings and enable stable scaling in large language models? Can richer cross-layer connectivity improve reasoning and representation quality without sacrificing optimization stability?"
+    title: "Interpreting Language Model Parameters"
+    cover: "https://images.lumacdn.com/uploads/bf/274e1429-ab42-400d-9204-d53824dc3bfa.png"
+    summary: "Can a model’s learned mechanisms be recovered directly from its parameters, without assuming that neurons, attention heads, or activation features are the correct units of analysis?"
     description: |-
-      How does constraining residual connections to a geometric manifold restore identity mappings and enable stable scaling in large language models? Can richer cross-layer connectivity improve reasoning and representation quality without sacrificing optimization stability?
+      Can a model’s learned mechanisms be recovered directly from its parameters, without assuming that neurons, attention heads, or activation features are the correct units of analysis?
 
-      DeepSeek’s Manifold-Constrained Hyper-Connections (mHC) introduce a principled fix to recent attempts at widening residual streams. While Hyper-Connections improve performance by allowing richer cross-layer mixing, their unconstrained residual matrices break the identity-mapping property that makes deep networks trainable, leading to severe instability at scale. mHC resolves this by projecting residual mixing matrices onto the manifold of doubly stochastic matrices, ensuring residual updates remain convex combinations of features and preserving signal magnitude across depth.
+      Goodfire’s adVersarial Parameter Decomposition (VPD) attempts to interpret language models by decomposing their actual weight matrices into simple rank-one subcomponents. Unlike activation-based methods such as sparse autoencoders and transcoders, VPD preserves the model’s original computational form: its components sum back to the model’s parameters and are trained so that only a small subset is necessary for any given input. Crucially, VPD adversarially searches for combinations of supposedly unimportant components whose removal would break the model, providing a stronger test of mechanistic faithfulness than ordinary random ablations.
 
-      Empirically, this constraint dramatically stabilizes training in large language models, eliminating gradient explosions observed in unconstrained HC while retaining its performance gains. With careful systems co-design—kernel fusion, recomputation, and pipeline overlap—mHC incurs only ~6–7% overhead at 27B scale, while consistently improving downstream reasoning benchmarks. The result reframes architectural scaling as a geometric constraint problem, showing that richer connectivity can be safely exploited when paired with mathematically grounded structure rather than ad-hoc regularization.
+      Applied to a four-layer, 67M-parameter language model, VPD discovers interpretable mechanisms that frequently cut across conventional architectural boundaries—including attention computations distributed across multiple heads. These components can be assembled into attribution graphs for behaviors such as pronoun prediction and bracket closing, and the authors demonstrate a preliminary hand-written parameter edit that predictably changes emoticon completions. The result challenges the field’s focus on activation features: rather than asking only what representations a model contains, VPD offers a path toward understanding the parameter-level algorithms that operate on those representations—while leaving open whether the method can scale to frontier models or uniquely recover their “true” mechanisms.
 
       Join us at CASI for discussion at 8 pm, and (optional) quiet reading from 7 pm.
     reading:
-      - title: "mHC: Manifold-Constrained Hyper-Connections — DeepSeek"
-        url: "https://www.arxiv.org/pdf/2512.24880"
+      - title: "Interpreting Language Model Parameters — Goodfire"
+        url: "https://www.goodfire.com/research/interpreting-lm-parameters"
+      - title: "Paper Summary: Interpreting Language Model Parameters — Goodfire"
+        url: "https://www.goodfire.com/research/vpd-explainer"
   - num: 16
     slug: "srsz8rga"
     evt: "evt-v89wbXHXDCt5bik"
