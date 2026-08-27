@@ -9,7 +9,7 @@ sitemap: false
 <section class="poemlock" id="poemlock">
   <ul class="poemlock-index" id="poemlock-index">
     {% for p in site.data.poems_76265 %}
-    <li><a href="#{{ p.slug }}">{{ p.title }}</a></li>
+    <li><a href="#{{ p.slug }}">{{ p.title }}</a><span class="poemlock-date">{{ p.date }}</span></li>
     {% endfor %}
   </ul>
 
@@ -63,6 +63,11 @@ sitemap: false
   }
   .poemlock-index a {
     font-size: 1.05rem;
+  }
+  .poemlock-date {
+    margin-left: 0.6rem;
+    font-size: 0.85rem;
+    opacity: 0.55;
   }
 
   /* gate */
