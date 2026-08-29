@@ -1,5 +1,10 @@
 # Research notebook PDF -> /research blog post
 
+> There is a second /research genre: the UNIFIED technical writeup (HCL-ML
+> style, e.g. the converging-on-rome entry). Its agent guide lives with the
+> plaintext masters, outside this repo: `VPD-Copying/docs/research_src/WRITEUP_GUIDE.md`.
+> This file covers only the verbatim notebook-PDF conversion below.
+
 
 When Chris uploads a notebook PDF (like "IH Engineering Notebook") and asks to post it,
 follow this workflow. The first post
