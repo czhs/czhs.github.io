@@ -22,9 +22,8 @@ layout: default
   <ul class="rzine-list">
     {% assign docs = site.research | sort: "date" | reverse %}
     {% for entry in docs %}
-      {% unless entry.compact %}
       <li>
-        <a class="rzine-entry{% if entry.cover %} has-cover{% endif %}" href="{{ entry.url | relative_url }}">
+        <a class="rzine-entry{% if entry.cover %} has-cover{% endif %}{% if entry.compact %} re-muted{% endif %}" href="{{ entry.url | relative_url }}">
           <div class="re-body">
             <p class="re-title">{{ entry.title }}</p>
             {% if entry.description %}
@@ -42,37 +41,8 @@ layout: default
           {% endif %}
         </a>
       </li>
-      {% endunless %}
     {% endfor %}
   </ul>
-
-  {% assign compacts = site.research | where: "compact", true | sort: "date" | reverse %}
-  {% if compacts.size > 0 %}
-  <div class="rzine-card rzine-compactcard">
-    <p class="rc-head">notebook archive</p>
-    <ul class="rc-list">
-      {% for entry in compacts %}
-        <li>
-          <a class="rc-row" href="{{ entry.url | relative_url }}">
-            <span class="rc-title">{{ entry.title }}</span>
-            {% if entry.description %}<span class="rc-desc">{{ entry.description }}</span>{% endif %}
-            <span class="rc-date">{{ entry.date | date: "%b %-d, %Y" }}{% if entry.enc_payload %} &#183; locked{% endif %}</span>
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-  <style>
-    .rzine-compactcard{padding:0.9rem 1.2rem 1rem;opacity:.82}
-    .rzine-compactcard .rc-head{font-family:ui-monospace,Menlo,monospace;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6;margin:0 0 .45rem}
-    .rzine-compactcard .rc-list{list-style:none;margin:0;padding:0}
-    .rzine-compactcard .rc-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem;padding:.28rem 0;text-decoration:none;color:inherit;border-bottom:none}
-    .rzine-compactcard .rc-title{font-weight:600;font-size:.92rem}
-    .rzine-compactcard .rc-desc{font-size:.8rem;opacity:.6;flex:1 1 12rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .rzine-compactcard .rc-date{font-family:ui-monospace,Menlo,monospace;font-size:.7rem;opacity:.55;margin-left:auto}
-    .rzine-compactcard .rc-row:hover .rc-title{text-decoration:underline}
-  </style>
-  {% endif %}
 
   {% include research_foot.liquid %}
 </div>
@@ -84,4 +54,13 @@ layout: default
   .rzine-entry.has-cover{display:flex;align-items:stretch;gap:1.1rem;padding:0}
   .rzine-entry.has-cover .re-body{flex:1 1 auto;min-width:0;padding:1.15rem 0 1.25rem 1.35rem}
   .rzine-entry .re-cover{display:block;flex:0 0 clamp(110px,24%,180px);width:clamp(110px,24%,180px);max-width:none;object-fit:cover;margin:0;border-left:5px solid var(--rz-ink)}
+
+  /* muted entries — compact: true docs (notebook pages) sit in the same list
+     as everything else, each its own card, just quieter: thinner border,
+     tighter type, faded ink. */
+  .rzine-entry.re-muted{opacity:.78;border-width:3px;padding:0.75rem 1.15rem 0.85rem}
+  .rzine-entry.re-muted .re-title{font-size:1.05rem;font-weight:700;letter-spacing:-0.01em}
+  .rzine-entry.re-muted .re-desc{font-size:0.85rem;margin-top:0.25rem}
+  .rzine-entry.re-muted .re-meta{margin-top:0.45rem}
+  .rzine-list li:hover .rzine-entry.re-muted{transform:translate(-2px,-2px);box-shadow:3px 3px 0 color-mix(in srgb,var(--rz-ink) 55%,transparent)}
 </style>
