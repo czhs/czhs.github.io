@@ -24,17 +24,22 @@ layout: default
     {% for entry in docs %}
       {% unless entry.compact %}
       <li>
-        <a class="rzine-entry" href="{{ entry.url | relative_url }}">
-          <p class="re-title">{{ entry.title }}</p>
-          {% if entry.description %}
-            <p class="re-desc">{{ entry.description }}</p>
-          {% endif %}
-          <p class="re-meta">
-            <span>{{ entry.date | date: "%B %-d, %Y" }}</span>
-            {% if entry.enc_payload %}
-              <span class="re-lock">locked</span>
+        <a class="rzine-entry{% if entry.cover %} has-cover{% endif %}" href="{{ entry.url | relative_url }}">
+          <div class="re-body">
+            <p class="re-title">{{ entry.title }}</p>
+            {% if entry.description %}
+              <p class="re-desc">{{ entry.description }}</p>
             {% endif %}
-          </p>
+            <p class="re-meta">
+              <span>{{ entry.date | date: "%B %-d, %Y" }}</span>
+              {% if entry.enc_payload %}
+                <span class="re-lock">locked</span>
+              {% endif %}
+            </p>
+          </div>
+          {% if entry.cover %}
+            <img class="re-cover" src="{{ entry.cover | relative_url }}" alt="" loading="lazy" />
+          {% endif %}
         </a>
       </li>
       {% endunless %}
@@ -71,3 +76,12 @@ layout: default
 
   {% include research_foot.liquid %}
 </div>
+
+<style>
+  /* entry covers — a panel filling the card's right side, flush against the
+     card border, separated from the text by the same ink rule the border
+     uses. Cards without a cover: field render exactly as before. */
+  .rzine-entry.has-cover{display:flex;align-items:stretch;gap:1.1rem;padding:0}
+  .rzine-entry.has-cover .re-body{flex:1 1 auto;min-width:0;padding:1.15rem 0 1.25rem 1.35rem}
+  .rzine-entry .re-cover{display:block;flex:0 0 clamp(110px,24%,180px);width:clamp(110px,24%,180px);max-width:none;object-fit:cover;margin:0;border-left:5px solid var(--rz-ink)}
+</style>
