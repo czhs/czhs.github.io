@@ -322,9 +322,29 @@ weeks:
       - title: "Paper Summary: Interpreting Language Model Parameters — Goodfire"
         url: "https://www.goodfire.com/research/vpd-explainer"
   - num: 16
+    slug: "1skezldi"
+    evt: "evt-GN1VWcMTv0UFkmf"
+    date: "2026-09-07"
+    title: "Vision Language Action Models: Foundation Models for Robotics"
+    cover: "https://images.lumacdn.com/uploads/2v/d3b3dcf7-1cf7-44a9-9a28-dfaa3f21531c.webp"
+    summary: "When language models became generalists by training on enormous, diverse datasets, what is the robotics equivalent when useful robot data is scarce, expensive, and fragmented across different machines? If a robot’s training set contains demonstrations, autonomous rollouts, failures, human video, and Internet data, how does the model learn which behaviors to imitate, which to avoid, and which pieces can be recombined into something new?"
+    description: |-
+      When language models became generalists by training on enormous, diverse datasets, what is the robotics equivalent when useful robot data is scarce, expensive, and fragmented across different machines? If a robot’s training set contains demonstrations, autonomous rollouts, failures, human video, and Internet data, how does the model learn which behaviors to imitate, which to avoid, and which pieces can be recombined into something new?
+
+      The central problem behind general-purpose robotics is not just collecting more data, but making heterogeneous data usable. Prior vision-language-action models can perform many trained behaviors, yet still struggle to compose skills into new tasks without task-specific fine-tuning. π0.7 attacks this by expanding the model’s prompt beyond a simple language instruction: each trajectory can be conditioned on detailed subtask descriptions, generated subgoal images showing what the near-future world should look like, and episode metadata describing speed, quality, mistakes, and control mode. Architecturally, π0.7 is a 5B-parameter VLA with a 4B Gemma 3 vision-language backbone, a memory-style history encoder, and an 860M-parameter flow-matching action expert that predicts chunks of continuous robot actions.
+
+      Each of those context signals is a lever on data diversity: metadata lets π0.7 learn from failed and suboptimal autonomous rollouts without blindly imitating them, subgoal images import knowledge from web-scale image-generation pretraining, and cross-embodiment and human data expose the model to behaviors beyond any single robot. The payoff is striking: one model can match task-specific specialists on dexterous tasks, follow unusual instructions in unseen environments, transfer skills between substantially different robots, and compose previously learned behaviors to solve new tasks without task-specific post-training. π0.7 asks whether richer context can substitute, at least partly, for pristine robot datasets.
+
+      Join us at CASI for discussion at 8 pm, and (optional) quiet reading from 7 pm.
+    reading:
+      - title: "π0.7: A Steerable Generalist Robotic Foundation Model — Physical Intelligence (blog post)"
+        url: "https://www.pi.website/blog/pi07"
+      - title: "π0.7: A Steerable Generalist Robotic Foundation Model — Physical Intelligence (full paper)"
+        url: "https://www.pi.website/download/pi07.pdf"
+  - num: 17
     slug: "srsz8rga"
     evt: "evt-v89wbXHXDCt5bik"
-    date: "2026-09-07"
+    date: "2026-09-14"
     title: "Attention Residuals: Rethinking Information Flow in LLMs"
     cover: "https://images.lumacdn.com/gallery-images/l6/26a28b85-5c4f-4d9a-a09a-e401c29ce330.png"
     summary: "Standard residual connections with PreNorm accumulate every layer’s output with fixed unit weights, letting the hidden state grow uncontrollably with depth and diluting each layer’s unique contribution — what if each layer could instead learn which earlier representations to read from?"
@@ -339,10 +359,10 @@ weeks:
     reading:
       - title: "Attention Residuals: Rethinking Information Flow in LLMs — Kimi Team"
         url: "https://arxiv.org/pdf/2603.15031"
-  - num: 17
+  - num: 18
     slug: "4uzwjunv"
     evt: "evt-yKmrA4UWyIo1FT1"
-    date: "2026-09-14"
+    date: "2026-09-21"
     title: "Goedel-Prover-V2: Scaling Formal Theorem Proving"
     cover: "https://images.unsplash.com/photo-1675627453075-0f170b02186a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjQyMjF8MHwxfHNlYXJjaHw1MXx8dGhlb3JlbSUyMHByb3Zpbmd8ZW58MHx8fHwxNzg3MDY5MTI2fDA&ixlib=rb-4.1.0&q=80&w=1080"
     summary: "How does pairing scaffolded data synthesis with verifier-guided self-correction overcome data scarcity in formal theorem proving? Can structured compiler feedback and subproblem generation outperform sheer parameter scaling in complex mathematical reasoning?"
