@@ -24,6 +24,9 @@ layout: default
         <p class="post-desc">{{ page.description }}</p>
       {% endif %}
       <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}</p>
+      {% if page.claude_authored %}
+        <p class="rz-byline">Claude authored based on my research repo and engineering notebook, proof read by Chris</p>
+      {% endif %}
     </header>
 
     <section class="rlock" id="rlock">

@@ -121,6 +121,12 @@ encrypted payload — so a research entry with math must set `math: true` in the
 5. Swap in the locked stub: `_research/<slug>.md` becomes front matter only —
    `layout: research_locked`, title/date/description (these stay public on the
    `/research` listing), `enc_payload: /assets/enc/research-<slug>.json`.
+   Optional: `cover:` (card art on the index), `compact: true` (notebook
+   entries render as one muted row), and `claude_authored: true` for a post
+   Claude wrote from the repo/notebook — it prints Chris's byline ("Claude
+   authored based on my research repo and engineering notebook, proof read by
+   Chris") under the date, on the lock screen and after unlocking. Verbatim
+   notebook entries do NOT get that flag.
 6. Archive the plaintext masters OUTSIDE this repo:
    `/Users/hshi/Desktop/VPD-Copying/docs/research_src/` (post .md, screenshots,
    figure SVGs — see its README for the re-edit loop).
