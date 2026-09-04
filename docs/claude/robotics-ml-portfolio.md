@@ -53,6 +53,24 @@ state.
   self-drawing "Chris Shi" overlay and its SVG include are gone; the
   Hershey-Script generator still lives in `local/sig/sig_gen.py` (gitignored)
   if it is ever wanted back.
+- **The window** (2026-09-04, after "i dont like the website scrolls a bit before
+  with the website background strip at the top, the whole design needs to be
+  tightened"): the ink frame is no longer a border on a sheet that scrolls — it
+  is `.rbx-window` in `portfolio_base.liquid`, a `position: fixed` frame with
+  the field ring painted by its `box-shadow` spread, and the sheet is the body
+  itself, scrolling beneath it. `--frame` (ring + frame width) is what content
+  must clear: sticky tops and every `scroll-margin-top` are
+  `calc(var(--frame) + …)`. The theme's back-to-top button is hidden here.
+- **Ruled grid**: the index is a contact sheet, not floating cards — no
+  gutters; each card carries its bottom rule, the left card of a pair its
+  right rule, the grid the outer edge; covers bleed to the rules and captions
+  sit in a band. Hover is a faint field tint on the cell, tape on the number,
+  a rule under the title; there is no offset shadow because cells touch. Cards
+  reveal fade-only so the rules never move. An odd last card gets a filler
+  cell (`::after`) so the bottom rule stays complete.
+- **Sidebar**: `site_label` as a mono eyebrow over the name, the name at
+  display size, 3px rules over the index and the links, links set in mono
+  uppercase (wayfinding, so the machine face).
 - **No asterisk mark** (removed 2026-09-04, "remove the asterisk above my name"):
   the four-line star glyph that sat above the sidebar name and beside the name in
   the detail masthead is gone; the masthead name text is still the link back to
@@ -71,7 +89,8 @@ state.
 - Detail pages are a shell grid: masthead across the top, sticky TOC rail on the
   left (≥1080px), content in `.rbx-main`. The rail is **built client-side** from
   whatever rendered — stations, section headings, the write-up's own `h2`s, the
-  gallery, the b-roll — so pages need no per-page TOC data. It scroll-spies, and
+  gallery — so pages need no per-page TOC data. The b-roll section is
+  deliberately NOT in it (Chris, 2026-09-04). It scroll-spies, and
   mirrors the run's `is-on`/`is-done` onto its rows (orange = flow state). The
   chip TOC still renders under 1080px.
 - The index sidebar carries a numbered project manifest (anchors to `#p-<slug>`
@@ -177,6 +196,14 @@ Do not score this by counting saturated pixels over the head: from behind-ish
 azimuths that mostly counts the yellow antenna-holder discs, so the metric
 rewards shooting the duck's back. Count green and blue only, or isolate the lens
 geoms the way `Rig.robot_mask` isolates the robot (hide them, render, diff).
+
+## Duck card cover
+
+`duck-cover.jpg` is a frame of the real robot standing on its own (Chris's
+legs behind it, hands away): `duck-stands-free.mp4` at 16.5 s, `crop=720:540:10:30`
+scaled to 1200×900. Replaced 2026-09-04 ("open duck mini cover also need to be
+improved" — the old one was the top-down wiring shot). Not a render, on
+purpose: the card has no caption to say so.
 
 ## Duck build footage
 
