@@ -98,6 +98,13 @@ state.
 
 ## Gotchas that cost time
 
+- **Anything injected after load that carries a reveal class (`.rbx-shot`,
+  `[data-rv]`, …) starts at opacity 0 and stays there** unless the observer in
+  `portfolio_base.liquid` is told about it — dispatch
+  `rbx:reveal` with `{ detail: { root } }` after injecting. The unlocked
+  pie-robot b-roll was invisible for two weeks this way (2026-08-26 reveal
+  system → found 2026-09-04, "the b-roll seems to be broken").
+
 - Gallery grid needs `align-items: start`. The footage mixes portrait phone video
   with landscape CAD stills; the default `stretch` leaves a dead gap under whichever
   tile is shorter.

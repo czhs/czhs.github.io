@@ -346,6 +346,9 @@ layout: portfolio_base
                 remap(out);
                 gate.hidden = true;
                 out.hidden = false;
+                // the injected figures carry .rbx-shot, which the reveal
+                // choreography hides until observed — see portfolio_base.liquid
+                document.dispatchEvent(new CustomEvent('rbx:reveal', { detail: { root: out } }));
                 if (lock) lock.textContent = 'open';
                 msg.textContent = '';
                 document.dispatchEvent(new CustomEvent('rbx:toc-refresh'));
