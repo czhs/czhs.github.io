@@ -251,21 +251,36 @@ ninja.data = [{
           description: "another project with an image 🎉",
           section: "Projects",handler: () => {
               window.location.href = "/projects/9_project/";
-            },},{id: "research-ih-engineering-notebook",
-          title: 'IH Engineering Notebook',
+            },},{id: "research-engineering-notebook-entry",
+          title: 'Engineering Notebook Entry',
           description: "exploring new techniques",
           section: "Research",handler: () => {
               window.location.href = "/research/ih-engineering-notebook-2026-08-15/";
-            },},{id: "research-ih-engineering-notebook",
-          title: 'IH Engineering Notebook',
+            },},{id: "research-engineering-notebook-entry",
+          title: 'Engineering Notebook Entry',
           description: "working with a toy model",
           section: "Research",handler: () => {
               window.location.href = "/research/ih-engineering-notebook-2026-08-16/";
-            },},{id: "research-ih-engineering-notebook",
-          title: 'IH Engineering Notebook',
+            },},{id: "research-engineering-notebook-entry",
+          title: 'Engineering Notebook Entry',
           description: "I reinvented ROME &amp; pivot",
           section: "Research",handler: () => {
               window.location.href = "/research/ih-engineering-notebook-2026-08-17/";
+            },},{id: "research-playing-with-vpd",
+          title: 'Playing with VPD',
+          description: "what I discovered when playing with VPD",
+          section: "Research",handler: () => {
+              window.location.href = "/research/playing-with-vpd-2026-08-29/";
+            },},{id: "research-reconstructing-rome",
+          title: 'Reconstructing ROME',
+          description: "how we converged on ROME, from a new direction",
+          section: "Research",handler: () => {
+              window.location.href = "/research/reconstructing-rome-2026-08-29/";
+            },},{id: "research-what-a-size-ladder-can-identify",
+          title: 'What a Size Ladder Can Identify',
+          description: "why the scaling exponents optimizer benchmarks fit measure the experimental design, not the optimizer",
+          section: "Research",handler: () => {
+              window.location.href = "/research/what-a-size-ladder-can-identify-2026-08-29/";
             },},{
         id: 'social-github',
         title: 'GitHub',
