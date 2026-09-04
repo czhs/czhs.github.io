@@ -259,7 +259,7 @@ projects:
   - slug: gantry
     title: Hack 100 Gantry
     blurb: >-
-      Built at Hack 100 — self-designed CAD through to the first limit-switch test.
+      Built at Hack 100 — partly self-designed CAD through to the first limit-switch test.
     date: Spring 2026
     cover: assets/img/robotics/gantry.jpg
     poster: assets/img/robotics/gantry-poster.jpg

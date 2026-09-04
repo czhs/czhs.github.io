@@ -159,18 +159,6 @@
   .rbx-side::-webkit-scrollbar {
     display: none;
   }
-  .rbx-mark-link {
-    display: inline-flex;
-    color: var(--rbx-accent);
-    margin-bottom: clamp(0.7rem, 1.5vh, 1.6rem);
-  }
-  .rbx-mark {
-    display: block;
-    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.3, 1);
-  }
-  .rbx-mark-link:hover .rbx-mark {
-    transform: rotate(45deg);
-  }
   .rbx-name {
     font-weight: 800;
     font-size: clamp(2.1rem, 4.4vh, 2.7rem);
@@ -497,12 +485,6 @@
     gap: 0.6rem;
     color: var(--rbx-ink);
     text-decoration: none;
-  }
-  .rbx-mast-brand .rbx-mark {
-    color: var(--rbx-accent);
-  }
-  .rbx-mast-brand:hover .rbx-mark {
-    transform: rotate(45deg);
   }
   .rbx-mast-name {
     font-family: var(--rbx-mono);
@@ -1348,17 +1330,12 @@
     .rbx-frame,
     .rbx-cover,
     .rbx-preview,
-    .rbx-mark,
     .rbx-stn-dot,
     .rbx-stn-media,
     .rbx-stn-line::after,
     .rbx-tocrail-marker,
     .rbx-tocrail-label {
       transition: none;
-    }
-    .rbx-mark-link:hover .rbx-mark,
-    .rbx-mast-brand:hover .rbx-mark {
-      transform: none;
     }
   }
 </style>

@@ -10,17 +10,6 @@ layout: portfolio_base
 
 <div class="rbx-wrap">
   <aside class="rbx-side" data-rv style="--rv: 0ms">
-    <a class="rbx-mark-link" href="{{ page.url | relative_url }}" aria-label="{{ r.name }}" data-rv style="--rv: 0ms">
-      <svg class="rbx-mark" viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
-        <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-          <line x1="12" y1="2.5" x2="12" y2="21.5" />
-          <line x1="2.5" y1="12" x2="21.5" y2="12" />
-          <line x1="5.3" y1="5.3" x2="18.7" y2="18.7" />
-          <line x1="18.7" y1="5.3" x2="5.3" y2="18.7" />
-        </g>
-      </svg>
-    </a>
-
     <h1 class="rbx-name" data-rv style="--rv: 40ms">{{ r.name }}<span class="rbx-name-dot">.</span></h1>
     <p class="rbx-sub" data-rv style="--rv: 90ms">{{ r.subtitle }}</p>
     {% if r.about and r.about != '' %}
