@@ -23,17 +23,22 @@ layout: default
     {% assign docs = site.research | sort: "date" | reverse %}
     {% for entry in docs %}
       <li>
-        <a class="rzine-entry" href="{{ entry.url | relative_url }}">
-          <p class="re-title">{{ entry.title }}</p>
-          {% if entry.description %}
-            <p class="re-desc">{{ entry.description }}</p>
-          {% endif %}
-          <p class="re-meta">
-            <span>{{ entry.date | date: "%B %-d, %Y" }}</span>
-            {% if entry.enc_payload %}
-              <span class="re-lock">locked</span>
+        <a class="rzine-entry{% if entry.cover %} has-cover{% endif %}{% if entry.compact %} re-muted{% endif %}" href="{{ entry.url | relative_url }}">
+          <div class="re-body">
+            <p class="re-title">{{ entry.title }}</p>
+            {% if entry.description %}
+              <p class="re-desc">{{ entry.description }}</p>
             {% endif %}
-          </p>
+            <p class="re-meta">
+              <span>{{ entry.date | date: "%B %-d, %Y" }}</span>
+              {% if entry.enc_payload %}
+                <span class="re-lock">locked</span>
+              {% endif %}
+            </p>
+          </div>
+          {% if entry.cover %}
+            <img class="re-cover" src="{{ entry.cover | relative_url }}" alt="" loading="lazy" />
+          {% endif %}
         </a>
       </li>
     {% endfor %}
@@ -41,3 +46,23 @@ layout: default
 
   {% include research_foot.liquid %}
 </div>
+
+<style>
+  /* entry covers — a panel filling the card's right side, flush against the
+     card border, separated from the text by the same ink rule the border
+     uses. Cards without a cover: field render exactly as before. */
+  .rzine-entry.has-cover{display:flex;align-items:stretch;gap:1.1rem;padding:0}
+  .rzine-entry.has-cover .re-body{flex:1 1 auto;min-width:0;padding:1.15rem 0 1.25rem 1.35rem}
+  .rzine-entry .re-cover{display:block;flex:0 0 clamp(110px,24%,180px);width:clamp(110px,24%,180px);max-width:none;object-fit:cover;margin:0;border-left:5px solid var(--rz-ink)}
+
+  /* muted entries — compact: true docs (notebook pages) sit in the same list
+     as everything else, each its own card, just quieter: a thinner border and
+     a single line carrying title, description, and date. */
+  .rzine-entry.re-muted{opacity:.78;border-width:3px;padding:0.42rem 0.9rem 0.48rem}
+  .rzine-entry.re-muted .re-body{display:flex;align-items:baseline;gap:0.55rem;min-width:0}
+  .rzine-entry.re-muted .re-title{font-size:0.92rem;font-weight:700;letter-spacing:-0.01em;white-space:nowrap}
+  .rzine-entry.re-muted .re-desc{font-size:0.8rem;margin:0;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rzine-entry.re-muted .re-meta{margin:0 0 0 auto;white-space:nowrap;flex:0 0 auto}
+  .rzine-list li:has(.re-muted) + li:has(.re-muted){margin-top:0.55rem}
+  .rzine-list li:hover .rzine-entry.re-muted{transform:translate(-2px,-2px);box-shadow:3px 3px 0 color-mix(in srgb,var(--rz-ink) 55%,transparent)}
+</style>

@@ -24,6 +24,9 @@ layout: default
         <p class="post-desc">{{ page.description }}</p>
       {% endif %}
       <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}</p>
+      {% if page.claude_authored %}
+        <p class="rz-byline">Claude authored based on my research repo and engineering notebook, proof read by Chris</p>
+      {% endif %}
     </header>
 
     <section class="rlock" id="rlock">
@@ -100,6 +103,16 @@ layout: default
     function unlock(password, remember) {
       return decrypt(password).then(function (data) {
         content.innerHTML = data.html;
+        // innerHTML leaves <script> elements inert; entries ship interactive
+        // widgets inside the payload, so re-create each script node to run it.
+        Array.prototype.forEach.call(content.querySelectorAll("script"), function (old) {
+          var s = document.createElement("script");
+          Array.prototype.forEach.call(old.attributes, function (a) {
+            s.setAttribute(a.name, a.value);
+          });
+          s.textContent = old.textContent;
+          old.parentNode.replaceChild(s, old);
+        });
         gate.hidden = true;
         content.hidden = false;
         if (remember) {

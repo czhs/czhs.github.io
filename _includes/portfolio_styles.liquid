@@ -1,20 +1,92 @@
 <style>
   /* ── Robotics / ML portfolio — standalone micro-site ─────────────
-     Design language: the main site's forest green and warm cream carry every
-     page (all colour comes off the --global-* theme vars), and the single
-     accent is the gaffer orange that is physically on every frame of this
-     footage. Orange is reserved for FLOW STATE — the station that is running,
-     the rail that has been played, the live row of the TOC — so colour always
-     means something. Mono is used for machine labelling (numbers, specs,
-     captions, wayfinding), never for prose. */
-  body.rbx-site {
-    padding: 0;
-    --tape: #e8590c;
-    --rail: rgba(47, 74, 58, 0.24);
-    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+     Design language (2026-08-26 redesign): the ZINE. The portfolio now wears
+     the same skin as the main site — one ivory sheet with a thick ink border
+     sitting on the seafoam field, Plus Jakarta Sans for prose and display,
+     JetBrains Mono strictly for machine labelling (numbers, specs, captions,
+     wayfinding). The palette is the zine's default seafoam, fixed: this site
+     is handed to people hiring, so it always looks the same. No dark mode —
+     one palette per visitor, like the rest of the site.
+
+     The single accent stays the gaffer orange that is physically on every
+     frame of this footage. Orange is reserved for FLOW STATE — the station
+     that is running, the rail that has been played, the live row of the TOC —
+     so colour always means something.
+
+     Shape language, from the zine: squared corners, real ink borders, hard
+     offset shadows (never soft blur), and no transform under the cursor —
+     moving an element under the pointer cancels its own hover at the edge. */
+
+  /* Self-hosted fonts, same files as the main site (see zine_palette.liquid
+     for the measurement notes behind the metric-matched fallbacks). */
+  @font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 200 800;
+    font-display: swap;
+    src: url('{{ '/assets/fonts/plus-jakarta-sans-latin-var.woff2' | relative_url }}') format('woff2');
   }
-  html[data-theme='dark'] body.rbx-site {
-    --rail: rgba(216, 196, 160, 0.28);
+  @font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 100 800;
+    font-display: swap;
+    src: url('{{ '/assets/fonts/jetbrains-mono-latin-var.woff2' | relative_url }}') format('woff2');
+  }
+  @font-face {
+    font-family: 'PJS Fallback';
+    src: local('Arial'), local('Helvetica'), local('Liberation Sans');
+    size-adjust: 106.07%;
+    ascent-override: 94.28%;
+    descent-override: 24.51%;
+    line-gap-override: 0%;
+  }
+  @font-face {
+    font-family: 'JBM Fallback';
+    src: local('Menlo'), local('Consolas'), local('DejaVu Sans Mono'), local('Courier New');
+    size-adjust: 100%;
+    ascent-override: 102%;
+    descent-override: 30%;
+    line-gap-override: 0%;
+  }
+
+  body.rbx-site {
+    /* zine seafoam, fixed (copied literals from zine_palette.liquid; keep in sync) */
+    --rbx-field: #8fb2a4;
+    --rbx-ink: #13261f;
+    --rbx-card: #fffcf2;
+    --rbx-accent: #0f6046;
+    --tape: #e8590c;
+    --rail: color-mix(in srgb, var(--rbx-ink) 26%, transparent);
+    --line: color-mix(in srgb, var(--rbx-ink) 18%, transparent);
+    --ink-soft: color-mix(in srgb, var(--rbx-ink) 62%, transparent);
+    --rbx-sans: 'Plus Jakarta Sans', 'PJS Fallback', 'Segoe UI', Roboto, sans-serif;
+    --rbx-mono: 'JetBrains Mono', 'JBM Fallback', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --mono: var(--rbx-mono);
+    /* field visible around the sheet, and the sheet's own inner padding */
+    --shm: clamp(0.75rem, 2.5vw, 2.25rem);
+    --shp: clamp(1.25rem, 3vw, 2.75rem);
+
+    /* remap the theme vars so anything still reading --global-* (focus rings,
+       back-to-top, stray al-folio rules) tracks the zine palette too */
+    color-scheme: light;
+    --global-bg-color: var(--rbx-card);
+    --global-text-color: var(--rbx-ink);
+    --global-text-color-light: var(--ink-soft);
+    --global-theme-color: var(--rbx-accent);
+    --global-hover-color: var(--rbx-accent);
+    --global-hover-text-color: var(--rbx-card);
+    --global-divider-color: var(--line);
+    --global-card-bg-color: var(--rbx-card);
+
+    padding: 0;
+    background: var(--rbx-field);
+    color: var(--rbx-ink);
+    font-family: var(--rbx-sans);
+  }
+  html:has(body.rbx-site) {
+    background: var(--rbx-field);
+    scrollbar-gutter: stable;
   }
   @media (prefers-reduced-motion: no-preference) {
     html {
@@ -22,14 +94,72 @@
     }
   }
 
-  /* two-column shell: sticky sidebar + project grid */
+  /* ── signature intro: full-screen, draws once per tab session ────
+     The overlay is the field itself; when the curtain lifts it reveals the
+     ivory sheet. Strokes are drawn by script (stroke-dashoffset per path,
+     duration proportional to each stroke's length). Skipped entirely under
+     reduced motion and on repeat visits — see the script in portfolio.liquid. */
+  html.rbx-lock {
+    overflow: hidden;
+  }
+  .rbx-intro {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    background: var(--rbx-field);
+    color: var(--rbx-ink);
+    transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1);
+  }
+  .rbx-intro.is-lift {
+    transform: translateY(-102%);
+  }
+  .rbx-intro .rbx-sig {
+    width: min(74vw, 60vh, 32rem);
+    height: auto;
+  }
+
+  /* ── reveal choreography ─────────────────────────────────────────
+     .rbx-armed lands on <html> before first paint (script in
+     portfolio_base.liquid) and only when motion is allowed, so without JS —
+     or with reduced motion — nothing is ever hidden. .rbx-ready arrives when
+     the intro lifts (or immediately on pages without one); the observer in
+     portfolio_base.liquid stamps .is-in as things reach the viewport. */
+  html.rbx-armed :is([data-rv], .rbx-stn, .rbx-shot, .rbx-pager) {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  html.rbx-armed.rbx-ready :is([data-rv], .rbx-stn, .rbx-shot, .rbx-pager) {
+    /* a short rise on a long expo-out tail: most of the distance is covered
+       early, the settle is gentle — a bigger translate on a snappier curve
+       read as choppy */
+    transition:
+      opacity 0.55s ease,
+      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--rv, 0ms);
+  }
+  html.rbx-armed.rbx-ready :is([data-rv], .rbx-stn, .rbx-shot, .rbx-pager).is-in {
+    opacity: 1;
+    transform: none;
+  }
+  /* Inside the sticky sidebar the stagger is fade-only: translating its
+     children makes the column momentarily taller than its max-height, which
+     flashes a scrollbar on every load. The column itself carries the rise. */
+  html.rbx-armed .rbx-side [data-rv] {
+    transform: none;
+  }
+
+  /* ── the sheet: two-column shell, ink border, field around it ─── */
   .rbx-wrap {
     display: grid;
     grid-template-columns: 300px minmax(0, 1fr);
     gap: 3.25rem;
-    max-width: 1460px;
-    margin: 0 auto;
-    padding: 2.75rem 2.75rem 4.5rem;
+    width: min(1500px, calc(100% - var(--shm) * 2));
+    margin: var(--shm) auto;
+    padding: var(--shp);
+    background: var(--rbx-card);
+    border: 8px solid var(--rbx-ink);
   }
 
   /* ── sidebar ──────────────────────────────────────────────────────
@@ -39,22 +169,25 @@
      gap and the display sizes shrink with the viewport instead of stacking up
      past the fold. `overflow-y: auto` stays only as a floor for genuinely tiny
      windows and large accessibility text sizes, where clipping the links would
-     be worse than a scrollbar. */
+     be worse; the rail itself is hidden (still scrollable) so the column never
+     shows a scrollbar. */
   .rbx-side {
     --sgap: clamp(0.8rem, 1.95vh, 1.9rem);
     position: sticky;
-    top: 2.25rem;
+    top: clamp(1.25rem, 3vh, 2.25rem);
     align-self: start;
     max-height: calc(100vh - 4.5rem);
     overflow-y: auto;
-    scrollbar-width: thin;
+    scrollbar-width: none;
     display: flex;
     flex-direction: column;
   }
+  .rbx-side::-webkit-scrollbar {
+    display: none;
+  }
   .rbx-mark-link {
     display: inline-flex;
-    color: var(--global-theme-color);
-    /* the mark needs less air than the gaps between content blocks */
+    color: var(--rbx-accent);
     margin-bottom: clamp(0.7rem, 1.5vh, 1.6rem);
   }
   .rbx-mark {
@@ -65,46 +198,49 @@
     transform: rotate(45deg);
   }
   .rbx-name {
-    font-family: var(--mono);
     font-weight: 800;
-    font-size: clamp(1.85rem, 3.9vh, 2.45rem);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
+    font-size: clamp(2.1rem, 4.4vh, 2.7rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
     margin: 0 0 0.55rem;
-    color: var(--global-text-color);
+    color: var(--rbx-ink);
+  }
+  .rbx-name-dot {
+    color: var(--rbx-accent);
   }
   .rbx-sub {
     font-size: clamp(0.87rem, 1.9vh, 0.94rem);
+    font-weight: 500;
     line-height: 1.45;
-    color: var(--global-text-color);
-    opacity: 0.62;
+    color: var(--ink-soft);
     margin: 0;
     max-width: 22rem;
   }
   .rbx-about {
     font-size: clamp(0.76rem, 1.62vh, 0.84rem);
     line-height: 1.45;
-    opacity: 0.6;
+    color: var(--ink-soft);
     margin: 0.5rem 0 0;
   }
   .rbx-about a {
     color: inherit;
     text-decoration: underline;
-    text-underline-offset: 2px;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.5px;
+    font-weight: 600;
   }
   .rbx-about a:hover {
-    color: var(--global-theme-color);
+    color: var(--rbx-accent);
   }
   .rbx-uc {
     align-self: flex-start;
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.72rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     padding: 0.3rem 0.65rem;
     margin-top: 1.1rem;
-    border: 1px solid var(--global-divider-color);
-    border-radius: 999px;
+    border: 2px solid var(--rbx-ink);
     opacity: 0.85;
   }
 
@@ -123,21 +259,17 @@
   .rbx-skill-label {
     display: inline;
     margin-right: 0.4rem;
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--global-theme-color);
-    opacity: 0.95;
-  }
-  html[data-theme='dark'] .rbx-skill-label {
-    opacity: 0.85;
+    color: var(--rbx-accent);
   }
   .rbx-skill-items {
     display: inline;
     margin: 0;
-    opacity: 0.58;
+    color: var(--ink-soft);
   }
 
   /* numbered index of the page — the grid outgrew one screen */
@@ -146,12 +278,12 @@
   }
   .rbx-manifest-h,
   .rbx-tocrail-h {
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    opacity: 0.45;
+    color: var(--ink-soft);
     margin: 0 0 0.35rem;
   }
   .rbx-manifest-row {
@@ -160,11 +292,11 @@
     align-items: baseline;
     padding: clamp(0.18rem, 0.42vh, 0.4rem) 0;
     line-height: 1.35;
-    color: var(--global-text-color);
+    color: var(--rbx-ink);
     text-decoration: none;
   }
   .rbx-manifest-num {
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.72rem;
     opacity: 0.4;
     transition:
@@ -173,7 +305,7 @@
   }
   .rbx-manifest-title {
     font-size: clamp(0.83rem, 1.8vh, 0.89rem);
-    font-weight: 500;
+    font-weight: 600;
     opacity: 0.82;
     transition:
       color 0.15s ease,
@@ -189,7 +321,7 @@
   }
   .rbx-manifest-row:hover .rbx-manifest-title,
   .rbx-manifest-row:focus-visible .rbx-manifest-title {
-    color: var(--global-theme-color);
+    color: var(--rbx-accent);
     opacity: 1;
   }
 
@@ -204,10 +336,11 @@
   }
   .rbx-link {
     padding: clamp(0.34rem, 0.75vh, 0.72rem) 0;
-    border-top: 1px solid var(--global-divider-color);
-    color: var(--global-text-color);
+    border-top: 1.5px solid var(--line);
+    color: var(--rbx-ink);
     text-decoration: none;
     font-size: clamp(0.83rem, 1.85vh, 0.9rem);
+    font-weight: 600;
     opacity: 0.85;
     transition:
       opacity 0.15s ease,
@@ -218,8 +351,9 @@
   }
   .rbx-link:hover {
     opacity: 1;
-    color: var(--global-theme-color);
+    color: var(--rbx-accent);
     text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   /* ── project grid ─────────────────────────────────────────────── */
@@ -231,7 +365,7 @@
   }
   .rbx-card {
     display: block;
-    color: var(--global-text-color);
+    color: var(--rbx-ink);
     text-decoration: none;
     scroll-margin-top: 2rem;
   }
@@ -241,25 +375,22 @@
 
   /* the frame stacks the still + hover preview; the preview fades in ON TOP of
      the still, which never fades out — fading both let the page background
-     glow through mid-cross-fade, a visible blink on every play and stop */
+     glow through mid-cross-fade, a visible blink on every play and stop.
+     Hover is a hard offset shadow, zine-style: shadow only, no translate. */
   .rbx-frame {
     position: relative;
     display: block;
     overflow: hidden;
-    border-radius: 10px;
-    border: 1px solid var(--global-divider-color);
-    background: var(--global-card-bg-color);
-    transition:
-      transform 0.35s cubic-bezier(0.2, 0.8, 0.3, 1),
-      box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.3, 1);
+    border: 3px solid var(--rbx-ink);
+    background: var(--rbx-card);
+    transition: box-shadow 0.18s ease;
   }
   .rbx-card:hover .rbx-frame,
   .rbx-card:focus-visible .rbx-frame {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.5);
+    box-shadow: 7px 7px 0 color-mix(in srgb, var(--rbx-ink) 55%, transparent);
   }
   .rbx-card:focus-visible .rbx-frame {
-    outline: 2px solid var(--global-theme-color);
+    outline: 2px solid var(--rbx-accent);
     outline-offset: 3px;
   }
   .rbx-cover {
@@ -267,7 +398,7 @@
     width: 100%;
     aspect-ratio: 4 / 3;
     object-fit: cover;
-    background: var(--global-card-bg-color);
+    background: var(--rbx-card);
   }
   .rbx-preview {
     position: absolute;
@@ -285,18 +416,16 @@
   /* little play marker, so a card that moves is signposted before you hover */
   .rbx-badge {
     position: absolute;
-    right: 0.6rem;
-    bottom: 0.6rem;
+    right: 0;
+    bottom: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.55rem;
-    height: 1.55rem;
+    width: 1.6rem;
+    height: 1.6rem;
     padding-left: 0.1rem;
-    border-radius: 999px;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(2px);
+    color: var(--rbx-card);
+    background: var(--rbx-ink);
     transition: opacity 0.25s ease;
   }
   .rbx-card.is-playing .rbx-badge {
@@ -304,13 +433,13 @@
   }
 
   .rbx-cover-empty {
-    border: 1px dashed var(--global-divider-color);
+    border: 2px dashed var(--rail);
     display: flex;
   }
   .rbx-cover-empty::after {
     content: 'under construction';
     margin: auto;
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.78rem;
     letter-spacing: 0.04em;
     opacity: 0.4;
@@ -320,7 +449,6 @@
     border: 0;
   }
   .rbx-card.is-empty:hover .rbx-frame {
-    transform: none;
     box-shadow: none;
   }
 
@@ -334,7 +462,7 @@
     gap: 0.6rem;
   }
   .rbx-card-num {
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -346,10 +474,10 @@
     opacity: 1;
   }
   .rbx-card-title {
-    font-weight: 650;
-    font-size: 1.08rem;
-    letter-spacing: -0.005em;
-    border-bottom: 1px solid transparent;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.015em;
+    border-bottom: 2px solid transparent;
   }
   .rbx-card:hover .rbx-card-title {
     border-bottom-color: currentColor;
@@ -357,7 +485,7 @@
   .rbx-card-date {
     flex-shrink: 0;
     margin-left: auto;
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.74rem;
     opacity: 0.5;
   }
@@ -366,7 +494,7 @@
     margin-top: 0.35rem;
     font-size: 0.84rem;
     line-height: 1.55;
-    opacity: 0.55;
+    color: var(--ink-soft);
     max-width: 46ch;
   }
 
@@ -377,46 +505,48 @@
     grid-template-areas:
       'mast'
       'main';
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 1.9rem 1.5rem 4.5rem;
+    width: min(1280px, calc(100% - var(--shm) * 2));
+    margin: var(--shm) auto;
+    padding: clamp(1.25rem, 2.6vw, 2.4rem) var(--shp) 4rem;
+    background: var(--rbx-card);
+    border: 8px solid var(--rbx-ink);
   }
   .rbx-mast {
     grid-area: mast;
     margin-bottom: 2.6rem;
     padding-bottom: 1.1rem;
-    border-bottom: 1px solid var(--global-divider-color);
+    border-bottom: 2px solid var(--line);
   }
   .rbx-mast-brand {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
-    color: var(--global-text-color);
+    color: var(--rbx-ink);
     text-decoration: none;
   }
   .rbx-mast-brand .rbx-mark {
-    color: var(--global-theme-color);
+    color: var(--rbx-accent);
   }
   .rbx-mast-brand:hover .rbx-mark {
     transform: rotate(45deg);
   }
   .rbx-mast-name {
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.92rem;
     font-weight: 700;
     letter-spacing: -0.01em;
   }
   .rbx-mast-sep {
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     opacity: 0.35;
   }
   .rbx-mast-site {
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.92rem;
     opacity: 0.65;
   }
   .rbx-mast-brand:hover .rbx-mast-name {
-    color: var(--global-theme-color);
+    color: var(--rbx-accent);
   }
   .rbx-main {
     grid-area: main;
@@ -443,8 +573,12 @@
       align-self: start;
       max-height: calc(100vh - 3.8rem);
       overflow-y: auto;
-      scrollbar-width: thin;
+      /* scrollable, but no visible rail of its own */
+      scrollbar-width: none;
       padding-right: 0.4rem;
+    }
+    .rbx-tocrail::-webkit-scrollbar {
+      display: none;
     }
     /* the rail replaces the chip TOC where both would render (extra specificity:
        the chip TOC's own display:flex rule sits later in the cascade) */
@@ -478,22 +612,22 @@
     column-gap: 0.65rem;
     align-items: baseline;
     padding: 0.3rem 0;
-    color: var(--global-text-color);
+    color: var(--rbx-ink);
     text-decoration: none;
   }
   .rbx-tocrail-marker {
     position: relative;
     z-index: 1;
     justify-self: center;
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.66rem;
     font-weight: 700;
     line-height: 1.3;
     text-align: center;
     min-width: 15px;
     border-radius: 999px;
-    background: var(--global-bg-color);
-    color: var(--global-text-color);
+    background: var(--rbx-card);
+    color: var(--rbx-ink);
     opacity: 0.55;
     transition:
       color 0.2s ease,
@@ -527,9 +661,8 @@
     opacity: 1;
   }
   .rbx-tocrail-link:focus-visible {
-    outline: 2px solid var(--global-theme-color);
+    outline: 2px solid var(--rbx-accent);
     outline-offset: 2px;
-    border-radius: 4px;
   }
   /* scroll-spy position */
   .rbx-tocrail-item.is-here .rbx-tocrail-label {
@@ -552,7 +685,7 @@
   }
   .rbx-tocrail-item.is-live .rbx-tocrail-marker {
     background: var(--tape);
-    color: #1f3329;
+    color: var(--rbx-ink);
     opacity: 1;
   }
   .rbx-tocrail-item.is-branch.is-live .rbx-tocrail-marker {
@@ -566,7 +699,6 @@
     margin-bottom: 2.75rem;
   }
   .rbx-flow-title {
-    font-family: var(--mono);
     font-weight: 800;
     font-size: clamp(2rem, 4.6vw, 3.15rem);
     line-height: 1.02;
@@ -577,37 +709,37 @@
     font-size: clamp(1rem, 1.6vw, 1.18rem);
     line-height: 1.5;
     margin: 0.7rem 0 0;
-    opacity: 0.72;
+    color: var(--ink-soft);
   }
   .rbx-flow-intro {
     font-size: clamp(1rem, 1.5vw, 1.08rem);
     line-height: 1.6;
     margin: 1.1rem 0 0;
-    opacity: 0.85;
+    color: color-mix(in srgb, var(--rbx-ink) 85%, transparent);
   }
   .rbx-specs {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 0.45rem;
     list-style: none;
     margin: 1.25rem 0 0;
     padding: 0;
   }
   .rbx-spec {
-    font-family: var(--mono);
-    font-size: 0.7rem;
+    font-family: var(--rbx-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 0.32rem 0.6rem;
-    border: 1px solid var(--rail);
-    border-radius: 999px;
-    opacity: 0.75;
+    border: 2px solid var(--rail);
+    color: color-mix(in srgb, var(--rbx-ink) 80%, transparent);
   }
   .rbx-flow-notes {
     font-size: 0.98rem;
     line-height: 1.62;
     margin: 1.4rem 0 0;
-    opacity: 0.8;
+    color: color-mix(in srgb, var(--rbx-ink) 80%, transparent);
   }
   .rbx-flow-ctl {
     display: flex;
@@ -619,23 +751,23 @@
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #1f3329;
+    color: var(--rbx-ink);
     background: var(--tape);
-    border: 0;
-    border-radius: 999px;
-    padding: 0.6rem 1.1rem;
+    border: 3px solid var(--rbx-ink);
+    padding: 0.55rem 1.05rem;
     cursor: pointer;
+    transition: box-shadow 0.12s ease;
   }
   .rbx-flow-play:hover {
-    filter: brightness(1.08);
+    box-shadow: 4px 4px 0 color-mix(in srgb, var(--rbx-ink) 55%, transparent);
   }
   .rbx-flow-play:focus-visible {
-    outline: 2px solid var(--global-text-color);
+    outline: 2px solid var(--rbx-accent);
     outline-offset: 3px;
   }
   .rbx-flow-play-ico {
@@ -654,14 +786,14 @@
   }
   .rbx-flow-hint {
     font-size: 0.8rem;
-    opacity: 0.5;
+    color: var(--ink-soft);
     margin: 0;
   }
   /* the same pill as a link that jumps down the page (titled gallery) */
   .rbx-jump,
   .rbx-jump:hover,
   .rbx-jump:focus-visible {
-    color: #1f3329;
+    color: var(--rbx-ink);
     text-decoration: none;
   }
   .rbx-jump-ico {
@@ -695,12 +827,12 @@
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.78rem;
     font-weight: 700;
-    color: var(--global-text-color);
-    background: var(--global-bg-color);
-    border: 1.5px solid var(--rail);
+    color: var(--rbx-ink);
+    background: var(--rbx-card);
+    border: 2px solid var(--rail);
     transition: all 0.25s ease;
   }
   .rbx-stn-line {
@@ -745,8 +877,8 @@
   .rbx-stn.is-on .rbx-stn-dot {
     background: var(--tape);
     border-color: var(--tape);
-    color: #1f3329;
-    box-shadow: 0 0 0 5px rgba(232, 89, 12, 0.18);
+    color: var(--rbx-ink);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--tape) 20%, transparent);
   }
   .rbx-stn-card {
     display: grid;
@@ -761,16 +893,17 @@
   }
   .rbx-stn-media {
     position: relative;
-    border-radius: 10px;
     overflow: hidden;
+    border: 3px solid var(--rbx-ink);
     background: #000;
     line-height: 0;
-    transition: box-shadow 0.25s ease;
+    transition:
+      box-shadow 0.25s ease,
+      border-color 0.25s ease;
   }
   .rbx-stn.is-on .rbx-stn-media {
-    box-shadow:
-      0 0 0 2px var(--tape),
-      0 16px 40px rgba(0, 0, 0, 0.4);
+    border-color: var(--tape);
+    box-shadow: 6px 6px 0 color-mix(in srgb, var(--rbx-ink) 45%, transparent);
   }
   .rbx-stn-video {
     display: block;
@@ -813,7 +946,7 @@
     margin: 0 0 0.5rem;
   }
   .rbx-stn-num {
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.7rem;
     letter-spacing: 0.12em;
     opacity: 0.45;
@@ -822,20 +955,18 @@
     content: 'STEP ';
   }
   .rbx-stn-branchtag {
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.62rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     padding: 0.14rem 0.45rem;
-    border: 1px dashed var(--rail);
-    border-radius: 999px;
+    border: 1.5px dashed var(--rail);
     opacity: 0.7;
   }
   .rbx-stn-label {
-    font-family: var(--mono);
     font-weight: 800;
     font-size: 1.32rem;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
   }
   .rbx-stn.is-branch .rbx-stn-label {
     font-size: 1.05rem;
@@ -848,7 +979,7 @@
     margin: 0;
     font-size: 0.94rem;
     line-height: 1.6;
-    opacity: 0.78;
+    color: color-mix(in srgb, var(--rbx-ink) 80%, transparent);
     max-width: 52ch;
   }
   /* the column beside each clip is where the engineering reasoning goes — this
@@ -856,23 +987,23 @@
   .rbx-stn-tech {
     margin-top: 0.9rem;
     padding-left: 0.9rem;
-    border-left: 2px solid rgba(232, 89, 12, 0.45);
+    border-left: 3px solid color-mix(in srgb, var(--tape) 50%, transparent);
     max-width: 56ch;
   }
   .rbx-stn-tech-h {
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.62rem;
+    font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     margin: 0 0 0.3rem;
     color: var(--tape);
-    opacity: 0.9;
   }
   .rbx-stn-tech-b {
     margin: 0;
     font-size: 0.9rem;
     line-height: 1.6;
-    opacity: 0.68;
+    color: var(--ink-soft);
   }
   @media (max-width: 700px) {
     .rbx-stn {
@@ -905,13 +1036,14 @@
   }
   .rbx-post h2 {
     font-size: 1.28rem;
-    font-weight: 700;
-    letter-spacing: -0.005em;
+    font-weight: 800;
+    letter-spacing: -0.02em;
     margin: 2.5rem 0 0.7rem;
     scroll-margin-top: 1.5rem;
   }
   .rbx-post p {
     margin: 0 0 1.1rem;
+    color: color-mix(in srgb, var(--rbx-ink) 84%, transparent);
   }
   .rbx-post li {
     margin-bottom: 0.35rem;
@@ -919,27 +1051,26 @@
   .rbx-post img {
     display: block;
     width: 100%;
-    border-radius: 8px;
+    border: 2px solid var(--line);
     margin: 1.5rem 0;
   }
   .rbx-post-title {
-    font-family: var(--mono);
     font-weight: 800;
     font-size: 2.2rem;
-    line-height: 1.1;
-    letter-spacing: -0.01em;
+    line-height: 1.06;
+    letter-spacing: -0.03em;
     margin: 0 0 0.4rem;
   }
   .rbx-post-meta {
     font-size: 0.95rem;
-    opacity: 0.55;
+    color: var(--ink-soft);
     margin: 0 0 2rem;
   }
   .rbx-post-hero {
     display: block;
     width: 100%;
     margin: 0 0 2rem;
-    border-radius: 10px;
+    border: 3px solid var(--rbx-ink);
   }
   /* Paper · Code · Demo link row */
   .rbx-post-links {
@@ -949,24 +1080,22 @@
     margin: 0 0 2.2rem;
   }
   .rbx-post-link {
-    font-family: var(--mono);
-    font-size: 0.82rem;
+    font-family: var(--rbx-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
     letter-spacing: 0.02em;
     padding: 0.45rem 0.9rem;
-    border: 1px solid var(--global-divider-color);
-    border-radius: 999px;
-    color: var(--global-text-color);
+    border: 2px solid var(--rbx-ink);
+    color: var(--rbx-ink);
+    background: var(--rbx-card);
     text-decoration: none;
-    opacity: 0.9;
     transition:
-      opacity 0.15s ease,
-      color 0.15s ease,
-      border-color 0.15s ease;
+      box-shadow 0.12s ease,
+      color 0.12s ease;
   }
   .rbx-post-link:hover {
-    opacity: 1;
-    color: var(--global-theme-color);
-    border-color: var(--global-theme-color);
+    color: var(--rbx-accent);
+    box-shadow: 3px 3px 0 color-mix(in srgb, var(--rbx-ink) 55%, transparent);
     text-decoration: none;
   }
 
@@ -978,25 +1107,31 @@
     margin: 1.5rem 0 0;
   }
   .rbx-toc-link {
-    font-family: var(--mono);
-    font-size: 0.78rem;
+    font-family: var(--rbx-mono);
+    font-size: 0.76rem;
+    font-weight: 600;
     letter-spacing: 0.02em;
     padding: 0.35rem 0.7rem;
-    border: 1px solid var(--global-divider-color);
-    border-radius: 99px;
-    opacity: 0.7;
+    border: 2px solid var(--rail);
+    opacity: 0.8;
     text-decoration: none;
     color: inherit;
+    transition:
+      box-shadow 0.12s ease,
+      color 0.12s ease,
+      border-color 0.12s ease;
   }
   .rbx-toc-link:hover,
   .rbx-toc-link:focus-visible {
     opacity: 1;
-    border-color: var(--global-theme-color);
-    color: var(--global-theme-color);
+    border-color: var(--rbx-ink);
+    color: var(--rbx-accent);
+    box-shadow: 3px 3px 0 color-mix(in srgb, var(--rbx-ink) 55%, transparent);
   }
   .rbx-sec-title {
     font-size: 1.15rem;
-    letter-spacing: 0.01em;
+    font-weight: 800;
+    letter-spacing: -0.01em;
     margin: 0 0 1.1rem;
     /* the anchor must clear the jump, not sit flush against the viewport top */
     scroll-margin-top: 1.5rem;
@@ -1008,12 +1143,12 @@
   .rbx-sec {
     margin-top: 3rem;
     padding-top: 2.25rem;
-    border-top: 1px solid var(--global-divider-color);
+    border-top: 2px solid var(--line);
     scroll-margin-top: 1.5rem;
   }
   .rbx-sec-note {
     font-size: 0.95rem;
-    opacity: 0.6;
+    color: var(--ink-soft);
     margin: -0.4rem 0 1.4rem;
   }
   /* a section's own grid already sits under a heading, so it repeats neither
@@ -1034,7 +1169,7 @@
     gap: 1.5rem 1.25rem;
     margin: 2.75rem 0 0;
     padding-top: 2.25rem;
-    border-top: 1px solid var(--global-divider-color);
+    border-top: 2px solid var(--line);
     scroll-margin-top: 1.5rem;
   }
   .rbx-shot {
@@ -1048,26 +1183,26 @@
     display: block;
     width: 100%;
     margin: 0;
-    border-radius: 8px;
-    background: var(--global-card-bg-color);
+    border: 2px solid color-mix(in srgb, var(--rbx-ink) 25%, transparent);
+    background: var(--rbx-card);
   }
   .rbx-shot video.rbx-shot-media {
     background: #000;
   }
   .rbx-shot-cap {
     margin-top: 0.55rem;
-    font-family: var(--mono);
-    font-size: 0.78rem;
+    font-family: var(--rbx-mono);
+    font-size: 0.76rem;
     letter-spacing: 0.02em;
     line-height: 1.45;
-    opacity: 0.55;
+    color: var(--ink-soft);
   }
 
   /* ── gated b-roll: one page, one password, no persistence ─────── */
   .rbx-broll {
     margin: 2.75rem 0 0;
     padding-top: 2.25rem;
-    border-top: 1px solid var(--global-divider-color);
+    border-top: 2px solid var(--line);
     scroll-margin-top: 1.5rem;
   }
   .rbx-broll-head {
@@ -1079,15 +1214,15 @@
   .rbx-broll-title {
     margin: 0;
     font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0.01em;
+    font-weight: 800;
+    letter-spacing: -0.01em;
   }
   .rbx-broll-lock {
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.72rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    opacity: 0.45;
+    color: var(--ink-soft);
   }
   .rbx-broll-row {
     display: flex;
@@ -1098,32 +1233,35 @@
     flex: 1;
     min-width: 0;
     padding: 0.5rem 0.7rem;
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.85rem;
     color: inherit;
-    background: var(--global-card-bg-color);
-    border: 1px solid var(--global-divider-color);
-    border-radius: 7px;
+    background: var(--rbx-card);
+    border: 2px solid var(--rbx-ink);
   }
   .rbx-broll-input:focus {
     outline: none;
-    border-color: var(--global-theme-color);
+    border-color: var(--rbx-accent);
   }
   .rbx-broll-btn {
     padding: 0.5rem 1rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--global-bg-color);
-    background: var(--global-theme-color);
-    border: 0;
-    border-radius: 7px;
+    font-family: var(--rbx-mono);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--rbx-card);
+    background: var(--rbx-ink);
+    border: 2px solid var(--rbx-ink);
     cursor: pointer;
+    transition: box-shadow 0.12s ease;
+  }
+  .rbx-broll-btn:hover {
+    box-shadow: 3px 3px 0 color-mix(in srgb, var(--rbx-ink) 45%, transparent);
   }
   .rbx-broll-msg {
     margin: 0.6rem 0 0;
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.78rem;
-    opacity: 0.6;
+    color: var(--ink-soft);
     min-height: 1.1em;
   }
   /* decrypted markup carries .rbx-gallery, which already has a top border —
@@ -1141,13 +1279,13 @@
     gap: 1.25rem;
     margin-top: 3.25rem;
     padding-top: 1.5rem;
-    border-top: 1px solid var(--global-divider-color);
+    border-top: 2px solid var(--line);
   }
   .rbx-pager-link {
     display: flex;
     align-items: center;
     gap: 0.9rem;
-    color: var(--global-text-color);
+    color: var(--rbx-ink);
     text-decoration: none;
     opacity: 0.85;
     transition: opacity 0.15s ease;
@@ -1165,8 +1303,7 @@
     width: 78px;
     aspect-ratio: 4 / 3;
     object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid var(--global-divider-color);
+    border: 2px solid var(--rbx-ink);
   }
   .rbx-pager-text {
     display: flex;
@@ -1175,26 +1312,29 @@
     min-width: 0;
   }
   .rbx-pager-dir {
-    font-family: var(--mono);
+    font-family: var(--rbx-mono);
     font-size: 0.74rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    opacity: 0.55;
+    color: var(--ink-soft);
   }
   .rbx-pager-title {
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1rem;
   }
   .rbx-pager-link:hover .rbx-pager-title {
-    color: var(--global-theme-color);
+    color: var(--rbx-accent);
   }
 
   .rbx-post-foot {
     margin-top: 3.5rem;
     padding-top: 1.25rem;
-    border-top: 1px solid var(--global-divider-color);
-    font-size: 0.82rem;
-    opacity: 0.5;
+    border-top: 2px solid var(--line);
+    font-family: var(--rbx-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
   }
 
   /* ── responsive: stack sidebar above the grid ─────────────────── */
@@ -1202,7 +1342,7 @@
     .rbx-wrap {
       grid-template-columns: 1fr;
       gap: 2.5rem;
-      padding: 2rem 1.5rem 3.5rem;
+      border-width: 6px;
     }
     .rbx-side {
       position: static;
@@ -1214,13 +1354,13 @@
       gap: 2.25rem;
     }
     .rbx-name {
-      font-size: 2.2rem;
+      font-size: 2.3rem;
     }
     .rbx-gallery {
       grid-template-columns: 1fr;
     }
     .rbx-shell {
-      padding: 1.5rem 1.5rem 3.5rem;
+      border-width: 6px;
     }
     .rbx-mast {
       margin-bottom: 2rem;
@@ -1242,12 +1382,12 @@
     .rbx-tocrail-label {
       transition: none;
     }
-    .rbx-card:hover .rbx-frame {
-      transform: none;
-    }
     .rbx-mark-link:hover .rbx-mark,
     .rbx-mast-brand:hover .rbx-mark {
       transform: none;
+    }
+    .rbx-intro {
+      display: none;
     }
   }
 </style>

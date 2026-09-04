@@ -124,6 +124,37 @@
     color: inherit;
   }
 
+  /* ── authorship byline ─────────────────────────────────────────
+     Entries Claude wrote (front matter `claude_authored: true`) say so
+     directly under the date, in Chris's words, stamped with the same mark
+     the in-text chips carry. Shown on the lock screen and after unlocking,
+     since the header is shared. */
+  .rzine-card .rz-byline {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5em;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.5;
+    opacity: 0.75;
+    margin: 0.7rem 0 0;
+  }
+
+  .rzine-card .rz-byline::before {
+    content: '';
+    flex: 0 0 auto;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background-color: currentColor;
+    -webkit-mask-image: var(--rz-claude-mark);
+    mask-image: var(--rz-claude-mark);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
+
   /* ── outranking the site-wide zine skin ─────────────────────────
      zine_styles.liquid styles prose from `body.zine .container[role='main'] …`,
      which outranks every `.rzine-*` selector here — so the card was silently
@@ -160,6 +191,11 @@
   body.zine .container[role='main'] .rzine-card p.post-meta {
     color: inherit;
     line-height: 1.4;
+  }
+
+  body.zine .container[role='main'] .rzine-card p.rz-byline {
+    color: inherit;
+    line-height: 1.5;
   }
 
   /* the skin's inline-prose link rule (thin rule, weight 600) outranks

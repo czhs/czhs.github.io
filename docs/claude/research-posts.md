@@ -1,5 +1,10 @@
 # Research notebook PDF -> /research blog post
 
+> There is a second /research genre: the UNIFIED technical writeup (HCL-ML
+> style, e.g. the converging-on-rome entry). Its agent guide lives with the
+> plaintext masters, outside this repo: `VPD-Copying/docs/research_src/WRITEUP_GUIDE.md`.
+> This file covers only the verbatim notebook-PDF conversion below.
+
 
 When Chris uploads a notebook PDF (like "IH Engineering Notebook") and asks to post it,
 follow this workflow. The first post
@@ -116,6 +121,12 @@ encrypted payload — so a research entry with math must set `math: true` in the
 5. Swap in the locked stub: `_research/<slug>.md` becomes front matter only —
    `layout: research_locked`, title/date/description (these stay public on the
    `/research` listing), `enc_payload: /assets/enc/research-<slug>.json`.
+   Optional: `cover:` (card art on the index), `compact: true` (notebook
+   entries render as one muted row), and `claude_authored: true` for a post
+   Claude wrote from the repo/notebook — it prints Chris's byline ("Claude
+   authored based on my research repo and engineering notebook, proof read by
+   Chris") under the date, on the lock screen and after unlocking. Verbatim
+   notebook entries do NOT get that flag.
 6. Archive the plaintext masters OUTSIDE this repo:
    `/Users/hshi/Desktop/VPD-Copying/docs/research_src/` (post .md, screenshots,
    figure SVGs — see its README for the re-edit loop).
