@@ -22,8 +22,8 @@ nav: false
   <figcaption class="rbx-shot-cap">The CAD assembly. Two servos per leg sit inside the body, the Raspberry Pi and the RPLIDAR A1 ride on the top plate.</figcaption>
 </figure>
 
-A printed quadruped. All structural parts are self-designed and 3D printed. Each
-leg is driven by two servos mounted in the body, through pushrod linkages, from a
+A printed quadruped. The structural parts are 3D printed, many of them self-designed.
+Each leg is driven by two servos mounted in the body, through pushrod linkages, from a
 PCA9685 servo controller on a Raspberry Pi. On the bench it stands and runs an
 authored dance routine on all four legs, powered over a tether.
 
@@ -148,8 +148,8 @@ capture time, so a camera on a walking robot requires state estimation as well.
 
 ## What I learned
 
-- **CAD to hardware.** Designing every structural part around servo geometry and
-  wiring paths, printing it, and correcting the model where it was wrong.
+- **CAD to hardware.** Designing structural parts around servo geometry and
+  wiring paths, printing them, and correcting the model where it was wrong.
 - **Designing for inertia.** Actuators in the body, legs driven through linkages,
   and the nonlinear joint mapping and pin slop that come with that choice.
 - **Prototyping one unknown at a time.** A single leg on a rig before four on a

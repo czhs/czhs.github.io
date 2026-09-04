@@ -53,6 +53,10 @@ state.
   self-drawing "Chris Shi" overlay and its SVG include are gone; the
   Hershey-Script generator still lives in `local/sig/sig_gen.py` (gitignored)
   if it is ever wanted back.
+- **No asterisk mark** (removed 2026-09-04, "remove the asterisk above my name"):
+  the four-line star glyph that sat above the sidebar name and beside the name in
+  the detail masthead is gone; the masthead name text is still the link back to
+  the index.
 - **No ticker**: the capability ticker that shipped with the re-skin was removed
   the same day at Chris's request ("i dont like the scrolling bar") — don't
   re-add it. The sidebar's `about` line and `skills` list were removed from
@@ -297,7 +301,11 @@ matches it ("Fall 2025 – Summer 2026").
 ## Content
 
 Bodies, dates and captions are **Chris's to write** — do NOT fabricate write-ups,
-specs, or dates ([content-rules](content-rules.md)). Captions may be lifted verbatim
+specs, or dates ([content-rules](content-rules.md)). Credit quantifiers matter:
+the Robot Dog and Hack 100 pages were team builds, and on 2026-09-04 Chris asked
+for "all"/"every"/"self-designed" claims to be softened ("many of them
+self-designed", "partly self-designed CAD", "some of the parts") without stating
+who did what — keep new copy on those pages to that standard. Captions may be lifted verbatim
 from his own source filenames; otherwise leave them blank.
 
 To add a project: append to `projects:` in the data file + add the

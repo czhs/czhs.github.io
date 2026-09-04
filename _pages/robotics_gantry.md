@@ -178,9 +178,9 @@ There was no schedule in which to debug three axes at once for the first time.
   consequence of 1220 mm stock, a 100-piece hardware kit and $352.50. Choosing V-slot
   so the structure doubles as the bearing, and rack-and-pinion so Z is two printed
   parts, are budget decisions before they are mechanical ones.
-- **CAD through to a machine that exists.** Modelling the frame, the carriage plates,
-  the rack, the pinion and the tool head, then printing and assembling them and
-  finding out where the model was optimistic.
+- **CAD through to a machine that exists.** Modelling some of the parts, from the
+  frame and carriage plates to the rack, pinion and tool head, then printing and
+  assembling them and finding out where the model was optimistic.
 - **Open-loop motion control end to end.** Step/direction generation, microstepping
   and where its resolution stops being real, acceleration limits, homing to a switch,
   and living with dead reckoning.

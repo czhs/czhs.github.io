@@ -22,14 +22,6 @@ layout: portfolio_base
 <div class="rbx-shell">
   <header class="rbx-mast">
     <a class="rbx-mast-brand" href="{{ data.url | default: '/' | relative_url }}">
-      <svg class="rbx-mark is-small" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-        <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-          <line x1="12" y1="2.5" x2="12" y2="21.5" />
-          <line x1="2.5" y1="12" x2="21.5" y2="12" />
-          <line x1="5.3" y1="5.3" x2="18.7" y2="18.7" />
-          <line x1="18.7" y1="5.3" x2="5.3" y2="18.7" />
-        </g>
-      </svg>
       <span class="rbx-mast-name">{{ data.name }}</span>
       {% if data.site_label and data.site_label != '' %}
         <span class="rbx-mast-sep" aria-hidden="true">/</span>
