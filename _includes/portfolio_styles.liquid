@@ -94,38 +94,12 @@
     }
   }
 
-  /* ── signature intro: full-screen, draws once per tab session ────
-     The overlay is the field itself; when the curtain lifts it reveals the
-     ivory sheet. Strokes are drawn by script (stroke-dashoffset per path,
-     duration proportional to each stroke's length). Skipped entirely under
-     reduced motion and on repeat visits — see the script in portfolio.liquid. */
-  html.rbx-lock {
-    overflow: hidden;
-  }
-  .rbx-intro {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: grid;
-    place-items: center;
-    background: var(--rbx-field);
-    color: var(--rbx-ink);
-    transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1);
-  }
-  .rbx-intro.is-lift {
-    transform: translateY(-102%);
-  }
-  .rbx-intro .rbx-sig {
-    width: min(74vw, 60vh, 32rem);
-    height: auto;
-  }
-
   /* ── reveal choreography ─────────────────────────────────────────
      .rbx-armed lands on <html> before first paint (script in
      portfolio_base.liquid) and only when motion is allowed, so without JS —
-     or with reduced motion — nothing is ever hidden. .rbx-ready arrives when
-     the intro lifts (or immediately on pages without one); the observer in
-     portfolio_base.liquid stamps .is-in as things reach the viewport. */
+     or with reduced motion — nothing is ever hidden. .rbx-ready follows at
+     once from the same file; the observer in portfolio_base.liquid stamps
+     .is-in as things reach the viewport. */
   html.rbx-armed :is([data-rv], .rbx-stn, .rbx-shot, .rbx-pager) {
     opacity: 0;
     transform: translateY(10px);
@@ -1385,9 +1359,6 @@
     .rbx-mark-link:hover .rbx-mark,
     .rbx-mast-brand:hover .rbx-mark {
       transform: none;
-    }
-    .rbx-intro {
-      display: none;
     }
   }
 </style>

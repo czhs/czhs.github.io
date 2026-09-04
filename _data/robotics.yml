@@ -10,36 +10,6 @@ subtitle: Math and computer engineering at Carnegie Mellon University.
 # Locally the same paths serve straight from the gitignored assets dirs.
 # Upload: gh release upload robotics-media <files>
 media_base: "https://github.com/czhs/czhs.github.io/releases/download/robotics-media/"
-# From the main site (_pages/about.md), trimmed to the two sentences that apply
-# here, with the second one reworded by Chris (2026-08-20): "for fun" undersold
-# it. His wording — do not re-edit it back. The main site still says "For fun".
-about: >-
-  I'm fascinated by the hardware of thinking. I love animating robots
-  (<a href="https://thewaltdisneycompany.com/news/behind-the-bdx-droids/"
-  target="_blank" rel="noopener">like these</a>), and it makes me happy.
-# Sidebar capability summary — this site is shared with people hiring, so it
-# states the range plainly instead of burying it in the write-ups. EVERY item
-# traces to something real: MuJoCo/expressive motion from the Duck renders,
-# teleoperation and biped bring-up from the Duck build, the quadruped from
-# Robot Dog, training and the demo from TartanIMU, power/soldering/drivers from
-# the Gantry, Duck and Pie pages, CAD and drives from the Gantry. The research
-# line is verbatim from the main site's about page ("currently researching
-# mechanistic interpretability for in-context learning and pretraining") and is
-# backed by the gated IH notebook posts under /research/; the ML topics are
-# reading-group subjects Chris confirmed he knows (2026-08-20).
-# Nothing claims more than that. Order = what to read first.
-# Chris's to reword; keep each `items` to about two lines at 300px.
-skills:
-  - label: Robot behavior
-    items: expressive motion in MuJoCo, teleoperation, biped and quadruped bring-up
-  - label: Machine learning
-    items: transformer internals, LLM inference, training in Python, a live demo
-  - label: Research
-    items: mechanistic interpretability of in-context learning and pretraining
-  - label: Electronics
-    items: soldering, power delivery, ESP32 and Raspberry Pi, servo and stepper drive
-  - label: Mechanical
-    items: self-designed CAD through to printed, assembled parts; V-slot machines
 under_construction: false
 # Sidebar links (bottom of the left column). External links open in a new tab.
 links:
@@ -70,9 +40,14 @@ projects:
     blurb: >-
       A printed quadruped, from a single leg test to dancing on all fours.
     date: ""
+    # Card still is the CAD render; the card's hover clip is the real robot
+    # dancing (Chris, 2026-09-04: "the robot video should be the dog dancing,
+    # cover image is the CAD"). The CAD turntable animation (robot-dog.mp4) is
+    # the detail page's own lead figure, placed by _pages/robotics_robot-dog.md
+    # with its caption, so it is deliberately not listed here.
     cover: assets/img/robotics/robot-dog.jpg
-    poster: assets/img/robotics/robot-dog-poster.jpg
-    video: assets/video/robotics/robot-dog.mp4
+    poster: assets/img/robotics/robot-dog-dance-poster.jpg
+    video: assets/video/robotics/robot-dog-dance.mp4
     gallery_title: Footage
     media:
       - video: assets/video/robotics/robot-dog-dance.mp4

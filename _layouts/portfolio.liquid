@@ -8,96 +8,6 @@ layout: portfolio_base
   {% assign media_base = '' %}
 {% endif %}
 
-{% comment %}
-  Full-screen signature intro: the name writes itself, then the curtain lifts
-  to reveal the sheet. Runs once per tab session, is skippable with any click
-  or key, and is skipped entirely under reduced motion — the CSS also hides
-  it there, so even without JS it cannot trap the page.
-{% endcomment %}
-<div class="rbx-intro" id="rbx-intro" aria-hidden="true">
-  {% include portfolio_sig.liquid %}
-</div>
-<noscript>
-  <style>
-    /* the drawing needs script; without it the overlay must never cover the page */
-    .rbx-intro {
-      display: none;
-    }
-  </style>
-</noscript>
-<script>
-  (function () {
-    var el = document.getElementById('rbx-intro');
-    var doc = document.documentElement;
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var seen = false;
-    try {
-      seen = sessionStorage.getItem('rbx-sig-seen') === '1';
-    } catch (e) {}
-    if (reduce || seen) {
-      el.parentNode.removeChild(el);
-      doc.classList.add('rbx-ready');
-      return;
-    }
-    try {
-      sessionStorage.setItem('rbx-sig-seen', '1');
-    } catch (e) {}
-    doc.classList.add('rbx-lock');
-
-    // Each stroke draws for a time proportional to its length, chained in
-    // writing order, so the whole signature takes DRAW ms however it is cut.
-    // Easing is LINEAR on purpose: the pen moves at one constant speed across
-    // the whole signature. Per-stroke ease-in-out made it accelerate and brake
-    // on every stroke, which read as pulsing rather than writing.
-    var paths = [].slice.call(el.querySelectorAll('.rbx-sig-p'));
-    var total = 0;
-    var lens = paths.map(function (p) {
-      var l = p.getTotalLength();
-      total += l;
-      return l;
-    });
-    var DRAW = 1700;
-    var t = 280;
-    paths.forEach(function (p, i) {
-      var d = Math.max(70, (lens[i] / total) * DRAW);
-      // The gap is oversized and the start offset overshoots the dash by a
-      // few units, so both path endpoints sit strictly INSIDE the gap while
-      // hidden — parking a round-cap stroke exactly on a dash boundary paints
-      // a dot at every stroke start before anything has drawn.
-      p.style.strokeDasharray = (lens[i] + 2).toFixed(1) + ' ' + (lens[i] * 2 + 22).toFixed(1);
-      p.style.strokeDashoffset = (lens[i] + 12).toFixed(1);
-      p.style.transition = 'stroke-dashoffset ' + d.toFixed(0) + 'ms linear ' + t.toFixed(0) + 'ms';
-      t += d + 25;
-    });
-
-    var lifted = false;
-    function lift() {
-      if (lifted) return;
-      lifted = true;
-      window.removeEventListener('keydown', lift);
-      el.classList.add('is-lift');
-      doc.classList.remove('rbx-lock');
-      doc.classList.add('rbx-ready');
-      setTimeout(function () {
-        if (el.parentNode) el.parentNode.removeChild(el);
-      }, 800);
-    }
-    // Double rAF so the dash start state is painted before the transitions arm;
-    // the timeout below fires regardless, so a backgrounded tab still lifts.
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        paths.forEach(function (p) {
-          p.style.strokeDashoffset = '0';
-        });
-      });
-    });
-    setTimeout(lift, t + 430);
-    el.addEventListener('click', lift);
-    el.addEventListener('touchstart', lift, { passive: true });
-    window.addEventListener('keydown', lift);
-  })();
-</script>
-
 <div class="rbx-wrap">
   <aside class="rbx-side" data-rv style="--rv: 0ms">
     <a class="rbx-mark-link" href="{{ page.url | relative_url }}" aria-label="{{ r.name }}" data-rv style="--rv: 0ms">
@@ -237,7 +147,10 @@ layout: portfolio_base
 
 <script>
   // Card previews play two ways: on hover/focus, and on their own at random so
-  // the grid always has a little life in it. (These are muted mp4 rather than
+  // the grid always has a little life in it -- but never while the pointer is
+  // on a card: hovering one card silences the others until the pointer leaves,
+  // so the clip the visitor chose is the only thing moving. (These are muted
+  // mp4 rather than
   // animated GIF: a GIF cannot be started or stopped from script -- it loops
   // from the moment it loads -- so the ambient behaviour would be impossible,
   // and the same clip as GIF is roughly forty times the bytes.)
@@ -245,6 +158,14 @@ layout: portfolio_base
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     var cards = [];
+    // Hover wins: any ambient clip elsewhere in the grid stops the moment a
+    // card is hovered or focused, and the ambient tick below stays quiet
+    // while any card is held.
+    var quietOthers = function (me) {
+      cards.forEach(function (c) {
+        if (c !== me && c.ambient) c.stop();
+      });
+    };
     document.querySelectorAll('.rbx-card').forEach(function (card) {
       var vid = card.querySelector('.rbx-preview');
       if (!vid) return;
@@ -287,6 +208,7 @@ layout: portfolio_base
         entry.hovered = true;
         clearTimeout(entry.timer);
         entry.ambient = false;
+        quietOthers(entry);
         entry.start();
       });
       // The preview carries `loop`, so `ended` never fires -- swap in the event
@@ -300,6 +222,7 @@ layout: portfolio_base
       });
       card.addEventListener('focus', function () {
         entry.hovered = true;
+        quietOthers(entry);
         entry.start();
       });
       card.addEventListener('blur', function () {
@@ -334,7 +257,7 @@ layout: portfolio_base
           return onScreen(c.card) && !c.hovered && !c.ambient;
         });
         var busy = cards.some(function (c) {
-          return c.ambient;
+          return c.ambient || c.hovered;
         });
         if (busy || !idle.length) return;
 

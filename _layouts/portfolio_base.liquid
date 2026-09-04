@@ -33,12 +33,11 @@
 
     <script>
       // Reveal-on-scroll, shared by the index and the detail pages. Elements
-      // rise in once as they reach the viewport; the index's signature intro
-      // holds the whole run back (rbx-ready) until its curtain lifts.
+      // rise in once as they reach the viewport.
       (function () {
         var doc = document.documentElement;
         if (!doc.classList.contains('rbx-armed')) return;
-        if (!document.getElementById('rbx-intro')) doc.classList.add('rbx-ready');
+        doc.classList.add('rbx-ready');
         var els = [].slice.call(document.querySelectorAll('[data-rv], .rbx-stn, .rbx-shot, .rbx-pager'));
         if (!els.length || !('IntersectionObserver' in window)) {
           doc.classList.remove('rbx-armed');
