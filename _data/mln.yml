@@ -325,6 +325,7 @@ weeks:
     slug: "1skezldi"
     evt: "evt-GN1VWcMTv0UFkmf"
     date: "2026-09-07"
+    tags: ["photos"]
     title: "Vision Language Action Models: Foundation Models for Robotics"
     cover: "https://images.lumacdn.com/uploads/2v/d3b3dcf7-1cf7-44a9-9a28-dfaa3f21531c.webp"
     summary: "When language models became generalists by training on enormous, diverse datasets, what is the robotics equivalent when useful robot data is scarce, expensive, and fragmented across different machines? If a robot’s training set contains demonstrations, autonomous rollouts, failures, human video, and Internet data, how does the model learn which behaviors to imitate, which to avoid, and which pieces can be recombined into something new?"
