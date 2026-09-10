@@ -2,5 +2,5 @@
 layout: mln
 permalink: /mln/week-17/
 week: 17
-standalone_title: "Week 17 · Attention Residuals: Rethinking Information Flow in LLMs — MLn Reading Club"
+standalone_title: "Week 17 · Speculative Decoding — MLn Reading Club"
 ---

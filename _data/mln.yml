@@ -8,6 +8,12 @@ contact_url: https://forms.gle/Vr6gxhKGjhsEnwPC7
 # Where the "interested in hosting a week?" banner points. Same address already
 # used by the runbook and the ML/robotics pages.
 contact_email: chrisshi@andrew.cmu.edu
+# One-line announcement band under the masthead on every /mln/ page. It renders
+# only while the build date is on or before `expires`, so it retires itself
+# instead of waiting to be deleted by hand. Leave `text` blank to pull it early.
+notice:
+  text: "New day — from week 17 (Sun Sep 13) the club meets on Sundays, 7–9 pm at CASI."
+  expires: "2026-10-18"
 # The club's seasons, NEWEST FIRST. `start` is the date a season opens on, and
 # a week belongs to the newest season that opened on or before it — so a season
 # needs no end date and the ranges can never overlap or leave a gap. `start` is
@@ -345,25 +351,25 @@ weeks:
   - num: 17
     slug: "srsz8rga"
     evt: "evt-v89wbXHXDCt5bik"
-    date: "2026-09-14"
-    title: "Attention Residuals: Rethinking Information Flow in LLMs"
-    cover: "https://images.lumacdn.com/gallery-images/l6/26a28b85-5c4f-4d9a-a09a-e401c29ce330.png"
-    summary: "Standard residual connections with PreNorm accumulate every layer’s output with fixed unit weights, letting the hidden state grow uncontrollably with depth and diluting each layer’s unique contribution — what if each layer could instead learn which earlier representations to read from?"
+    date: "2026-09-13"
+    title: "Speculative Decoding"
+    cover: "https://images.lumacdn.com/gallery-images/s2/572c40d4-57a2-4b79-9de9-cf00ae2bd737.png"
+    summary: "This week, we’re diving into speculative decoding, one of the key techniques behind modern high-throughput LLM inference. The core problem is simple: autoregressive decoding is inherently sequential—generating K tokens normally requires K serial runs of the model. Speculative decoding instead uses a smaller, faster draft model to propose several tokens ahead, then verifies those proposals in parallel with the larger target model. Crucially, the algorithm can accelerate generation without changing the target model’s output distribution."
     description: |-
-      Standard residual connections with PreNorm accumulate every layer’s output with fixed unit weights, letting the hidden state grow uncontrollably with depth and diluting each layer’s unique contribution — what if each layer could instead learn which earlier representations to read from?
+      This week, we’re diving into speculative decoding, one of the key techniques behind modern high-throughput LLM inference. The core problem is simple: autoregressive decoding is inherently sequential—generating K tokens normally requires K serial runs of the model. Speculative decoding instead uses a smaller, faster draft model to propose several tokens ahead, then verifies those proposals in parallel with the larger target model. Crucially, the algorithm can accelerate generation without changing the target model’s output distribution.
 
-      This paper introduces Attention Residuals (AttnRes), a novel architectural mechanism by the Kimi Team designed to rethink how information flows in modern Large Language Models. The central challenge is that standard residual connections with PreNorm accumulate all layer outputs using fixed unit weights; this uniform aggregation causes uncontrolled hidden-state growth with depth, progressively diluting each layer’s unique contribution.
+      This also gives us a chance to go deeper on speculative decoding after it came up during our vLLM week. Rather than treating it as another inference optimization in the stack, we’ll look at the actual algorithm: how draft tokens are proposed and accepted, why rejected tokens require a corrected distribution, and how the speedup depends on the draft model’s acceptance rate and relative cost.
 
-      To overcome this limitation, the authors replace the fixed accumulation with a softmax attention mechanism over preceding layer outputs, allowing each layer to selectively aggregate earlier representations using learned, input-dependent weights.
+      In particular, the paper is a nice bridge between the systems questions we discussed with vLLM—latency, memory bandwidth, and parallelism—and the probabilistic details required to make speculative execution exact.
 
       Join us at CASI for discussion at 8 pm, and (optional) quiet reading from 7 pm.
     reading:
-      - title: "Attention Residuals: Rethinking Information Flow in LLMs — Kimi Team"
-        url: "https://arxiv.org/pdf/2603.15031"
+      - title: "Fast Inference from Transformers via Speculative Decoding — Leviathan, Kalman, Matias (Google Research)"
+        url: "https://arxiv.org/pdf/2211.17192"
   - num: 18
     slug: "4uzwjunv"
     evt: "evt-yKmrA4UWyIo1FT1"
-    date: "2026-09-21"
+    date: "2026-09-20"
     title: "Goedel-Prover-V2: Scaling Formal Theorem Proving"
     cover: "https://images.unsplash.com/photo-1675627453075-0f170b02186a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjQyMjF8MHwxfHNlYXJjaHw1MXx8dGhlb3JlbSUyMHByb3Zpbmd8ZW58MHx8fHwxNzg3MDY5MTI2fDA&ixlib=rb-4.1.0&q=80&w=1080"
     summary: "How does pairing scaffolded data synthesis with verifier-guided self-correction overcome data scarcity in formal theorem proving? Can structured compiler feedback and subproblem generation outperform sheer parameter scaling in complex mathematical reasoning?"

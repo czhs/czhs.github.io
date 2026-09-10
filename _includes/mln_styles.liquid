@@ -164,6 +164,42 @@ body.mln-site { padding: 0; }
 .mln-foot-by { margin-left: auto; color: var(--global-theme-color); text-decoration: none; }
 .mln-foot-by:hover { text-decoration: underline; }
 
+/* ── announcement band ────────────────────────────────────────────────────
+   One line under the masthead, from `notice:` in _data/mln.yml. Painted on the
+   card ground rather than the page ground and carrying the masthead's own
+   bottom rule, so the two stack as a single piece of chrome. `margin: 0 auto`
+   rather than `margin: 0`: the <p> is also the .mln-shell, and this block sits
+   later in the file, so a plain `0` here would win and un-centre the column on
+   wide screens. The tag takes the filled-pill treatment from the cards'
+   "upcoming" chip — theme colour under the hover text colour, the one pairing
+   on this palette that stays legible either way round. */
+.mln-notice-band {
+  background: var(--global-card-bg-color);
+  border-bottom: 1px solid var(--global-divider-color);
+}
+.mln-notice {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  margin: 0 auto;
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
+  font-family: var(--global-code-font-family, monospace);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+.mln-notice-tag {
+  flex: 0 0 auto;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--global-theme-color);
+  color: var(--global-hover-text-color);
+  font-weight: 700;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 /* hero (landing) */
 .mln-hero { margin: 0 0 1.35rem; }
 .mln-hero-title {

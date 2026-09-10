@@ -26,6 +26,30 @@ of truth: the Luma calendar https://luma.com/mln. All copy is **verbatim from Lu
   "by Chris Shi" (plus the ringworld sibling pill — see
   [ringworld.md](ringworld.md) for the pixel-alignment contract).
 
+## Meeting day — Mondays through week 16, Sundays from week 17
+
+The club met on **Mondays** for weeks 1–16 (through 2026-09-07) and moved to
+**Sundays** from week 17 (2026-09-13) onward. So a Sunday `date:` on a recent week
+is correct — don't "fix" it back to a Monday, and don't assume a fixed 7-day step
+across the week 16 → 17 boundary (it is 6 days). Luma is still the source of truth
+for each week's date; confirm the day there rather than deriving it.
+
+Copy that names the day: the hero lead + chip in `_pages/mln.html` and the footer
+line in `_layouts/mln_base.liquid` now say Sundays. Every "Mondays" left in the
+repo is **historical and stays** — the Summer 2026 `season_recap.line` ("13
+Mondays"), the `seasons:` comment about Fall 2026 opening on Monday Aug 24, and
+the season-derivation comment in `_pages/mln.html`.
+
+## Announcement band (`notice:` in `_data/mln.yml`)
+
+`notice: {text, expires}` renders a one-line band under the masthead on **every**
+page of the micro-site (`_layouts/mln_base.liquid`, `.mln-notice*` in
+`_includes/mln_styles.liquid`) — most people arrive on a week page from a Luma
+link, not on the landing page. It only renders while the build date is on or
+before `expires`, so it retires itself; blank the `text` to pull it early. It
+scrolls away with the page rather than pinning under the sticky masthead. The
+band announced the Sunday move (expires 2026-10-18).
+
 ## Grid behavior (all derived from `date`)
 
 Reverse-chronological by `date`, NOT by `num`. Only the next meeting shows as its own
