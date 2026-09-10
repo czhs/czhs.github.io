@@ -6,9 +6,9 @@
 - Chris deploys by **pushing to `main`** (GitHub Actions builds and publishes). When he
   says "push," commit to `main` and push — do not branch (a branch wouldn't deploy).
   He says "push" explicitly when he wants it live.
-- **Exception: MLn syncs push themselves.** "Update the MLn" means sync → preview →
-  commit → push → verify, without waiting for a separate "push" — see
-  [mln.md](mln.md). Everything else on this repo follows the rule above.
+- MLn used to be the exception here (its syncs pushed themselves). It moved to its
+  own repo — see [mln.md](mln.md) — so that carve-out is gone and **every** change on
+  this repo now waits for Chris to say "push".
 - **Verify the deploy, not just the push.** The live URL is CDN-cached; a fresh
   `curl https://czhs.github.io/...` can show the previous build for minutes after
   `Deploy site` goes green. Confirm against `git show origin/gh-pages:<path>` (the
@@ -32,8 +32,7 @@ LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 bundle exec jekyll serve --config _config.ym
   serve works). Don't commit it.
 - Config/collection changes need a serve **restart**; everything else hot-reloads.
 - The repo-wide `Prettier code formatter` CI job has long been failing on unrelated
-  files (`_books/*`, `_includes/mln_card.liquid`) — check only that YOUR changed
-  files pass.
+  files (`_books/*`) — check only that YOUR changed files pass.
 
 ## Local-only files — NEVER stage blindly
 
@@ -44,7 +43,7 @@ LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 bundle exec jekyll serve --config _config.ym
   `assets/img/ml/`, `assets/video/ml/`. The `/robotics/` + `/ml/` PAGES are published
   as under-construction shells (`under_construction: true`, covers blanked); their
   media stays local until a project goes public (paths are wired in the data files'
-  comments). MLn media (`assets/img/mln/`, `assets/video/mln/`) IS published.
+  comments). MLn media used to be published from here; it moved with the club site.
 - `local/` — local-only tooling; `bin/` is Jekyll-excluded but tracked.
 - `_config_local.yml`, `.claude/` (machine-local settings/launch config).
 

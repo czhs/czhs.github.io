@@ -31,11 +31,12 @@
 
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 {%- comment -%}
-  Only MLn and ringworld still fetch from Google Fonts; the zine pages and the
+  Only ringworld still fetches from Google Fonts; the zine pages and the
   robotics/ML portfolio self-host (see zine_palette.liquid and
   portfolio_styles.liquid), so these two hints would be dead weight there.
+  (MLn used to be the other one, before it moved to its own site.)
 {%- endcomment -%}
-{% if page.layout contains 'mln' or page.layout contains 'ringworld' %}
+{% if page.layout contains 'ringworld' %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 {% endif %}
@@ -48,10 +49,10 @@
   that still inherit al-folio's base typography (mdb.min.css sets Roboto as
   the body face). The zine pages and the portfolio set their own family on
   every element, so on those this request downloads three unused families and
-  blocks rendering while it does. Emitted for MLn and ringworld only.
+  blocks rendering while it does. Emitted for ringworld only.
 {%- endcomment -%}
 {% assign micro = false %}
-{% if page.layout contains 'mln' or page.layout contains 'ringworld' %}
+{% if page.layout contains 'ringworld' %}
   {% assign micro = true %}
 {% endif %}
 {% if micro %}

@@ -21,9 +21,10 @@ site there, not here.
 - **Paper audio.** The accumulating `mln-audio` release is still on THIS repo, and
   the `recording:` URLs on the club site still point at it. Moving it would break
   every past week's player — leave it unless Chris asks.
-- **The old build machinery** (`_data/mln.yml`, `_layouts/mln*.liquid`,
-  `_includes/mln_*.liquid`, `assets/img/mln/`, `assets/video/mln/`) is still in the
-  tree but no longer renders anything — the pages that used it are redirects now.
-  It is a **stale duplicate**: editing `_data/mln.yml` here changes nothing and will
-  silently diverge from the real one. Pruning it is a clean follow-up; until then,
-  treat it as read-only history.
+- **The old build machinery is gone.** `_data/mln.yml`, the mln layouts and
+  includes, and all of `assets/img/mln/` + `assets/video/mln/` were deleted once the
+  club site was verified serving every one of those files. If you need any of it,
+  it is in the other repo — or in this one's history, up to `c5bb4422`. Two shared
+  files kept an MLn branch that went with it: `_includes/metadata.liquid` (the
+  per-week social-card fallback) and `_sass/_themes.scss` (which pinned
+  `body.mln-site` dark).
