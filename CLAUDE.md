@@ -14,7 +14,7 @@ on that area**:
 |---|---|
 | [site-basics](docs/claude/site-basics.md) | always useful: deploy/push semantics, local preview, local-only files, Jekyll gotchas |
 | [content-rules](docs/claude/content-rules.md) | any user-facing copy |
-| [mln](docs/claude/mln.md) | updating the MLn reading club: Luma sync, new weeks, paper audio, recap photos |
+| [mln](docs/claude/mln.md) | MLn moved to its own repo (mlnclub/mlnclub.github.io) — read this before touching anything /mln/, incl. the redirects left behind |
 | [research-posts](docs/claude/research-posts.md) | turning an uploaded notebook PDF into a password-gated /research post |
 | [ringworld](docs/claude/ringworld.md) | the /ringworld/ micro-site: posts, sessions, design decisions not to undo |
 | [poems](docs/claude/poems.md) | the /76265/ poem directory: adding a poem from an uploaded PDF (public titles, gated bodies) |

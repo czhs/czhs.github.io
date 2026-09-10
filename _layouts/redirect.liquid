@@ -1,0 +1,35 @@
+{%- comment -%}
+  A moved page. MLn now lives in its own repo (mlnclub/mlnclub.github.io) and
+  serves from its own domain, but the /mln/ and /mln/week-N/ URLs have been
+  shared publicly for months — in every Luma event description, in chat, on a
+  QR code — so each one stays put here and forwards.
+
+  Deliberately not the site's normal chrome: this page is a signpost, not a
+  destination, and pulling head.liquid would drag the whole stylesheet chain in
+  for markup nobody looks at. `robots: noindex` plus a canonical pointing at
+  the new URL is what moves the search ranking across instead of leaving two
+  competing copies of every week.
+
+  To use: give a page `layout: redirect` and a `redirect_to`.
+{%- endcomment -%}
+<!doctype html>
+<html lang="{{ site.lang }}">
+  <head>
+    <meta charset="utf-8">
+    <title>Redirecting to {{ page.redirect_to }}</title>
+    <link rel="canonical" href="{{ page.redirect_to }}">
+    <meta http-equiv="refresh" content="0; url={{ page.redirect_to }}">
+    <meta name="robots" content="noindex">
+    <style>
+      body { font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+             margin: 0; min-height: 100vh; display: flex; align-items: center;
+             justify-content: center; text-align: center; padding: 1.5rem;
+             background: #1f3329; color: #ece1c8; }
+      a { color: #d8c4a0; }
+    </style>
+  </head>
+  <body>
+    <p>The MLn Reading Club has moved to <a href="{{ page.redirect_to }}">{{ page.redirect_to }}</a>.</p>
+    <script>window.location.replace({{ page.redirect_to | jsonify }});</script>
+  </body>
+</html>

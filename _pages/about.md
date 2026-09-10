@@ -48,7 +48,7 @@ Reach me at chrisshi [at] andrew [dot] cmu [dot] edu.
 
 <div class="home-links">
   <a class="home-link home-link-substack" href="https://ultrastructure.substack.com/" target="_blank" rel="noopener">Read my Substack — ultrastructure <span class="home-link-arrow">→</span></a>
-  <a class="home-link home-club home-club-mln" href="/mln/" aria-label="MLn Reading Club — weekly ML papers in Pittsburgh"><span class="home-club-ico" aria-hidden="true"></span><span class="home-club-wordmark" aria-hidden="true"></span><span class="home-club-text">— weekly ML papers in Pittsburgh</span> <span class="home-link-arrow">→</span></a>
+  <a class="home-link home-club home-club-mln" href="https://mlnclub.github.io/" aria-label="MLn Reading Club — weekly ML papers in Pittsburgh"><span class="home-club-ico" aria-hidden="true"></span><span class="home-club-wordmark" aria-hidden="true"></span><span class="home-club-text">— weekly ML papers in Pittsburgh</span> <span class="home-link-arrow">→</span></a>
   <a class="home-link home-club home-club-rw" href="/ringworld/" aria-label="ringworld — a Sunday maker space in Pittsburgh"><img class="home-club-ring" src="/assets/img/ringworld/mark.png" alt="" aria-hidden="true" width="480" height="263" /><span class="home-club-wordmark" aria-hidden="true"></span><span class="home-club-text">— a Sunday maker space in Pittsburgh</span> <span class="home-link-arrow">→</span></a>
 </div>
 

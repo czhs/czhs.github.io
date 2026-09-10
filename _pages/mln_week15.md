@@ -1,6 +1,7 @@
 ---
-layout: mln
+layout: redirect
 permalink: /mln/week-15/
-week: 15
-standalone_title: "Week 15 · Interpreting Language Model Parameters — MLn Reading Club"
+redirect_to: https://mlnclub.github.io/week-15/
+sitemap: false
+nav: false
 ---

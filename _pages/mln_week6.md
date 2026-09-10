@@ -1,16 +1,7 @@
 ---
-layout: mln
+layout: redirect
 permalink: /mln/week-6/
-week: 6
-standalone_title: "Week 6 · Self-Distillation Enables Continual Learning — MLn Reading Club"
+redirect_to: https://mlnclub.github.io/week-6/
+sitemap: false
+nav: false
 ---
-
-<figure class="mln-recap">
-  <img src="{{ '/assets/img/mln/week6-recap.jpg' | relative_url }}" alt="MLn Reading Club, Week 6 — the group at CASI for Self-Distillation Enables Continual Learning" loading="lazy" decoding="async">
-  <figcaption>Week 6 at CASI — Self-Distillation Enables Continual Learning.</figcaption>
-</figure>
-
-<figure class="mln-recap">
-  <img src="{{ '/assets/img/mln/week6-notes.jpg' | relative_url }}" alt="Handwritten discussion notes — KL divergence between a true distribution P and an approximation Q, cross-entropy, and post-training supervision" loading="lazy" decoding="async">
-  <figcaption>Week 6 — KL divergence, cross-entropy, and post-training supervision.</figcaption>
-</figure>

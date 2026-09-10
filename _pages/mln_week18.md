@@ -1,6 +1,7 @@
 ---
-layout: mln
+layout: redirect
 permalink: /mln/week-18/
-week: 18
-standalone_title: "Week 18 · Goedel-Prover-V2: Scaling Formal Theorem Proving — MLn Reading Club"
+redirect_to: https://mlnclub.github.io/week-18/
+sitemap: false
+nav: false
 ---

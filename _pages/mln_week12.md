@@ -1,6 +1,7 @@
 ---
-layout: mln
+layout: redirect
 permalink: /mln/week-12/
-week: 12
-standalone_title: "Week 12 · Towards Monosemanticity — MLn Reading Club"
+redirect_to: https://mlnclub.github.io/week-12/
+sitemap: false
+nav: false
 ---

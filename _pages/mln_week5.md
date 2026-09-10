@@ -1,6 +1,7 @@
 ---
-layout: mln
+layout: redirect
 permalink: /mln/week-5/
-week: 5
-standalone_title: "Week 5 · A Mathematical Framework for Transformer Circuits — MLn Reading Club"
+redirect_to: https://mlnclub.github.io/week-5/
+sitemap: false
+nav: false
 ---

@@ -1,235 +1,29 @@
-# MLn — updating the reading-club micro-site (the frequent workflow)
+# MLn — moved out to its own repo
 
-The MLn Reading Club micro-site lives at `/mln/` (framed as its own website, not a blog
-tab). Single source of truth: `_data/mln.yml` (every card on `/mln/` + each
-`/mln/week-N/` page) plus a thin stub `_pages/mln_weekN.md` per week. External source
-of truth: the Luma calendar https://luma.com/mln. All copy is **verbatim from Luma**
-([content-rules.md](content-rules.md)).
+**The MLn Reading Club is no longer built here.** On 2026-09-10 it was split out
+into `mlnclub/mlnclub.github.io`, serving at <https://mlnclub.github.io>. The full
+workflow — Luma sync, new weeks, paper audio, recap photos, seasons, the
+announcement band — lives in that repo's `docs/claude/mln.md`. Work on the club
+site there, not here.
 
-## Architecture
+## What is still here, and why
 
-- `_data/mln.yml` — `calendar_url`, `contact_url` (unused since 2026-08-09), `weeks:`
-  list. Week fields: `num, date, slug, evt, title, cover, summary, description,
-  reading[]` (`{title, url}`), optional `tags`, `recording`, `symposium: true`,
-  `coming_soon: true`. No `status:` field (removed 2026-07-01) — everything derives
-  from `date` at build time.
-- `_layouts/mln_base.liquid` — standalone shell (keeps `head.liquid`/`scripts.liquid`,
-  replaces blog chrome with the MLn masthead/footer). `_pages/mln.html` — landing +
-  grid logic. `_layouts/mln.liquid` — per-week detail (looks up by `page.week`).
-  `_includes/mln_styles.liquid` — all CSS. `_includes/mln_card.liquid` — card markup.
-  `_includes/mln_runbook.liquid` — kept but not included anywhere.
-- Stubs: front matter only (`layout: mln`, `permalink: /mln/week-N/`, `week: N`,
-  `standalone_title`) — except weeks with body content (e.g. week 4's systolic-array
-  interactive; symposium week's sign-up link).
-- **Permalinks `/mln/` and `/mln/week-N/` must NOT change** (shared publicly).
-  Navigation is one-way: homepage links into MLn; the only link out is the footer
-  "by Chris Shi" (plus the ringworld sibling pill — see
-  [ringworld.md](ringworld.md) for the pixel-alignment contract).
-
-## Meeting day — Mondays through week 16, Sundays from week 17
-
-The club met on **Mondays** for weeks 1–16 (through 2026-09-07) and moved to
-**Sundays** from week 17 (2026-09-13) onward. So a Sunday `date:` on a recent week
-is correct — don't "fix" it back to a Monday, and don't assume a fixed 7-day step
-across the week 16 → 17 boundary (it is 6 days). Luma is still the source of truth
-for each week's date; confirm the day there rather than deriving it.
-
-Copy that names the day: the hero lead + chip in `_pages/mln.html` and the footer
-line in `_layouts/mln_base.liquid` now say Sundays. Every "Mondays" left in the
-repo is **historical and stays** — the Summer 2026 `season_recap.line` ("13
-Mondays"), the `seasons:` comment about Fall 2026 opening on Monday Aug 24, and
-the season-derivation comment in `_pages/mln.html`.
-
-## Announcement band (`notice:` in `_data/mln.yml`)
-
-`notice: {text, expires}` renders a one-line band under the masthead on **every**
-page of the micro-site (`_layouts/mln_base.liquid`, `.mln-notice*` in
-`_includes/mln_styles.liquid`) — most people arrive on a week page from a Luma
-link, not on the landing page. It only renders while the build date is on or
-before `expires`, so it retires itself; blank the `text` to pull it early. It
-scrolls away with the page rather than pinning under the sticky masthead. The
-band announced the Sunday move (expires 2026-10-18).
-
-## Grid behavior (all derived from `date`)
-
-Reverse-chronological by `date`, NOT by `num`. Only the next meeting shows as its own
-card ("reading now"); other upcoming weeks collapse behind a dropdown mosaic card that
-sits first: `[dropdown] [coming week] [past…]`; expanding inserts future weeks between
-dropdown and coming card (JS toggles `.mln-expanded`).
-
-## Syncing from Luma (manual by request — helper script deleted 2026-06-30)
-
-`curl -fsSL https://luma.com/mln` and each event page `https://luma.com/<slug>`; parse
-`__NEXT_DATA__` JSON (`props.pageProps.initialData.data`). On an event page,
-`start_at`/`url`/`api_id`/`cover_url`/`name` live under `...data.event`, but
-`description_mirror` is a SIBLING of `event` — reading it off the event dict silently
-returns None.
-
-Hard-won rules, all real incidents:
-
-- **Diff `data.event_start_ats`** (on the calendar page — holds ALL dates, past and
-  upcoming) against the `date:`s in `_data/mln.yml` FIRST. A site date with no Luma
-  date is a phantom week to delete (and renumber after). Gaps are real breaks — don't
-  invent placeholder weeks (five-week August 2026 break was real).
-- **Match site weeks to Luma by title + date, NEVER by `#N` or evt-id.** Luma
-  renumbers every `#` on insert/remove; skips numbers outright; recreates events with
-  new slug/evt (and sometimes hands the OLD slug to a DIFFERENT topic); moves dates
-  while keeping evt; deletes placeholders same-day. Re-pull slug/evt/cover/date/name
-  for every upcoming week every sync.
-- **Site `num` is the honest chronological Monday counter**, not Luma's `#N` (the
-  unnumbered Symposium week broke the equality permanently). On insert/remove:
-  renumber `num` in the yml and rename/retitle every affected `_pages/mln_weekN.md`
-  stub (permalink + `week:` + `standalone_title`); add/delete stubs as needed.
-- Covers change after the fact — re-pull, don't assume stable.
-- `description_mirror` is ProseMirror JSON — walk `content` nodes for text, pull
-  `link` marks' `href` for reading URLs. The "Welcome to Week N:" header is often a
-  stale copy-paste — use the event `name` for the title.
-- Keep yml descriptions clean like existing entries: summary = the leading
-  question(s); description = questions + body prose ending at "Join us at CASI…".
-  Drop Luma boilerplate (📖 Reading Recommendations, When/Where, etc.). Reading-list
-  `title` = paper title + authors/org, not raw anchor text.
-- **Symposium-style special weeks**: `symposium: true`, no `reading:` — drives
-  confetti + festive card flag (`_includes/mln_confetti.liquid`, `.is-symposium`,
-  gated on `coming.symposium` / `w.symposium`).
-
-## Coming-soon placeholder weeks
-
-Block = `{ num, coming_soon: true, date, title: "Paper to be announced", summary }`.
-Card shows dashed "coming soon" flag + striped TBA thumb (guards in `mln_card.liquid`
-and `_layouts/mln.liquid`). If Luma schedules the event before the paper is picked,
-keep `coming_soon: true` and add `slug` + `evt` — the page gains its RSVP iframe and
-the card shows the real date; do NOT copy Luma's recycled cover onto it.
-
-## Paper audio (GitHub release, never committed)
-
-Audio lives on the single accumulating release tagged `mln-audio` — NOT in
-`assets/audio/` (Pages has a 1 GB site cap + 100 GB/mo bandwidth; release assets are
-outside both). Workflow:
-
-1. Source mp3s arrive in `/Users/hshi/Desktop/MLn/elevenaudio/audios/`, renamed by
-   Chris after the paper.
-2. Rename to `mln-week-N-<topic>.mp3` (asset name = URL).
-3. `gh release upload mln-audio <file>`.
-4. Set `recording: "https://github.com/czhs/czhs.github.io/releases/download/mln-audio/<file>"`
-   in the yml + add the `paper audio` tag.
-
-Gotchas: served as `application/octet-stream` — browsers play it fine, Range/seek
-works (verified). Sources can be enormous (5.5 h / 299 MB happened) — verify length
-by sampling `mean_volume` at offsets before assuming a glitch; week 12 was re-encoded
-`ffmpeg -c:a libmp3lame -b:a 32k -ac 1 -ar 22050`. Chris sometimes trims — ask, don't
-guess a cut point. ~168 MB of pre-migration audio is still in git history (no rewrite
-authorized). Older weeks vary in bitrate.
-
-## Recap photos, tags, carousels
-
-Tags on a week render icons via the `case` in `mln_card.liquid`: `photos`→📷 (group/
-candid/food), `board notes`→📝 (whiteboard/flip-chart discussion boards),
-`visualization`→📊, `demo`→🕹️, `paper audio`→🎙️; unknown → ✦. Combine as an array.
-
-Adding a photo: convert (often HEIC from `~/Downloads/`) with
-`magick "IMG.HEIC" -auto-orient -resize 1600x1600\> -quality 82 -strip assets/img/mln/weekN-recap.jpg`,
-then in the stub body a `<figure class="mln-recap">` (full-width, uncropped — use it,
-not `.mln-gallery` which crops 4:3, for anything that must stay legible/portrait).
-
-Many-media weeks use `.mln-carousel` (pure CSS, manual only, no autoplay): hidden
-radios ~ slides (figures) + thumbs (labels); first `checked` radio = first slide (put
-the group photo first); slides may be img / linked img / `<video controls
-preload="none">` (▶ badge via `.mln-thumb-play`). CSS covers up to 6 slides — radios,
-slides, thumbs are matched by `nth-of-type`, keep counts in sync.
-
-## Season recap reel (the band above the grid on `/mln/`)
-
-The archive spans more than one season, so a season that has ended must be labelled
-or its weeks read as the current one. **One recap band is not enough** — asked for
-just the band, the club still didn't read as being in a new phase, because the grid
-below it was an undifferentiated run of cards. It takes both: the band, and season
-dividers inside the grid.
-
-Everything derives from `seasons:` at the top of `_data/mln.yml` — **newest first**,
-each entry just `name` + `start`. A week belongs to the newest season that opened on
-or before it, so seasons need no end date and can't overlap or leave a gap. `start`
-is the boundary, **not necessarily a meeting** — it is just the Monday the new
-season starts from: Fall 2026 opens Mon Aug 24, the first Monday after the
-summer/fall break. Adding a season is one entry; nothing else needs touching.
-
-- **Which season is current is derived, never a key**: it is the season of the NEXT
-  meeting, not of today's date. That difference is the whole point at a break — for
-  the week between the last summer Monday and the first fall one, a date lookup still
-  answers "Summer" while the club is plainly already in fall. It also means nothing
-  has to be flipped by hand when a season turns over.
-- **Dividers** (`_includes/mln_season_divider.liquid`, `.mln-grid-season`): full-width
-  rows in the grid, `{season} ──── now | wrapped`. `_includes/mln_season_of.liquid`
-  resolves a date to a season and leaks `season_of` to the caller (Jekyll includes
-  share page scope) — that is what lets the grid's three passes share one
-  `shown_season` pointer. The whole run is strictly newest→oldest, so one pointer is
-  enough. The lead divider goes before the dropdown card and is NOT collapsible (the
-  dropdown stands in for the weeks it hides); dividers inside the future run take
-  `far=true`. The row is a block wrapping a flex inner — `.mln-far-week` is toggled
-  with `display: block`, so a flex `li` loses its layout when revealed.
-- **Recap bar** (`_includes/mln_season_recap.liquid`, `.mln-reel-*`): emitted by the
-  divider include, so a season's heading and its reel arrive together. `season_recap`
-  is `season, line, length, youtube, poster`; `season` must match a name in `seasons:`.
-  It is a **bar, not a panel** — ~185px shut. One mat holding two rows: the clickable
-  bar (a `<details>`, same device as the hero's "About the club" — no JS, keyboard
-  free; its toggle is a filled **pill button** — as plain type with an arrow it read as
-  a caption and people didn't know the bar opened, and it must stay decorative markup,
-  never a real `<button>`, since the whole `<summary>` is the click target) and the
-  season's weeks as a row of **Luma covers in polaroid frames**, one per
-  week, linked, with the week number in the print's chin. The covers are the index —
-  same art as each week's card below — and they replaced a row of numbered ticks.
-  That row sits **outside `<summary>`** on purpose: a summary is one click target, and
-  links nested in it both follow and toggle. Its range is read back out of `seasons:`
-  (walking newest-first, the entry before the recap's is the one that ended it), so no
-  dates are restated and it can't drift.
-- **The bar is `mln-reel-`, NOT `mln-recap-`** — `.mln-recap` is already the week pages'
-  full-width photo figure, and its `.mln-recap img { border-radius: 12px }` reached into
-  the bar and rounded the corners clean off 46px prints. Two more traps in the same
-  spot: al-folio rounds bare `img` site-wide (the prints set `border-radius: 0`), and
-  the ratio must be on the `<img>` itself — `height: 100%` against a parent sized only
-  by `aspect-ratio` collapsed for some covers and the prints came out mixed heights.
-- **All strings are the reel's own on-screen copy** ([content-rules](content-rules.md)) —
-  `line` is the reel's caption card verbatim. Don't write new copy for the bar.
-- **The reel plays from YouTube — the repo does not carry the file.** Chris cuts it
-  more than one way (a 1080x1920 vertical, a 1920x1080 wide) and the sources are
-  enormous — 77 MB and 132 MB have both landed. **The bar runs the wide cut**, so
-  upload that one and put its id in `youtube:` (id only, not the watch URL). Nothing
-  else is committed but the poster — a still of the reel's own end card
-  (`ffmpeg -ss <t> … -vf scale=1280:720` → `magick -quality 82 -strip`), which is the
-  frame's CSS background while the player paints and the `<noscript>` fallback image.
-  `assets/video/mln/*-recap.mp4` is gitignored so a local encode can't drift back in.
-  A self-hosted 10 MB cut is what this replaced; don't re-add one.
-- **The embed is built in JS on first open, and torn down on close — don't "simplify"
-  it to a plain `<iframe src>` in the markup.** Three reasons, each learned the hard
-  way: a closed `<details>` hides its children with `display: none`, and a hidden
-  iframe is fetched anyway (that is the one case `loading="lazy"` refuses to defer),
-  so a static src would pull YouTube's player on every `/mln/` load — the deferral is
-  what keeps the property `preload="none"` gave the local file. Navigating an iframe
-  that is already on the page adds a session-history entry, so Back would land on the
-  reel instead of the previous page; an iframe inserted with its src already set does
-  not. And removing it on close stops playback, where a hidden player just keeps
-  going out of sight. The `<summary>` toggle itself is still no-JS; without JS the
-  `<noscript>` poster links out to the video.
-- **The frame carries the 16:9 itself** (`aspect-ratio` on `.mln-reel-frame`, iframe
-  at `width/height: 100%`). An iframe has no intrinsic ratio — the old `<video>` read
-  one off its `width`/`height` attrs, and a stale `810x1440` pair there once beat the
-  CSS and rendered the frame square. The tall-window cap runs through the frame's
-  `max-width` (`calc(74vh * 16 / 9)`): a `max-height` fights `aspect-ratio` and wins.
-- Bar colours are **sampled from the reel, not the theme** — the micro-site's pinned
-  green is close enough to the reel's that the video would have no visible edge, so
-  the mat is one step darker (`--mln-mat`) with the reel on its true ground
-  (`--mln-ground`). It deliberately doesn't track the theme vars; don't "fix" that.
-
-Next season: add its entry to `seasons:` (the dividers and the "now" marker follow on
-their own), then upload that season's wide cut and swap the whole `season_recap`
-block once its reel exists.
-
-## Adding a brand-new week, end to end
-
-1. Sync from Luma (above) → new block in `_data/mln.yml` (verbatim copy) with the
-   Monday `date`.
-2. Add `_pages/mln_weekN.md` stub.
-3. Audio/photos when they exist (above), with matching tags.
-4. Local preview, then commit and push — **an MLn update is not finished until it
-   is live**, so this push does not wait on Chris saying "push" (the one carve-out
-   from the rule in [site-basics.md](site-basics.md)). Verify the deploy per that
-   same file.
+- **Redirects.** `/mln/`, `/mln/qr/` and `/mln/week-1/` … `/mln/week-18/` are all
+  still served from this site as `layout: redirect` stubs (`_layouts/redirect.liquid`),
+  one-for-one onto the new host. They exist because those URLs have been shared
+  publicly for months — every Luma event description links to one, and there is a
+  QR code pointing at `/mln/qr/`. **Do not delete them**, and if a week is ever
+  renumbered over there, move its stub here to match.
+- **Entry points.** The homepage club pill (`_pages/about.md`) and ringworld's
+  sibling pill (`_layouts/ringworld_base.liquid`) now link to the absolute
+  `https://mlnclub.github.io/`. The pill artwork (`assets/img/mln_*.png`) is still
+  served from here, so those files stay.
+- **Paper audio.** The accumulating `mln-audio` release is still on THIS repo, and
+  the `recording:` URLs on the club site still point at it. Moving it would break
+  every past week's player — leave it unless Chris asks.
+- **The old build machinery** (`_data/mln.yml`, `_layouts/mln*.liquid`,
+  `_includes/mln_*.liquid`, `assets/img/mln/`, `assets/video/mln/`) is still in the
+  tree but no longer renders anything — the pages that used it are redirects now.
+  It is a **stale duplicate**: editing `_data/mln.yml` here changes nothing and will
+  silently diverge from the real one. Pruning it is a clean follow-up; until then,
+  treat it as read-only history.

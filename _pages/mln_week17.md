@@ -1,6 +1,7 @@
 ---
-layout: mln
+layout: redirect
 permalink: /mln/week-17/
-week: 17
-standalone_title: "Week 17 · Speculative Decoding — MLn Reading Club"
+redirect_to: https://mlnclub.github.io/week-17/
+sitemap: false
+nav: false
 ---
