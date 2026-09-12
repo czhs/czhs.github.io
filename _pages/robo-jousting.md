@@ -124,9 +124,76 @@ chained together by a transition library so one motion can run into the next. Th
 waits on the real motions — the screen does not resolve an exchange until the arms have
 actually fought it.
 
+### The real arms
+
+The arms fenced for real. Three exchanges were filmed, and they are in the trailer: an
+overhead chop stopped by the high bar, an overhead chop landing against a low guard,
+and a low slash from the left stopped by the right-hand guard.
+
+{% include figure.liquid
+   path="assets/img/robo-jousting/real_robot_exchange_blockhigh.webp"
+   alt="Two real robot arms mid-exchange: an overhead chop caught on the high bar"
+   caption="An overhead chop, stopped by the high bar."
+   zoomable=true
+%}
+
+{% include figure.liquid
+   path="assets/img/robo-jousting/real_robot_exchange_blockmid.webp"
+   alt="Two real robot arms mid-exchange: an overhead chop coming down against a low guard"
+   caption="An overhead chop, landing against a low guard."
+   zoomable=true
+%}
+
+<div class="row justify-content-sm-center" style="margin-bottom: 1.5rem">
+  <div class="col-sm-6 mt-3 mt-md-0">
+    {% include figure.liquid
+       path="assets/img/robo-jousting/real_robot_exchange_attackleft_blockright.webp"
+       alt="Two real robot arms: a low slash from the left stopped by the right-hand guard"
+       caption="A low slash from the left, stopped by the right-hand guard."
+       zoomable=true
+    %}
+  </div>
+  <div class="col-sm-6 mt-3 mt-md-0">
+    {% include figure.liquid
+       path="assets/img/robo-jousting/sim_attackleft_blockright.webp"
+       alt="The same low slash and right-hand guard, rendered in MuJoCo simulation"
+       caption="The same exchange designed in MuJoCo, blades meeting 3 mm from the guard."
+       zoomable=true
+    %}
+  </div>
+</div>
+
+### Calibration, by hand
+
+The arms' servo calibrations live in the repo, in `calib/`. We calibrated the SO-100 by
+holding it at the zero pose and sweeping every joint to its stops, then checked the zero
+points against physical references — the arm leaning fully back on its board, the
+upright square pose, the blade sitting on top of the gripper — before we trusted the
+taught moves on the real arm.
+
+{% include figure.liquid
+   path="assets/img/robo-jousting/real_robot_bts_calibration.webp"
+   alt="Behind the scenes: a hand holding the arm at a reference pose during calibration"
+   caption="Calibration, by hand."
+   zoomable=true
+%}
+
+### Driving the arms live
+
+At the start of a match the game prepares the hardware: home the rails, move apart, both
+arms to rest. It drives the carriages together for the charge and apart for the return,
+plays each beat on both arms, and waits on the arms' own busy flags rather than on
+timers. The screen beat is stretched to the real motion — an overhead chop is 4.5 s of
+arm time, not the 1.4 s the screen would take on its own.
+
+A mock daemon carrying the real motion timings lets the whole thing be rehearsed with no
+hardware attached. In rehearsal the screen never released before the arms, with a worst
+margin of +23 ms.
+
 Players choose their own openers and finishing flourishes. The En garde opener runs
 before the first beat; the Samurai finish runs after the knockout, with the winner
-raining blows while the loser collapses.
+raining blows while the loser collapses. Both stream the rail carriages in time with the
+arm motions.
 
 The arms sit on stepper rails and charge in to 19.5 inches of each other.
 
@@ -170,6 +237,9 @@ The arms sit on stepper rails and charge in to 19.5 inches of each other.
 We printed a fencing gripper for the arms: a sword holder that takes swappable 6 and 8
 inch blades in five styles — fang, katana, rapier, falchion and crystal — plus a shield,
 a gauntlet and a sword-breaker talon for the wrist.
+
+For the tilt itself we printed a plate with one of each 8 inch blade, plus the gauntlet
+and talon wrists.
 
 {% include figure.liquid
    path="assets/img/robo-jousting/full_arm_8in_fang.webp"
