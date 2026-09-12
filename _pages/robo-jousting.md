@@ -278,6 +278,6 @@ play a scene together.
 
 ## Team and links
 
-Team: [names]
+Team: Chris Shi, Avnith Vijayram, Siddharth Radhakrishnan
 
 Code: [github.com/avnithv/robot-jousting](https://github.com/avnithv/robot-jousting)
