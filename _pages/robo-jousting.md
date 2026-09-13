@@ -7,6 +7,85 @@ standalone_title: "The Tilt of Tiltford — robot jousting"
 nav: false
 ---
 
+<div class="row justify-content-sm-center" style="margin-bottom: 1.5rem">
+  <div class="col-sm-3 mt-3 mt-md-0">
+    {% include figure.liquid
+       path="assets/img/robo-jousting/build_01_driver_board.webp"
+       alt="A stepper driver board on a plywood base, its loose leads tagged X LIMIT and Y LIMIT"
+       caption="Fri 11:03 PM"
+       zoomable=true
+    %}
+  </div>
+  <div class="col-sm-3 mt-3 mt-md-0">
+    {% include figure.liquid
+       path="assets/img/robo-jousting/build_02_rails_assembly.webp"
+       alt="A teammate leaning across two tables, wiring up the aluminium extrusion rails"
+       caption="Sat 2:44 AM"
+       zoomable=true
+    %}
+  </div>
+  <div class="col-sm-3 mt-3 mt-md-0">
+    {% include figure.liquid
+       path="assets/img/robo-jousting/build_03_print_progress.webp"
+       alt="The Bambu Handy app showing the Duck-A1 printer at 49 percent, about 52 minutes left"
+       caption="Sat 5:53 AM"
+       zoomable=true
+    %}
+  </div>
+  <div class="col-sm-3 mt-3 mt-md-0">
+    {% include figure.liquid
+       path="assets/img/robo-jousting/build_04_campus_dawn.webp"
+       alt="A lit campus path at dawn beside a brick building, under a pale cloudy sky"
+       caption="Sat 6:50 AM"
+       zoomable=true
+    %}
+  </div>
+</div>
+
+<div class="row justify-content-sm-center" style="margin-bottom: 1.5rem">
+  <div class="col-sm-6 mt-3 mt-md-0">
+    {% include figure.liquid
+       path="assets/img/robo-jousting/build_gripper_ceiling.webp"
+       alt="Looking up past the arm's gripper at the slatted ceiling"
+       zoomable=true
+    %}
+  </div>
+  <div class="col-sm-6 mt-3 mt-md-0">
+    {% include figure.liquid
+       path="assets/img/robo-jousting/build_led_ring.webp"
+       alt="A hand holding a twelve-LED NeoPixel ring wired to a small board"
+       zoomable=true
+    %}
+  </div>
+</div>
+
+<div class="row justify-content-sm-center" style="margin-bottom: 1.5rem">
+  <div class="col-sm-6 mt-3 mt-md-0">
+    {% include figure.liquid
+       path="assets/img/robo-jousting/build_lab_night.webp"
+       alt="Two teammates working late in the lab, one at a laptop and one sitting on the floor"
+       zoomable=true
+    %}
+  </div>
+  <div class="col-sm-6 mt-3 mt-md-0">
+    {% include figure.liquid
+       path="assets/img/robo-jousting/build_arms_measured.webp"
+       alt="Both arms set out on the tables with a tape measure run between them"
+       zoomable=true
+    %}
+  </div>
+</div>
+
+<div class="row justify-content-sm-center" style="margin-bottom: 1.5rem">
+  <div class="col-sm-6 mt-3 mt-md-0">
+    {% include figure.liquid
+       path="assets/img/robo-jousting/build_blade_mounted.webp"
+       alt="The arm holding a black printed blade, raised over the rail"
+       zoomable=true
+    %}
+  </div>
+</div>
+
 <figure class="rj-hero" style="margin: 0 0 2rem">
   <video
     controls
