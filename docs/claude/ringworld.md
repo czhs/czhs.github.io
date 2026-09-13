@@ -14,8 +14,8 @@ table, file map, gotchas; its 2026-08-20 addendum describes the current state).
 
 ## Static-landing mode (since 2026-08-20)
 
-The page exists to show the club exists, nothing more: banner → hero (title, lead,
-meta row with About panel) → footer. **No Luma links, no sessions strip, no blog.**
+The page exists to show the club exists, nothing more: banner → hero (lead, meta
+row with About panel; no title line since 2026-09-13) → footer. **No Luma links, no sessions strip, no blog.**
 The machinery is parked, not deleted:
 
 - Feed + sessions markup: git history of `_pages/ringworld.html` (pre-2026-08-20).
@@ -81,8 +81,9 @@ as not fitting the zine — don't bring them back.
 The room's stated purpose (Chris, 2026-08-09): honest, exciting work with no penalty
 for failing — that framing lives on in the parked `_ringworld/what-ringworld-is-for.md`
 (bylined to the club, `author: ringworld`, no placeholder flag by request; now fully
-general, no interp/CASI content). Hero is the single line "A Socratica node in
-Pittsburgh". Body copy is existing text (the About panel is the Luma description
-verbatim; blurb single-sourced from the data file); only the hero title was written
+general, no interp/CASI content). The hero has no title line: the h1 "A Socratica
+node in Pittsburgh." was removed 2026-09-13 at Chris's request, so the hero opens on
+the blurb. All body copy is existing text (the About panel is the Luma description
+verbatim; blurb single-sourced from the data file) — nothing on the page was written
 for the site. Reproducing Neel Nanda's guide / Socratica toolbox at length: declined,
 stays declined — short attributed quotes + links only.

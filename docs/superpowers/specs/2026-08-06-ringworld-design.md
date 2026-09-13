@@ -7,7 +7,8 @@ Jekyll layout pair, a YAML data file, and card grids.
 > **2026-08-20 rework.** The site now presents the club as what it is on Luma: a
 > general weekly maker space — a Socratica node (socratica.info, linked from the About
 > panel and footer) — with no AI-safety/interp framing and no CASI affiliation (the
-> Luma event is hosted by Chris Shi). Hero: *A Socratica node in Pittsburgh.* At the
+> Luma event is hosted by Chris Shi). Hero: *A Socratica node in Pittsburgh.* (that
+> title line was removed 2026-09-13 — the hero now opens on the blurb). At the
 > same time the site dropped to **static-landing mode**, to show the club exists and
 > nothing more: no Luma links anywhere, no sessions strip, no blog, and the About
 > panel is always open — the `About ringworld` toggle and the meta-row chip pinning
@@ -157,7 +158,8 @@ Blog posts are one markdown file per post in `_ringworld/`, with `title`, `autho
 ## 6. Page behaviour
 
 **`/ringworld/`** — full-bleed banner (the artwork's background matches the page and its
-dot grid is continued in CSS, so it has no visible edge), hero title and lead, a single
+dot grid is continued in CSS, so it has no visible edge), hero lead (no title since
+2026-09-13), a single
 **meta row**, then **the ringworld interpretability blog**, then the **sessions** row.
 
 The meta row is one line: the `What's this?` toggle at the **left** in normal flow, the
