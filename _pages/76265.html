@@ -138,6 +138,64 @@ sitemap: false
   .poemlock-view p:last-child {
     margin-bottom: 0;
   }
+
+  /* flip card: an image poem on the front, what it was cut from on the back */
+  .poem-flip {
+    margin: 0;
+  }
+  .poem-flip-card {
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4; /* the poem sets its own inline */
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    perspective: 1800px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .poem-flip-card:focus-visible {
+    outline: 2px solid var(--global-theme-color);
+    outline-offset: 4px;
+  }
+  .poem-flip-inner {
+    display: block;
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .poem-flip-card.is-flipped .poem-flip-inner {
+    transform: rotateY(180deg);
+  }
+  .poem-flip-front,
+  .poem-flip-back {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 6px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  .poem-flip-back {
+    transform: rotateY(180deg);
+  }
+  .poem-flip figcaption {
+    margin: 0.9rem 0 0;
+    text-align: center;
+    font-size: 0.85rem;
+    opacity: 0.55;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .poem-flip-inner {
+      transition: none;
+    }
+  }
 </style>
 
 <script>
@@ -210,18 +268,43 @@ sitemap: false
       });
     }
 
-    function storedPw() {
+    // Poems can have different passwords: remember every one entered this
+    // session (most recent first) and try them all at the next gate.
+    function storedPws() {
+      var raw;
       try {
-        return sessionStorage.getItem(PW_KEY);
+        raw = sessionStorage.getItem(PW_KEY);
       } catch (e) {
-        return null;
+        return [];
+      }
+      if (!raw) return [];
+      try {
+        var v = JSON.parse(raw);
+        return Array.isArray(v) ? v : [String(v)];
+      } catch (e) {
+        return [raw];
       }
     }
 
     function storePw(v) {
+      var list = [v].concat(
+        storedPws().filter(function (p) {
+          return p !== v;
+        })
+      );
       try {
-        sessionStorage.setItem(PW_KEY, v);
+        sessionStorage.setItem(PW_KEY, JSON.stringify(list));
       } catch (e) {}
+    }
+
+    function unlockWithStored(slug) {
+      var list = storedPws();
+      var i = 0;
+      function next() {
+        if (i >= list.length) return Promise.reject();
+        return unlock(slug, list[i++]).catch(next);
+      }
+      return next();
     }
 
     function showIndex() {
@@ -260,10 +343,9 @@ sitemap: false
         return;
       }
       showGate(slug);
-      var saved = storedPw();
-      if (saved && window.crypto && window.crypto.subtle) {
+      if (storedPws().length && window.crypto && window.crypto.subtle) {
         msg.textContent = "unlocking…";
-        unlock(slug, saved).then(
+        unlockWithStored(slug).then(
           function () {
             if (current === slug) showPoem(slug);
           },
@@ -293,6 +375,14 @@ sitemap: false
           pw.select();
         }
       );
+    });
+
+    // Flip cards (image poems): the poem HTML is injected, so handle clicks here.
+    view.addEventListener("click", function (e) {
+      var card = e.target.closest ? e.target.closest(".poem-flip-card") : null;
+      if (!card || !view.contains(card)) return;
+      var flipped = card.classList.toggle("is-flipped");
+      card.setAttribute("aria-pressed", flipped ? "true" : "false");
     });
 
     window.addEventListener("hashchange", route);
