@@ -61,6 +61,12 @@ rather than moving it.
 
 ## Jekyll gotchas that cost real time
 
+- **jekyll-minifier breaks `var(--x)` inside `calc()`** (cssminify2 turns it into
+  `var( -  - x)`, voiding the declaration) — but only in production builds, so the
+  local preview looks fine and the deploy is blank. `compress_css: false` in the
+  minifier block keeps inline `<style>` CSS verbatim (Sass output is compressed by
+  Sass itself). Found 2026-09-15 when the redesigned /robotics/ frame, whose
+  geometry is all `calc(var(--frame) …)`, deployed as an empty seafoam field.
 - A **future-dated** collection doc is listed in the collection but its page is never
   written (`site.future` defaults false) — the card renders, the link 404s. Date
   today or earlier.

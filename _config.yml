@@ -263,6 +263,11 @@ sass:
 
 jekyll-minifier:
   compress_javascript: false # set to false since we are using terser as the js minifier
+  # CSS stays uncompressed: cssminify2 rewrites `var(--x)` inside `calc()` as
+  # `var( -  - x)`, which silently voids every declaration that uses it — the
+  # /robotics/ frame geometry is all calc(var(--frame) …) and the whole page
+  # rendered as a blank field on 2026-09-15. Sass output is already compressed.
+  compress_css: false
   exclude: ["robots.txt", "assets/js/search/*.js"]
 
 # -----------------------------------------------------------------------------
