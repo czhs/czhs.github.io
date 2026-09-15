@@ -10,6 +10,9 @@ layout: portfolio_base
 
 <div class="rbx-wrap">
   <aside class="rbx-side" data-rv style="--rv: 0ms">
+    {% if r.site_label and r.site_label != '' %}
+      <p class="rbx-eyebrow" data-rv style="--rv: 0ms">{{ r.site_label }}</p>
+    {% endif %}
     <h1 class="rbx-name" data-rv style="--rv: 40ms">{{ r.name }}<span class="rbx-name-dot">.</span></h1>
     <p class="rbx-sub" data-rv style="--rv: 90ms">{{ r.subtitle }}</p>
     {% if r.about and r.about != '' %}

@@ -20,6 +20,8 @@
       })();
     </script>
 
+    <div class="rbx-window" aria-hidden="true"></div>
+
     {{ content }}
 
     <!-- Hidden theme toggle: al-folio's theme.js wires listeners to these IDs on load.
@@ -55,6 +57,16 @@
         );
         els.forEach(function (el) {
           io.observe(el);
+        });
+        // Content injected after load (the unlocked b-roll gallery) carries the
+        // same reveal classes, so it starts hidden too — and nothing would ever
+        // observe it. Anything that injects such markup dispatches this event
+        // with the new root, and the observer picks its children up.
+        document.addEventListener('rbx:reveal', function (e) {
+          var root = (e.detail && e.detail.root) || document;
+          root.querySelectorAll('[data-rv], .rbx-stn, .rbx-shot, .rbx-pager').forEach(function (el) {
+            if (!el.classList.contains('is-in')) io.observe(el);
+          });
         });
       })();
     </script>

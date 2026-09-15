@@ -346,6 +346,9 @@ layout: portfolio_base
                 remap(out);
                 gate.hidden = true;
                 out.hidden = false;
+                // the injected figures carry .rbx-shot, which the reveal
+                // choreography hides until observed — see portfolio_base.liquid
+                document.dispatchEvent(new CustomEvent('rbx:reveal', { detail: { root: out } }));
                 if (lock) lock.textContent = 'open';
                 msg.textContent = '';
                 document.dispatchEvent(new CustomEvent('rbx:toc-refresh'));
@@ -594,13 +597,13 @@ layout: portfolio_base
     var entries = [];
     function collect() {
       var nodes = document.querySelectorAll(
-        '.rbx-stn, .rbx-sec-title.is-build, .rbx-post h2:not(.rbx-sec-title), .rbx-sec, .rbx-gallery:not(.is-sec), .rbx-broll'
+        '.rbx-stn, .rbx-sec-title.is-build, .rbx-post h2:not(.rbx-sec-title), .rbx-sec, .rbx-gallery:not(.is-sec)'
       );
       var list = [];
       nodes.forEach(function (el) {
-        // the unlocked b-roll injects its own gallery markup; the b-roll row
-        // already covers that section, so don't give its innards rows too
-        if (el.closest && el.closest('.rbx-broll-out')) return;
+        // the b-roll gets no TOC row (Chris, 2026-09-04), and the gallery
+        // markup it injects when unlocked gets none either
+        if (el.closest && el.closest('.rbx-broll')) return;
         var label = '',
           kind = 'plain',
           num = '';
@@ -620,9 +623,6 @@ layout: portfolio_base
           label = h ? h.textContent : '';
         } else if (el.classList.contains('rbx-gallery')) {
           label = 'Gallery';
-        } else if (el.classList.contains('rbx-broll')) {
-          var bt = el.querySelector('.rbx-broll-title');
-          label = bt ? bt.textContent : 'B-roll';
         } else {
           label = el.textContent;
         }
