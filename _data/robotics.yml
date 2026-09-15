@@ -35,6 +35,137 @@ links:
 # Captions come verbatim from the source filenames where one existed, and are
 # blank otherwise — nothing here is written for you. Fill the blanks in.
 projects:
+  - slug: joust
+    title: Robot Jousting
+    blurb: >-
+      Two real robot arms with 3D-printed swords fence each other on stepper rails while a crowd plays from their phones.
+    date: Fall 2026
+    # HackCMU 2026 (12-13 September 2026), team of three. Every line of prose on
+    # this entry is lifted verbatim from Chris's own write-up at /robo-jousting/
+    # (the blog post on main), the footage sidecar captions he edited in
+    # hackcmu26/video/footage/*.json, or the robot-jousting README. Captions on
+    # the new MuJoCo renders describe what the render shows, nothing more.
+    # Media provenance + the render script: docs/claude/robotics-ml-portfolio.md.
+    # Card still is a 4:3 crop of the real overhead-chop contact frame; the
+    # card's hover clip is the three filmed exchanges back to back.
+    cover: assets/img/robotics/joust.jpg
+    poster: assets/img/robotics/joust-hero-poster.jpg
+    video: assets/video/robotics/joust-hero.mp4
+    tagline: "The Tilt of Tiltford. Two real robot arms with 3D-printed swords fence each other on stepper rails while a crowd plays from their phones."
+    intro: >-
+      Two real SO-100/SO-101 robot arms, each holding a 3D-printed sword, fence each
+      other on stepper rails at a medieval festival. Players fight from their phones.
+      A crowd watches. It is an HRI experiment in whether a machine can make a room of
+      people cheer. We built it at HackCMU 2026, on 12 September 2026.
+    specs:
+      - HackCMU 2026
+      - SO-100 and SO-101 arms
+      - Stepper rails
+      - MuJoCo
+      - 3D-printed fencing gripper
+      - Team of three
+    build_notes: >-
+      Every move was designed in MuJoCo, then tuned on the real arms, and the moves are
+      chained together by a transition library so one motion can run into the next. The
+      game waits on the real motions — the screen does not resolve an exchange until the
+      arms have actually fought it.
+    links:
+      - { label: Code, url: "https://github.com/avnithv/robot-jousting" }
+      - { label: Write-up, url: /robo-jousting/ }
+      - { label: Trailer, url: "https://youtu.be/Ol8j64tkMzg" }
+      - { label: Demo, url: "https://youtu.be/c6h_7mXpHWY" }
+    build_title: The real arms
+    # The path: the three exchanges that were filmed, in the order they are in the
+    # trailer, then a whole bout. `desc` is the sidecar caption Chris edited for
+    # each clip; `tech` is a sentence from his write-up (or the repo README).
+    run:
+      - label: Overhead chop, high bar
+        note: blocked
+        video: assets/video/robotics/joust-blockhigh.mp4
+        poster: assets/img/robotics/joust-blockhigh-poster.jpg
+        desc: "Overhead chop meets the high bar. Blocked."
+        tech: "The screen beat is stretched to the real motion — an overhead chop is 4.5 s of arm time, not the 1.4 s the screen would take on its own."
+      - label: Overhead chop, low guard
+        note: the hit lands
+        video: assets/video/robotics/joust-blockmid.mp4
+        poster: assets/img/robotics/joust-blockmid-poster.jpg
+        desc: "Overhead chop against a low guard. The hit lands."
+        tech: "It drives the carriages together for the charge and apart for the return, plays each beat on both arms, and waits on the arms' own busy flags rather than on timers."
+      - label: Low slash, right-hand guard
+        note: blocked
+        video: assets/video/robotics/joust-attackleft.mp4
+        poster: assets/img/robotics/joust-attackleft-poster.jpg
+        desc: "A low slash from the left meets the right-hand guard. Blocked."
+        tech: "Rules used everywhere: hand no more than 0.27 m forward of its own base (hands never cross the centre line), nothing below the base plane, servo speed ~300 deg/s, the real wrist roll must not cross +/-180."
+      - label: A whole bout
+        note: 3x speed
+        video: assets/video/robotics/joust-bout.mp4
+        poster: assets/img/robotics/joust-bout-poster.jpg
+        desc: "A whole bout, played from the laptop (3x speed)"
+        tech: "A mock daemon carrying the real motion timings lets the whole thing be rehearsed with no hardware attached. In rehearsal the screen never released before the arms, with a worst margin of +23 ms."
+    # The simulation the moves were designed in. All of it replays trajectories
+    # from arm/motions_tuned.json; the three twins and the bout are new renders
+    # (one continuous camera each, slow motion and a frozen-time orbit at the
+    # moment the blades meet). Carriage spacing per exchange was picked so the
+    # blades actually touch: 0.667 m between the pan axes for the chop into the
+    # high bar, 0.61 m for the other two.
+    gallery_title: Designed in simulation
+    media:
+      - video: assets/video/robotics/joust-sim-bout.mp4
+        poster: assets/img/robotics/joust-sim-bout-poster.jpg
+        caption: "MuJoCo. The whole tilt in one flight: the en garde opener, the three exchanges above with the carriages charging in for each beat and backing off for the return, then the samurai finish."
+        wide: true
+      - video: assets/video/robotics/joust-sim-twin-blockhigh.mp4
+        poster: assets/img/robotics/joust-sim-twin-blockhigh-poster.jpg
+        caption: "MuJoCo twin of the first exchange: the overhead chop into the high bar."
+      - video: assets/video/robotics/joust-sim-twin-blockmid.mp4
+        poster: assets/img/robotics/joust-sim-twin-blockmid-poster.jpg
+        caption: "MuJoCo twin of the second: the chop's tip comes to rest on the guard hand."
+      - video: assets/video/robotics/joust-sim-twin-attackleft.mp4
+        poster: assets/img/robotics/joust-sim-twin-attackleft-poster.jpg
+        caption: "MuJoCo twin of the third: the low slash from the left into the right-hand guard."
+      - video: assets/video/robotics/joust-sim-clash.mp4
+        poster: assets/img/robotics/joust-sim-clash-poster.jpg
+        caption: "MuJoCo. Chop against high bar, then two low slashes crossing, each replayed at a quarter speed."
+      - video: assets/video/robotics/joust-sim-reel.mp4
+        poster: assets/img/robotics/joust-sim-reel-poster.jpg
+        caption: "All eleven tuned moves, back to back."
+      - image: assets/img/robotics/joust-sim-pipeline.jpg
+        caption: "From MuJoCo to the arms."
+    sections:
+      - title: The hardware
+        anchor: hardware
+        note: >-
+          We printed a fencing gripper for the arms: a sword holder that takes swappable 6
+          and 8 inch blades in five styles — fang, katana, rapier, falchion and crystal —
+          plus a shield, a gauntlet and a sword-breaker talon for the wrist. For the tilt
+          itself we printed a plate with one of each 8 inch blade, plus the gauntlet and
+          talon wrists.
+        media:
+          - video: assets/video/robotics/joust-cad-blades.mp4
+            poster: assets/img/robotics/joust-cad-blades-poster.jpg
+            caption: "Five blades: fang, katana, rapier, falchion, crystal."
+          - video: assets/video/robotics/joust-cad-wrists.mp4
+            poster: assets/img/robotics/joust-cad-wrists-poster.jpg
+            caption: "The gauntlet, and the sword-breaker talon."
+          - image: assets/img/robotics/joust-cad-fang.jpg
+            caption: "A full arm with the 8 inch fang blade."
+          - video: assets/video/robotics/joust-rig.mp4
+            poster: assets/img/robotics/joust-rig-poster.jpg
+            caption: "The rig: a scavenged CNC board, limit switches and steppers drive the rails"
+          - video: assets/video/robotics/joust-calibration.mp4
+            poster: assets/img/robotics/joust-calibration-poster.jpg
+            caption: "Behind the scenes: calibrating the arms by hand before the tilt"
+            wide: true
+      - title: The demo
+        anchor: demo
+        note: ""
+        media:
+          - video: assets/video/robotics/joust-expo.mp4
+            poster: assets/img/robotics/joust-expo-poster.jpg
+            caption: "HackCMU 2026."
+            wide: true
+
   - slug: robot-dog
     title: Robot Dog
     blurb: >-

@@ -332,6 +332,100 @@ research span there as fall 2025 through summer 2026 — that span is his own
 statement, wider than the notebook's 10/28→3/31 window, and the card date
 matches it ("Fall 2025 – Summer 2026").
 
+## Robot Jousting (joust)
+
+Added 2026-09-15 at Chris's request ("add robo jousting to my personal website
+robotics portfolio as the first item") — the first project in `_data/robotics.yml`
+(grid order = curation order), page `_pages/robotics_joust.md`, at `/robotics/joust/`.
+
+Chris's brief while it was built: "mostly focus on the robotics rather than the
+gameplay which should be minimal" — so the entry carries **no game screencaps**;
+the crowd/phone side is carried by the intro text and the demo clip only. Also:
+"make new media as well as you see fit to make it look super good"; "when doing
+animations try to use the calibrated versions when possible to make the blades hit
+each other"; "I really like the cinematic moving camera/drone camera during the
+sword swings makes it super cool". Future renders should keep to that brief: blades
+that actually meet, one continuously moving camera.
+
+**Copy rule for this entry.** Every prose string — blurb, tagline, intro,
+build_notes, the run's `desc`/`tech`, section notes, the page body — is verbatim
+from one of three places: Chris's own write-up at `/robo-jousting/`
+(`_pages/robo-jousting.md` on main), the footage sidecar captions he edited
+(`hackcmu26/video/footage/*.json`, each marked "user-edited, use as is"), or
+`robot-jousting/README.md`. Captions on the new MuJoCo renders only describe what
+the render shows. No prose comes from anywhere else.
+
+Source material lives outside this repo, in `/Users/hshi/Desktop/hackcmu26/video/`:
+real phone footage in `footage/` (HEVC 1920x1080 `.mov`, upright, with sidecar
+`.json` captions), the 1080p MuJoCo/CAD masters in `clips/` (documented in
+`clips/README.md`), stills in `stills/`.
+
+Web files are `assets/video/robotics/joust-*.mp4` + `assets/img/robotics/joust-*.jpg`
+— gitignored, published to the `robotics-media` release like everything else; every
+basename carries the `joust-` prefix so the flat release namespace stays unique.
+Encode: `libx264 -crf 26 -preset slow`, 1280 wide, `-an`, `+faststart`; posters are
+frame-0 extracts.
+
+Provenance, so any clip can be re-cut:
+
+| web file | source |
+| --- | --- |
+| `joust-blockhigh` | `robot_exchange_blockhigh.mov` |
+| `joust-blockmid` | `robot_exchange_blockmid.mov` |
+| `joust-attackleft` | `robot_exchange_attackleft_blockright.mov` |
+| `joust-bout` | `robot_full_bout.mov` from 1.5 s at 3x (`setpts=PTS/3`, 12.4 s) |
+| `joust-calibration` | `robot_bts_calibration.mov` |
+| `joust-rig` | `robot_bts_hardware.mov` |
+| `joust-expo` | `assets/img/robo-jousting/tilt_demo.mp4` (the crowd demo; video stream copied, audio dropped) |
+| `joust-hero` | the three exchange `.mov`s concatenated (the card's hover clip) |
+| `joust.jpg` (card cover) | `robot_exchange_blockhigh.mov` at 2.6 s, `crop=1440:1080:240:0` scaled to 1200x900 |
+| `joust-sim-orbit` / `-clash` / `-reel` / `-cad-blades` / `-cad-wrists` | `clips/sim_orbit_engarde` / `sim_clash` / `sim_reel_moves` / `cad_blades_turntable` / `cad_wrists` |
+| `joust-sim-pipeline.jpg` | `stills/sim_pipeline_still.png` |
+| `joust-cad-fang.jpg` | `assets/img/robo-jousting/full_arm_8in_fang.webp` on main |
+
+**New renders (2026-09-15)**, made by
+`/Users/hshi/Desktop/hackcmu26/video/render/shot8_portfolio.py` (run from
+`robot-jousting/sim` with `../.venv/bin/python`; modes `probe` / `twins` / `bout`;
+per-beat carriage spacing lives in `shot8_spacing.json` next to it): masters
+`clips/sim_twin_blockhigh.mp4`, `clips/sim_twin_blockmid.mp4`,
+`clips/sim_twin_attackleft.mp4`, `clips/sim_bout.mp4` → web `joust-sim-twin-*` and
+`joust-sim-bout`. Every arm motion replays `arm/motions_tuned.json` unchanged; the
+bout chains `EN_GARDE_OPENER`, the three beats (carriages charge in to the beat
+spacing, arms return to REST while carriages back off to 0.11 m retraction) and
+`SAMURAI_FINISH`, with smootherstep blends between them. Camera: one continuous
+flight per clip, keyed in output time through a time-parameterised (Barry-Goldman)
+Catmull-Rom, with 4x slow motion for 0.5 s around each blade contact and a
+0.7–0.9 s frozen-time orbit at the contact instant.
+
+**"Calibrated" spacing.** There are no separate calibrated motion files — the
+collision-intent doc (`robot-jousting/docs/collision_intent.md`) describes
+hand-calibrated contact poses. The probe measured closest blade-axis distance
+against carriage retraction, and the spacing per exchange was chosen so the blades
+genuinely touch: chop vs. high bar at 0.060 m retraction (0.667 m between pan
+axes: 0.05 cm, real blade-on-blade contact); chop vs. low guard at 0.0315 m
+(0.61 m, `pair.py`'s spacing — the chop's tip rests on the guard hand, the designed
+"hit lands"); low slash vs. right guard at 0.0315 m (0.61 m: blades meet, one
+contact sample). At the real charge-in stop (0.5469 m) the chop misses the high bar
+by 6 cm and the slash drives through the guard, so don't render those at 0.
+
+Gotchas: `shot_common.build` recompiles the scene, so any new render script has to
+go through it (it calls `arena.finish_model`). Camera azimuth 90 puts arm A
+(yellow, red blade — the attacker in all three filmed exchanges) on the LEFT,
+matching the real footage. MuJoCo's contact `dist` is negative for penetration, and
+a fast sweep into a held guard can show up to ~1 cm for a single sample — why the
+closer spacings were rejected. The contact instant each flight freezes on is the FIRST
+blade-on-anything contact inside the beat (falling back to the blades' closest
+approach) — for the chop into the low guard the blades never meet, the tip lands on
+the gripper, and the closest blade-to-blade approach is at the end of the hold,
+which put a camera key out of order on the first pass. Keep every elevation
+negative: a positive elevation is a lens below the target, which for a low contact
+point put it under the floor plane and rendered the far arm as a grey ghost
+(`Cam.mjcam` now clamps the lens to 10 cm off the floor).
+
+Links row on the page: Code (`github.com/avnithv/robot-jousting`), Write-up
+(`/robo-jousting/` — linking from robotics to the main site is allowed; the reverse
+never is), Trailer (`youtu.be/Ol8j64tkMzg`), Demo (`youtu.be/c6h_7mXpHWY`).
+
 ## Content
 
 Bodies, dates and captions are **Chris's to write** — do NOT fabricate write-ups,
