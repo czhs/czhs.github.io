@@ -17,6 +17,7 @@ links:
   - { label: LinkedIn, url: "https://www.linkedin.com/in/chris-h-shi" }
   - { label: GitHub, url: "https://github.com/czhs" }
   - { label: CV, url: /cv/ }
+  - { label: Portfolio PDF, url: /assets/pdf/chris-shi-robotics-portfolio.pdf } # built by bin/robotics_pdf/build.py
   - { label: Email, url: "mailto:chrisshi@andrew.cmu.edu" }
 
 # Grid order = list order. Per project:
@@ -170,7 +171,7 @@ projects:
     title: Robot Dog
     blurb: >-
       A printed quadruped, from a single leg test to dancing on all fours.
-    date: ""
+    date: "Summer 2026"
     # Card still is the CAD render; the card's hover clip is the real robot
     # dancing (Chris, 2026-09-04: "the robot video should be the dog dancing,
     # cover image is the CAD"). The CAD turntable animation (robot-dog.mp4) is
@@ -193,7 +194,7 @@ projects:
     title: Open Duck Mini
     blurb: >-
       An open-source biped built from bare servos up: soldered, wired, and driven until it walked and picked itself up off the floor.
-    date: ""
+    date: "Summer 2025"
     # Real build footage leads; the MuJoCo renders of the reference design sit at
     # the bottom of the gallery. Renders are NOT the physical build — keep them
     # labelled as renders and keep the upstream credit in `links`.
@@ -285,7 +286,7 @@ projects:
     title: Pi Day Pie Robot
     blurb: >-
       A borrowed microwave, a printed arm, and a great deal of orange tape.
-    date: ""
+    date: "Spring 2026"
     # Gated b-roll at the bottom of the post. Ciphertext only in the repo; the
     # password is never written here (public repo). Re-encrypt with:
     #   python3 bin/research_lock.py pie-broll <password> <plain.html> assets/enc/robotics-pie-broll.json
@@ -391,7 +392,7 @@ projects:
     title: Hack 100 Gantry
     blurb: >-
       Built at Hack 100 — partly self-designed CAD through to the first limit-switch test.
-    date: Spring 2026
+    date: "Spring 2026"
     cover: assets/img/robotics/gantry.jpg
     poster: assets/img/robotics/gantry-poster.jpg
     video: assets/video/robotics/gantry.mp4
@@ -408,7 +409,7 @@ projects:
     title: TartanIMU
     blurb: >-
       Inertial odometry: a trajectory estimated from IMU alone, with a live demo on Hugging Face.
-    date: "Fall 2025 – Summer 2026"
+    date: "Oct 2025 – May 2026"
     # Figures are real output from the demo's own model + bundled example
     # (LIN_ios_2022-01-19), run on the 4090 because the Space is on free-tier
     # CPU. ATE 1.4684 m, translational RTE 0.2044 m, inference 0.35 s.
@@ -437,7 +438,7 @@ projects:
     title: Dice Arms
     blurb: >-
       A dice mosaic generated from the Duck render — each cell is one die, pip count tracking local tone.
-    date: Video coming soon
+    date: "Summer 2025"
     # Dice mosaic generated from the Duck render: each cell is one die, pip count
     # tracks local tone, error-diffused across black and white dice.
     cover: assets/img/robotics/dice-arms.jpg

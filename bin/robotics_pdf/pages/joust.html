@@ -1,0 +1,56 @@
+<!-- Robot Jousting — reference page. Every string is verbatim from
+     _data/robotics.yml (tagline, intro, build_notes, specs, links, run labels/
+     notes/desc, gallery_title, media captions). Frames cut from the published
+     web clips: blockhigh 2.5 s, blockmid 2.8 s, attackleft 3.1 s,
+     sim-twin-blockhigh 2.67 s, expo 14.5 s. -->
+<style>
+  #p-joust .side { --g: 12px; }
+  #p-joust .side .prose { max-width: 292px; }
+</style>
+<div class="grid" style="grid-template-columns: 292px minmax(0, 1fr); --g: 22px">
+  <div class="stack side">
+    <p class="lead">The Tilt of Tiltford. Two real robot arms with 3D-printed swords fence each other on stepper rails while a crowd plays from their phones.</p>
+    <div class="prose">
+      <p>Two real SO-100/SO-101 robot arms, each holding a 3D-printed sword, fence each other on stepper rails at a medieval festival. Players fight from their phones. A crowd watches. It is an HRI experiment in whether a machine can make a room of people cheer. We built it at HackCMU 2026, on 12 September 2026.</p>
+      <p>Every move was designed in MuJoCo, then tuned on the real arms, and the moves are chained together by a transition library so one motion can run into the next. The game waits on the real motions — the screen does not resolve an exchange until the arms have actually fought it.</p>
+    </div>
+    <ul class="specs">
+      <li>HackCMU 2026</li>
+      <li>SO-100 and SO-101 arms</li>
+      <li>Stepper rails</li>
+      <li>MuJoCo</li>
+      <li>3D-printed fencing gripper</li>
+      <li>Team of three</li>
+    </ul>
+    <div class="links">
+      <a href="https://github.com/avnithv/robot-jousting"><span>Code</span><span class="url">github.com/avnithv/robot-jousting</span></a>
+      <a href="https://chrisshi.com/robo-jousting/"><span>Write-up</span><span class="url">chrisshi.com/robo-jousting/</span></a>
+      <a href="https://youtu.be/Ol8j64tkMzg"><span>Trailer</span><span class="url">youtu.be/Ol8j64tkMzg</span></a>
+      <a href="https://youtu.be/c6h_7mXpHWY"><span>Demo</span><span class="url">youtu.be/c6h_7mXpHWY</span></a>
+    </div>
+    <figure class="fig fill push" style="min-height: 120px">
+      <img src="frames/joust-expo-crowd.jpg" alt="" style="object-position: 50% 45%">
+      <figcaption>HackCMU 2026.</figcaption>
+    </figure>
+  </div>
+  <div class="grid" style="grid-template-rows: minmax(0, 1fr) 196px; --g: 14px">
+    <figure class="fig">
+      <img src="frames/joust-blockhigh-contact.jpg" alt="" style="object-position: 50% 35%">
+      <figcaption><span class="cap-title">Overhead chop, high bar</span>Overhead chop meets the high bar. Blocked.</figcaption>
+    </figure>
+    <div class="contact" style="--cols: 3; --rows: 1">
+      <figure class="cell">
+        <img src="frames/joust-blockmid-contact.jpg" alt="" style="object-position: 50% 40%">
+        <figcaption><span class="cap-title">Overhead chop, low guard</span>Overhead chop against a low guard. The hit lands.</figcaption>
+      </figure>
+      <figure class="cell">
+        <img src="frames/joust-attackleft-contact.jpg" alt="" style="object-position: 50% 45%">
+        <figcaption><span class="cap-title">Low slash, right-hand guard</span>A low slash from the left meets the right-hand guard. Blocked.</figcaption>
+      </figure>
+      <figure class="cell">
+        <img src="frames/joust-sim-twin-blockhigh-contact.jpg" alt="" style="object-position: 50% 55%">
+        <figcaption><span class="cap-title">Designed in simulation</span>MuJoCo twin of the first exchange: the overhead chop into the high bar.</figcaption>
+      </figure>
+    </div>
+  </div>
+</div>

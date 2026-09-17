@@ -1,0 +1,575 @@
+/* bin/robotics_pdf/style.css — the portfolio PDF wears the /robotics/ zine skin.
+   Palette + type are the literals from _includes/portfolio_styles.liquid (keep
+   in sync): ivory sheet, ink rules, seafoam field, Plus Jakarta Sans for prose
+   and display, JetBrains Mono strictly for machine labelling. Squared corners,
+   real rules, no soft shadows. One page = 11in x 8.5in landscape = 1056 x 816
+   CSS px; every length below is in px so the layout is deterministic. */
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 200 800;
+  src: url('fonts/plus-jakarta-sans-latin-var.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  src: url('fonts/jetbrains-mono-latin-var.woff2') format('woff2');
+}
+
+:root {
+  --field: #8fb2a4;
+  --ink: #13261f;
+  --card: #fffcf2;
+  --accent: #0f6046;
+  --tape: #e8590c;
+  --rail: rgba(19, 38, 31, 0.26);
+  --line: rgba(19, 38, 31, 0.18);
+  --soft: rgba(19, 38, 31, 0.62);
+  --sans: 'Plus Jakarta Sans', 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'JetBrains Mono', Menlo, Consolas, monospace;
+  --pw: 1056px;
+  --ph: 816px;
+  --ring: 14px; /* seafoam ring around the ink frame */
+  --fw: 6px; /* the ink frame */
+  --pad: 26px; /* sheet's inner padding */
+  --rule: 3px; /* the ink rule used everywhere */
+}
+
+@page {
+  size: 11in 8.5in;
+  margin: 0;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--field);
+}
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-variant-ligatures: common-ligatures;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img {
+  display: block;
+}
+
+/* ── one page = one window onto one sheet ─────────────────────── */
+.page {
+  position: relative;
+  width: var(--pw);
+  height: var(--ph);
+  padding: var(--ring);
+  background: var(--field);
+  overflow: hidden;
+  break-after: page;
+  page-break-after: always;
+}
+.page:last-child {
+  break-after: auto;
+  page-break-after: auto;
+}
+.sheet {
+  width: 100%;
+  height: 100%;
+  border: var(--fw) solid var(--ink);
+  background: var(--card);
+  padding: var(--pad);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── masthead + footer (written by build.py, shared by every project page) ── */
+.mast {
+  flex: none;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 14px;
+  padding-bottom: 12px;
+  border-bottom: var(--rule) solid var(--ink);
+  margin-bottom: 18px;
+}
+.mast-num {
+  font: 700 11px/1 var(--mono);
+  letter-spacing: 0.12em;
+  color: var(--soft);
+}
+.mast-title {
+  margin: 0;
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+.mast-date {
+  font: 600 9.5px/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--soft);
+  white-space: nowrap;
+}
+.foot {
+  flex: none;
+  margin-top: 14px;
+  padding-top: 9px;
+  border-top: 1.5px solid var(--rail);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font: 700 7.5px/1 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--soft);
+}
+.foot-mid {
+  color: var(--accent);
+}
+
+/* ── the body: everything a page fragment lays out lives in here ──
+   It is the space between masthead and footer (about 964 x 598 px).
+   Fragments put ONE .grid (or any block with height:100%) in it. */
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.body > * {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.grid {
+  display: grid;
+  gap: var(--g, 18px);
+  min-height: 0;
+  min-width: 0;
+  height: 100%;
+}
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g, 10px);
+  min-height: 0;
+  min-width: 0;
+}
+.fill {
+  flex: 1 1 0%;
+  min-height: 0;
+}
+.push {
+  margin-top: auto;
+}
+
+/* ── type ──────────────────────────────────────────────────────── */
+.eyebrow {
+  margin: 0 0 8px;
+  font: 700 7.5px/1 var(--mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.lead {
+  margin: 0 0 12px;
+  font-size: 15.5px;
+  line-height: 1.32;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.prose {
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.prose p {
+  margin: 0 0 8px;
+}
+.prose p:last-child {
+  margin-bottom: 0;
+}
+.prose ul {
+  margin: 0 0 8px;
+  padding-left: 14px;
+}
+.prose li {
+  margin: 0 0 3px;
+}
+.prose strong {
+  font-weight: 700;
+}
+.prose code,
+.mono {
+  font-family: var(--mono);
+  font-size: 0.92em;
+}
+.soft {
+  color: var(--soft);
+}
+.h {
+  margin: 0 0 7px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--ink);
+  font-weight: 800;
+  font-size: 12.5px;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.note {
+  font: 500 8px/1.45 var(--mono);
+  color: var(--soft);
+}
+
+/* specs: mono chips with a real border */
+.specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.specs li {
+  font: 700 7px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--ink);
+  padding: 4px 6px 3px;
+}
+
+/* links: wayfinding is set in the machine face, label + the URL it points at */
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: var(--rule) solid var(--ink);
+}
+.links a {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 0 4px;
+  border-top: 1.5px solid var(--rail);
+  font: 700 7.5px/1.3 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.links a:first-child {
+  border-top: 0;
+}
+.links .url {
+  margin-left: auto;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── figures ───────────────────────────────────────────────────── */
+/* .fig — one framed still, its caption in a band beneath. The image fills
+   whatever height the grid gives the figure and is cropped (object-fit:
+   cover); steer the crop with `style="object-position: 50% 30%"` on the img.
+   Give the grid explicit row heights (1fr, px) — an auto row collapses. */
+.fig {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  margin: 0;
+  border: var(--rule) solid var(--ink);
+  background: var(--card);
+  overflow: hidden;
+}
+.fig > img,
+.cell > img,
+.stn > img {
+  flex: 1 1 0%;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.fig > figcaption,
+.cell > figcaption,
+.cap {
+  flex: none;
+  border-top: var(--rule) solid var(--ink);
+  padding: 6px 8px 7px;
+  font: 500 8px/1.45 var(--mono);
+  color: var(--ink);
+}
+.cap-title {
+  display: block;
+  font: 700 9px/1.3 var(--sans);
+  letter-spacing: -0.01em;
+  margin-bottom: 1px;
+}
+
+/* .contact — a ruled contact sheet: cells divided by ink rules, no gutters
+   (the grid gap is painted ink). Set --cols / --rows or the grid templates. */
+.contact {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--rows, 1), minmax(0, 1fr));
+  gap: var(--rule);
+  background: var(--ink);
+  border: var(--rule) solid var(--ink);
+  min-height: 0;
+  min-width: 0;
+}
+.cell {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  margin: 0;
+  background: var(--card);
+  overflow: hidden;
+}
+.cell.blank {
+  background: var(--card);
+}
+
+/* .run — the path: numbered stations in a ruled strip */
+.run {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+  gap: var(--rule);
+  background: var(--ink);
+  border: var(--rule) solid var(--ink);
+  min-height: 0;
+  min-width: 0;
+}
+.stn {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  background: var(--card);
+  overflow: hidden;
+}
+.stn-head {
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 6px 8px 5px;
+  border-bottom: var(--rule) solid var(--ink);
+}
+.stn-num {
+  font: 700 7.5px/1 var(--mono);
+  letter-spacing: 0.08em;
+  color: var(--soft);
+}
+.stn-label {
+  font-weight: 700;
+  font-size: 9px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  min-width: 0;
+}
+.stn-note {
+  margin-left: auto;
+  flex: none;
+  font: 700 6.5px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--ink);
+  padding: 2.5px 4px 2px;
+}
+.stn-desc {
+  flex: none;
+  border-top: var(--rule) solid var(--ink);
+  padding: 6px 8px 7px;
+  font-size: 8.5px;
+  line-height: 1.42;
+}
+
+/* ── cover ─────────────────────────────────────────────────────── */
+.cover {
+  display: grid;
+  grid-template-columns: 276px minmax(0, 1fr);
+  gap: 34px;
+  height: 100%;
+  min-height: 0;
+}
+.cv-side {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.cv-name {
+  margin: 0 0 10px;
+  font-weight: 800;
+  font-size: 58px;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+.cv-name .dot {
+  color: var(--accent);
+}
+.cv-sub {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 500;
+  color: var(--soft);
+  max-width: 24ch;
+}
+.toc {
+  margin-top: 28px;
+  padding-top: 12px;
+  border-top: var(--rule) solid var(--ink);
+}
+.toc-h {
+  margin: 0 0 6px;
+  font: 700 7.5px/1 var(--mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--soft);
+}
+.toc-row {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 8px;
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+}
+.toc-row:first-of-type {
+  border-top: 0;
+}
+.toc-num {
+  font: 700 7.5px/1 var(--mono);
+  letter-spacing: 0.08em;
+  color: var(--soft);
+}
+.toc-title {
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.toc-date {
+  display: block;
+  margin-top: 1px;
+  font: 500 7px/1.3 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--soft);
+}
+.toc-page {
+  font: 700 8.5px/1 var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--soft);
+}
+.cv-links {
+  margin-top: auto;
+  padding-top: 4px;
+  border-top: var(--rule) solid var(--ink);
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.cv-links a {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0 5px;
+  border-top: 1.5px solid var(--rail);
+  font: 700 7.5px/1.3 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.cv-links a:first-child {
+  border-top: 0;
+}
+.cv-links .url {
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cv-contact .cell-cap {
+  display: block;
+  flex: none;
+  border-top: var(--rule) solid var(--ink);
+  padding: 8px 10px 9px;
+  font-size: 8.5px;
+  line-height: 1.45;
+}
+.cell-head {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+.cell-num {
+  font: 700 7.5px/1 var(--mono);
+  letter-spacing: 0.08em;
+  color: var(--soft);
+}
+.cell-title {
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.cell-date {
+  margin-left: auto;
+  flex: none;
+  font: 500 7px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--soft);
+}
+.cell-blurb {
+  display: block;
+  margin: 4px 0 0;
+  font-size: 8.5px;
+  line-height: 1.45;
+  color: var(--soft);
+}
+.colophon {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 12px 14px;
+  font: 500 8px/1.6 var(--mono);
+  color: var(--soft);
+}
+.colophon strong {
+  display: block;
+  font: 800 15px/1.15 var(--sans);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+/* placeholder while a page fragment has not been written yet */
+.todo {
+  border: 2px dashed var(--rail);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 500 10px var(--mono);
+  color: var(--soft);
+}

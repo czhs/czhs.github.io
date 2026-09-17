@@ -426,6 +426,56 @@ Links row on the page: Code (`github.com/avnithv/robot-jousting`), Write-up
 (`/robo-jousting/` — linking from robotics to the main site is allowed; the reverse
 never is), Trailer (`youtu.be/Ol8j64tkMzg`), Demo (`youtu.be/c6h_7mXpHWY`).
 
+## The portfolio PDF (2026-09-16)
+
+`assets/pdf/chris-shi-robotics-portfolio.pdf` is a one-page-per-project PDF
+edition of /robotics/ — a cover with the table of contents, then one landscape
+page per project, in the zine skin — linked from the sidebar as "Portfolio PDF"
+(a `.pdf` link opens in a new tab like an external one; `portfolio.liquid`).
+Chris asked for it 2026-09-16: "custom made PDF, 1 page per project, laid out
+nicely and visually lots of images, cover with table of contents, not like a
+CV", and "keep it decently professional".
+
+Built by `bin/robotics_pdf/build.py` (tracked; `out/` and `frames/` are
+gitignored) from HTML rendered through Playwright's Chromium:
+
+- `style.css` is the design system — the portfolio palette/type literals
+  copied from `portfolio_styles.liquid` (keep in sync), 11 x 8.5 in pages as
+  1056 x 816 CSS px, primitives `.fig` / `.contact` / `.run` / `.lead` /
+  `.prose` / `.specs` / `.links`. `CONTRACT.md` is the page contract.
+- `pages/<slug>.html` is each project page's **body only**; the build writes
+  the masthead (number, title, date from the data file), the footer (the live
+  page URL, page number) and the cover (index rows + a contact sheet of the
+  covers) from `_data/robotics.yml`, so order, titles and dates have one source.
+- Images: `img/<basename>` = `assets/img/robotics/`, or `frames/<name>.jpg`
+  cut from the published web clips with ffmpeg (posters are frame 0, the
+  contact/action frame is usually mid-clip). The build **rejects** an image the
+  data file does not attach to that project, and the gated pie b-roll always.
+- Copy on every page is verbatim from the data file or the page stub, trimmed
+  to whole sentences — same rule as the site ([content-rules](content-rules.md)).
+- The build measures every element after layout and refuses (`exit 2`) if
+  anything runs past its sheet, is clipped, failed to load, or is tiny; the
+  PDF page count must equal the number of `.page` sections (an 816px page that
+  spills makes a blank extra page). `--only <slug> --png` renders one page to
+  `out/only-<slug>/png/` for review; `--png` renders them all.
+- Regenerate + publish: `python3 bin/robotics_pdf/build.py && cp
+  bin/robotics_pdf/out/robotics-portfolio.pdf assets/pdf/chris-shi-robotics-portfolio.pdf`,
+  then commit the PDF (about 5 MB, in git like the other assets/pdf files —
+  not on the media release, so it opens inline at chrisshi.com).
+  The pages were written 2026-09-16 by one agent per project, the joust page
+  first as the reference for density and hierarchy.
+- **No legs, no socks** (Chris, 2026-09-16, while the duck page was built: "I
+  dont want my legs in it", then "remove the socks while youre at it"). The
+  duck page's standing robot is a subject cutout of `duck-stands-free` at
+  16.5 s — macOS Vision's `VNGenerateForegroundInstanceMaskRequest`
+  (`tools/cutout.swift`, which also records the sock rectangles) isolated
+  robot + socks, then the socks were erased with rectangle alpha masks in PIL
+  — the finished PNG is the one tracked file under `frames/` — and
+  it sits on the ivory sheet with `object-fit: contain`. `COVER_STILL` in
+  build.py swaps the cover sheet's duck cell for a Test Runs frame with
+  neither, since the site's `duck-cover.jpg` card still shows both. Frames
+  from the `surge-topple` and `walk` clips are already cropped clear of him.
+
 ## Content
 
 Bodies, dates and captions are **Chris's to write** — do NOT fabricate write-ups,

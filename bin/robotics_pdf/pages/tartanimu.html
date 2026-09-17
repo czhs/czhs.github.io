@@ -1,0 +1,42 @@
+<!-- TartanIMU. Every string is verbatim from _data/robotics.yml (blurb, link,
+     the top-down media caption) or _pages/robotics_tartanimu.md (the lead
+     figure's caption, the opening paragraph cut at a sentence boundary, the
+     "The demo" heading and its first two paragraphs, "Looking at the data" as
+     a label). No frames: this project has no clips. The images are plots, so
+     they sit on white with object-fit: contain — nothing crops an axis. -->
+<style>
+  #p-tartanimu .side { --g: 12px; }
+  #p-tartanimu .side .prose { max-width: 292px; }
+  #p-tartanimu .fig { background: #fff; }
+  #p-tartanimu .fig > img { object-fit: contain; }
+  #p-tartanimu .demo { display: grid; grid-template-columns: 1fr 1fr; column-gap: 22px; align-content: start; }
+  #p-tartanimu .demo .h { grid-column: 1 / -1; }
+  #p-tartanimu .demo p { margin: 0; }
+  #p-tartanimu .demo .links { grid-column: 1 / -1; margin-top: 10px; }
+</style>
+<div class="grid" style="grid-template-columns: 292px minmax(0, 1fr); --g: 22px">
+  <div class="stack side">
+    <p class="lead">Inertial odometry: a trajectory estimated from IMU alone, with a live demo on Hugging Face.</p>
+    <div class="prose">
+      <p>TartanIMU is a learned inertial odometry project in the AirLab at Carnegie Mellon, where I did research from fall 2025 through the summer of 2026. The problem is odometry from an IMU alone: take the raw stream — three axes of acceleration, three of angular velocity — and recover the trajectory the sensor travelled, with no camera, no GPS, nothing else. The ambition is a foundation model for inertial data: one network trained across four motion types — car, dog, drone, human — rather than a model tuned per platform.</p>
+    </div>
+    <figure class="fig fill push" style="min-height: 240px">
+      <img src="img/tartanimu-viz-traj.jpg" alt="">
+      <figcaption><span class="cap-title">Looking at the data</span>The same sequence top-down, coloured by time.</figcaption>
+    </figure>
+  </div>
+  <div class="grid" style="grid-template-rows: minmax(0, 1fr) auto; --g: 14px">
+    <figure class="fig">
+      <img src="img/tartanimu-traj.jpg" alt="">
+      <figcaption>The demo's own output on its bundled example — an iOS capture travelling about 45 m. Prediction against ground truth in three views; the bottom-left panel is the honest one, position error compounding over time.</figcaption>
+    </figure>
+    <div class="prose demo">
+      <h3 class="h">The demo</h3>
+      <p>The public face is the Hugging Face Space linked on this page, implemented in early March: upload an npz in the project's format and it runs inference and draws what you see at the top of this page — the sensor streams, the predicted trajectory against ground truth, and the metrics. The model behind it is deliberately modest, an overfit LaMar model: a demonstration that the pipeline works end to end, not a claim about generalization.</p>
+      <p>The figures on this page are the demo's real output on its bundled example, an iOS capture from January 2022: ATE 1.4684 m, translational RTE 0.2044 m, drift RTE 0.2298 m, velocity RMSE 0.0903 m/s, inference in 0.35 s. The Space itself runs on the free CPU tier, which could not finish that example in six minutes, so these figures come from running the Space's own inference and plotting code on the 4090 — same code, same weights, same example, faster silicon.</p>
+      <div class="links">
+        <a href="https://huggingface.co/spaces/HongyiShi/TartanIMU-Demo"><span>HuggingFace Demo</span><span class="url">huggingface.co/spaces/HongyiShi/TartanIMU-Demo</span></a>
+      </div>
+    </div>
+  </div>
+</div>

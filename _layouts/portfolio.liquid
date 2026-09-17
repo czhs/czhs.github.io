@@ -57,10 +57,13 @@ layout: portfolio_base
         {% if l.url contains '://' %}{% assign is_url = true %}{% endif %}
         {% assign is_ext = is_url %}
         {% if l.url contains 'mailto:' %}{% assign is_ext = true %}{% endif %}
+        {% comment %} a document (the portfolio PDF) opens in a new tab like an external link {% endcomment %}
+        {% assign new_tab = is_url %}
+        {% if l.url contains '.pdf' %}{% assign new_tab = true %}{% endif %}
         <a
           class="rbx-link"
           href="{% if is_ext %}{{ l.url }}{% else %}{{ l.url | relative_url }}{% endif %}"
-          {% if is_url %}
+          {% if new_tab %}
             target="_blank" rel="noopener"
           {% endif %}
         >

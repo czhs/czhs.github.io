@@ -1,0 +1,48 @@
+<!-- Hack 100 Gantry. Every string is verbatim from _data/robotics.yml (blurb,
+     the "Limit switch test" media caption) or _pages/robotics_gantry.md (the lead
+     figure caption, the first two body paragraphs, the "Bringing it up" heading
+     and its paragraph, the "Electronics" heading used as a label). Frames cut
+     from the published web clips: gantry.mp4 at 4 s (the finished machine) and
+     15 s (the breadboard), gantry-limit.mp4 at 16 s (the bench test). The two
+     CAD stills have blank captions in the data, so they carry no band. -->
+<style>
+  #p-gantry .side { --g: 12px; }
+  #p-gantry .side .prose { max-width: 320px; }
+</style>
+<div class="grid" style="grid-template-columns: 320px minmax(0, 1fr); --g: 22px">
+  <div class="stack side">
+    <p class="lead">Built at Hack 100 — partly self-designed CAD through to the first limit-switch test.</p>
+    <div class="prose">
+      <p>A three-axis Cartesian gantry, about 1.2 m on a side, standing free on its own legs over a taped-out floor grid, built to reach any point in that grid, drop a tool head onto it, pick something up and put it somewhere else.</p>
+      <p>It was built in a week. 18-100 runs an optional hackathon in the week before spring finals — build anything you want — and rather than something that fits on a desk we went after a machine we could not comfortably finish. The single-axis bench test further down this page is dated 26 April and the assembled gantry running is 1 May. Everything here happened in the five days between them, off a 19-line bill of materials totalling $352.50, with no kit and nothing bought pre-assembled. It won $50, which did not cover the extrusion, and on the last evening we taught the steppers to play Ode to Joy.</p>
+    </div>
+    <div>
+      <h3 class="h">Bringing it up</h3>
+      <div class="prose">
+        <p>The limit switch clip is one rail on a bench — a single carriage, one motor, one switch — and it is dated five days before the machine ran. That order was the whole method, and on a week-long build it was the only affordable one. Every unknown in the machine — does the carriage bind, does the belt slip under acceleration, does the switch trigger repeatably at speed, does the driver stay cool — got paid for one at a time on a bench, so that assembling the full gantry was assembly and not discovery. There was no schedule in which to debug three axes at once for the first time.</p>
+      </div>
+    </div>
+    <figure class="fig fill push" style="min-height: 120px">
+      <img src="frames/gantry-electronics-15s.jpg" alt="" style="object-position: 50% 28%">
+      <figcaption>Electronics</figcaption>
+    </figure>
+  </div>
+  <div class="grid" style="grid-template-rows: minmax(0, 1fr) 210px; --g: 14px">
+    <figure class="fig">
+      <img src="frames/gantry-run-4s.jpg" alt="" style="object-position: 50% 40%">
+      <figcaption>The finished machine, 1 May — the steppers are playing Ode to Joy.</figcaption>
+    </figure>
+    <div class="contact" style="grid-template-columns: 168px minmax(0, 1fr) 180px; --rows: 1">
+      <figure class="cell">
+        <img src="img/gantry-cad-1.jpg" alt="" style="object-position: 50% 50%">
+      </figure>
+      <figure class="cell">
+        <img src="img/gantry-cad-2.jpg" alt="" style="object-position: 50% 50%">
+      </figure>
+      <figure class="cell">
+        <img src="frames/gantry-limit-16s.jpg" alt="" style="object-position: 50% 42%">
+        <figcaption>Limit switch test</figcaption>
+      </figure>
+    </div>
+  </div>
+</div>

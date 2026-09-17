@@ -1,0 +1,77 @@
+<!-- Open Duck Mini. Every string is verbatim from the duck entry in
+     _data/robotics.yml (blurb, build_title, run labels, sections[0].title, the
+     render captions, the link). tagline / intro / build_notes are empty in the
+     data and stay empty: the page is image-led. The media captions are blank,
+     so the build stills carry no caption band; every render carries its
+     "MuJoCo render" caption. Frames cut from the published web clips:
+     servos-row 10.5 s, solder-pi 2.8 s, plate-held 2 s, pack-dressing 5 s,
+     surge-topple 2.8 s, walk 6.8 s, curious-tilt 0.6 s, waddle-sway 0.5 s.
+     The standing robot is a subject cutout of stands-free 16.5 s (macOS
+     Vision foreground mask, socks erased by hand afterwards — see
+     docs/claude/robotics-ml-portfolio.md): Chris asked for no legs and then no
+     socks in this page's pictures (2026-09-16, "you can crop out the
+     background for that one", "remove the socks while youre at it"), so the
+     robot alone sits on the sheet. -->
+<style>
+  #p-duck .side { --g: 12px; }
+  /* station heads flow the number and label inline and take a uniform
+     two-line height so the image tops line up across the strip */
+  #p-duck .stn-head { display: block; min-height: 33px; }
+  #p-duck .stn-num { margin-right: 4px; }
+  /* the cutout floats on the ivory sheet, whole, never cropped */
+  #p-duck .fig.cutout > img { object-fit: contain; padding: 10px 12px; }
+</style>
+<div class="grid" style="grid-template-columns: 292px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) 250px; --g: 18px">
+  <div class="stack side">
+    <p class="lead">An open-source biped built from bare servos up: soldered, wired, and driven until it walked and picked itself up off the floor.</p>
+    <div class="links">
+      <a href="https://github.com/apirrone/Open_Duck_Mini"><span>Open Duck Mini</span><span class="url">github.com/apirrone/Open_Duck_Mini</span></a>
+    </div>
+    <div class="stack fill push" style="--g: 0">
+      <div class="h">Duck renders as an HCI project</div>
+      <div class="contact fill" style="--cols: 2; --rows: 1">
+        <figure class="cell">
+          <img src="frames/duck-curious-tilt-0.6s.jpg" alt="" style="object-position: 50% 50%">
+          <figcaption>MuJoCo render</figcaption>
+        </figure>
+        <figure class="cell">
+          <img src="frames/duck-waddle-sway-0.5s.jpg" alt="" style="object-position: 50% 50%">
+          <figcaption>MuJoCo render</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+  <div class="grid" style="grid-template-columns: minmax(0, 1fr) 310px; --g: 14px">
+    <figure class="fig cutout">
+      <img src="frames/duck-standing-cutout.png" alt="">
+    </figure>
+    <figure class="fig">
+      <img src="frames/duck-surge-topple-2.8s.jpg" alt="" style="object-position: 50% 50%">
+    </figure>
+  </div>
+  <div class="stack" style="grid-column: 1 / 3; --g: 0">
+    <div class="h">The build</div>
+    <div class="run fill" style="--cols: 5">
+      <div class="stn">
+        <div class="stn-head"><span class="stn-num">01</span><span class="stn-label">Disassembling Arms and Configuring Servos</span></div>
+        <img src="frames/duck-servos-row-10.5s.jpg" alt="" style="object-position: 73% 50%">
+      </div>
+      <div class="stn">
+        <div class="stn-head"><span class="stn-num">02</span><span class="stn-label">Soldering Pi0 2W</span></div>
+        <img src="frames/duck-solder-pi-2.8s.jpg" alt="" style="object-position: 100% 50%">
+      </div>
+      <div class="stn">
+        <div class="stn-head"><span class="stn-num">03</span><span class="stn-label">Soldering Microphone</span></div>
+        <img src="frames/duck-plate-held-2s.jpg" alt="" style="object-position: 50% 55%">
+      </div>
+      <div class="stn">
+        <div class="stn-head"><span class="stn-num">04</span><span class="stn-label">Assembling Battery Pack</span></div>
+        <img src="frames/duck-pack-dressing-5s.jpg" alt="" style="object-position: 50% 85%">
+      </div>
+      <div class="stn">
+        <div class="stn-head"><span class="stn-num">05</span><span class="stn-label">Test Runs</span></div>
+        <img src="frames/duck-walk-6.8s.jpg" alt="" style="object-position: 50% 50%">
+      </div>
+    </div>
+  </div>
+</div>

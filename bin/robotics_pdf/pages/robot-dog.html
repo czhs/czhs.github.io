@@ -1,0 +1,54 @@
+<!-- Robot Dog. Every string is verbatim from _data/robotics.yml (blurb, media
+     captions) or _pages/robotics_robot-dog.md (the opening paragraph, the CAD /
+     Prototyping / Robot animation sections, the lead-figure caption). Frames cut
+     from the published clips: robot-dog-dance.mp4 at 7.5 s (crop 900x429 at
+     150,140), robot-dog-leg.mp4 at 1.8 s (crop 720x700 at 0,200),
+     robot-dog.mp4 (the CAD turntable) at 3.0 s (crop 960x561 at 138,128). -->
+<style>
+  #p-robot-dog .side { --g: 12px; }
+  #p-robot-dog .side .prose { max-width: 292px; }
+</style>
+<div class="grid" style="grid-template-columns: 292px minmax(0, 1fr); --g: 22px">
+  <div class="stack side">
+    <p class="lead">A printed quadruped, from a single leg test to dancing on all fours.</p>
+    <div class="prose">
+      <p>A printed quadruped. The structural parts are 3D printed, many of them self-designed. Each leg is driven by two servos mounted in the body, through pushrod linkages, from a PCA9685 servo controller on a Raspberry Pi. On the bench it stands and runs an authored dance routine on all four legs, powered over a tether.</p>
+    </div>
+    <div>
+      <p class="h">CAD</p>
+      <div class="prose">
+        <p>No servo is mounted on a leg. Both actuators for each leg sit in the body and drive the lower link through a pushrod, so what swings is printed plastic and bearings. Moment of inertia scales with the square of distance from the joint, so a servo at the knee costs several times what the same mass costs at the hip. Hobby servos have a fixed torque budget, and leg inertia sets how fast a leg can move before it stops tracking its commands.</p>
+      </div>
+    </div>
+    <div>
+      <p class="h">Prototyping</p>
+      <div class="prose">
+        <p>One leg was built and tested before the other three: a single leg bolted to a vertical extrusion on a plywood stand, driven from a breadboard with a dev board and a bench power module.</p>
+        <p>The rig answered three questions: whether the linkage moves through its full range without self-interference, whether the printed pin joints survive repeated load, and what the servo delivers against the real leg rather than the datasheet.</p>
+      </div>
+    </div>
+    <div>
+      <p class="h">Robot animation</p>
+      <div class="prose">
+        <p>The dance is authored motion: a sequence of poses with interpolation between them, not a learned or planned gait.</p>
+        <p>Every joint takes a position command and nothing else. No velocity, no torque, no feedback.</p>
+      </div>
+    </div>
+  </div>
+  <div class="grid" style="grid-template-rows: minmax(0, 1fr) 270px; --g: 14px">
+    <figure class="fig">
+      <img src="frames/robot-dog-dance-7.5s.jpg" alt="" style="object-position: 50% 50%">
+      <figcaption>Final dancing</figcaption>
+    </figure>
+    <div class="contact" style="grid-template-columns: 240px minmax(0, 1fr); --rows: 1">
+      <figure class="cell">
+        <img src="frames/robot-dog-leg-1.8s.jpg" alt="" style="object-position: 50% 40%">
+        <figcaption>Leg test</figcaption>
+      </figure>
+      <figure class="cell">
+        <img src="frames/robot-dog-cad-3s.jpg" alt="" style="object-position: 50% 50%">
+        <figcaption>The CAD assembly. Two servos per leg sit inside the body, the Raspberry Pi and the RPLIDAR A1 ride on the top plate.</figcaption>
+      </figure>
+    </div>
+  </div>
+</div>

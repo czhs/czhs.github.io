@@ -1,0 +1,22 @@
+<!-- Dice Arms. Copy: the blurb from _data/robotics.yml (the lead) and the
+     single stub line from _pages/robotics_dice-arms.md (the note). One still —
+     the mosaic itself, shown whole: the right column is 650 px wide, so the
+     framed 4:3 image is 650 x 489 (644 x 483 inside the rule). No clips. -->
+<style>
+  /* one rectangle, set as a plate: optically centred (a hair above geometric) */
+  #p-dice-arms .plate { height: 100%; display: flex; flex-direction: column; justify-content: center; padding-bottom: 16px; }
+  #p-dice-arms .plate .grid { height: auto; flex: none; }
+  #p-dice-arms .side { --g: 12px; }
+  #p-dice-arms .side .note { margin: auto 0 0; }
+</style>
+<div class="plate">
+  <div class="grid" style="grid-template-columns: 292px minmax(0, 1fr); grid-template-rows: 489px; --g: 22px">
+    <div class="stack side">
+      <p class="lead">A dice mosaic generated from the Duck render — each cell is one die, pip count tracking local tone.</p>
+      <p class="note push">Under construction.</p>
+    </div>
+    <figure class="fig">
+      <img src="img/dice-arms.jpg" alt="">
+    </figure>
+  </div>
+</div>

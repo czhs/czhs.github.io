@@ -1,0 +1,98 @@
+<!-- Pi Day Pie Robot. Every string is verbatim from _data/robotics.yml
+     (tagline, intro, the first two sentences of build_notes, specs, the run
+     stations' label/note/desc, the training-data media caption). The hero's
+     caption is the "Two-stage door open" spec used as a label. Frames cut from
+     the published web clips, cropped to the bench (crop=630:900:60:140 on the
+     portrait clips): open 12 s, cup-in 6.5 s, door-close 5.5 s, door-fail 7 s,
+     servo-start 3 s (crop=504:720:520:0), cup-out 5 s, cream 3.5 s,
+     training-data 7 s (crop=720:800:0:200). -->
+<style>
+  #p-pie-robot .side { --g: 10px; }
+  #p-pie-robot .run { --cols: 7; }
+  #p-pie-robot .stn-head { padding-left: 7px; padding-right: 7px; }
+  #p-pie-robot .stn > img { flex: none; height: 200px; }
+  #p-pie-robot .stn-desc { flex: 1 1 auto; }
+  /* the Retry station is a `branch` in the data: a detour off Close. The site
+     hangs it as a dashed, unnumbered detour; here the rules it shares with its
+     neighbours go dashed (painted over the strip's ink gaps) and its own follow. */
+  #p-pie-robot .stn.branch { position: relative; overflow: visible; }
+  #p-pie-robot .stn.branch::before,
+  #p-pie-robot .stn.branch::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: repeating-linear-gradient(to bottom, var(--card) 0 5px, transparent 5px 10px);
+  }
+  #p-pie-robot .stn.branch::before { left: -3px; }
+  #p-pie-robot .stn.branch::after { right: -3px; }
+  #p-pie-robot .stn.branch .stn-head { border-bottom-style: dashed; }
+  #p-pie-robot .stn.branch .stn-desc { border-top-style: dashed; }
+  #p-pie-robot .stn.branch .stn-note { border-style: dashed; }
+</style>
+<div class="grid" style="grid-template-rows: minmax(0, 1fr) 322px; --g: 14px">
+  <div class="grid" style="grid-template-columns: 370px minmax(0, 1fr) 204px; --g: 14px">
+    <div class="stack side">
+      <p class="lead">A borrowed microwave, a printed arm, and a great deal of orange tape.</p>
+      <div class="prose">
+        <p>A Pi Day hackathon sprint. Each cup is a pie assembled ahead of time — a crumb base of crushed crackers under pumpkin pie filling — so it only needs heating. Everything after that is the robot's job: the door, the cup, the start button, and the whipped cream on top.</p>
+        <p>The microwave is stock hardware with no electrical interface, so every input had to be made mechanically. Servos driven by an ESP32 work the door and the start button, and every bracket holding them — along with the fixture that clamps the whipped cream can upside down above the plate — is self-designed and 3D printed.</p>
+      </div>
+      <ul class="specs push">
+        <li>Pi Day hackathon</li>
+        <li>ESP32</li>
+        <li>Self-designed 3D-printed mounts</li>
+        <li>Servo actuation</li>
+        <li>Two-stage door open</li>
+      </ul>
+    </div>
+    <figure class="fig">
+      <img src="img/pie-robot.jpg" alt="" style="object-position: 50% 50%">
+      <figcaption><span class="cap-title">Two-stage door open</span></figcaption>
+    </figure>
+    <figure class="fig">
+      <img src="frames/pie-training-data-walk.jpg" alt="" style="object-position: 50% 50%">
+      <figcaption>Collecting training data: walking the arm through the motion by hand, repeatedly, so it can do it on its own.</figcaption>
+    </figure>
+  </div>
+  <!-- cells weighted by how much each station has to say, so the strip's
+       height is not set by the longest desc over a row of half-empty cells -->
+  <div class="run" style="grid-template-columns: 1.25fr 0.85fr 1fr 1.2fr 0.8fr 0.95fr 0.95fr">
+    <div class="stn">
+      <div class="stn-head"><span class="stn-num">01</span><span class="stn-label">Open</span><span class="stn-note">two moves</span></div>
+      <img src="frames/pie-open-shove.jpg" alt="">
+      <div class="stn-desc">The gripper pulls the handle until the latch pops, then reaches up and shoves the acrylic bar taped to the top of the door. The arm is too short to swing the door itself, so the door was given a longer handle.</div>
+    </div>
+    <div class="stn">
+      <div class="stn-head"><span class="stn-num">02</span><span class="stn-label">Load</span><span class="stn-note">cup in</span></div>
+      <img src="frames/pie-cup-in-turntable.jpg" alt="">
+      <div class="stn-desc">Cup off the top of the microwave and onto the turntable.</div>
+    </div>
+    <div class="stn">
+      <div class="stn-head"><span class="stn-num">03</span><span class="stn-label">Close</span><span class="stn-note">door shut</span></div>
+      <img src="frames/pie-door-close-push.jpg" alt="">
+      <div class="stn-desc">The arm rises to near-vertical, reaches the top of the open door and pushes it until the latch catches.</div>
+    </div>
+    <div class="stn branch">
+      <div class="stn-head"><span class="stn-label">Retry</span><span class="stn-note">the tape gave up</span></div>
+      <img src="frames/pie-door-fail-peel.jpg" alt="">
+      <div class="stn-desc">The same close, twenty-three seconds earlier. The door swings almost shut, rebounds, and the tape holding the acrylic bar peels off. Someone re-tapes it and the next attempt holds.</div>
+    </div>
+    <div class="stn">
+      <div class="stn-head"><span class="stn-num">04</span><span class="stn-label">Start</span><span class="stn-note">servo</span></div>
+      <img src="frames/pie-servo-start-press.jpg" alt="">
+      <div class="stn-desc">A servo on a printed bracket presses the panel.</div>
+    </div>
+    <div class="stn">
+      <div class="stn-head"><span class="stn-num">05</span><span class="stn-label">Unload</span><span class="stn-note">cup out</span></div>
+      <img src="frames/pie-cup-out-lift.jpg" alt="">
+      <div class="stn-desc">Back out and onto the paper plate, which is parked under the nozzle for a reason.</div>
+    </div>
+    <div class="stn">
+      <div class="stn-head"><span class="stn-num">06</span><span class="stn-label">Top</span><span class="stn-note">whipped cream</span></div>
+      <img src="frames/pie-cream-dispense.jpg" alt="">
+      <div class="stn-desc">The reason. The gripper tips the lever on an upside-down can and the cup fills from empty.</div>
+    </div>
+  </div>
+</div>
