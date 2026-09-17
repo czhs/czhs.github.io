@@ -37,12 +37,15 @@ SITE = "https://chrisshi.com"
 PW, PH = 1056, 816
 PDF_NAME = "robotics-portfolio.pdf"
 
-# Lead figures that the page stubs (_pages/robotics_<slug>.md) place themselves,
-# so they are not in the data file's media lists but are part of the project.
+# Stills that belong to a project but are not in the data file's media lists:
+# lead figures the page stubs (_pages/robotics_<slug>.md) place themselves, and
+# pie-robot.jpg, the 4:3 crop of the two-part door open that was the card cover
+# until 2026-09-16 (the pie page's hero, labelled "Two-stage door open").
 STUB_IMAGES = {
     "robot-dog": ["robot-dog-poster.jpg"],
     "gantry": ["gantry-poster.jpg"],
     "tartanimu": ["tartanimu-traj.jpg"],
+    "pie-robot": ["pie-robot.jpg"],
 }
 # Image-name prefixes a project's frames/ stills must carry.
 PREFIX = {
