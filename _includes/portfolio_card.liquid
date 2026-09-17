@@ -1,0 +1,72 @@
+{%- comment -%}
+  One contact-sheet card. Shared by the flat index (robotics) and the grouped
+  index (ml), so the two stay identical. Media URLs arrive already resolved —
+  the layout decides which data file and which release prefix they come from.
+    include.slug       anchor id (#p-<slug>) — the sidebar manifest points here
+    include.href       where the card goes (a detail page here, or another site's)
+    include.title      card title
+    include.blurb      one-line blurb (optional)
+    include.date       term/year (optional)
+    include.tag        small mono tag on the head row, e.g. "locked" (optional)
+    include.still_url  4:3 still, '' for an under-construction placeholder
+    include.video_url  hover clip, '' for none
+    include.num        two-digit index string
+    include.rv         reveal stagger, ms
+{%- endcomment -%}
+{%- assign has_media = false -%}
+{%- if include.still_url and include.still_url != '' -%}{%- assign has_media = true -%}{%- endif -%}
+{%- if include.video_url and include.video_url != '' -%}{%- assign has_media = true -%}{%- endif -%}
+<a
+  class="rbx-card{% unless has_media %} is-empty{% endunless %}"
+  id="p-{{ include.slug }}"
+  href="{{ include.href }}"
+  data-rv
+  style="--rv: {{ include.rv }}ms"
+>
+  <span class="rbx-frame">
+    {% if include.still_url and include.still_url != '' %}
+      <img class="rbx-cover" src="{{ include.still_url }}" alt="{{ include.title }}" loading="lazy">
+    {% else %}
+      <span class="rbx-cover rbx-cover-empty" aria-hidden="true"></span>
+    {% endif %}
+
+    {% comment %}
+      Hover preview. src is held in data-src so nothing downloads until the
+      pointer actually lands on the card -- six autoplaying clips would
+      otherwise cost several MB on first paint.
+    {% endcomment %}
+    {% if include.video_url and include.video_url != '' %}
+      <video
+        class="rbx-preview"
+        muted
+        loop
+        playsinline
+        preload="none"
+        tabindex="-1"
+        aria-hidden="true"
+        data-src="{{ include.video_url }}"
+      ></video>
+      <span class="rbx-badge" aria-hidden="true">
+        <svg viewBox="0 0 12 12" width="9" height="9">
+          <path d="M3 2l7 4-7 4z" fill="currentColor" />
+        </svg>
+      </span>
+    {% endif %}
+  </span>
+
+  <span class="rbx-cap">
+    <span class="rbx-card-head">
+      <span class="rbx-card-num" aria-hidden="true">{{ include.num }}</span>
+      <span class="rbx-card-title">{{ include.title }}</span>
+      {% if include.tag and include.tag != '' -%}
+        <span class="rbx-card-tag">{{ include.tag }}</span>
+      {%- endif %}
+      {% if include.date and include.date != '' -%}
+        <span class="rbx-card-date">{{ include.date }}</span>
+      {%- endif %}
+    </span>
+    {% if include.blurb and include.blurb != '' -%}
+      <span class="rbx-card-blurb">{{ include.blurb }}</span>
+    {%- endif %}
+  </span>
+</a>

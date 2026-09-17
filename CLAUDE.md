@@ -18,7 +18,7 @@ on that area**:
 | [research-posts](docs/claude/research-posts.md) | turning an uploaded notebook PDF into a password-gated /research post |
 | [ringworld](docs/claude/ringworld.md) | the /ringworld/ micro-site: posts, sessions, design decisions not to undo |
 | [poems](docs/claude/poems.md) | the /76265/ poem directory: adding a poem from an uploaded PDF (public titles, gated bodies) |
-| [robotics-ml-portfolio](docs/claude/robotics-ml-portfolio.md) | /robotics/ + /ml/ shells; the never-link-to-robotics rule |
+| [robotics-ml-portfolio](docs/claude/robotics-ml-portfolio.md) | /robotics/ and the integrated /ml/ portfolio (research + DLSys + robotics); the never-link-to-robotics rule |
 | [hcl-ml](docs/claude/hcl-ml.md) | the gated /HCL-ML page: unified write-up, inline co-drafting editor + save server, publishing |
 | [domain](docs/claude/domain.md) | chrisshi.com DNS / cutover |
 

@@ -1,29 +1,148 @@
-# Standalone ML projects portfolio (/ml/) — single source of truth.
-# Mirrors the robotics micro-site (same layout system: layout: portfolio / portfolio_post).
-# Add a project: append to `projects` below and create _pages/ml_<slug>.md.
+# /ml/ — the integrated portfolio: ML research, ML systems and the robotics
+# work on one contact sheet. Same layout system as /robotics/ (layout:
+# portfolio / portfolio_post), read docs/claude/robotics-ml-portfolio.md first.
+# Like /robotics/, this micro-site is handed to people directly; the personal
+# site does not link to it.
 name: Chris Shi
 url: /ml/
-subtitle: Machine learning projects — models, training, and results.
-under_construction: true
+site_label: ML & Robotics
+subtitle: Math and computer engineering at Carnegie Mellon University.
+# Production builds serve every media path under assets/{img,video}/ml/ from
+# this GitHub release (basename only) — same trick as robotics-media, so the
+# bytes never enter git. Locally the same paths serve from the gitignored dirs.
+# Upload: gh release upload ml-media <files> [--clobber]
+media_base: "https://github.com/czhs/czhs.github.io/releases/download/ml-media/"
+under_construction: false
 
 # Sidebar links (bottom of the left column). External links open in a new tab.
 links:
   - { label: Personal Website, url: / } # the one link back to the main site
+  - { label: Robotics Portfolio, url: /robotics/ }
   - { label: LinkedIn, url: "https://www.linkedin.com/in/chris-h-shi" }
   - { label: GitHub, url: "https://github.com/czhs" }
   - { label: CV, url: /cv/ }
   - { label: Email, url: "mailto:chrisshi@andrew.cmu.edu" }
 
-# Grid order = list order. For each project:
-#   cover:  a figure to use as the card image (architecture diagram, result plot, etc.)
-#           Drop it into assets/img/ml/<slug>.png and set cover: assets/img/ml/<slug>.png
-#   date:   optional term/year shown on the card and detail page (e.g. "Fall 2025")
-#   links:  optional row of buttons on the detail page, e.g.
-#           links:
-#             - { label: Paper, url: "https://arxiv.org/abs/..." }
-#             - { label: Code,  url: "https://github.com/..." }
-#             - { label: Demo,  url: "https://..." }
-# Blank cover renders an "under construction" placeholder card.
+# ── Projects that live HERE (detail pages at /ml/<slug>/) ──────────────────
+# Same keys as robotics.yml: cover (4:3 card still), poster/video (hover clip),
+# date, links (pill row on the detail page), gallery_title + media (gallery).
+# Blurbs are the repos' own one-line descriptions, verbatim. Write-ups are the
+# repos' READMEs, verbatim, in _pages/ml_<slug>.md.
 projects:
-  - { slug: project-one, title: Project One, date: "", cover: "" }
-  - { slug: project-two, title: Project Two, date: "", cover: "" }
+  - slug: autodidact
+    title: autodidact
+    blurb: reverse-mode autodiff engine and nn library from scratch in numpy # the repo's description
+    date: "Fall 2026"
+    # Card + gallery figures are real output of the repo's own code, drawn in
+    # the site palette by bin/ml_figs/fig_autodidact.py (examples/spiral.py's
+    # setup and examples/train_gpt.py's loop verbatim; the graph is walked off
+    # Tensor._prev). Numbers in the captions are what those runs printed.
+    cover: assets/img/ml/autodidact.jpg
+    links:
+      - { label: Code, url: "https://github.com/czhs/autodidact" }
+    gallery_title: Figures
+    media:
+      - image: assets/img/ml/autodidact-graph.png
+        caption: "The graph backward() walks for the README's own expression, y = ((x @ x.T).tanh() * 2 + x[:, :3].exp()).log_softmax(-1).sum(), read off Tensor._prev: one box per op call, arrows pointing forward, the root in orange."
+        wide: true
+      - image: assets/img/ml/autodidact-spiral.png
+        caption: "examples/spiral.py: a 2-layer MLP on the 3-arm spiral toy dataset. Decision regions after 500 steps of Adam; val acc 0.967."
+        wide: true
+      - image: assets/img/ml/autodidact-gpt-loss.png
+        caption: "examples/train_gpt.py: char-level GPT on the built-in text snippet (925 chars, vocab 29, 104k params), 300 steps of AdamW on a cosine-with-warmup schedule, 3.38 to 1.49 nats on one CPU thread."
+        wide: true
+
+  - slug: tinydecode
+    title: tinydecode
+    blurb: small llama-style inference runtime, tuned for single-stream latency # pyproject.toml's description
+    date: "Fall 2026"
+    # Figures are the repo's own benchmarks (bench/latency.py, bench/spec.py)
+    # run on the RTX 4090 against Llama-3.2-3B-Instruct, drawn by
+    # bin/ml_figs/fig_tinydecode.py from the JSON the bench dumps.
+    cover: assets/img/ml/tinydecode.jpg
+    links:
+      - { label: Code, url: "https://github.com/czhs/tinydecode" }
+    gallery_title: Benchmarks
+    media:
+      - image: assets/img/ml/tinydecode-latency.png
+        caption: "bench/latency.py on the RTX 4090: Llama-3.2-3B-Instruct and 1B-Instruct in bf16, 128 new tokens, median of 5 runs. Eager vs cuda graph replay, torch ops vs the fused kernels; right, every decode step of one 3B run."
+        wide: true
+      - image: assets/img/ml/tinydecode-spec.png
+        caption: "bench/spec.py, same target: a Llama-3.2-1B-Instruct draft model against free n-gram prompt lookup at k = 3, 5, 8, temperature 0, 128 new tokens; plain decode at 129.8 tok/s for reference."
+        wide: true
+
+  - slug: vpd-factual-recall
+    title: VPD factual recall
+    blurb: what the CI mask keeps and what it loses in OPT-125m # the README's title line
+    date: "Summer 2026"
+    # Cover is the top-left panel of the repo's own figures/showcase_factual.png
+    # (the two-shot "capital of France is" flip), set on the sheet's ivory.
+    # Gallery = the seven figures the README embeds, captions = its alt texts.
+    cover: assets/img/ml/vpd-factual-recall.jpg
+    links:
+      - { label: Code, url: "https://github.com/czhs/vpd-factual-recall" }
+    gallery_title: Figures
+    media:
+      - image: assets/img/ml/vpd-pair-paris-france-2shot.png
+        caption: one fact, both directions
+        wide: true
+      - image: assets/img/ml/vpd-showcase-factual.png
+        caption: factual recall
+        wide: true
+      - image: assets/img/ml/vpd-showcase-rare.png
+        caption: rare-word recall
+        wide: true
+      - image: assets/img/ml/vpd-capital-ladder.png
+        caption: capital ladder
+      - image: assets/img/ml/vpd-frequency-law.png
+        caption: frequency law
+        wide: true
+      - image: assets/img/ml/vpd-passage.png
+        caption: passage
+        wide: true
+      - image: assets/img/ml/vpd-trace-france.png
+        caption: trace
+        wide: true
+
+# ── The index: the sheet in three parts ───────────────────────────────────
+# Each entry names one source —
+#   project:  <slug>  a project above (card links to /ml/<slug>/)
+#   robotics: <slug>  a project in _data/robotics.yml (card links to
+#                     /robotics/<slug>/, media from the robotics release)
+#   research: <slug>  a /research/ entry (title, description, date and cover
+#                     from the collection doc; gated entries show "locked")
+# `rows:` render as compact ruled lines under the grid (the notebook pages).
+# Numbering runs through the whole page. Grid order = list order.
+groups:
+  - title: Research
+    links:
+      - { label: Lab notebook, url: /research/ }
+    items:
+      - { research: reconstructing-rome-2026-08-29 }
+      - { research: playing-with-vpd-2026-08-29 }
+      - { project: vpd-factual-recall }
+      - { research: what-a-size-ladder-can-identify-2026-08-29 }
+      - { robotics: tartanimu }
+    rows:
+      - { research: ih-engineering-notebook-2026-08-17 }
+      - { research: ih-engineering-notebook-2026-08-16 }
+      - { research: ih-engineering-notebook-2026-08-15 }
+
+  - title: Deep Learning Systems
+    links:
+      - { label: 10-414 coursework, url: "https://github.com/czhs/10414-class" }
+    items:
+      - { project: autodidact }
+      - { project: tinydecode }
+
+  - title: Robotics
+    links:
+      - { label: Full portfolio, url: /robotics/ }
+      - { label: Portfolio PDF, url: /assets/pdf/chris-shi-robotics-portfolio.pdf }
+    items:
+      - { robotics: joust }
+      - { robotics: robot-dog }
+      - { robotics: duck }
+      - { robotics: pie-robot }
+      - { robotics: gantry }
+      - { robotics: dice-arms }

@@ -7,6 +7,20 @@
     <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ '/assets/fonts/plus-jakarta-sans-latin-var.woff2' | relative_url }}">
     <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ '/assets/fonts/jetbrains-mono-latin-var.woff2' | relative_url }}">
     {% include portfolio_styles.liquid %}
+    <script>
+      // head.liquid's theme.js has just applied the VISITOR's theme (system
+      // preference by default). This sheet has one fixed palette, so pin the
+      // computed theme to light here: otherwise a dark-mode visitor gets the
+      // dark syntax-highlight stylesheet and Bootstrap's .table-dark stamped
+      // on every table — white text on ivory. theme.js declares these with
+      // `let` at top level, so a later classic script can reassign them.
+      if (typeof determineComputedTheme === 'function' && typeof applyTheme === 'function') {
+        determineComputedTheme = function () {
+          return 'light';
+        };
+        applyTheme();
+      }
+    </script>
   </head>
 
   <body class="rbx-site">

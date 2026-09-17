@@ -1,0 +1,49 @@
+NVIDIA GeForce RTX 4090, 535.309.01
+2.5.1+cu121 12.1
+=== latency 3B
+eager, torch ops         ttft   10.85ms  itl p50  11.01ms  p99  11.08ms     91.5 tok/s
+/home/hshi-j-4090/miniconda3/envs/jpre/lib/python3.11/site-packages/torch/utils/cpp_extension.py:1964: UserWarning: TORCH_CUDA_ARCH_LIST is not set, all archs for visible cards are included for compilation. 
+If this is not desired, please set os.environ['TORCH_CUDA_ARCH_LIST'].
+  warnings.warn(
+eager, fused kernels     ttft    9.05ms  itl p50   8.09ms  p99   8.17ms    124.5 tok/s
+graphs, torch ops        ttft   11.03ms  itl p50   9.82ms  p99   9.84ms    102.6 tok/s
+graphs, fused kernels    ttft    9.17ms  itl p50   7.76ms  p99   7.84ms    129.8 tok/s
+
+| config | ttft (ms) | itl p50 (ms) | itl p99 (ms) | tok/s |
+|---|---|---|---|---|
+| eager, torch ops | 10.85 | 11.01 | 11.08 | 91.5 |
+| eager, fused kernels | 9.05 | 8.09 | 8.17 | 124.5 |
+| graphs, torch ops | 11.03 | 9.82 | 9.84 | 102.6 |
+| graphs, fused kernels | 9.17 | 7.76 | 7.84 | 129.8 |
+=== latency 1B
+eager, torch ops         ttft    4.98ms  itl p50   5.46ms  p99   5.73ms    185.2 tok/s
+/home/hshi-j-4090/miniconda3/envs/jpre/lib/python3.11/site-packages/torch/utils/cpp_extension.py:1964: UserWarning: TORCH_CUDA_ARCH_LIST is not set, all archs for visible cards are included for compilation. 
+If this is not desired, please set os.environ['TORCH_CUDA_ARCH_LIST'].
+  warnings.warn(
+eager, fused kernels     ttft    3.89ms  itl p50   3.38ms  p99   3.43ms    298.0 tok/s
+graphs, torch ops        ttft    5.13ms  itl p50   4.28ms  p99   4.30ms    235.6 tok/s
+graphs, fused kernels    ttft    3.94ms  itl p50   3.17ms  p99   3.21ms    318.2 tok/s
+
+| config | ttft (ms) | itl p50 (ms) | itl p99 (ms) | tok/s |
+|---|---|---|---|---|
+| eager, torch ops | 4.98 | 5.46 | 5.73 | 185.2 |
+| eager, fused kernels | 3.89 | 3.38 | 3.43 | 298.0 |
+| graphs, torch ops | 5.13 | 4.28 | 4.30 | 235.6 |
+| graphs, fused kernels | 3.94 | 3.17 | 3.21 | 318.2 |
+=== spec 3B draft 1B
+/home/hshi-j-4090/miniconda3/envs/jpre/lib/python3.11/site-packages/torch/utils/cpp_extension.py:1964: UserWarning: TORCH_CUDA_ARCH_LIST is not set, all archs for visible cards are included for compilation. 
+If this is not desired, please set os.environ['TORCH_CUDA_ARCH_LIST'].
+  warnings.warn(
+plain decode: 129.8 tok/s
+k= 3  accept 72.1%    138.4 tok/s  (1.07x)
+k= 5  accept 62.4%    139.1 tok/s  (1.07x)
+k= 8  accept 53.6%    128.9 tok/s  (0.99x)
+=== spec 3B ngram
+/home/hshi-j-4090/miniconda3/envs/jpre/lib/python3.11/site-packages/torch/utils/cpp_extension.py:1964: UserWarning: TORCH_CUDA_ARCH_LIST is not set, all archs for visible cards are included for compilation. 
+If this is not desired, please set os.environ['TORCH_CUDA_ARCH_LIST'].
+  warnings.warn(
+plain decode: 129.8 tok/s
+k= 3  accept 13.1%    100.7 tok/s  (0.78x)
+k= 5  accept  8.8%    100.9 tok/s  (0.78x)
+k= 8  accept  6.0%    100.9 tok/s  (0.78x)
+=== DONE

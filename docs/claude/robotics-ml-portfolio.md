@@ -1,11 +1,16 @@
 # /robotics/ and /ml/ — portfolio micro-sites
 
-Standalone portfolio micro-sites Chris shares directly with employers.
+Standalone portfolio micro-sites Chris shares directly with employers. `/robotics/`
+is the robotics portfolio; `/ml/` (since 2026-09-17) is the **integrated**
+portfolio — ML research, deep-learning-systems projects and the robotics work on
+one sheet — see [its own section](#ml--the-integrated-portfolio-2026-09-17).
 
 **Hard constraint: the personal site must NEVER link to `/robotics/`** — not navbar,
 homepage, or pokedex. All robotics pages carry `nav: false`. The link is one-way:
 robotics links back to `/` ("Personal Website" in its sidebar). This is the inverse
-of MLn's one-way rule.
+of MLn's one-way rule. `/ml/` is unlisted the same way (`nav: false`, nothing on the
+personal site points at it) and, like the gated /HCL-ML page, it is allowed to link
+to `/robotics/` — its sidebar, its Robotics part and its robotics cards all do.
 
 ## Architecture
 
@@ -27,6 +32,28 @@ Per project in the data file:
 
 A project with no `cover`/`video` renders as an "under construction" placeholder card.
 `under_construction: true` at the top of the data file adds the sidebar badge.
+
+**Two shapes of index** (`_layouts/portfolio.liquid`). A flat `projects:` list
+(robotics) renders as one contact sheet. `groups:` (ml) partitions the sheet into
+titled parts — each a ruled grid of its own under a heading band (mono part
+number, display title, optional `links:` pills right-aligned, optional `note:`) —
+and the sidebar index labels each part; numbering runs through the whole page.
+Every entry of a group's `items:` (cards) or `rows:` (compact ruled lines under
+the grid, the way /research lists its notebook pages) names ONE source:
+
+| entry             | resolves to                                                                                                                                  |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `project: <slug>` | a project in THIS data file; card links to `<url><slug>/`, media from this site's `media_base`                                                |
+| `robotics: <slug>`| a project in `_data/robotics.yml`; card links to `/robotics/<slug>/`, media from the **robotics** release (its own `media_base`)                |
+| `research: <slug>`| a `/research/` collection doc; title, `description`, date and `cover` come from its front matter; an `enc_payload` adds a mono `locked` tag |
+
+plus an optional `tag:` override. The resolution lives once, in
+`_includes/portfolio_item.liquid` (modes `card` / `row` / `manifest`), and the card
+markup once, in `_includes/portfolio_card.liquid` — the flat index goes through the
+same include, so the two sites cannot drift. A `robotics:` entry may appear in any
+part (TartanIMU sits under Research on /ml/ and is left out of its Robotics part
+so it is not shown twice). Research covers are repo files
+(`assets/img/research-covers/`), so they are never rewritten onto a release.
 
 Grid cards lazy-load their preview: the clip URL sits in `data-src` and is only
 fetched on hover, so the grid costs one poster image per card on first paint. The
@@ -97,6 +124,16 @@ state.
   cards). Card numbers = grid order = curation order.
 
 ## Gotchas that cost time
+
+- **The theme script follows the VISITOR's system theme, not the sheet's.**
+  `theme.js` (head.liquid) sets `html[data-theme]` from localStorage/system,
+  swaps in the dark syntax-highlight stylesheet, and `no_defer.js` stamps
+  Bootstrap's `.table-dark` (white text) on every table — on this fixed ivory
+  sheet a dark-mode visitor got invisible README tables and unreadable code
+  (found 2026-09-17 on /ml/). `portfolio_base.liquid` now reassigns
+  `determineComputedTheme` to return `light` right after head.liquid and
+  re-runs `applyTheme()`; `portfolio_styles.liquid` also overrides
+  `.table-dark` under `body.rbx-site` as a belt to those braces.
 
 - **Anything injected after load that carries a reveal class (`.rbx-shot`,
   `[data-rv]`, …) starts at opacity 0 and stays there** unless the observer in
@@ -502,6 +539,76 @@ gitignored) from HTML rendered through Playwright's Chromium:
   build.py swaps the cover sheet's duck cell for a Test Runs frame with
   neither, since the site's `duck-cover.jpg` card still shows both. Frames
   from the `surge-topple` and `walk` clips are already cropped clear of him.
+
+## /ml/ — the integrated portfolio (2026-09-17)
+
+Chris: "build a portfolio page that is similar to the robotics portfolio but
+integrates my ML research with my robotics portfolio, and my ML/AI work, can put
+any of the Dlsys 10-414 projects on it (all of them are open source)". The
+under-construction `/ml/` shell became that page. `_data/ml.yml` is the source of
+truth; `site_label: ML & Robotics`; sidebar links add "Robotics Portfolio".
+
+Three parts, in this order:
+
+1. **Research** — the three gated 2026-08-29 `/research/` posts (cards pull
+   title/description/date/cover from the collection, and show `locked`), the
+   public `vpd-factual-recall` repo as a project here, and TartanIMU pulled from
+   robotics.yml. `rows:` = the three Engineering Notebook entries. Part link:
+   "Lab notebook" → /research/ (his own description of that page).
+2. **Deep Learning Systems** — `autodidact` and `tinydecode`, the two open-source
+   DLSys repos (both committed 2026-09-09 under his `clcos` git identity); part
+   link "10-414 coursework" → github.com/czhs/10414-class (hw0 only as of
+   2026-09-17, so it is a link, not a card).
+3. **Robotics** — joust, robot-dog, duck, pie-robot, gantry, dice-arms by
+   reference; part links "Full portfolio" → /robotics/ and the portfolio PDF.
+
+Left out on purpose: `hcl-ml` (a take-home for one company — Chris's call whether
+it belongs on a general portfolio; the gated /HCL-ML page exists if he wants a
+card), `TALOS-V2` (a fork with no commits of his), and every private repo
+(`llmspeedrun`, `j-pretrain`, `sdft-repro`). The reading club is not named, per the
+2026-08-20 decision.
+
+**Copy.** Blurbs are the repos' own one-liners verbatim (autodidact's GitHub
+description, tinydecode's `pyproject.toml` description, the VPD README's title
+line). Write-ups (`_pages/ml_<slug>.md`) are the repos' READMEs verbatim with the
+H1 dropped — edit upstream and re-copy rather than editing here. Two trims on the
+VPD page: the "Writeup with the interactive figures" pointer (that URL 404s on the
+site — the writeup was never published) and the seven inline images, which moved
+into the data file's gallery with the README's alt texts as captions, and its
+repo-relative links were made absolute. Figure captions were composed from README
+phrases plus the numbers the runs printed — Chris's to tighten or blank.
+
+**Figures are real output, not illustrations** (the TartanIMU precedent), drawn in
+the zine palette with JetBrains Mono by the scripts in `bin/ml_figs/` (tracked,
+Jekyll-excluded; see its README):
+
+- `fig_autodidact.py <checkout> <out>` runs `examples/spiral.py`'s setup and
+  `examples/train_gpt.py`'s loop verbatim (seed 0, so deterministic) and walks
+  `Tensor._prev` on the README's own expression for the graph. Card = the spiral
+  decision regions (`autodidact.jpg`); gallery = graph, spiral + curves, GPT loss.
+- `fig_tinydecode.py <bench dir> <out>` reads the JSON `bench/latency.py` dumps and
+  the lines `bench/spec.py` prints. The bench was run on the `hshi4090` box
+  (RTX 4090, driver 535, conda env `jpre` = torch 2.5.1+cu121 matching
+  `/usr/local/cuda-12.1`, `ninja` pip-installed to a throwaway `--target` dir —
+  NOT into his env) against the HF-cached `meta-llama/Llama-3.2-3B-Instruct` and
+  `1B-Instruct` snapshots: `latency.py <model> --new 128 --runs 5 --json …` for both,
+  `spec.py 3B --draft 1B -k 3 5 8`, `spec.py 3B --ngram`. Its stdout + JSON are
+  kept in `bin/ml_figs/bench/` so the figures re-render without a GPU. All 35 of
+  the repo's CUDA op tests passed there first. Headline: 3B eager/torch 11.01 ms
+  → graphs/fused 7.76 ms per token (91.5 → 129.8 tok/s); the 1B draft gives 1.07x
+  at k=3–5, n-gram lookup 0.78x on these prose prompts.
+- The VPD card is the top-left panel of the repo's `figures/showcase_factual.png`
+  with the figure's near-white background recoloured to the sheet ivory; gallery
+  PNGs are the repo's, copied with a `vpd-` prefix (release names are flat).
+
+**Media** lives in the gitignored `assets/img/ml/` and serves in production from
+the **`ml-media` GitHub release** (`media_base` in ml.yml; upload with
+`gh release upload ml-media <files> [--clobber]`), exactly like robotics-media.
+The release must hold every file ml.yml references.
+
+The READMEs bring code blocks and tables into `.rbx-post`, so
+`portfolio_styles.liquid` gained rules for `pre`/`code`/`table` (ivory-tinted,
+ruled, mono headers) and `.rbx-post-src` for the "From the repository README" line.
 
 ## Content
 

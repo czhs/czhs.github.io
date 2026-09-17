@@ -41,9 +41,11 @@ LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 bundle exec jekyll serve --config _config.ym
 - `robotics_media/` — multi-GB raw portfolio source.
 - Portfolio web media: `assets/img/robotics/`, `assets/video/robotics/`,
   `assets/img/ml/`, `assets/video/ml/`. The `/robotics/` + `/ml/` PAGES are published
-  as under-construction shells (`under_construction: true`, covers blanked); their
-  media stays local until a project goes public (paths are wired in the data files'
-  comments). MLn media used to be published from here; it moved with the club site.
+  and fully live; their media never enters git — production builds serve it from
+  the `robotics-media` / `ml-media` GitHub releases (`media_base` in the data files,
+  see [robotics-ml-portfolio](robotics-ml-portfolio.md#media)), and local preview
+  reads these dirs. MLn media used to be published from here; it moved with the
+  club site.
 - `local/` — local-only tooling; `bin/` is Jekyll-excluded but tracked.
 - `_config_local.yml`, `.claude/` (machine-local settings/launch config).
 

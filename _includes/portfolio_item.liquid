@@ -1,0 +1,94 @@
+{%- comment -%}
+  Resolves one index entry and renders it in one of three shapes. An entry
+  names exactly one source:
+    include.project   a slug in THIS site's data file (`projects:`) — the card
+                      links to the detail page here and media serves from this
+                      site's release
+    include.robotics  a slug in _data/robotics.yml — the card links to
+                      /robotics/<slug>/ and media serves from the robotics release
+    include.research  a /research/ entry's slug — title, description, date and
+                      cover come from the collection doc; a gated entry gets a
+                      "locked" tag
+  and one shape:
+    include.mode      'card' (contact-sheet cell), 'row' (one compact ruled
+                      line), or 'manifest' (a sidebar index row)
+  plus include.num (two-digit string), include.rv (reveal stagger, ms) and an
+  optional include.tag override.
+  Reads r, page, media_base and robotics_base from the calling layout.
+{%- endcomment -%}
+{%- assign i_title = '' -%}
+{%- assign i_blurb = '' -%}
+{%- assign i_date = '' -%}
+{%- assign i_href = '' -%}
+{%- assign i_still = '' -%}
+{%- assign i_video = '' -%}
+{%- assign i_tag = '' -%}
+{%- assign i_slug = '' -%}
+{%- if include.research -%}
+  {%- assign i_slug = include.research -%}
+  {%- assign i_url = '/research/' | append: include.research | append: '/' -%}
+  {%- assign doc = site.research | where: 'url', i_url | first -%}
+  {%- assign i_title = doc.title -%}
+  {%- assign i_blurb = doc.description | default: '' -%}
+  {%- assign i_date = doc.date | date: '%B %-d, %Y' -%}
+  {%- assign i_href = doc.url | relative_url -%}
+  {%- if doc.cover and doc.cover != '' -%}
+    {%- assign i_still = doc.cover | relative_url -%}
+  {%- endif -%}
+  {%- if doc.enc_payload and doc.enc_payload != '' -%}
+    {%- assign i_tag = 'locked' -%}
+  {%- endif -%}
+{%- else -%}
+  {%- if include.robotics -%}
+    {%- assign i_slug = include.robotics -%}
+    {%- assign q = site.data.robotics.projects | where: 'slug', include.robotics | first -%}
+    {%- assign i_href = site.data.robotics.url | append: include.robotics | append: '/' | relative_url -%}
+    {%- assign i_base = robotics_base -%}
+  {%- else -%}
+    {%- assign i_slug = include.project -%}
+    {%- assign q = r.projects | where: 'slug', include.project | first -%}
+    {%- assign i_href = page.url | append: include.project | append: '/' | relative_url -%}
+    {%- assign i_base = media_base -%}
+  {%- endif -%}
+  {%- assign i_title = q.title -%}
+  {%- assign i_blurb = q.blurb | default: '' -%}
+  {%- assign i_date = q.date | default: '' -%}
+  {%- comment -%} cover is framed for the 4:3 card; poster matches the video's own aspect {%- endcomment -%}
+  {%- assign i_src = q.cover | default: q.poster -%}
+  {%- if i_src and i_src != '' -%}
+    {%- capture i_still -%}{%- include portfolio_src.liquid path=i_src base=i_base -%}{%- endcapture -%}
+  {%- endif -%}
+  {%- if q.video and q.video != '' -%}
+    {%- capture i_video -%}{%- include portfolio_src.liquid path=q.video base=i_base -%}{%- endcapture -%}
+  {%- endif -%}
+{%- endif -%}
+{%- if include.tag and include.tag != '' -%}{%- assign i_tag = include.tag -%}{%- endif -%}
+{%- assign i_still = i_still | strip -%}
+{%- assign i_video = i_video | strip -%}
+
+{%- if include.mode == 'manifest' -%}
+  <a class="rbx-manifest-row" href="#p-{{ i_slug }}">
+    <span class="rbx-manifest-num">{{ include.num }}</span>
+    <span class="rbx-manifest-title">{{ i_title }}</span>
+  </a>
+{%- elsif include.mode == 'row' -%}
+  <a class="rbx-row" href="{{ i_href }}" data-rv style="--rv: {{ include.rv }}ms">
+    <span class="rbx-row-date">{{ i_date }}</span>
+    <span class="rbx-row-title">{{ i_title }}</span>
+    {% if i_blurb != '' -%}<span class="rbx-row-desc">{{ i_blurb }}</span>{%- endif %}
+    {% if i_tag != '' -%}<span class="rbx-card-tag">{{ i_tag }}</span>{%- endif %}
+  </a>
+{%- else -%}
+  {%- include portfolio_card.liquid
+    slug=i_slug
+    href=i_href
+    title=i_title
+    blurb=i_blurb
+    date=i_date
+    tag=i_tag
+    still_url=i_still
+    video_url=i_video
+    num=include.num
+    rv=include.rv
+  -%}
+{%- endif -%}
