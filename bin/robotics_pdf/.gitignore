@@ -1,3 +1,3 @@
 out/
-frames/
+frames/*
 !frames/duck-standing-cutout.png
