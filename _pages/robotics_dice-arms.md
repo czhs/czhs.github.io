@@ -5,6 +5,7 @@ permalink: /robotics/dice-arms/
 project: dice-arms
 standalone_title: "Dice Arms — Chris Shi"
 nav: false
+og_image: /assets/img/robotics-portfolio-cover.jpg # the portfolio cover — bin/robotics_cover.py
 ---
 
 _Under construction._

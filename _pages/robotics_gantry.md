@@ -5,6 +5,7 @@ permalink: /robotics/gantry/
 project: gantry
 standalone_title: "Hack 100 Gantry — Chris Shi"
 nav: false
+og_image: /assets/img/robotics-portfolio-cover.jpg # the portfolio cover — bin/robotics_cover.py
 ---
 
 <!-- Media lead. The shared portfolio_post layout now builds its hero from a `run:`

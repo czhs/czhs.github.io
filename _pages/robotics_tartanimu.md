@@ -5,6 +5,7 @@ permalink: /robotics/tartanimu/
 project: tartanimu
 standalone_title: "TartanIMU — Chris Shi"
 nav: false
+og_image: /assets/img/robotics-portfolio-cover.jpg # the portfolio cover — bin/robotics_cover.py
 ---
 
 <!-- Media lead, same pattern as the gantry page: this project has no `run:` block,

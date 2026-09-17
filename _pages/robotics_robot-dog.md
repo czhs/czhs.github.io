@@ -5,6 +5,7 @@ permalink: /robotics/robot-dog/
 project: robot-dog
 standalone_title: "Robot Dog — Chris Shi"
 nav: false
+og_image: /assets/img/robotics-portfolio-cover.jpg # the portfolio cover — bin/robotics_cover.py
 ---
 
 <!-- Media lead. The shared portfolio_post layout builds its hero from a `run:`

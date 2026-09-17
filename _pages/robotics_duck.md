@@ -5,6 +5,7 @@ permalink: /robotics/duck/
 project: duck
 standalone_title: "Open Duck Mini — Chris Shi"
 nav: false
+og_image: /assets/img/robotics-portfolio-cover.jpg # the portfolio cover — bin/robotics_cover.py
 ---
 
 <!-- The write-up goes here, in your own words.

@@ -32,3 +32,6 @@ _config_local.yml
 # body, which ships only encrypted (assets/enc/hcl-ml.json). Never publish.
 /_includes/research/
 /assets/img/research/
+
+# static font instances bin/robotics_cover.py makes from the site woff2 files
+/bin/.fontcache/

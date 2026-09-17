@@ -610,6 +610,27 @@ The READMEs bring code blocks and tables into `.rbx-post`, so
 `portfolio_styles.liquid` gained rules for `pre`/`code`/`table` (ivory-tinted,
 ruled, mono headers) and `.rbx-post-src` for the "From the repository README" line.
 
+## The portfolio cover image (2026-09-17)
+
+Chris: "change the robotics portfolio cover image and push" → "can you design
+something graphically appealing with all the assets". Nothing on the site was a
+single cover before, so the cover became the portfolio's **link preview**:
+`assets/img/robotics-portfolio-cover.jpg` (1200 x 630, committed — scrapers need
+a plain image URL, not the release's octet-stream redirect) is the `og_image` of
+`_pages/robotics.html` and every `_pages/robotics_*.md`, absolutised by
+`metadata.liquid`. It is drawn by `bin/robotics_cover.py`: the index page as one
+still — the ink window on the field, the sidebar's name block and mono index
+(titles and dates read from robotics.yml) on the left, a ruled 4 x 3 contact
+sheet on the right with `joust.jpg` as a 2 x 2 hero, then the six other card
+covers, `pie-cream-poster.jpg` and `gantry-cad-1.jpg`. Palette and type are the
+site's (the variable woff2 fonts are instanced to static TTFs in `bin/.fontcache`,
+gitignored). Rules kept on purpose: no renders or simulation frames (a cover has
+no captions to label them), none of the shots with legs or socks in them
+([no-legs rule](#duck-card-cover)), and the joust gripper CAD was dropped because a
+square crop runs through the caption baked into that image. Re-render after any
+card cover changes and commit the JPEG; it also fits the PDF's cover sheet if that
+is ever wanted as a single image.
+
 ## Content
 
 Bodies, dates and captions are **Chris's to write** — do NOT fabricate write-ups,

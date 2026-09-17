@@ -5,6 +5,7 @@ permalink: /robotics/joust/
 project: joust
 standalone_title: "Robot Jousting — Chris Shi"
 nav: false
+og_image: /assets/img/robotics-portfolio-cover.jpg # the portfolio cover — bin/robotics_cover.py
 ---
 
 <!-- Every paragraph below is verbatim from the write-up at /robo-jousting/
