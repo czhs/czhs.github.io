@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta name="google-site-verification" content="1Tr_0wbEqQ0HHCbM5RNwU54JR7c0j2DsuzOWY8c4Cjw"> <meta http-equiv="Permissions-Policy" content="interest-cohort=()"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Chris Shi — ML Projects </title> <meta name="author" content="Chris Shi"> <meta name="description" content="Chris Shi's machine learning projects — models, training, and results."> <meta name="keywords" content="Chris Shi, Hongyi Shi, Carnegie Mellon University, CMU, infrastructure, biodefense, interpretability, optimal transport"> <meta property="og:site_name" content="Chris Shi"> <meta property="og:type" content="website"> <meta property="og:title" content="Chris Shi — ML Projects"> <meta property="og:url" content="https://chrisshi.com/ml/"> <meta property="og:description" content="Chris Shi's machine learning projects — models, training, and results."> <meta property="og:image" content="https://chrisshi.com/assets/img/prof_pic.jpg"> <meta property="og:locale" content="en"> <meta name="twitter:card" content="summary_large_image"> <meta name="twitter:title" content="Chris Shi — ML Projects"> <meta name="twitter:description" content="Chris Shi's machine learning projects — models, training, and results."> <meta name="twitter:image" content="https://chrisshi.com/assets/img/prof_pic.jpg"> <script type="application/ld+json">
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta name="google-site-verification" content="1Tr_0wbEqQ0HHCbM5RNwU54JR7c0j2DsuzOWY8c4Cjw"> <meta http-equiv="Permissions-Policy" content="interest-cohort=()"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Chris Shi — ML &amp; Robotics Portfolio </title> <meta name="author" content="Chris Shi"> <meta name="description" content="Chris Shi's portfolio — machine learning research, deep learning systems, and robotics projects."> <meta name="keywords" content="Chris Shi, Hongyi Shi, Carnegie Mellon University, CMU, infrastructure, biodefense, interpretability, optimal transport"> <meta property="og:site_name" content="Chris Shi"> <meta property="og:type" content="website"> <meta property="og:title" content="Chris Shi — ML &amp; Robotics Portfolio"> <meta property="og:url" content="https://chrisshi.com/ml/"> <meta property="og:description" content="Chris Shi's portfolio — machine learning research, deep learning systems, and robotics projects."> <meta property="og:image" content="https://chrisshi.com/assets/img/prof_pic.jpg"> <meta property="og:locale" content="en"> <meta name="twitter:card" content="summary_large_image"> <meta name="twitter:title" content="Chris Shi — ML &amp; Robotics Portfolio"> <meta name="twitter:description" content="Chris Shi's portfolio — machine learning research, deep learning systems, and robotics projects."> <meta name="twitter:image" content="https://chrisshi.com/assets/img/prof_pic.jpg"> <script type="application/ld+json">
     {
         "author":
         {
@@ -7,7 +7,7 @@
         },
         "url": "https://chrisshi.com/ml/",
         "@type": "WebSite",
-        "description": "Chris Shi's machine learning projects — models, training, and results.",
+        "description": "Chris Shi's portfolio — machine learning research, deep learning systems, and robotics projects.",
         "headline": "ml",
         
         "sameAs": ["https://github.com/czhs","https://www.linkedin.com/in/chris-h-shi","https://orcid.org/0009-0002-4153-698X","https://openreview.net/profile?id=~Chris_Shi1"],
@@ -562,7 +562,13 @@
   .rbx-card-head {
     display: flex;
     align-items: baseline;
-    gap: 0.6rem;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.6rem;
+  }
+  /* a long title keeps its line and pushes the date down a row, rather than
+     being squeezed to one word per line on a phone */
+  .rbx-card-title {
+    flex: 1 1 auto;
   }
   .rbx-card-num {
     font-family: var(--rbx-mono);
@@ -599,6 +605,188 @@
     line-height: 1.55;
     color: var(--ink-soft);
     max-width: 46ch;
+  }
+
+  /* small mono tag on a card's head row — "locked" on a gated research
+     entry, or whatever an index entry sets; wayfinding, so the machine face */
+  .rbx-card-tag {
+    flex-shrink: 0;
+    align-self: center;
+    font-family: var(--rbx-mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.38rem;
+    border: 1.5px solid var(--rail);
+    color: var(--ink-soft);
+  }
+
+  /* ── grouped index: the sheet partitioned into titled parts ─────
+     Each part is a ruled grid of its own under a heading band: a mono part
+     number, the title at display weight, and (right-aligned) any links that
+     belong to the part as a whole. The band carries no rule of its own —
+     the grid's 3px top edge draws it. */
+  .rbx-parts {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2.4rem, 4.2vw, 3.6rem);
+    min-width: 0;
+  }
+  .rbx-part {
+    min-width: 0;
+    scroll-margin-top: calc(var(--frame) + var(--shp));
+  }
+  .rbx-part-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.9rem;
+    margin: 0 0 0.8rem;
+  }
+  .rbx-part-num {
+    font-family: var(--rbx-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--tape);
+  }
+  .rbx-part-title {
+    margin: 0;
+    font-weight: 800;
+    font-size: clamp(1.4rem, 2.3vw, 1.8rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+  .rbx-part-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-left: auto;
+    align-self: center;
+  }
+  .rbx-part-link {
+    font-family: var(--rbx-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.6rem;
+    border: 2px solid var(--rail);
+    color: var(--rbx-ink);
+    text-decoration: none;
+    transition:
+      box-shadow 0.12s ease,
+      color 0.12s ease,
+      border-color 0.12s ease;
+  }
+  .rbx-part-link:hover,
+  .rbx-part-link:focus-visible {
+    border-color: var(--rbx-ink);
+    color: var(--rbx-accent);
+    text-decoration: none;
+    box-shadow: 3px 3px 0 color-mix(in srgb, var(--rbx-ink) 55%, transparent);
+  }
+  .rbx-part-note {
+    margin: -0.2rem 0 1rem;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 62ch;
+  }
+
+  /* compact rows under a part's grid — entries that belong to the record but
+     do not carry a card (the lab-notebook pages). They continue the sheet's
+     frame: the grid's bottom rule is their top, hairlines between them. */
+  .rbx-rows {
+    border: 3px solid var(--rbx-ink);
+    border-top: 0;
+  }
+  .rbx-row {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    align-items: baseline;
+    column-gap: 0.85rem;
+    padding: 0.62rem 1rem;
+    border-bottom: 1.5px solid var(--rail);
+    color: var(--rbx-ink);
+    text-decoration: none;
+  }
+  .rbx-row:last-child {
+    border-bottom: 0;
+  }
+  .rbx-row:hover {
+    text-decoration: none;
+    background: color-mix(in srgb, var(--rbx-field) 18%, var(--rbx-card));
+  }
+  .rbx-row:focus-visible {
+    outline: 3px solid var(--rbx-accent);
+    outline-offset: -3px;
+  }
+  .rbx-row-date {
+    font-family: var(--rbx-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+    opacity: 0.5;
+    white-space: nowrap;
+  }
+  .rbx-row-title {
+    font-weight: 700;
+    font-size: 0.92rem;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+  }
+  .rbx-row:hover .rbx-row-title {
+    border-bottom-color: currentColor;
+  }
+  .rbx-row:hover .rbx-row-date {
+    color: var(--tape);
+    opacity: 1;
+  }
+  .rbx-row-desc {
+    font-size: 0.84rem;
+    color: var(--ink-soft);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (max-width: 700px) {
+    .rbx-row {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+    }
+    .rbx-row-desc {
+      grid-column: 1 / -1;
+      white-space: normal;
+    }
+  }
+
+  /* the sidebar index, grouped: a part label over each run of rows; a long
+     index tightens its rows so the column still fits a laptop screen */
+  .rbx-manifest-group {
+    display: block;
+    margin: clamp(0.4rem, 0.9vh, 0.7rem) 0 0.1rem;
+    font-family: var(--rbx-mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rbx-accent);
+    text-decoration: none;
+  }
+  .rbx-manifest-h + .rbx-manifest-group {
+    margin-top: 0;
+  }
+  .rbx-manifest-group:hover {
+    color: var(--tape);
+    text-decoration: none;
+  }
+  .rbx-manifest.is-long .rbx-manifest-row {
+    padding: clamp(0.08rem, 0.25vh, 0.22rem) 0;
+    line-height: 1.3;
+  }
+  .rbx-manifest.is-long .rbx-manifest-title {
+    font-size: clamp(0.78rem, 1.6vh, 0.85rem);
   }
 
   /* ── detail page shell: masthead across, TOC rail left ────────── */
@@ -1149,6 +1337,115 @@
     border: 2px solid var(--line);
     margin: 1.5rem 0;
   }
+  /* the ML write-ups are the repos' own READMEs, so they carry code and
+     tables; set both in the machine face inside the sheet's rules */
+  .rbx-post pre,
+  .rbx-post .highlight {
+    max-width: 82ch;
+    margin: 0 0 1.2rem;
+    padding: 0.85rem 1rem;
+    background: color-mix(in srgb, var(--rbx-field) 14%, var(--rbx-card));
+    border: 2px solid var(--line);
+    border-radius: 0;
+    overflow-x: auto;
+  }
+  .rbx-post .highlight pre {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  .rbx-post pre,
+  .rbx-post code {
+    font-family: var(--rbx-mono);
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--rbx-ink);
+  }
+  /* the theme's inline-code rule sets white-space: normal, and its block
+     override is scoped to blog posts — without this a fenced block here
+     collapses onto one line */
+  .rbx-post pre code {
+    white-space: pre;
+    padding: 0;
+    background: none;
+  }
+  .rbx-post p code,
+  .rbx-post li code,
+  .rbx-post td code,
+  .rbx-post th code {
+    font-size: 0.84em;
+    padding: 0.05em 0.3em;
+    background: color-mix(in srgb, var(--rbx-field) 22%, var(--rbx-card));
+    border-radius: 0;
+  }
+  .rbx-post table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 0 0 1.4rem;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+    line-height: 1.45;
+  }
+  .rbx-post th,
+  .rbx-post td {
+    padding: 0.42rem 0.7rem;
+    border-bottom: 1.5px solid var(--rail);
+    vertical-align: top;
+    text-align: left;
+  }
+  .rbx-post th {
+    font-family: var(--rbx-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-bottom: 3px solid var(--rbx-ink);
+  }
+  /* the theme's dark-mode script stamps Bootstrap's .table-dark on every table
+     when the VISITOR's system is dark — white text on this fixed ivory sheet.
+     The palette here never changes, so neither may the tables. */
+  body.rbx-site .rbx-post table.table-dark,
+  body.rbx-site .rbx-post .table-dark th,
+  body.rbx-site .rbx-post .table-dark td {
+    color: var(--rbx-ink);
+    background-color: transparent;
+  }
+  body.rbx-site .rbx-post .table-hover tbody tr:hover {
+    color: var(--rbx-ink);
+    background-color: color-mix(in srgb, var(--rbx-field) 18%, var(--rbx-card));
+  }
+  .rbx-post td[align='right'],
+  .rbx-post th[align='right'] {
+    text-align: right;
+    font-family: var(--rbx-mono);
+    font-size: 0.8rem;
+  }
+  .rbx-post a {
+    color: var(--rbx-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.5px;
+  }
+  .rbx-post a:hover {
+    color: var(--rbx-ink);
+  }
+  .rbx-post h3 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 1.8rem 0 0.5rem;
+  }
+  .rbx-post-src {
+    font-family: var(--rbx-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 1.6rem;
+  }
   .rbx-post-title {
     font-weight: 800;
     font-size: 2.2rem;
@@ -1475,7 +1772,20 @@
       transition: none;
     }
   }
-</style> </head> <body class="rbx-site"> <script>
+</style> <script>
+      // head.liquid's theme.js has just applied the VISITOR's theme (system
+      // preference by default). This sheet has one fixed palette, so pin the
+      // computed theme to light here: otherwise a dark-mode visitor gets the
+      // dark syntax-highlight stylesheet and Bootstrap's .table-dark stamped
+      // on every table — white text on ivory. theme.js declares these with
+      // `let` at top level, so a later classic script can reassign them.
+      if (typeof determineComputedTheme === 'function' && typeof applyTheme === 'function') {
+        determineComputedTheme = function () {
+          return 'light';
+        };
+        applyTheme();
+      }
+    </script> </head> <body class="rbx-site"> <script>
       // Arm the reveal choreography before first paint — and only when motion
       // is allowed, so without JS or with reduced motion nothing is hidden.
       (function () {
@@ -1483,7 +1793,7 @@
           document.documentElement.classList.add('rbx-armed');
         }
       })();
-    </script> <div class="rbx-window" aria-hidden="true"></div> <div class="rbx-wrap"> <aside class="rbx-side" data-rv style="--rv: 0ms"> <h1 class="rbx-name" data-rv style="--rv: 40ms">Chris Shi<span class="rbx-name-dot">.</span> </h1> <p class="rbx-sub" data-rv style="--rv: 90ms">Machine learning projects — models, training, and results.</p> <span class="rbx-uc">Under construction</span> <nav class="rbx-manifest" aria-label="Projects on this page" data-rv style="--rv: 260ms"> <p class="rbx-manifest-h">Index</p> <a class="rbx-manifest-row" href="#p-project-one"> <span class="rbx-manifest-num">01</span> <span class="rbx-manifest-title">Project One</span> </a> <a class="rbx-manifest-row" href="#p-project-two"> <span class="rbx-manifest-num">02</span> <span class="rbx-manifest-title">Project Two</span> </a> </nav> <nav class="rbx-links" data-rv style="--rv: 320ms"> <a class="rbx-link" href="/">Personal Website</a> <a class="rbx-link" href="https://www.linkedin.com/in/chris-h-shi" target="_blank" rel="noopener">LinkedIn</a> <a class="rbx-link" href="https://github.com/czhs" target="_blank" rel="noopener">GitHub</a> <a class="rbx-link" href="/cv/">CV</a> <a class="rbx-link" href="mailto:chrisshi@andrew.cmu.edu">Email</a> </nav> </aside> <main class="rbx-grid"> <a class="rbx-card is-empty" id="p-project-one" href="/ml/project-one/" data-rv style="--rv: 120ms"> <span class="rbx-frame"> <span class="rbx-cover rbx-cover-empty" aria-hidden="true"></span> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">01</span> <span class="rbx-card-title">Project One</span> </span> </span> </a> <a class="rbx-card is-empty" id="p-project-two" href="/ml/project-two/" data-rv style="--rv: 210ms"> <span class="rbx-frame"> <span class="rbx-cover rbx-cover-empty" aria-hidden="true"></span> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">02</span> <span class="rbx-card-title">Project Two</span> </span> </span> </a> </main> </div> <script>
+    </script> <div class="rbx-window" aria-hidden="true"></div> <div class="rbx-wrap"> <aside class="rbx-side" data-rv style="--rv: 0ms"> <p class="rbx-eyebrow" data-rv style="--rv: 0ms">ML &amp; Robotics</p> <h1 class="rbx-name" data-rv style="--rv: 40ms">Chris Shi<span class="rbx-name-dot">.</span> </h1> <p class="rbx-sub" data-rv style="--rv: 90ms">Math and computer engineering at Carnegie Mellon University.</p> <nav class="rbx-manifest is-long" aria-label="Projects on this page" data-rv style="--rv: 260ms"> <p class="rbx-manifest-h">Index</p> <a class="rbx-manifest-group" href="#part-1">Research</a> <a class="rbx-manifest-row" href="#p-reconstructing-rome-2026-08-29"> <span class="rbx-manifest-num">01</span> <span class="rbx-manifest-title">Reconstructing ROME</span> </a> <a class="rbx-manifest-row" href="#p-playing-with-vpd-2026-08-29"> <span class="rbx-manifest-num">02</span> <span class="rbx-manifest-title">Playing with VPD</span> </a> <a class="rbx-manifest-row" href="#p-vpd-factual-recall"> <span class="rbx-manifest-num">03</span> <span class="rbx-manifest-title">VPD factual recall</span> </a> <a class="rbx-manifest-row" href="#p-what-a-size-ladder-can-identify-2026-08-29"> <span class="rbx-manifest-num">04</span> <span class="rbx-manifest-title">What a Size Ladder Can Identify</span> </a> <a class="rbx-manifest-row" href="#p-tartanimu"> <span class="rbx-manifest-num">05</span> <span class="rbx-manifest-title">TartanIMU</span> </a> <a class="rbx-manifest-group" href="#part-2">Deep Learning Systems</a> <a class="rbx-manifest-row" href="#p-autodidact"> <span class="rbx-manifest-num">06</span> <span class="rbx-manifest-title">autodidact</span> </a> <a class="rbx-manifest-row" href="#p-tinydecode"> <span class="rbx-manifest-num">07</span> <span class="rbx-manifest-title">tinydecode</span> </a> <a class="rbx-manifest-group" href="#part-3">Robotics</a> <a class="rbx-manifest-row" href="#p-joust"> <span class="rbx-manifest-num">08</span> <span class="rbx-manifest-title">Robot Jousting</span> </a> <a class="rbx-manifest-row" href="#p-robot-dog"> <span class="rbx-manifest-num">09</span> <span class="rbx-manifest-title">Robot Dog</span> </a> <a class="rbx-manifest-row" href="#p-duck"> <span class="rbx-manifest-num">10</span> <span class="rbx-manifest-title">Open Duck Mini</span> </a> <a class="rbx-manifest-row" href="#p-pie-robot"> <span class="rbx-manifest-num">11</span> <span class="rbx-manifest-title">Pi Day Pie Robot</span> </a> <a class="rbx-manifest-row" href="#p-gantry"> <span class="rbx-manifest-num">12</span> <span class="rbx-manifest-title">Hack 100 Gantry</span> </a> <a class="rbx-manifest-row" href="#p-dice-arms"> <span class="rbx-manifest-num">13</span> <span class="rbx-manifest-title">Dice Arms</span> </a> </nav> <nav class="rbx-links" data-rv style="--rv: 320ms"> <a class="rbx-link" href="/">Personal Website</a> <a class="rbx-link" href="/robotics/">Robotics Portfolio</a> <a class="rbx-link" href="https://www.linkedin.com/in/chris-h-shi" target="_blank" rel="noopener">LinkedIn</a> <a class="rbx-link" href="https://github.com/czhs" target="_blank" rel="noopener">GitHub</a> <a class="rbx-link" href="/cv/">CV</a> <a class="rbx-link" href="mailto:chrisshi@andrew.cmu.edu">Email</a> </nav> </aside> <main class="rbx-parts"> <section class="rbx-part" id="part-1"> <header class="rbx-part-head" data-rv style="--rv: 60ms"> <span class="rbx-part-num" aria-hidden="true">01</span> <h2 class="rbx-part-title">Research</h2> <span class="rbx-part-links"> <a class="rbx-part-link" href="/research/">Lab notebook</a> </span> </header> <div class="rbx-grid"> <a class="rbx-card" id="p-reconstructing-rome-2026-08-29" href="/research/reconstructing-rome-2026-08-29/" data-rv style="--rv: 120ms"> <span class="rbx-frame"> <img class="rbx-cover" src="/assets/img/research-covers/art-swords-to-plowshares.jpg" alt="Reconstructing ROME" loading="lazy"> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">01</span> <span class="rbx-card-title">Reconstructing ROME</span> <span class="rbx-card-tag">locked</span> <span class="rbx-card-date">August 29, 2026</span> </span> <span class="rbx-card-blurb">how we converged on ROME, from a new direction</span> </span> </a> <a class="rbx-card" id="p-playing-with-vpd-2026-08-29" href="/research/playing-with-vpd-2026-08-29/" data-rv style="--rv: 210ms"> <span class="rbx-frame"> <img class="rbx-cover" src="/assets/img/research-covers/art-ephemerate.jpg" alt="Playing with VPD" loading="lazy"> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">02</span> <span class="rbx-card-title">Playing with VPD</span> <span class="rbx-card-tag">locked</span> <span class="rbx-card-date">August 29, 2026</span> </span> <span class="rbx-card-blurb">what I discovered when playing with VPD</span> </span> </a> <a class="rbx-card" id="p-vpd-factual-recall" href="/ml/vpd-factual-recall/" data-rv style="--rv: 120ms"> <span class="rbx-frame"> <img class="rbx-cover" src="https://github.com/czhs/czhs.github.io/releases/download/ml-media/vpd-factual-recall.jpg" alt="VPD factual recall" loading="lazy"> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">03</span> <span class="rbx-card-title">VPD factual recall</span> <span class="rbx-card-date">Summer 2026</span> </span> <span class="rbx-card-blurb">what the CI mask keeps and what it loses in OPT-125m</span> </span> </a> <a class="rbx-card" id="p-what-a-size-ladder-can-identify-2026-08-29" href="/research/what-a-size-ladder-can-identify-2026-08-29/" data-rv style="--rv: 210ms"> <span class="rbx-frame"> <img class="rbx-cover" src="/assets/img/research-covers/art-path-to-exile.jpg" alt="What a Size Ladder Can Identify" loading="lazy"> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">04</span> <span class="rbx-card-title">What a Size Ladder Can Identify</span> <span class="rbx-card-tag">locked</span> <span class="rbx-card-date">August 29, 2026</span> </span> <span class="rbx-card-blurb">why the scaling exponents optimizer benchmarks fit measure the experimental design, not the optimizer</span> </span> </a> <a class="rbx-card" id="p-tartanimu" href="/robotics/tartanimu/" data-rv style="--rv: 120ms"> <span class="rbx-frame"> <img class="rbx-cover" src="https://github.com/czhs/czhs.github.io/releases/download/robotics-media/tartanimu.jpg" alt="TartanIMU" loading="lazy"> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">05</span> <span class="rbx-card-title">TartanIMU</span> <span class="rbx-card-date">Oct 2025 – May 2026</span> </span> <span class="rbx-card-blurb">Inertial odometry: a trajectory estimated from IMU alone, with a live demo on Hugging Face.</span> </span> </a> </div> <div class="rbx-rows"> <a class="rbx-row" href="/research/ih-engineering-notebook-2026-08-17/" data-rv style="--rv: 120ms"> <span class="rbx-row-date">August 17, 2026</span> <span class="rbx-row-title">Engineering Notebook Entry</span> <span class="rbx-row-desc">I reinvented ROME &amp; pivot</span> <span class="rbx-card-tag">locked</span> </a> <a class="rbx-row" href="/research/ih-engineering-notebook-2026-08-16/" data-rv style="--rv: 160ms"> <span class="rbx-row-date">August 16, 2026</span> <span class="rbx-row-title">Engineering Notebook Entry</span> <span class="rbx-row-desc">working with a toy model</span> <span class="rbx-card-tag">locked</span> </a> <a class="rbx-row" href="/research/ih-engineering-notebook-2026-08-15/" data-rv style="--rv: 200ms"> <span class="rbx-row-date">August 15, 2026</span> <span class="rbx-row-title">Engineering Notebook Entry</span> <span class="rbx-row-desc">exploring new techniques</span> <span class="rbx-card-tag">locked</span> </a> </div> </section> <section class="rbx-part" id="part-2"> <header class="rbx-part-head" data-rv style="--rv: 60ms"> <span class="rbx-part-num" aria-hidden="true">02</span> <h2 class="rbx-part-title">Deep Learning Systems</h2> <span class="rbx-part-links"> <a class="rbx-part-link" href="https://github.com/czhs/10414-class" target="_blank" rel="noopener">10-414 coursework</a> </span> </header> <div class="rbx-grid"> <a class="rbx-card" id="p-autodidact" href="/ml/autodidact/" data-rv style="--rv: 120ms"> <span class="rbx-frame"> <img class="rbx-cover" src="https://github.com/czhs/czhs.github.io/releases/download/ml-media/autodidact.jpg" alt="autodidact" loading="lazy"> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">06</span> <span class="rbx-card-title">autodidact</span> <span class="rbx-card-date">Fall 2026</span> </span> <span class="rbx-card-blurb">reverse-mode autodiff engine and nn library from scratch in numpy</span> </span> </a> <a class="rbx-card" id="p-tinydecode" href="/ml/tinydecode/" data-rv style="--rv: 210ms"> <span class="rbx-frame"> <img class="rbx-cover" src="https://github.com/czhs/czhs.github.io/releases/download/ml-media/tinydecode.jpg" alt="tinydecode" loading="lazy"> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">07</span> <span class="rbx-card-title">tinydecode</span> <span class="rbx-card-date">Fall 2026</span> </span> <span class="rbx-card-blurb">small llama-style inference runtime, tuned for single-stream latency</span> </span> </a> </div> </section> <section class="rbx-part" id="part-3"> <header class="rbx-part-head" data-rv style="--rv: 60ms"> <span class="rbx-part-num" aria-hidden="true">03</span> <h2 class="rbx-part-title">Robotics</h2> <span class="rbx-part-links"> <a class="rbx-part-link" href="/robotics/">Full portfolio</a> <a class="rbx-part-link" href="/assets/pdf/chris-shi-robotics-portfolio.pdf" target="_blank" rel="noopener">Portfolio PDF</a> </span> </header> <div class="rbx-grid"> <a class="rbx-card" id="p-joust" href="/robotics/joust/" data-rv style="--rv: 120ms"> <span class="rbx-frame"> <img class="rbx-cover" src="https://github.com/czhs/czhs.github.io/releases/download/robotics-media/joust.jpg" alt="Robot Jousting" loading="lazy"> <video class="rbx-preview" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true" data-src="https://github.com/czhs/czhs.github.io/releases/download/robotics-media/joust-hero.mp4"></video> <span class="rbx-badge" aria-hidden="true"> <svg viewbox="0 0 12 12" width="9" height="9"> <path d="M3 2l7 4-7 4z" fill="currentColor"></path> </svg> </span> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">08</span> <span class="rbx-card-title">Robot Jousting</span> <span class="rbx-card-date">Fall 2026</span> </span> <span class="rbx-card-blurb">Two real robot arms with 3D-printed swords fence each other on stepper rails while a crowd plays from their phones.</span> </span> </a> <a class="rbx-card" id="p-robot-dog" href="/robotics/robot-dog/" data-rv style="--rv: 210ms"> <span class="rbx-frame"> <img class="rbx-cover" src="https://github.com/czhs/czhs.github.io/releases/download/robotics-media/robot-dog-card.jpg" alt="Robot Dog" loading="lazy"> <video class="rbx-preview" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true" data-src="https://github.com/czhs/czhs.github.io/releases/download/robotics-media/robot-dog-dance.mp4"></video> <span class="rbx-badge" aria-hidden="true"> <svg viewbox="0 0 12 12" width="9" height="9"> <path d="M3 2l7 4-7 4z" fill="currentColor"></path> </svg> </span> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">09</span> <span class="rbx-card-title">Robot Dog</span> <span class="rbx-card-date">Summer 2026</span> </span> <span class="rbx-card-blurb">A printed quadruped, from a single leg test to dancing on all fours.</span> </span> </a> <a class="rbx-card" id="p-duck" href="/robotics/duck/" data-rv style="--rv: 120ms"> <span class="rbx-frame"> <img class="rbx-cover" src="https://github.com/czhs/czhs.github.io/releases/download/robotics-media/duck-card.jpg" alt="Open Duck Mini" loading="lazy"> <video class="rbx-preview" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true" data-src="https://github.com/czhs/czhs.github.io/releases/download/robotics-media/duck-rights-itself.mp4"></video> <span class="rbx-badge" aria-hidden="true"> <svg viewbox="0 0 12 12" width="9" height="9"> <path d="M3 2l7 4-7 4z" fill="currentColor"></path> </svg> </span> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">10</span> <span class="rbx-card-title">Open Duck Mini</span> <span class="rbx-card-date">Summer 2025</span> </span> <span class="rbx-card-blurb">An open-source biped built from bare servos up: soldered, wired, and driven until it walked and picked itself up off the floor.</span> </span> </a> <a class="rbx-card" id="p-pie-robot" href="/robotics/pie-robot/" data-rv style="--rv: 210ms"> <span class="rbx-frame"> <img class="rbx-cover" src="https://github.com/czhs/czhs.github.io/releases/download/robotics-media/pie-robot-card.jpg" alt="Pi Day Pie Robot" loading="lazy"> <video class="rbx-preview" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true" data-src="https://github.com/czhs/czhs.github.io/releases/download/robotics-media/pie-open.mp4"></video> <span class="rbx-badge" aria-hidden="true"> <svg viewbox="0 0 12 12" width="9" height="9"> <path d="M3 2l7 4-7 4z" fill="currentColor"></path> </svg> </span> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">11</span> <span class="rbx-card-title">Pi Day Pie Robot</span> <span class="rbx-card-date">Spring 2026</span> </span> <span class="rbx-card-blurb">A borrowed microwave, a printed arm, and a great deal of orange tape.</span> </span> </a> <a class="rbx-card" id="p-gantry" href="/robotics/gantry/" data-rv style="--rv: 120ms"> <span class="rbx-frame"> <img class="rbx-cover" src="https://github.com/czhs/czhs.github.io/releases/download/robotics-media/gantry.jpg" alt="Hack 100 Gantry" loading="lazy"> <video class="rbx-preview" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true" data-src="https://github.com/czhs/czhs.github.io/releases/download/robotics-media/gantry.mp4"></video> <span class="rbx-badge" aria-hidden="true"> <svg viewbox="0 0 12 12" width="9" height="9"> <path d="M3 2l7 4-7 4z" fill="currentColor"></path> </svg> </span> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">12</span> <span class="rbx-card-title">Hack 100 Gantry</span> <span class="rbx-card-date">Spring 2026</span> </span> <span class="rbx-card-blurb">Built at Hack 100 — partly self-designed CAD through to the first limit-switch test.</span> </span> </a> <a class="rbx-card" id="p-dice-arms" href="/robotics/dice-arms/" data-rv style="--rv: 210ms"> <span class="rbx-frame"> <img class="rbx-cover" src="https://github.com/czhs/czhs.github.io/releases/download/robotics-media/dice-arms.jpg" alt="Dice Arms" loading="lazy"> </span> <span class="rbx-cap"> <span class="rbx-card-head"> <span class="rbx-card-num" aria-hidden="true">13</span> <span class="rbx-card-title">Dice Arms</span> <span class="rbx-card-date">Summer 2025</span> </span> <span class="rbx-card-blurb">A dice mosaic generated from the Duck render — each cell is one die, pip count tracking local tone.</span> </span> </a> </div> </section> </main> </div> <script>
   // Card previews play two ways: on hover/focus, and on their own at random so
   // the grid always has a little life in it -- but never while the pointer is
   // on a card: hovering one card silences the others until the pointer leaves,

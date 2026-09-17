@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta name="google-site-verification" content="1Tr_0wbEqQ0HHCbM5RNwU54JR7c0j2DsuzOWY8c4Cjw"> <meta http-equiv="Permissions-Policy" content="interest-cohort=()"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Pi Day Pie Robot — Chris Shi </title> <meta name="author" content="Chris Shi"> <meta name="description" content="Personal site and blog of Chris Shi (also known as Hongyi Shi), studying math and computer engineering at Carnegie Mellon University, writing on infrastructure and math: biodefense, interpretability, and automation."> <meta name="keywords" content="Chris Shi, Hongyi Shi, Carnegie Mellon University, CMU, infrastructure, biodefense, interpretability, optimal transport"> <meta property="og:site_name" content="Chris Shi"> <meta property="og:type" content="website"> <meta property="og:title" content="Pi Day Pie Robot — Chris Shi"> <meta property="og:url" content="https://chrisshi.com/robotics/pie-robot/"> <meta property="og:description" content="Personal site and blog of Chris Shi (also known as Hongyi Shi), studying math and computer engineering at Carnegie Mellon University, writing on infrastructure and math: biodefense, interpretability, and automation."> <meta property="og:image" content="https://chrisshi.com/assets/img/prof_pic.jpg"> <meta property="og:locale" content="en"> <meta name="twitter:card" content="summary_large_image"> <meta name="twitter:title" content="Pi Day Pie Robot — Chris Shi"> <meta name="twitter:description" content="Personal site and blog of Chris Shi (also known as Hongyi Shi), studying math and computer engineering at Carnegie Mellon University, writing on infrastructure and math: biodefense, interpretability, and automation."> <meta name="twitter:image" content="https://chrisshi.com/assets/img/prof_pic.jpg"> <script type="application/ld+json">
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta name="google-site-verification" content="1Tr_0wbEqQ0HHCbM5RNwU54JR7c0j2DsuzOWY8c4Cjw"> <meta http-equiv="Permissions-Policy" content="interest-cohort=()"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Pi Day Pie Robot — Chris Shi </title> <meta name="author" content="Chris Shi"> <meta name="description" content="Personal site and blog of Chris Shi (also known as Hongyi Shi), studying math and computer engineering at Carnegie Mellon University, writing on infrastructure and math: biodefense, interpretability, and automation."> <meta name="keywords" content="Chris Shi, Hongyi Shi, Carnegie Mellon University, CMU, infrastructure, biodefense, interpretability, optimal transport"> <meta property="og:site_name" content="Chris Shi"> <meta property="og:type" content="website"> <meta property="og:title" content="Pi Day Pie Robot — Chris Shi"> <meta property="og:url" content="https://chrisshi.com/robotics/pie-robot/"> <meta property="og:description" content="Personal site and blog of Chris Shi (also known as Hongyi Shi), studying math and computer engineering at Carnegie Mellon University, writing on infrastructure and math: biodefense, interpretability, and automation."> <meta property="og:image" content="https://chrisshi.com/assets/img/robotics-portfolio-cover.jpg"> <meta property="og:locale" content="en"> <meta name="twitter:card" content="summary_large_image"> <meta name="twitter:title" content="Pi Day Pie Robot — Chris Shi"> <meta name="twitter:description" content="Personal site and blog of Chris Shi (also known as Hongyi Shi), studying math and computer engineering at Carnegie Mellon University, writing on infrastructure and math: biodefense, interpretability, and automation."> <meta name="twitter:image" content="https://chrisshi.com/assets/img/robotics-portfolio-cover.jpg"> <script type="application/ld+json">
     {
         "author":
         {
@@ -562,7 +562,13 @@
   .rbx-card-head {
     display: flex;
     align-items: baseline;
-    gap: 0.6rem;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.6rem;
+  }
+  /* a long title keeps its line and pushes the date down a row, rather than
+     being squeezed to one word per line on a phone */
+  .rbx-card-title {
+    flex: 1 1 auto;
   }
   .rbx-card-num {
     font-family: var(--rbx-mono);
@@ -599,6 +605,188 @@
     line-height: 1.55;
     color: var(--ink-soft);
     max-width: 46ch;
+  }
+
+  /* small mono tag on a card's head row — "locked" on a gated research
+     entry, or whatever an index entry sets; wayfinding, so the machine face */
+  .rbx-card-tag {
+    flex-shrink: 0;
+    align-self: center;
+    font-family: var(--rbx-mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.38rem;
+    border: 1.5px solid var(--rail);
+    color: var(--ink-soft);
+  }
+
+  /* ── grouped index: the sheet partitioned into titled parts ─────
+     Each part is a ruled grid of its own under a heading band: a mono part
+     number, the title at display weight, and (right-aligned) any links that
+     belong to the part as a whole. The band carries no rule of its own —
+     the grid's 3px top edge draws it. */
+  .rbx-parts {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2.4rem, 4.2vw, 3.6rem);
+    min-width: 0;
+  }
+  .rbx-part {
+    min-width: 0;
+    scroll-margin-top: calc(var(--frame) + var(--shp));
+  }
+  .rbx-part-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.9rem;
+    margin: 0 0 0.8rem;
+  }
+  .rbx-part-num {
+    font-family: var(--rbx-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--tape);
+  }
+  .rbx-part-title {
+    margin: 0;
+    font-weight: 800;
+    font-size: clamp(1.4rem, 2.3vw, 1.8rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+  .rbx-part-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-left: auto;
+    align-self: center;
+  }
+  .rbx-part-link {
+    font-family: var(--rbx-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.6rem;
+    border: 2px solid var(--rail);
+    color: var(--rbx-ink);
+    text-decoration: none;
+    transition:
+      box-shadow 0.12s ease,
+      color 0.12s ease,
+      border-color 0.12s ease;
+  }
+  .rbx-part-link:hover,
+  .rbx-part-link:focus-visible {
+    border-color: var(--rbx-ink);
+    color: var(--rbx-accent);
+    text-decoration: none;
+    box-shadow: 3px 3px 0 color-mix(in srgb, var(--rbx-ink) 55%, transparent);
+  }
+  .rbx-part-note {
+    margin: -0.2rem 0 1rem;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 62ch;
+  }
+
+  /* compact rows under a part's grid — entries that belong to the record but
+     do not carry a card (the lab-notebook pages). They continue the sheet's
+     frame: the grid's bottom rule is their top, hairlines between them. */
+  .rbx-rows {
+    border: 3px solid var(--rbx-ink);
+    border-top: 0;
+  }
+  .rbx-row {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    align-items: baseline;
+    column-gap: 0.85rem;
+    padding: 0.62rem 1rem;
+    border-bottom: 1.5px solid var(--rail);
+    color: var(--rbx-ink);
+    text-decoration: none;
+  }
+  .rbx-row:last-child {
+    border-bottom: 0;
+  }
+  .rbx-row:hover {
+    text-decoration: none;
+    background: color-mix(in srgb, var(--rbx-field) 18%, var(--rbx-card));
+  }
+  .rbx-row:focus-visible {
+    outline: 3px solid var(--rbx-accent);
+    outline-offset: -3px;
+  }
+  .rbx-row-date {
+    font-family: var(--rbx-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+    opacity: 0.5;
+    white-space: nowrap;
+  }
+  .rbx-row-title {
+    font-weight: 700;
+    font-size: 0.92rem;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+  }
+  .rbx-row:hover .rbx-row-title {
+    border-bottom-color: currentColor;
+  }
+  .rbx-row:hover .rbx-row-date {
+    color: var(--tape);
+    opacity: 1;
+  }
+  .rbx-row-desc {
+    font-size: 0.84rem;
+    color: var(--ink-soft);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (max-width: 700px) {
+    .rbx-row {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+    }
+    .rbx-row-desc {
+      grid-column: 1 / -1;
+      white-space: normal;
+    }
+  }
+
+  /* the sidebar index, grouped: a part label over each run of rows; a long
+     index tightens its rows so the column still fits a laptop screen */
+  .rbx-manifest-group {
+    display: block;
+    margin: clamp(0.4rem, 0.9vh, 0.7rem) 0 0.1rem;
+    font-family: var(--rbx-mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rbx-accent);
+    text-decoration: none;
+  }
+  .rbx-manifest-h + .rbx-manifest-group {
+    margin-top: 0;
+  }
+  .rbx-manifest-group:hover {
+    color: var(--tape);
+    text-decoration: none;
+  }
+  .rbx-manifest.is-long .rbx-manifest-row {
+    padding: clamp(0.08rem, 0.25vh, 0.22rem) 0;
+    line-height: 1.3;
+  }
+  .rbx-manifest.is-long .rbx-manifest-title {
+    font-size: clamp(0.78rem, 1.6vh, 0.85rem);
   }
 
   /* ── detail page shell: masthead across, TOC rail left ────────── */
@@ -1149,6 +1337,115 @@
     border: 2px solid var(--line);
     margin: 1.5rem 0;
   }
+  /* the ML write-ups are the repos' own READMEs, so they carry code and
+     tables; set both in the machine face inside the sheet's rules */
+  .rbx-post pre,
+  .rbx-post .highlight {
+    max-width: 82ch;
+    margin: 0 0 1.2rem;
+    padding: 0.85rem 1rem;
+    background: color-mix(in srgb, var(--rbx-field) 14%, var(--rbx-card));
+    border: 2px solid var(--line);
+    border-radius: 0;
+    overflow-x: auto;
+  }
+  .rbx-post .highlight pre {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  .rbx-post pre,
+  .rbx-post code {
+    font-family: var(--rbx-mono);
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--rbx-ink);
+  }
+  /* the theme's inline-code rule sets white-space: normal, and its block
+     override is scoped to blog posts — without this a fenced block here
+     collapses onto one line */
+  .rbx-post pre code {
+    white-space: pre;
+    padding: 0;
+    background: none;
+  }
+  .rbx-post p code,
+  .rbx-post li code,
+  .rbx-post td code,
+  .rbx-post th code {
+    font-size: 0.84em;
+    padding: 0.05em 0.3em;
+    background: color-mix(in srgb, var(--rbx-field) 22%, var(--rbx-card));
+    border-radius: 0;
+  }
+  .rbx-post table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 0 0 1.4rem;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+    line-height: 1.45;
+  }
+  .rbx-post th,
+  .rbx-post td {
+    padding: 0.42rem 0.7rem;
+    border-bottom: 1.5px solid var(--rail);
+    vertical-align: top;
+    text-align: left;
+  }
+  .rbx-post th {
+    font-family: var(--rbx-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-bottom: 3px solid var(--rbx-ink);
+  }
+  /* the theme's dark-mode script stamps Bootstrap's .table-dark on every table
+     when the VISITOR's system is dark — white text on this fixed ivory sheet.
+     The palette here never changes, so neither may the tables. */
+  body.rbx-site .rbx-post table.table-dark,
+  body.rbx-site .rbx-post .table-dark th,
+  body.rbx-site .rbx-post .table-dark td {
+    color: var(--rbx-ink);
+    background-color: transparent;
+  }
+  body.rbx-site .rbx-post .table-hover tbody tr:hover {
+    color: var(--rbx-ink);
+    background-color: color-mix(in srgb, var(--rbx-field) 18%, var(--rbx-card));
+  }
+  .rbx-post td[align='right'],
+  .rbx-post th[align='right'] {
+    text-align: right;
+    font-family: var(--rbx-mono);
+    font-size: 0.8rem;
+  }
+  .rbx-post a {
+    color: var(--rbx-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.5px;
+  }
+  .rbx-post a:hover {
+    color: var(--rbx-ink);
+  }
+  .rbx-post h3 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 1.8rem 0 0.5rem;
+  }
+  .rbx-post-src {
+    font-family: var(--rbx-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 1.6rem;
+  }
   .rbx-post-title {
     font-weight: 800;
     font-size: 2.2rem;
@@ -1475,7 +1772,20 @@
       transition: none;
     }
   }
-</style> </head> <body class="rbx-site"> <script>
+</style> <script>
+      // head.liquid's theme.js has just applied the VISITOR's theme (system
+      // preference by default). This sheet has one fixed palette, so pin the
+      // computed theme to light here: otherwise a dark-mode visitor gets the
+      // dark syntax-highlight stylesheet and Bootstrap's .table-dark stamped
+      // on every table — white text on ivory. theme.js declares these with
+      // `let` at top level, so a later classic script can reassign them.
+      if (typeof determineComputedTheme === 'function' && typeof applyTheme === 'function') {
+        determineComputedTheme = function () {
+          return 'light';
+        };
+        applyTheme();
+      }
+    </script> </head> <body class="rbx-site"> <script>
       // Arm the reveal choreography before first paint — and only when motion
       // is allowed, so without JS or with reduced motion nothing is hidden.
       (function () {
