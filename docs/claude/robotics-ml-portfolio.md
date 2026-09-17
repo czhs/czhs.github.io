@@ -206,11 +206,38 @@ geoms the way `Rig.robot_mask` isolates the robot (hide them, render, diff).
 
 ## Duck card cover
 
-`duck-cover.jpg` is a frame of the real robot standing on its own (Chris's
-legs behind it, hands away): `duck-stands-free.mp4` at 16.5 s, `crop=720:540:10:30`
-scaled to 1200×900. Replaced 2026-09-04 ("open duck mini cover also need to be
-improved" — the old one was the top-down wiring shot). Not a render, on
-purpose: the card has no caption to say so.
+`duck-card.jpg` (2026-09-16, "get a better cover for the duck") is the real
+robot standing, **cut out of its background** and set on the sheet's ivory
+(#fffcf2): `bin/robotics_pdf/frames/duck-standing-cutout.png` scaled 1.46x to
+612×756 and centred on a 1200×900 card, robot top at 10% of the height. It
+replaced `duck-cover.jpg` — the same instant of `duck-stands-free.mp4` (16.5 s,
+`crop=720:540:10:30`) as a plain frame — because Chris ruled out his legs and
+then his socks in any picture, and every frame of the robot standing has both
+behind it. A real-photo alternative was cut and rejected as the card: the robot
+face-up on the bench (`duck-face-mounted.mp4` 8.25 s, `crop=600:450:0:475`
+scaled 2x) reads as wiring, not a biped; it is kept at
+`bin/robotics_pdf/out/cand-duck-card/duck-card-bench-alternative.jpg` locally.
+Not a render, on purpose: the card has no caption to say so. The PDF cover
+sheet uses the same card (`COVER_STILL` in build.py is empty again).
+
+## Robot Dog and Pie Robot card covers (2026-09-16)
+
+Chris: "for robot dog also use an actual photo of the dog" (this supersedes the
+2026-09-04 "cover image is the CAD"). `robot-dog-card.jpg` is
+`robotics_media/Dog/final_dancing.MOV` frame 174 (5.806 s), `crop=1200:900:550:60`
+at 1:1 (no resampling), light unsharp — the sharpest frame of the dance's only
+fully upright pause; the CAD render (`robot-dog.jpg`) stays as the detail page's
+lead figure. `pie-robot-card.jpg` replaces `pie-robot.jpg` (a soft 720×540 crop
+of the door-open frame): `robotics_media/Pie Day Bot/IMG_9022.MOV` at 227.71 s
+(1080×1920 upright after its −90° rotation tag), `crop=1080:810:0:520`, scaled
+1080×810 → 1200×900 (an 11% upscale; every raw recording is 1080 wide), light
+unsharp — the arm in the open microwave with the cup just placed on the
+turntable, inside a 0.6 s pause where the arm is still. Candidate sheets and
+scores for all three cards are under `bin/robotics_pdf/out/cand-*-card/`
+(gitignored). All three new cards were uploaded to the `robotics-media` release
+the same day; the old `duck-cover.jpg`, `pie-robot.jpg`, `robot-dog.jpg` assets
+stay on the release (`robot-dog.jpg` is still the detail page's lead poster
+pattern's neighbour; the other two are simply unreferenced now).
 
 ## Duck build footage
 

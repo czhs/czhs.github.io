@@ -56,10 +56,9 @@ PREFIX = {
 }
 # Never in the PDF: the pie-robot b-roll is password-gated on the site.
 FORBIDDEN = re.compile(r"^pie-robot-broll")
-# Cover-sheet cells that must not use the site's card cover. The duck card
-# still has Chris's legs behind the robot; he wants no legs and no socks in
-# the PDF (2026-09-16), so the cover uses a Test Runs frame with neither.
-COVER_STILL = {"duck": "frames/duck-surge-topple-2.8s.jpg"}
+# Cover-sheet cells that should not use the site's card cover (slug -> src).
+# Empty since 2026-09-16: the duck card is now the leg-free cutout itself.
+COVER_STILL = {}
 
 
 def esc(s):

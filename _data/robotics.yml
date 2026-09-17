@@ -172,12 +172,14 @@ projects:
     blurb: >-
       A printed quadruped, from a single leg test to dancing on all fours.
     date: "Summer 2026"
-    # Card still is the CAD render; the card's hover clip is the real robot
-    # dancing (Chris, 2026-09-04: "the robot video should be the dog dancing,
-    # cover image is the CAD"). The CAD turntable animation (robot-dog.mp4) is
-    # the detail page's own lead figure, placed by _pages/robotics_robot-dog.md
-    # with its caption, so it is deliberately not listed here.
-    cover: assets/img/robotics/robot-dog.jpg
+    # Card still is a real photo of the robot standing on the bench (Chris,
+    # 2026-09-16: "for robot dog also use an actual photo of the dog" — this
+    # supersedes the 2026-09-04 "cover image is the CAD"): final_dancing.MOV
+    # frame 174 (5.806 s), crop=1200:900:550:60, no resampling. The card's
+    # hover clip is the real robot dancing. The CAD turntable animation
+    # (robot-dog.mp4) is the detail page's own lead figure, placed by
+    # _pages/robotics_robot-dog.md with its caption, so it is not listed here.
+    cover: assets/img/robotics/robot-dog-card.jpg
     poster: assets/img/robotics/robot-dog-dance-poster.jpg
     video: assets/video/robotics/robot-dog-dance.mp4
     gallery_title: Footage
@@ -200,7 +202,14 @@ projects:
     # labelled as renders and keep the upstream credit in `links`.
     # Clip provenance (source recording + in-point) is in
     # docs/claude/robotics-ml-portfolio.md so any clip can be re-cut.
-    cover: assets/img/robotics/duck-cover.jpg
+    # Card still (2026-09-16, "get a better cover for the duck", after "I dont
+    # want my legs in it" and "remove the socks while youre at it"): the real
+    # robot standing, cut out of duck-stands-free at 16.5 s and set on the
+    # sheet's ivory — every real frame of it standing has his legs behind it,
+    # so the background goes instead. Source PNG + recipe:
+    # bin/robotics_pdf/frames/duck-standing-cutout.png, bin/robotics_pdf/tools/cutout.swift.
+    # Not a render, on purpose: the card has no caption to say so.
+    cover: assets/img/robotics/duck-card.jpg
     poster: assets/img/robotics/duck-rights-itself-poster.jpg
     video: assets/video/robotics/duck-rights-itself.mp4
     # ── Yours to write. Left empty on purpose; the layout hides empty ones. ──
@@ -292,9 +301,11 @@ projects:
     #   python3 bin/research_lock.py pie-broll <password> <plain.html> assets/enc/robotics-pie-broll.json
     broll_title: "B-roll"
     broll_enc: /assets/enc/robotics-pie-broll.json
-    # Hero is the two-part door open — the signature move. cover is a 4:3 crop of
-    # the same frame (a raw portrait still cropped to the card loses the subject).
-    cover: assets/img/robotics/pie-robot.jpg
+    # Hero is the two-part door open — the signature move. Card still (2026-09-16,
+    # "get a better cover for the ... pi bot"): the arm reaching into the open
+    # microwave with the cup on the turntable — robotics_media/Pie Day Bot/
+    # IMG_9022.MOV at 227.71 s, upright, crop=1080:810:0:520, scaled to 1200x900.
+    cover: assets/img/robotics/pie-robot-card.jpg
     poster: assets/img/robotics/pie-robot-poster.jpg
     video: assets/video/robotics/pie-open.mp4
     tagline: "A borrowed microwave, a printed arm, and a great deal of orange tape."
