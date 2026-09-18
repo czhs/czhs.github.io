@@ -19,9 +19,36 @@ layout: default
     {{ content }}
   </div>
 
+  {% assign docs = site.research | sort: "date" | reverse %}
+
+  {%- comment -%}
+    Entries that exist as an address before they exist as a post
+    (`coming_soon: true`, layout research_soon) sit under their own heading,
+    as compact rows with a dashed border — not yet a card of the record.
+  {%- endcomment -%}
+  {% assign soon = docs | where: "coming_soon", true %}
+  {% if soon.size > 0 %}
+    <p class="rzine-soon-h">Coming soon</p>
+    <ul class="rzine-list rzine-soon">
+      {% for entry in soon %}
+        <li>
+          <a class="rzine-entry re-muted re-soon" href="{{ entry.url | relative_url }}">
+            <div class="re-body">
+              <p class="re-title{% if entry.slug_title %} rz-slug{% endif %}">{{ entry.title }}</p>
+              {% if entry.description %}
+                <p class="re-desc">{{ entry.description }}</p>
+              {% endif %}
+              <p class="re-meta"><span class="re-soon-tag">coming soon</span></p>
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
   <ul class="rzine-list">
-    {% assign docs = site.research | sort: "date" | reverse %}
     {% for entry in docs %}
+      {% if entry.coming_soon %}{% continue %}{% endif %}
       <li>
         <a class="rzine-entry{% if entry.cover %} has-cover{% endif %}{% if entry.compact %} re-muted{% endif %}" href="{{ entry.url | relative_url }}">
           <div class="re-body">
@@ -65,4 +92,12 @@ layout: default
   .rzine-entry.re-muted .re-meta{margin:0 0 0 auto;white-space:nowrap;flex:0 0 auto}
   .rzine-list li:has(.re-muted) + li:has(.re-muted){margin-top:0.55rem}
   .rzine-list li:hover .rzine-entry.re-muted{transform:translate(-2px,-2px);box-shadow:3px 3px 0 color-mix(in srgb,var(--rz-ink) 55%,transparent)}
+
+  /* coming soon — a heading in the gate's mono label voice, rows with a dashed
+     border (an address, not yet a card), the slug-titled ones in the machine face */
+  .rzine-soon-h{max-width:48rem;margin:0 auto 0.55rem;font-family:var(--rz-mono);font-size:0.68rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;opacity:0.55;color:var(--rz-text)}
+  .rzine-list.rzine-soon{margin-bottom:1.35rem}
+  .rzine-entry.re-soon{border-style:dashed}
+  .rzine-entry .re-title.rz-slug{font-family:var(--rz-mono);font-weight:600;letter-spacing:-0.01em;font-size:0.9rem}
+  .rzine-entry.re-muted .re-title.rz-slug{white-space:normal;overflow-wrap:anywhere}
 </style>

@@ -11,6 +11,20 @@ follow this workflow. The first post
 (`_research/ih-engineering-notebook-2026-08-15.md` + its payload) is the reference
 implementation; commit `fd3181e` shows the final state.
 
+### Coming-soon entries
+
+An entry can exist as an address before it exists as a post (Chris,
+2026-09-18: "add a coming soon to my research page with an entry:
+chrisshi.com/research/robot-safety-spais-mech-interp"). Front matter only:
+`layout: research_soon`, `coming_soon: true`, `title`, `date` (today or earlier —
+a future date never writes the page), `related_posts: false`. The index lists
+such entries under a "Coming soon" heading as dashed compact rows above the
+record; the page itself is the zine card with a "coming soon" label where the
+password form would be. No payload, no password, nothing to protect. Until he
+gives the entry a name the title is its slug, with `slug_title: true` so both
+renderings set it in the mono face — no invented title ([content-rules](content-rules.md)).
+When the post is ready, replace the stub with a locked entry as below.
+
 ### Invariants (non-negotiable)
 
 1. **Chris's words are byte-exact.** Extract the text layer with

@@ -1,0 +1,41 @@
+---
+layout: default
+---
+{%- comment -%}
+  A research entry that exists as an address before it exists as a post —
+  `coming_soon: true` in the front matter. The /research index lists it under
+  its own "Coming soon" heading (research_index.html); this page is the same
+  zine card with the gate's mono label where the password form would be, and
+  nothing else, so the link can be shared now and fill in later. No payload,
+  no password: there is nothing to protect yet.
+{%- endcomment -%}
+
+{% include research_styles.liquid %}
+
+<div class="rzine">
+  <div class="rzine-card">
+    <header class="post-header">
+      <h1 class="post-title{% if page.slug_title %} rz-slug{% endif %}">{{ page.title }}</h1>
+      {% if page.description %}
+        <p class="post-desc">{{ page.description }}</p>
+      {% endif %}
+    </header>
+
+    <section class="rzine-gate">
+      <p class="rzine-lock">coming soon</p>
+    </section>
+  </div>
+
+  {% include research_foot.liquid %}
+</div>
+
+<style>
+  /* an entry titled by its address until it has a name: the machine face */
+  .rzine-card .post-title.rz-slug {
+    font-family: var(--rz-mono);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    font-size: clamp(1.1rem, 0.9rem + 1vw, 1.5rem);
+    overflow-wrap: anywhere;
+  }
+</style>
