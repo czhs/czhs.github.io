@@ -281,6 +281,11 @@ ninja.data = [{
           description: "why the scaling exponents optimizer benchmarks fit measure the experimental design, not the optimizer",
           section: "Research",handler: () => {
               window.location.href = "/research/what-a-size-ladder-can-identify-2026-08-29/";
+            },},{id: "research-robot-safety-spais-mech-interp",
+          title: 'robot-safety-spais-mech-interp',
+          description: "",
+          section: "Research",handler: () => {
+              window.location.href = "/research/robot-safety-spais-mech-interp/";
             },},{
         id: 'social-github',
         title: 'GitHub',
