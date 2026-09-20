@@ -1,6 +1,6 @@
 # ringworld — the /ringworld/ micro-site (a Socratica node)
 
-Weekly maker space in Pittsburgh (Sundays 4–7pm, location TBD) and a **Socratica
+Weekly maker space in Pittsburgh (Sundays 2–5pm, Ansys Hall 1st floor) and a **Socratica
 node** (https://www.socratica.info/ — linked from the About panel and the footer).
 The Luma event (https://luma.com/ringworld) is hosted by Chris Shi; **no CASI /
 AI-safety / interp framing anywhere** — that was removed in the 2026-08-20 rework,

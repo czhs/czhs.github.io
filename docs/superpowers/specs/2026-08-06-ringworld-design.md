@@ -13,7 +13,9 @@ Jekyll layout pair, a YAML data file, and card grids.
 > nothing more: no Luma links anywhere, no sessions strip, no blog, and the About
 > panel is always open — the `About ringworld` toggle and the meta-row chip pinning
 > it required are retired (§6's meta-row mechanics now describe MLn only). Location:
-> CUC Fishbowl, 3rd Floor. The machinery is
+> CUC Fishbowl, 3rd Floor — moved 2026-09-20 to Ansys Hall, 1st Floor, next to the
+> windows overlooking Scaife Hall, and the window shifted from 4–7pm to 2–5pm (the
+> run-of-show times in `_pages/ringworld.html` shifted with it). The machinery is
 > parked, not deleted — the feed/strip markup lives in this repo's history
 > (`_pages/ringworld.html` pre-2026-08-20), the includes/layouts/data survive in place,
 > and `_pages/rw_projects.html` + `_ringworld/what-ringworld-is-for.md` carry
