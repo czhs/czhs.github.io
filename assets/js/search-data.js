@@ -286,6 +286,11 @@ ninja.data = [{
           description: "",
           section: "Research",handler: () => {
               window.location.href = "/research/robot-safety-spais-mech-interp/";
+            },},{id: "research-english-chinese-instruction-robustness-in-minivla",
+          title: 'English–Chinese instruction robustness in MiniVLA',
+          description: "A paired study of verb language, noun language, and sentence frame in robot instructions.",
+          section: "Research",handler: () => {
+              window.location.href = "/research/english-chinese-minivla/";
             },},{
         id: 'social-github',
         title: 'GitHub',
