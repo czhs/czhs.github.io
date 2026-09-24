@@ -281,16 +281,16 @@ ninja.data = [{
           description: "why the scaling exponents optimizer benchmarks fit measure the experimental design, not the optimizer",
           section: "Research",handler: () => {
               window.location.href = "/research/what-a-size-ladder-can-identify-2026-08-29/";
-            },},{id: "research-robot-safety-spais-mech-interp",
-          title: 'robot-safety-spais-mech-interp',
-          description: "",
-          section: "Research",handler: () => {
-              window.location.href = "/research/robot-safety-spais-mech-interp/";
             },},{id: "research-english-chinese-instruction-robustness-in-minivla",
           title: 'English–Chinese instruction robustness in MiniVLA',
           description: "A paired study of verb language, noun language, and sentence frame in robot instructions.",
           section: "Research",handler: () => {
               window.location.href = "/research/english-chinese-minivla/";
+            },},{id: "research-english-harm-probes-across-languages",
+          title: 'English harm probes across languages',
+          description: "A research note on multilingual harm detection.",
+          section: "Research",handler: () => {
+              window.location.href = "/research/robot-safety-spais-mech-interp/";
             },},{
         id: 'social-github',
         title: 'GitHub',
