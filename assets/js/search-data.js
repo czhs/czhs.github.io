@@ -291,6 +291,11 @@ ninja.data = [{
           description: "A research note on multilingual harm detection.",
           section: "Research",handler: () => {
               window.location.href = "/research/robot-safety-spais-mech-interp/";
+            },},{id: "research-notes-on-arithmetic-inside-a-flow-matching-robot-policy",
+          title: 'Notes on arithmetic inside a flow-matching robot policy',
+          description: "A research note in mechanistic interpretability.",
+          section: "Research",handler: () => {
+              window.location.href = "/research/flow-policy-arithmetic/";
             },},{
         id: 'social-github',
         title: 'GitHub',
