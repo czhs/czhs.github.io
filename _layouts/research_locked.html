@@ -1,33 +1,25 @@
 ---
 layout: default
 ---
-{%- comment -%}
-  Password gate for research entries — the generalization of the poem page's
-  scheme (see bin/research_lock.py). The page ships only AES-GCM ciphertext
-  (page.enc_payload under assets/enc/); the body decrypts in-browser via
-  WebCrypto. One shared password unlocks every entry: on success it is kept in
-  sessionStorage and other locked entries auto-open for the rest of the tab
-  session. Plaintext never exists in this public repo.
 
-  Presentation lives in _includes/research_styles.liquid (the .rzine "zine
-  card" treatment). Both the lock and the decrypted body render inside the same
-  card, so unlocking swaps the contents rather than repainting the page.
-{%- endcomment -%}
-
-{% include research_styles.liquid %}
+{%- comment -%} Password gate for research entries — the generalization of the poem page's scheme (see bin/research_lock.py). The page ships only
+AES-GCM ciphertext (page.enc_payload under assets/enc/); the body decrypts in-browser via WebCrypto. One shared password unlocks every entry: on
+success it is kept in sessionStorage and other locked entries auto-open for the rest of the tab session. Plaintext never exists in this public repo.
+Presentation lives in _includes/research_styles.liquid (the .rzine "zine card" treatment). Both the lock and the decrypted body render inside the same
+card, so unlocking swaps the contents rather than repainting the page. {%- endcomment -%} {% include research_styles.liquid %}
 
 <div class="rzine">
   <div class="rzine-card">
     <header class="post-header">
       <h1 class="post-title">{{ page.title }}</h1>
       {% if page.description %}
-        <p class="post-desc">{{ page.description }}</p>
+      <p class="post-desc">{{ page.description }}</p>
       {% endif %}
       <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}</p>
       {% if page.authorship_note %}
-        <p class="rz-byline">{{ page.authorship_note | escape }}</p>
+      <p class="rz-byline">{{ page.authorship_note | escape }}</p>
       {% elsif page.claude_authored %}
-        <p class="rz-byline">Claude authored based on my research repo and engineering notebook, proof read by Chris</p>
+      <p class="rz-byline">Claude authored based on my research repo and engineering notebook, proof read by Chris</p>
       {% endif %}
     </header>
 
@@ -46,18 +38,19 @@ layout: default
             autocapitalize="off"
             autocorrect="off"
             spellcheck="false"
-          >
+          />
           <button class="rzine-btn" type="submit">open</button>
         </div>
         <p class="rzine-msg" id="rlock-msg" role="status" aria-live="polite"></p>
       </form>
       <article class="post-content rzine-content" id="rlock-content" hidden></article>
     </section>
+
+    {% include research_author.liquid locked=true %}
   </div>
 
   {% include research_foot.liquid %}
 </div>
-
 
 <script>
   (function () {
@@ -70,15 +63,22 @@ layout: default
     var content = document.getElementById("rlock-content");
 
     function b64(s) {
-      return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); });
+      return Uint8Array.from(atob(s), function (c) {
+        return c.charCodeAt(0);
+      });
     }
 
     var payload = null;
     function getPayload() {
       if (payload) return Promise.resolve(payload);
       return fetch(PAYLOAD_URL)
-        .then(function (r) { return r.json(); })
-        .then(function (p) { payload = p; return p; });
+        .then(function (r) {
+          return r.json();
+        })
+        .then(function (p) {
+          payload = p;
+          return p;
+        });
     }
 
     function decrypt(password) {
@@ -98,7 +98,9 @@ layout: default
           .then(function (key) {
             return subtle.decrypt({ name: "AES-GCM", iv: b64(p.iv) }, key, b64(p.ct));
           })
-          .then(function (buf) { return JSON.parse(new TextDecoder().decode(buf)); });
+          .then(function (buf) {
+            return JSON.parse(new TextDecoder().decode(buf));
+          });
       });
     }
 
@@ -117,8 +119,11 @@ layout: default
         });
         gate.hidden = true;
         content.hidden = false;
+        document.getElementById("research-author").hidden = false;
         if (remember) {
-          try { sessionStorage.setItem(STORE_KEY, password); } catch (e) {}
+          try {
+            sessionStorage.setItem(STORE_KEY, password);
+          } catch (e) {}
         }
       });
     }

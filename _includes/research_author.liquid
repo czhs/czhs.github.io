@@ -1,0 +1,26 @@
+{%- comment -%}
+  Shared post footer, outside the article extracted by research_lock.py.
+  Locked posts reveal it with the decrypted body; local previews show it directly.
+{%- endcomment -%}
+<footer
+  class="research-author"
+  {% if include.locked %}
+    id="research-author" hidden
+  {% endif %}
+  aria-label="About the author and more research"
+>
+  <p class="research-author-invitation">
+    If you’re working on related questions, I’d love to hear about it.
+    <a href="mailto:chrisshi@andrew.cmu.edu">Get in touch</a>, or <a href="{{ '/research/' | relative_url }}">read more of my research</a>.
+  </p>
+  <div class="research-author-card">
+    <img src="{{ '/assets/img/chris_shi.png' | relative_url }}" alt="" width="64" height="64" loading="lazy">
+    <div>
+      <a class="research-author-name" href="{{ '/' | relative_url }}">Chris Shi</a>
+      <p>
+        I’m an undergraduate studying electrical and computer engineering and mathematics at CMU. I work on mechanistic interpretability and robot
+        learning.
+      </p>
+    </div>
+  </div>
+</footer>
