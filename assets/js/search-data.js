@@ -296,9 +296,9 @@ ninja.data = [{
           description: "A research note in mechanistic interpretability.",
           section: "Research",handler: () => {
               window.location.href = "/research/flow-policy-arithmetic/";
-            },},{id: "research-speeding-up-the-so-101-experiment-loop",
-          title: 'Speeding up the SO-101 experiment loop',
-          description: "Faster SmolVLA training, an evaluation shortcut that failed, and more room for careful measurement.",
+            },},{id: "research-consider-performance-for-better-science",
+          title: 'Consider Performance for Better Science',
+          description: "thoughts on emergent behavior in science.",
           section: "Research",handler: () => {
               window.location.href = "/research/making-my-robot-learning-loop-faster-2026-09-27/";
             },},{
