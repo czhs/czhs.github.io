@@ -1,22 +1,25 @@
 ---
 layout: research_public
-title: Making my robot learning loop faster
+title: Speeding up the SO-101 experiment loop
 date: 2026-09-27 18:00:00-0400
-description: Profiling a SmolVLA pipeline, finding its real bottleneck, and keeping the speedups that survived an accuracy check.
+description: Faster SmolVLA training, an evaluation shortcut that failed, and more room for careful measurement.
 related_posts: false
-authorship_note: Optimizations by a performance agent; post drafted with Codex from its report.
 ---
 
-I wanted to learn more about optimization, partly after reading [Daphne Cornelisse's post about making an electric-fish simulation fast](https://daphnecornelisse.substack.com/p/training-artificial-electric-fish). I had a smaller problem close at hand: my SO-101 simulation pipeline generates robot demonstrations, fine-tunes SmolVLA to pick up a red cube, and evaluates the policy in closed loop. I asked a performance agent to find out where the time went and which shortcuts preserved the experiment.
+A 50,000-step SmolVLA run on my simulated SO-101 pick-and-place task used to take about 2.3 hours to train, plus checkpoint evaluations. With a new pipeline, two full runs took **49.8 and 52 minutes**, evaluations included. After reading [Daphne Cornelisse's electric-fish optimization post](https://daphnecornelisse.substack.com/p/training-artificial-electric-fish), I had a performance agent profile this loop and find out which parts could be made faster.
 
-The training profile ruled out a plausible suspect. The dataset is stored as AV1, and every batch reads frames, so video decoding might have been expensive. Instead, the data loader occupied less than 0.2% of a step on the RTX 4090. The expensive part was the *frozen* image encoder and connector: about 80 of the original 151 milliseconds per step. Over a 50,000-step run, the same 110,479 frames passed through that frozen computation roughly 14 times.
+## The bottleneck wasn't video
 
-That changed the question from “how do I load images faster?” to “why compute the same image features again?” The agent cached the features once, then worked through the remaining step: it removed language-padding tokens from a no-gradient prefix, limited the gradient pass to the state and action tokens, used fused AdamW, and compiled the two passes. The cache took 6.7 minutes to build on the 4090 and occupies 13.6 GB, so it is a time-for-storage trade. Caching the entire transformer prefix looked like a further step, but would have needed about 174 GB to save at most another 7 milliseconds per training step.
+The demonstrations are stored as AV1 video, so decoding seemed like a reasonable place to look. The profiler disagreed: waiting for data took less than 0.2% of a training step on the RTX 4090. Nearly half the step was spent running the frozen image encoder and connector. Over 50,000 steps, the model recomputed features for the same 110,479 frames about 14 times.
 
-On an idle 4090 with batches preloaded, the training step went from **6.6 to 38.1 steps per second**. That 5.8× figure is a step benchmark, not the speed of a whole experiment. In full runs, the new trainer reached about **27–29 steps per second** when it had the GPU to itself. Two 50,000-step runs, with checkpoint evaluations and some GPU sharing, finished in **49.8 and 52.0 minutes**. The older training run took about 2.3 hours, plus its evaluations.
+The fix was to cache those features once. The cache takes 6.7 minutes to build and uses 13.6 GB. The agent then removed unused language-padding tokens from the no-gradient prefix, restricted the gradient pass to the state and action tokens, switched to fused AdamW, and compiled both passes. On an idle 4090 with batches already loaded, the step went from **6.6 to 38.1 steps/s**. End-to-end training throughput was lower, around 27–29 steps/s. The two full runs above used different camera setups and shared the GPU for part of their runtime, so they aren't matched end-to-end benchmarks.
 
-The other stages produced a more interesting lesson than “faster is better.” During demonstration generation, the expert does not look at the camera images. Rendering at the 50 Hz control rate meant discarding four out of five frames; rendering only the recorded frames and streaming them to the video encoder made a short parallel benchmark **1.8× faster**, with identical dataset files. Those changes are still a prototype rather than part of the dataset builder.
+There were smaller wins elsewhere. The demonstration generator was rendering camera frames at 50 Hz even though it only recorded them at 10 Hz. Rendering only the recorded frames and streaming them to the encoder made a short parallel benchmark **1.8× faster**, with identical output files. That change is still a prototype, not yet in the dataset builder.
 
-Evaluation had a tempting shortcut: run ten simulated robots together so the policy can process their observations in a batch. On 30 quick episodes, success was 16/30 both ways, and the batched version was about 4.5× faster. On the larger set of 100 paired seeds, though, the batched version succeeded **64 times versus 75** for the original evaluator, losing 16 episodes and gaining five. Small numerical changes in batched inference changed individual trajectories. The agent kept the exact evaluation changes—render only frames the policy reads and skip the unused wrist camera—but set the standard evaluator back to one environment at a time. That path reproduced all 30 tested trajectories and gave a more modest **1.25×** speedup on the loaded RTX 3060.
+## The shortcut that failed
 
-I like that the fastest evaluation configuration didn't become the default. The training changes passed numerical checks against the original step and a 2,000-step same-seed loss-curve comparison; the ten-environment evaluator failed its larger outcome comparison. A faster loop matters because it lets me test more ideas, but only if I can still tell whether a changed result came from the idea or from the loop itself.
+Evaluation looked like an easy place to go faster: batch ten simulated robots into each policy call. In a 30-episode test, one batched version went from 2.42 to 0.98 seconds per episode, with success at 16/30 in both versions. Synchronizing the batch brought it down to 0.54 seconds, but success fell to 14/30. Then the agent tried 100 paired seeds: the batched evaluator succeeded on **64**, while the original succeeded on **75**. Small changes in batched numerical computation were enough to flip trajectories, and the losses were not balanced by gains.
+
+So the default evaluator still runs one environment at a time. It skips camera renders the policy never reads, which reproduced all 30 tested trajectories and was about **1.25× faster** on the loaded RTX 3060. The more dramatic batching number isn't a usable speedup for the comparisons I care about.
+
+The time saved on training goes into more evaluation rollouts: hundreds per condition instead of a few dozen. This has brought the confidence interval on success rate from roughly **±15 percentage points down to about ±5**.
