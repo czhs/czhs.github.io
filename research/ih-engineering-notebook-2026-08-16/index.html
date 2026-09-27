@@ -732,6 +732,74 @@
     color: var(--rz-text);
   }
 
+  /* Shared invitation and author card; kept outside the encrypted article. */
+  .research-author {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--rz-ink);
+  }
+
+  .research-author[hidden] {
+    display: none;
+  }
+
+  body.zine .container[role='main'] .research-author p {
+    font-family: var(--rz-sans);
+    color: var(--rz-text);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  body.zine .container[role='main'] .research-author a {
+    color: var(--rz-text);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  .research-author a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .research-author a:focus-visible {
+    outline: 2px solid var(--rz-ink);
+    outline-offset: 3px;
+  }
+
+  .research-author-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 1.25rem;
+    padding: 1rem;
+    border: 2px solid var(--rz-ink);
+  }
+
+  .research-author-card img {
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .research-author-card > div {
+    min-width: 0;
+  }
+
+  .research-author-name {
+    display: inline-block;
+    margin-bottom: 0.3rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 420px) {
+    .research-author-card {
+      flex-direction: column;
+    }
+  }
+
   /* ── masthead ──────────────────────────────────────────────── */
   .rzine-card .post-header {
     margin: 0 0 2.5rem;
@@ -1520,11 +1588,10 @@
       }
 
       if (target !== null) {
-        var reduce = window.matchMedia &&
-                     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         window.scrollTo({
           top: Math.max(0, target),
-          behavior: reduce ? 'auto' : 'smooth'
+          behavior: reduce ? 'auto' : 'smooth',
         });
       }
 
@@ -1565,7 +1632,10 @@
         var def = id && root.querySelector('#' + CSS.escape(id));
         if (!def) return;
 
-        ref.addEventListener('click', function (e) { e.preventDefault(); reveal(def); });
+        ref.addEventListener('click', function (e) {
+          e.preventDefault();
+          reveal(def);
+        });
         if (!drawable) return;
 
         var rb = ref.getBoundingClientRect();
@@ -1575,8 +1645,7 @@
         var y1 = db.top - fieldBox.top + db.height / 2;
         // bow further out the longer the jump, but never past the field edge
         var bow = Math.min(margin - 14, 28 + Math.abs(y1 - y0) * 0.16);
-        var d = 'M ' + x + ' ' + y0 +
-                ' C ' + (x - bow) + ' ' + y0 + ', ' + (x - bow) + ' ' + y1 + ', ' + x + ' ' + y1;
+        var d = 'M ' + x + ' ' + y0 + ' C ' + (x - bow) + ' ' + y0 + ', ' + (x - bow) + ' ' + y1 + ', ' + x + ' ' + y1;
 
         var g = document.createElementNS(SVGNS, 'g');
 
@@ -1610,11 +1679,10 @@
         // near the line — it arrives travelling in the arc's own direction.
         var pEnd = line.getPointAtLength(len);
         var pPrev = line.getPointAtLength(Math.max(0, len - 3));
-        var angle = Math.atan2(pEnd.y - pPrev.y, pEnd.x - pPrev.x) * 180 / Math.PI;
+        var angle = (Math.atan2(pEnd.y - pPrev.y, pEnd.x - pPrev.x) * 180) / Math.PI;
 
         var headWrap = document.createElementNS(SVGNS, 'g');
-        headWrap.setAttribute('transform',
-          'translate(' + pEnd.x + ',' + pEnd.y + ') rotate(' + angle + ')');
+        headWrap.setAttribute('transform', 'translate(' + pEnd.x + ',' + pEnd.y + ') rotate(' + angle + ')');
         var head = document.createElementNS(SVGNS, 'path');
         head.setAttribute('class', 'arc-head');
         // drawn pointing along +x; the wrapper rotates it onto the tangent
@@ -1622,8 +1690,12 @@
         headWrap.appendChild(head);
         g.appendChild(headWrap);
 
-        function on() { g.classList.add('is-on'); }
-        function off() { g.classList.remove('is-on'); }
+        function on() {
+          g.classList.add('is-on');
+        }
+        function off() {
+          g.classList.remove('is-on');
+        }
 
         ref.addEventListener('mouseenter', on);
         ref.addEventListener('mouseleave', off);
@@ -1631,7 +1703,10 @@
         ref.addEventListener('blur', off);
         hit.addEventListener('mouseenter', on);
         hit.addEventListener('mouseleave', off);
-        hit.addEventListener('click', function (e) { e.preventDefault(); reveal(def); });
+        hit.addEventListener('click', function (e) {
+          e.preventDefault();
+          reveal(def);
+        });
       });
     }
 
@@ -1656,7 +1731,7 @@
       t = setTimeout(init, 150);
     });
   })();
-</script> <div class="rzine"> <div class="rzine-card"> <header class="post-header"> <h1 class="post-title">Engineering Notebook Entry</h1> <p class="post-desc">working with a toy model</p> <p class="post-meta">August 16, 2026</p> </header> <section class="rlock" id="rlock"> <form class="rzine-gate" id="rlock-gate" autocomplete="off"> <p class="rzine-lock">locked entry</p> <div class="rzine-row"> <input class="rzine-input" id="rlock-pw" type="password" name="rlock-pw" placeholder="password" aria-label="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"> <button class="rzine-btn" type="submit">open</button> </div> <p class="rzine-msg" id="rlock-msg" role="status" aria-live="polite"></p> </form> <article class="post-content rzine-content" id="rlock-content" hidden></article> </section> </div> <div class="zine-foot rzine-foot"> <span>© 2026 Chris Shi</span> <span><a href="/research/">research index</a></span> <span class="zf-spacer"><a href="/">chrisshi.com</a></span> </div> </div> <script>
+</script> <div class="rzine"> <div class="rzine-card"> <header class="post-header"> <h1 class="post-title">Engineering Notebook Entry</h1> <p class="post-desc">working with a toy model</p> <p class="post-meta">August 16, 2026</p> </header> <section class="rlock" id="rlock"> <form class="rzine-gate" id="rlock-gate" autocomplete="off"> <p class="rzine-lock">locked entry</p> <div class="rzine-row"> <input class="rzine-input" id="rlock-pw" type="password" name="rlock-pw" placeholder="password" aria-label="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"> <button class="rzine-btn" type="submit">open</button> </div> <p class="rzine-msg" id="rlock-msg" role="status" aria-live="polite"></p> </form> <article class="post-content rzine-content" id="rlock-content" hidden></article> </section> <footer class="research-author" id="research-author" hidden aria-label="About the author and more research"> <p class="research-author-invitation"> If you’re working on related questions, I’d love to hear about it. <a href="mailto:chrisshi@andrew.cmu.edu">Get in touch</a>, or <a href="/research/">read more of my research</a>. </p> <div class="research-author-card"> <img src="/assets/img/chris_shi.png" alt="" width="64" height="64" loading="lazy"> <div> <a class="research-author-name" href="/">Chris Shi</a> <p> I’m an undergraduate studying electrical and computer engineering and mathematics at CMU. I work on mechanistic interpretability and robot learning. </p> </div> </div> </footer> </div> <div class="zine-foot rzine-foot"> <span>© 2026 Chris Shi</span> <span><a href="/research/">research index</a></span> <span class="zf-spacer"><a href="/">chrisshi.com</a></span> </div> </div> <script>
   (function () {
     var PAYLOAD_URL = "/assets/enc/research-ih-engineering-notebook-2026-08-16.json";
     var STORE_KEY = "research_pw";
@@ -1667,15 +1742,22 @@
     var content = document.getElementById("rlock-content");
 
     function b64(s) {
-      return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); });
+      return Uint8Array.from(atob(s), function (c) {
+        return c.charCodeAt(0);
+      });
     }
 
     var payload = null;
     function getPayload() {
       if (payload) return Promise.resolve(payload);
       return fetch(PAYLOAD_URL)
-        .then(function (r) { return r.json(); })
-        .then(function (p) { payload = p; return p; });
+        .then(function (r) {
+          return r.json();
+        })
+        .then(function (p) {
+          payload = p;
+          return p;
+        });
     }
 
     function decrypt(password) {
@@ -1695,7 +1777,9 @@
           .then(function (key) {
             return subtle.decrypt({ name: "AES-GCM", iv: b64(p.iv) }, key, b64(p.ct));
           })
-          .then(function (buf) { return JSON.parse(new TextDecoder().decode(buf)); });
+          .then(function (buf) {
+            return JSON.parse(new TextDecoder().decode(buf));
+          });
       });
     }
 
@@ -1714,8 +1798,11 @@
         });
         gate.hidden = true;
         content.hidden = false;
+        document.getElementById("research-author").hidden = false;
         if (remember) {
-          try { sessionStorage.setItem(STORE_KEY, password); } catch (e) {}
+          try {
+            sessionStorage.setItem(STORE_KEY, password);
+          } catch (e) {}
         }
       });
     }
