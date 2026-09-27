@@ -296,6 +296,11 @@ ninja.data = [{
           description: "A research note in mechanistic interpretability.",
           section: "Research",handler: () => {
               window.location.href = "/research/flow-policy-arithmetic/";
+            },},{id: "research-making-my-robot-learning-loop-faster",
+          title: 'Making my robot learning loop faster',
+          description: "Profiling a SmolVLA pipeline, finding its real bottleneck, and keeping the speedups that survived an accuracy check.",
+          section: "Research",handler: () => {
+              window.location.href = "/research/making-my-robot-learning-loop-faster-2026-09-27/";
             },},{
         id: 'social-github',
         title: 'GitHub',
