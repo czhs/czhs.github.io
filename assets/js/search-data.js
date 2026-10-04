@@ -301,6 +301,11 @@ ninja.data = [{
           description: "thoughts on emergent behavior in science.",
           section: "Research",handler: () => {
               window.location.href = "/research/making-my-robot-learning-loop-faster-2026-09-27/";
+            },},{id: "research-toy-smol-vla",
+          title: 'toy-smol-vla',
+          description: "",
+          section: "Research",handler: () => {
+              window.location.href = "/research/toy-smol-vla/";
             },},{
         id: 'social-github',
         title: 'GitHub',
