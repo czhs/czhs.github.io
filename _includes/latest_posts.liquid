@@ -4,7 +4,8 @@
   rendered a heading above an empty table. Both conditions are checked now.
 {%- endcomment -%}
 {% assign public_research_posts = site.research | where: 'layout', 'research_public' %}
-{% assign latest_posts = site.posts | concat: public_research_posts | sort: 'date' | reverse %}
+{% assign streamed_research_posts = site.research | where: 'stream', true %}
+{% assign latest_posts = site.posts | concat: public_research_posts | concat: streamed_research_posts | sort: 'date' | reverse %}
 {% assign latest_posts_size = latest_posts | size %}
 <div class="news">
   {% if page.latest_posts != blank and latest_posts_size > 0 %}

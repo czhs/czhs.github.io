@@ -65,6 +65,30 @@ def inline(m):
 
 body = re.sub(r'<img[^>]+src="([^"]+)"', inline, body)
 
+# Videos (src + poster) and self-contained iframe pages are inlined too, so an entry with
+# animations needs no plaintext media in the public repo. Only local files are touched.
+MIME.update({"mp4": "video/mp4", "webm": "video/webm", "html": "text/html"})
+
+
+def inline_attr(tag_re, attr):
+    def sub_tag(tm):
+        tag = tm.group(0)
+        am = re.search(rf'\b{attr}="(/[^"]+)"', tag)
+        if not am:
+            return tag
+        path = f"{site}/_site{am.group(1)}"
+        if not os.path.isfile(path):
+            return tag
+        b64 = base64.b64encode(open(path, "rb").read()).decode()
+        mime = MIME.get(am.group(1).rsplit(".", 1)[-1].lower(), "application/octet-stream")
+        return tag.replace(am.group(0), f'{attr}="data:{mime};base64,{b64}"')
+    return sub_tag
+
+
+for tag_re, attr in ((r"<video\b[^>]*>", "src"), (r"<video\b[^>]*>", "poster"),
+                     (r"<source\b[^>]*>", "src"), (r"<iframe\b[^>]*>", "src")):
+    body = re.sub(tag_re, inline_attr(tag_re, attr), body)
+
 iters = 300000
 salt, iv = os.urandom(16), os.urandom(12)
 key = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=iters).derive(
