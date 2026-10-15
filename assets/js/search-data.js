@@ -155,6 +155,11 @@ ninja.data = [{
           description: "",
           section: "Books",handler: () => {
               window.location.href = "/books/2026/the_billion_dollar_molecule/";
+            },},{id: "books-the-making-of-the-atomic-bomb",
+          title: 'The Making of the Atomic Bomb',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/2026/the_making_of_the_atomic_bomb/";
             },},{id: "books-the-peace-war",
           title: 'The Peace War',
           description: "",
