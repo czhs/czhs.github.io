@@ -546,42 +546,6 @@
     color: var(--rz-ink);
   }
 
-  body.zine .home-link-substack {
-    border-left-color: #ff6719;
-  }
-
-  body.zine .home-link-substack:hover {
-    border-color: var(--rz-ink);
-    border-left-color: #ff6719;
-    color: var(--rz-ink);
-  }
-
-  /* The two club rows (markup in _pages/about.md, marks in about.liquid)
-     take the zine's box like every other pill — ivory card, ink text, ink
-     border. The club shows only in its spine colour here and in its mark and
-     wordmark art, painted in the club's own ink over in about.liquid. Same
-     device as the Substack pill's orange spine; hexes are copied literals
-     from the micro-sites; keep in sync. */
-  body.zine .home-club-mln {
-    border-left-color: #d8c4a0;
-  }
-
-  body.zine .home-club-mln:hover {
-    border-color: var(--rz-ink);
-    border-left-color: #d8c4a0;
-    color: var(--rz-ink);
-  }
-
-  body.zine .home-club-rw {
-    border-left-color: #3e6fb4;
-  }
-
-  body.zine .home-club-rw:hover {
-    border-color: var(--rz-ink);
-    border-left-color: #3e6fb4;
-    color: var(--rz-ink);
-  }
-
   /* al-folio's tag/category pills */
   body.zine .badge,
   body.zine .tag,
@@ -846,12 +810,17 @@
     }
     })();
   </script> <style>
-  /* Clocktower Town: one line that wears the game's own pixel art. The strip is a
-     mirrored crop of the landing hero (so the tower stands right of the name);
-     the emblem and lantern sprite are the landing's own files; the name is set
-     in the game's display face (IM Fell English, OFL). Sources live in the
-     clocktower repo's apps/client/public/landing; keep in sync. Shared by the
-     about and garden layouts; the selectors outrank both skins' .home-link. */
+  /* Homepage link banners: each row is one line that wears its destination's
+     own artwork. Shared by the about and garden layouts; the selectors outrank
+     both skins' .home-link. Sources:
+     - Clocktower: emblem, lantern sprite and a mirrored crop of the landing hero
+       from the clocktower repo's apps/client/public/landing; name in the
+       game's display face (IM Fell English, OFL).
+     - ringworld: crop of assets/img/ringworld/banner.png, its mark, wordmark
+       and astronaut sprite.
+     - MLn: the eight-dot mark and wordmark; the field is the og card's wash.
+     - Substack: a band of Berthe Morisot, Woman at Her Toilette (the blog
+       page's header painting, assets/img/prof_pic.jpg). */
   @font-face {
     font-family: "Clocktower Fell";
     font-style: normal;
@@ -859,21 +828,45 @@
     font-display: swap;
     src: url("/assets/fonts/im-fell-english-latin-400-normal.woff2") format("woff2");
   }
-  body .home-links .home-link.home-link-clocktower {
+  body .home-links .home-link.home-art {
     position: relative;
     display: flex;
-    border: 0;
-    border-radius: 0;
-    font-family: var(--rz-sans, inherit);
-    font-weight: 400;
-    line-height: 1;
-    transform: none;
     align-items: center;
     gap: 8px;
     height: 40px;
     padding: 0 10px 0 6px;
     overflow: hidden;
     white-space: nowrap;
+    border: 0;
+    border-radius: 0;
+    font-family: var(--rz-sans, inherit);
+    font-weight: 400;
+    line-height: 1;
+    text-decoration: none;
+    transform: none;
+    transition:
+      background-position 1.2s ease,
+      box-shadow 0.2s ease;
+  }
+  body .home-links .home-art .home-link-arrow {
+    margin-left: auto;
+    font-size: 13px;
+    transition: transform 0.15s ease;
+  }
+  .home-art:hover .home-link-arrow {
+    transform: translateX(2px);
+  }
+  .home-art .ha-ico {
+    flex: 0 0 auto;
+    display: block;
+  }
+  .home-art .ha-wordmark {
+    flex: 0 0 auto;
+    display: block;
+  }
+
+  /* ── Clocktower Town ── */
+  body .home-links .home-link.home-art-ct {
     background:
       linear-gradient(90deg, rgba(15, 13, 20, 0.88) 0%, rgba(15, 13, 20, 0.55) 55%, rgba(15, 13, 20, 0.25) 100%),
       url("/assets/img/clocktower/banner.jpg") right -4px top 39% / max(440px, calc(100% + 8px)) auto no-repeat;
@@ -881,26 +874,21 @@
       0 0 0 2px #0f0d14,
       inset 0 0 0 1px rgba(226, 177, 74, 0.45);
     color: #f3cf7a;
-    text-decoration: none;
-    transition:
-      background-position 1.2s ease,
-      box-shadow 0.2s ease;
   }
-  body .home-links .home-link.home-link-clocktower:hover {
+  body .home-links .home-link.home-art-ct:hover {
     background-position: 0 0, right 0 top 46%;
     box-shadow:
       0 0 0 2px #0f0d14,
       inset 0 0 0 1px rgba(243, 207, 122, 0.9),
       0 0 14px rgba(232, 160, 60, 0.35);
   }
-  .home-link-clocktower .ct-emblem {
-    flex: 0 0 auto;
+  .home-art-ct .ct-emblem {
     width: 30px;
     height: 30px;
     image-rendering: pixelated;
     filter: drop-shadow(0 1px 0 #0f0d14);
   }
-  .home-link-clocktower .ct-name {
+  .home-art-ct .ct-name {
     flex: 0 0 auto;
     font-family: "Clocktower Fell", "Iowan Old Style", Georgia, serif;
     font-size: 18px;
@@ -912,7 +900,7 @@
       0 0 8px rgba(232, 160, 60, 0.45);
   }
   /* the landing's six-frame wall lantern, one frame per step */
-  .home-link-clocktower .ct-lantern {
+  .home-art-ct .ct-lantern {
     flex: 0 0 auto;
     width: 12px;
     height: 24px;
@@ -926,20 +914,171 @@
       background-position: -72px 0;
     }
   }
-  body .home-links .home-link-clocktower .home-link-arrow {
+  body .home-links .home-art-ct .home-link-arrow {
     margin-left: 0;
     color: #f3cf7a;
-    font-size: 13px;
-    transition: transform 0.15s ease;
   }
-  .home-link-clocktower:hover .home-link-arrow {
-    transform: translateX(2px);
+
+  /* ── ringworld ── */
+  /* the whole ring at row height, on its own paper */
+  body .home-links .home-link.home-art-rw {
+    padding-left: 10px;
+    background:
+      url("/assets/img/home-links/ringworld-strip.jpg") right 44px center / auto 40px no-repeat,
+      #fcf8ef;
+    box-shadow:
+      0 0 0 2px #3e6fb4,
+      inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+    color: #3e6fb4;
   }
+  body .home-links .home-link.home-art-rw:hover {
+    background-position: right 50px center, 0 0;
+    box-shadow:
+      0 0 0 2px #3e6fb4,
+      inset 0 0 0 1px rgba(255, 255, 255, 0.7),
+      0 0 14px rgba(62, 111, 180, 0.3);
+  }
+  /* the script wordmark's source art is 4:1; keep the box that ratio */
+  .home-art-rw .ha-wordmark {
+    width: 84px;
+    height: 21px;
+    background: #3e6fb4;
+    -webkit-mask: url("/assets/img/ringworld/wordmark.png") left center / contain no-repeat;
+    mask: url("/assets/img/ringworld/wordmark.png") left center / contain no-repeat;
+  }
+  .home-art-rw .rw-astronaut {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 22px;
+    margin-left: auto;
+    animation: rw-drift 4.2s ease-in-out infinite;
+  }
+  @keyframes rw-drift {
+    0%,
+    100% {
+      transform: translateY(2px) rotate(-6deg);
+    }
+    50% {
+      transform: translateY(-3px) rotate(5deg);
+    }
+  }
+  body .home-links .home-art-rw .home-link-arrow {
+    margin-left: 0;
+    color: #3e6fb4;
+  }
+  @media (max-width: 400px) {
+    body .home-links .home-link.home-art-rw,
+    body .home-links .home-link.home-art-rw:hover {
+      background-position: right 24px center, 0 0;
+      background-size: auto 34px, auto;
+    }
+    .home-art-rw .rw-astronaut {
+      display: none;
+    }
+    body .home-links .home-art-rw .home-link-arrow {
+      margin-left: auto;
+    }
+  }
+
+  /* ── MLn ── */
+  body .home-links .home-link.home-art-mln {
+    background:
+      radial-gradient(120% 140% at 0% 0%, rgba(196, 232, 210, 0.95) 0%, rgba(196, 232, 210, 0) 55%),
+      radial-gradient(90% 160% at 100% 100%, rgba(232, 224, 236, 0.9) 0%, rgba(232, 224, 236, 0) 60%),
+      #f4efe4;
+    box-shadow:
+      0 0 0 2px #1b1813,
+      inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+    color: #1b1813;
+  }
+  body .home-links .home-link.home-art-mln:hover {
+    box-shadow:
+      0 0 0 2px #1b1813,
+      inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+      0 0 14px rgba(26, 154, 108, 0.3);
+  }
+  .home-art-mln .mln-mark {
+    width: 26px;
+    height: 26px;
+  }
+  /* mln_wordmark_small is the alpha-dilated cut; keep the box's ~2.6:1 ratio */
+  .home-art-mln .ha-wordmark {
+    width: 55px;
+    height: 21px;
+    background: #1b1813;
+    -webkit-mask: url("/assets/img/mln_wordmark_small.png") left center / contain no-repeat;
+    mask: url("/assets/img/mln_wordmark_small.png") left center / contain no-repeat;
+  }
+  /* the same mark, large, its top arc rising through the row; a hover turns
+     it one seat on */
+  .home-art-mln .mln-orbit {
+    position: absolute;
+    top: -12px;
+    right: 14px;
+    width: 140px;
+    height: 140px;
+    opacity: 0.85;
+    pointer-events: none;
+  }
+  .home-art-mln .mln-orbit g {
+    transform-origin: 50px 50px;
+    transition: transform 0.9s cubic-bezier(0.5, 0, 0.2, 1);
+  }
+  .home-art-mln:hover .mln-orbit g {
+    transform: rotate(45deg);
+  }
+  body .home-links .home-art-mln .home-link-arrow {
+    position: relative;
+    color: #1b1813;
+  }
+
+  /* ── Substack: ultrastructure ── */
+  /* the whole band at row height, eased in from the paper on its left */
+  body .home-links .home-link.home-art-substack {
+    background:
+      linear-gradient(90deg, #efe9df calc(100% - 270px), rgba(239, 233, 223, 0) calc(100% - 180px)),
+      url("/assets/img/home-links/morisot-strip.jpg") right 0 center / auto 40px no-repeat,
+      #efe9df;
+    box-shadow:
+      0 0 0 2px #cfc6ba,
+      inset 3px 0 0 #ff6719;
+    color: #2e2a33;
+  }
+  body .home-links .home-link.home-art-substack:hover {
+    box-shadow:
+      0 0 0 2px #ff6719,
+      inset 3px 0 0 #ff6719,
+      0 0 14px rgba(255, 103, 25, 0.25);
+  }
+  .home-art-substack .ss-ico {
+    width: 15px;
+    height: 15px;
+    margin-left: 6px;
+    fill: #ff6719;
+  }
+  .home-art-substack .ss-name {
+    flex: 0 0 auto;
+    font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    font-size: 19px;
+    font-style: italic;
+    letter-spacing: -0.01em;
+    color: #2e2a33;
+    text-shadow: 0 0 6px rgba(239, 233, 223, 0.95);
+  }
+  body .home-links .home-art-substack .home-link-arrow {
+    color: #ff6719;
+    text-shadow:
+      0 0 3px #fff,
+      0 0 6px #fff;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .home-link-clocktower .ct-lantern {
+    .home-art-ct .ct-lantern,
+    .home-art-rw .rw-astronaut {
       animation: none;
     }
-    body .home-links .home-link.home-link-clocktower {
+    body .home-links .home-link.home-art,
+    .home-art-mln .mln-orbit g {
       transition: none;
     }
   }
@@ -980,58 +1119,6 @@
     transition: transform 0.15s ease;
   }
   .home-link:hover .home-link-arrow { transform: translateX(2px); }
-  .home-link-substack { border-left-color: #ff6719; }
-  .home-link-substack:hover { border-color: #ff6719; color: #ff6719; }
-
-  /* The two club pills wear the palettes and hand-lettered marks of the
-     micro-sites they go to — same rule as the sibling pills on /mln/ and
-     /ringworld/. Hexes are copied literals (the micro-sites' vars don't reach
-     this page); keep in sync with mln_styles / ringworld_styles. The wordmarks
-     are artwork as alpha masks, so each link's accessible name lives in its
-     aria-label. al-folio's main.css sets a colour on bare `span`, which beats
-     inheritance — hence the explicit colours on every piece. */
-  .home-link.home-club { gap: 0.5rem; border-width: 1px; }
-  .home-club .home-link-arrow,
-  .home-club .home-club-text { color: inherit; }
-  .home-club-ico,
-  .home-club-ring {
-    display: block;
-    width: 24px;
-    height: 16px;
-    flex: 0 0 auto;
-  }
-  .home-club-wordmark { display: block; flex: 0 0 auto; }
-
-  /* The rows all take the page's own box (the zine reskins it in
-     zine_styles.liquid — body.zine .home-link outranks these); the clubs are
-     identified only by their marks and wordmarks, painted in each club's own
-     ink, and by the spine colour the zine file adds. Hexes are copied
-     literals from mln_styles / ringworld_styles; keep in sync. */
-  .home-club-mln .home-club-ico {
-    background: #1f3329;
-    -webkit-mask: url("/assets/img/mln_mark.png") center / contain no-repeat;
-    mask: url("/assets/img/mln_mark.png") center / contain no-repeat;
-  }
-  /* mln_wordmark_small is the alpha-dilated cut — the plain wordmark's Didone
-     hairline vanishes at this size. Keep the box's ~2.6:1 ratio. */
-  .home-club-mln .home-club-wordmark {
-    width: 42px;
-    height: 16px;
-    background: #1f3329;
-    -webkit-mask: url("/assets/img/mln_wordmark_small.png") left center / contain no-repeat;
-    mask: url("/assets/img/mln_wordmark_small.png") left center / contain no-repeat;
-  }
-
-  /* the ring is full-colour crayon art, so it stays an <img>, not a mask */
-  .home-club-ring { object-fit: contain; border-radius: 0; }
-  /* the script wordmark's source art is 4:1; keep the box that ratio */
-  .home-club-rw .home-club-wordmark {
-    width: 64px;
-    height: 16px;
-    background: #3e6fb4;
-    -webkit-mask: url("/assets/img/ringworld/wordmark.png") left center / contain no-repeat;
-    mask: url("/assets/img/ringworld/wordmark.png") left center / contain no-repeat;
-  }
 
   .home-banner-restore-wrap { margin: 2.5rem 0 0; text-align: center; }
   .home-banner-restore[hidden] { display: none; }
@@ -1053,7 +1140,7 @@
   .profile .profile-social .contact-icons { font-size: 1.7rem; }
   .profile .profile-social .contact-icons a img,
   .profile .profile-social .contact-icons a svg { margin-bottom: 0; }
-</style> <div class="post"> <header class="post-header"> <h1 class="post-title"> Chris Shi </h1> <p class="desc">Math and computer engineering at Carnegie Mellon University.</p> </header> <article> <div class="profile float-right"> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/chris_shi-480.webp 480w,/assets/img/chris_shi-800.webp 800w,/assets/img/chris_shi-1400.webp 1400w," type="image/webp" sizes="(min-width: 930px) 270.0px, (min-width: 576px) 30vw, 95vw"> <img src="/assets/img/chris_shi.png?16f63c0bd62ffd149d311c0727033349" class="img-fluid z-depth-1 rounded" width="100%" height="auto" alt="chris_shi.png" loading="eager" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </source></picture> </figure> <div class="social profile-social"> <div class="contact-icons"> <a href="https://github.com/czhs" title="GitHub" rel="external nofollow noopener" target="_blank"><i class="fa-brands fa-github"></i></a> <a href="https://www.linkedin.com/in/chris-h-shi" title="LinkedIn" rel="external nofollow noopener" target="_blank"><i class="fa-brands fa-linkedin"></i></a> <a href="https://orcid.org/0009-0002-4153-698X" title="ORCID" rel="external nofollow noopener" target="_blank"><i class="ai ai-orcid"></i></a> <a href="https://openreview.net/profile?id=~Chris_Shi1" title="OpenReview" rel="external nofollow noopener" target="_blank"> <img src="/assets/img/openreview.png" alt="OpenReview"> </a> </div> </div> </div> <div class="clearfix"> <p>Hi, I’m Chris Shi (also known as Hongyi Shi), an undergraduate studying math and computer engineering at Carnegie Mellon University (CMU).</p> <p>This is a personal blog. I’m interested in infrastructure, biodefense, interpretability, automation.</p> <p>I’m fascinated by the hardware of thinking. I’m currently researching mechanistic interpretability for in-context learning and pretraining. I’m also interested in optimal transport and high dimensional probability. For fun, I work on animating robots (<a href="https://thewaltdisneycompany.com/news/behind-the-bdx-droids/" target="_blank" rel="noopener">like these</a>).</p> <p>Reach me at chrisshi [at] andrew [dot] cmu [dot] edu.</p> <div class="home-links"> <a class="home-link home-club home-club-rw" href="/ringworld/" aria-label="ringworld — a Sunday maker space in Pittsburgh"><img class="home-club-ring" src="/assets/img/ringworld/mark.png" alt="" aria-hidden="true" width="480" height="263"><span class="home-club-wordmark" aria-hidden="true"></span><span class="home-club-text">— a Sunday maker space in Pittsburgh</span> <span class="home-link-arrow">→</span></a> <a class="home-link home-link-clocktower" href="https://clocktower.chrisshi.com/" target="_blank" rel="noopener" aria-label="Clocktower Town — a gothic pixel-art town for private games of social deduction with friends" title="A gothic pixel-art town for private games of social deduction with friends."><img class="ct-emblem" src="/assets/img/clocktower/emblem.png" alt="" aria-hidden="true" width="64" height="64"><span class="ct-name" aria-hidden="true">Clocktower Town</span><span class="ct-lantern" aria-hidden="true"></span><span class="home-link-arrow" aria-hidden="true">→</span></a> <a class="home-link home-club home-club-mln" href="https://mlnclub.github.io/" aria-label="MLn Reading Club — weekly ML papers in Pittsburgh" rel="external nofollow noopener" target="_blank"><span class="home-club-ico" aria-hidden="true"></span><span class="home-club-wordmark" aria-hidden="true"></span><span class="home-club-text">— weekly ML papers in Pittsburgh</span> <span class="home-link-arrow">→</span></a> <a class="home-link home-link-substack" href="https://ultrastructure.substack.com/" target="_blank" rel="noopener">Read my Substack — ultrastructure <span class="home-link-arrow">→</span></a> </div> <p><a href="https://www.anilada.com/notes/godel-letter.pdf" target="_blank" rel="noopener">Gödel’s letter to von Neumann</a></p> <div style="display: none" aria-hidden="true"><a href="/about/">More about me and my research interests</a></div> </div> <h2>latest posts</h2> <div class="news"> <div class="table-responsive"> <table class="table table-sm table-borderless"> <tr> <th scope="row" style="width: 20%">Oct 17, 2026</th> <td> <a class="news-title" href="https://www.youtube.com/watch?v=Bl_nYOT-vl4" target="_blank" rel="external nofollow noopener">Tracing a Fine-Tuned SmolVLA from Pixels to Action — accepted at the CoRL 2026 Workshop SPAIS</a> <svg width="2rem" height="2rem" viewbox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"> <path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path> </svg> </td> </tr> <tr> <th scope="row" style="width: 20%">Sep 27, 2026</th> <td> <a class="news-title" href="/research/making-my-robot-learning-loop-faster-2026-09-27/">Consider Performance for Better Science</a> </td> </tr> </table> </div> </div> <style>
+</style> <div class="post"> <header class="post-header"> <h1 class="post-title"> Chris Shi </h1> <p class="desc">Math and computer engineering at Carnegie Mellon University.</p> </header> <article> <div class="profile float-right"> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/chris_shi-480.webp 480w,/assets/img/chris_shi-800.webp 800w,/assets/img/chris_shi-1400.webp 1400w," type="image/webp" sizes="(min-width: 930px) 270.0px, (min-width: 576px) 30vw, 95vw"> <img src="/assets/img/chris_shi.png?16f63c0bd62ffd149d311c0727033349" class="img-fluid z-depth-1 rounded" width="100%" height="auto" alt="chris_shi.png" loading="eager" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </source></picture> </figure> <div class="social profile-social"> <div class="contact-icons"> <a href="https://github.com/czhs" title="GitHub" rel="external nofollow noopener" target="_blank"><i class="fa-brands fa-github"></i></a> <a href="https://www.linkedin.com/in/chris-h-shi" title="LinkedIn" rel="external nofollow noopener" target="_blank"><i class="fa-brands fa-linkedin"></i></a> <a href="https://orcid.org/0009-0002-4153-698X" title="ORCID" rel="external nofollow noopener" target="_blank"><i class="ai ai-orcid"></i></a> <a href="https://openreview.net/profile?id=~Chris_Shi1" title="OpenReview" rel="external nofollow noopener" target="_blank"> <img src="/assets/img/openreview.png" alt="OpenReview"> </a> </div> </div> </div> <div class="clearfix"> <p>Hi, I’m Chris Shi (also known as Hongyi Shi), an undergraduate studying math and computer engineering at Carnegie Mellon University (CMU).</p> <p>This is a personal blog. I’m interested in infrastructure, biodefense, interpretability, automation.</p> <p>I’m fascinated by the hardware of thinking. I’m currently researching mechanistic interpretability for in-context learning and pretraining. I’m also interested in optimal transport and high dimensional probability. For fun, I work on animating robots (<a href="https://thewaltdisneycompany.com/news/behind-the-bdx-droids/" target="_blank" rel="noopener">like these</a>).</p> <p>Reach me at chrisshi [at] andrew [dot] cmu [dot] edu.</p> <div class="home-links"> <a class="home-link home-art home-art-rw" href="/ringworld/" aria-label="ringworld — a Sunday maker space in Pittsburgh" title="ringworld — a Sunday maker space in Pittsburgh"><span class="ha-wordmark" aria-hidden="true"></span><img class="rw-astronaut" src="/assets/img/ringworld/sprites/astronaut.png" alt="" aria-hidden="true" width="220" height="190"><span class="home-link-arrow" aria-hidden="true">→</span></a> <a class="home-link home-art home-art-ct" href="https://clocktower.chrisshi.com/" target="_blank" rel="noopener" aria-label="Clocktower Town — a gothic pixel-art town for private games of social deduction with friends" title="A gothic pixel-art town for private games of social deduction with friends."><img class="ha-ico ct-emblem" src="/assets/img/clocktower/emblem.png" alt="" aria-hidden="true" width="64" height="64"><span class="ct-name" aria-hidden="true">Clocktower Town</span><span class="ct-lantern" aria-hidden="true"></span><span class="home-link-arrow" aria-hidden="true">→</span></a> <a class="home-link home-art home-art-mln" href="https://mlnclub.github.io/" aria-label="MLn Reading Club — weekly ML papers in Pittsburgh" title="MLn Reading Club — weekly ML papers in Pittsburgh" rel="external nofollow noopener" target="_blank"><svg class="ha-ico mln-mark" viewbox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="38" fill="none" stroke="#b8b2a5" stroke-width="3"></circle><g fill="#1b1813"><circle cx="50.0" cy="12.0" r="8"></circle><circle cx="76.9" cy="23.1" r="8"></circle><circle cx="88.0" cy="50.0" r="8"></circle><circle cx="76.9" cy="76.9" r="8"></circle><circle cx="50.0" cy="88.0" r="8"></circle><circle cx="23.1" cy="76.9" r="8"></circle><circle cx="12.0" cy="50.0" r="8"></circle><circle cx="23.1" cy="23.1" r="8"></circle></g></svg><span class="ha-wordmark" aria-hidden="true"></span><svg class="mln-orbit" viewbox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="38" fill="none" stroke="#b8b2a5" stroke-width="1.2"></circle><g fill="#1b1813"><circle cx="50.0" cy="12.0" r="4.5"></circle><circle cx="76.9" cy="23.1" r="4.5"></circle><circle cx="88.0" cy="50.0" r="4.5"></circle><circle cx="76.9" cy="76.9" r="4.5"></circle><circle cx="50.0" cy="88.0" r="4.5"></circle><circle cx="23.1" cy="76.9" r="4.5"></circle><circle cx="12.0" cy="50.0" r="4.5"></circle><circle cx="23.1" cy="23.1" r="4.5"></circle></g></svg><span class="home-link-arrow" aria-hidden="true">→</span></a> <a class="home-link home-art home-art-substack" href="https://ultrastructure.substack.com/" target="_blank" rel="noopener" aria-label="Read my Substack — ultrastructure" title="Read my Substack — ultrastructure"><svg class="ha-ico ss-ico" viewbox="0 0 24 24" aria-hidden="true"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"></path></svg><span class="ss-name" aria-hidden="true">ultrastructure</span><span class="home-link-arrow" aria-hidden="true">→</span></a> </div> <p><a href="https://www.anilada.com/notes/godel-letter.pdf" target="_blank" rel="noopener">Gödel’s letter to von Neumann</a></p> <div style="display: none" aria-hidden="true"><a href="/about/">More about me and my research interests</a></div> </div> <h2>latest posts</h2> <div class="news"> <div class="table-responsive"> <table class="table table-sm table-borderless"> <tr> <th scope="row" style="width: 20%">Oct 17, 2026</th> <td> <a class="news-title" href="https://www.youtube.com/watch?v=Bl_nYOT-vl4" target="_blank" rel="external nofollow noopener">Tracing a Fine-Tuned SmolVLA from Pixels to Action — accepted at the CoRL 2026 Workshop SPAIS</a> <svg width="2rem" height="2rem" viewbox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"> <path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path> </svg> </td> </tr> <tr> <th scope="row" style="width: 20%">Sep 27, 2026</th> <td> <a class="news-title" href="/research/making-my-robot-learning-loop-faster-2026-09-27/">Consider Performance for Better Science</a> </td> </tr> </table> </div> </div> <style>
   .news-soon {
     display: inline-block;
     margin: 0.35rem 0 0;
