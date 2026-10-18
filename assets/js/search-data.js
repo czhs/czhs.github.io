@@ -211,7 +211,12 @@ ninja.data = [{
             },},{id: "news-a-simple-inline-announcement-with-markdown-emoji-sparkles-smile",
           title: 'A simple inline announcement with Markdown emoji! :sparkles: :smile:',
           description: "",
-          section: "News",},{id: "projects-project-1",
+          section: "News",},{id: "news-tracing-a-fine-tuned-smolvla-from-pixels-to-action-accepted-at-the-corl-2026-workshop-spais",
+          title: 'Tracing a Fine-Tuned SmolVLA from Pixels to Action — accepted at the CoRL...',
+          description: "",
+          section: "News",handler: () => {
+              window.location.href = "/news/2026-10-17-spais-accept/";
+            },},{id: "projects-project-1",
           title: 'project 1',
           description: "with background image",
           section: "Projects",handler: () => {
@@ -286,18 +291,18 @@ ninja.data = [{
           description: "why the scaling exponents optimizer benchmarks fit measure the experimental design, not the optimizer",
           section: "Research",handler: () => {
               window.location.href = "/research/what-a-size-ladder-can-identify-2026-08-29/";
-            },},{id: "research-english-chinese-instruction-robustness-in-minivla",
-          title: 'English–Chinese instruction robustness in MiniVLA',
+            },},{id: "research-english-chinese-code-switched-instructions-in-a-minivla-policy",
+          title: 'English–Chinese Code-Switched Instructions in a MiniVLA Policy',
           description: "A paired study of verb language, noun language, and sentence frame in robot instructions.",
           section: "Research",handler: () => {
               window.location.href = "/research/english-chinese-minivla/";
-            },},{id: "research-english-harm-probes-across-languages",
-          title: 'English harm probes across languages',
+            },},{id: "research-cross-language-transfer-of-harm-probes-in-vision-language-action-models",
+          title: 'Cross-Language Transfer of Harm Probes in Vision-Language-Action Models',
           description: "A research note on multilingual harm detection.",
           section: "Research",handler: () => {
               window.location.href = "/research/robot-safety-spais-mech-interp/";
-            },},{id: "research-notes-on-arithmetic-inside-a-flow-matching-robot-policy",
-          title: 'Notes on arithmetic inside a flow-matching robot policy',
+            },},{id: "research-a-complete-mechanistic-account-of-single-joint-control-in-smolvla",
+          title: 'A Complete Mechanistic Account of Single-Joint Control in SmolVLA',
           description: "A research note in mechanistic interpretability.",
           section: "Research",handler: () => {
               window.location.href = "/research/flow-policy-arithmetic/";
@@ -306,8 +311,8 @@ ninja.data = [{
           description: "thoughts on emergent behavior in science.",
           section: "Research",handler: () => {
               window.location.href = "/research/making-my-robot-learning-loop-faster-2026-09-27/";
-            },},{id: "research-toy-smol-vla",
-          title: 'toy-smol-vla',
+            },},{id: "research-tracing-a-fine-tuned-smolvla-from-pixels-to-action",
+          title: 'Tracing a Fine-Tuned SmolVLA from Pixels to Action',
           description: "",
           section: "Research",handler: () => {
               window.location.href = "/research/toy-smol-vla/";
