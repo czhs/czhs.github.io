@@ -3,7 +3,7 @@
      Design language (2026-08-26 redesign): the ZINE. The portfolio now wears
      the same skin as the main site — one ivory sheet with a thick ink border
      sitting on the seafoam field, Plus Jakarta Sans for prose and display,
-     JetBrains Mono strictly for machine labelling (numbers, specs, captions,
+     Space Mono strictly for machine labelling (numbers, specs, captions,
      wayfinding). The palette is the zine's default seafoam, fixed: this site
      is handed to people hiring, so it always looks the same. No dark mode —
      one palette per visitor, like the rest of the site.
@@ -26,12 +26,28 @@
     font-display: swap;
     src: url('{{ '/assets/fonts/plus-jakarta-sans-latin-var.woff2' | relative_url }}') format('woff2');
   }
+  /* Space Mono (OFL), 400 + 700 static files; 500 resolves to 400 and 600+ to 700.
+     Its native line box is 1.48em against JetBrains Mono's 1.32em; the overrides pin it
+     to the old metrics so swapping the face moved no layout. */
   @font-face {
-    font-family: 'JetBrains Mono';
+    font-family: 'Space Mono';
     font-style: normal;
-    font-weight: 100 800;
+    font-weight: 400;
     font-display: swap;
-    src: url('{{ '/assets/fonts/jetbrains-mono-latin-var.woff2' | relative_url }}') format('woff2');
+    src: url('{{ '/assets/fonts/space-mono-latin-400-normal.woff2' | relative_url }}') format('woff2');
+    ascent-override: 102%;
+    descent-override: 30%;
+    line-gap-override: 0%;
+  }
+  @font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('{{ '/assets/fonts/space-mono-latin-700-normal.woff2' | relative_url }}') format('woff2');
+    ascent-override: 102%;
+    descent-override: 30%;
+    line-gap-override: 0%;
   }
   @font-face {
     font-family: 'PJS Fallback';
@@ -42,11 +58,13 @@
     line-gap-override: 0%;
   }
   @font-face {
-    font-family: 'JBM Fallback';
+    font-family: 'Mono Fallback';
     src: local('Menlo'), local('Consolas'), local('DejaVu Sans Mono'), local('Courier New');
-    size-adjust: 100%;
-    ascent-override: 102%;
-    descent-override: 30%;
+    /* Space Mono advances 0.612em to Menlo's 0.602em; the overrides are
+       relative to the adjusted em, so 102%/30% are divided by 1.0166 */
+    size-adjust: 101.66%;
+    ascent-override: 100.33%;
+    descent-override: 29.51%;
     line-gap-override: 0%;
   }
 
@@ -61,7 +79,7 @@
     --line: color-mix(in srgb, var(--rbx-ink) 18%, transparent);
     --ink-soft: color-mix(in srgb, var(--rbx-ink) 62%, transparent);
     --rbx-sans: 'Plus Jakarta Sans', 'PJS Fallback', 'Segoe UI', Roboto, sans-serif;
-    --rbx-mono: 'JetBrains Mono', 'JBM Fallback', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --rbx-mono: 'Space Mono', 'Mono Fallback', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     --mono: var(--rbx-mono);
     /* the window: a ring of field (--shm) and an ink frame (--fw) fixed to
        the viewport; everything else scrolls beneath it. --frame is what
