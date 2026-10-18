@@ -1,0 +1,120 @@
+---
+layout: research_public
+title: English–Chinese Code-Switched Instructions in a MiniVLA Policy
+date: 2026-09-24 10:00:00-0400
+description: A paired study of verb language, noun language, and sentence frame in robot instructions.
+related_posts: false
+cover: /assets/img/research-covers/art-opt.jpg
+tags: [for the agents]
+placeholder: true
+authorship_note: Drafted with Codex from my experiment records.
+feed: false
+---
+{% raw %}
+<style>
+.codeswitch-post{--cv-blue:#286eb0;--cv-orange:#bd600c;--cv-line:rgba(120,120,120,.3)}
+.codeswitch-post img,.codeswitch-post video{max-width:100%;height:auto}.codeswitch-post p{overflow-wrap:break-word}
+.codeswitch-post table{display:block;overflow-x:auto;width:100%;font-size:.88em}.codeswitch-post td,.codeswitch-post th{padding:.55em;vertical-align:top}
+.codeswitch-post .cv-panel{margin:2rem 0;padding:1.2rem;border:1px solid var(--cv-line);border-radius:12px;background:rgba(127,127,127,.045)}
+.codeswitch-post .cv-kicker{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin:0 0 .5rem}
+.codeswitch-post h2{font-size:1.3rem;line-height:1.3;margin:.25rem 0 1rem}
+.codeswitch-post .cv-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.codeswitch-post .cv-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem}
+.codeswitch-post .cv-card{padding:1rem;border:1px solid var(--cv-line);border-radius:8px;min-width:0}
+.codeswitch-post .cv-card p{margin:.5rem 0;font-size:.9rem}.codeswitch-post .cv-big{font-size:2.4rem;line-height:1.2;font-weight:750}
+.codeswitch-post .cv-track{height:20px;background:rgba(120,120,120,.16);border-radius:4px;overflow:hidden;margin:.65rem 0}
+.codeswitch-post .cv-fill{height:100%;background:var(--cv-blue);min-width:0;transition:width .2s}
+.codeswitch-post .cv-caption{font-size:.85rem;line-height:1.55;opacity:.85;margin:.8rem 0 0}
+.codeswitch-post .cv-label{font-size:.85rem;font-weight:650;display:block}
+.codeswitch-post select{display:block;width:100%;padding:.6rem;margin:.4rem 0;font:inherit;color:inherit;background:transparent;border:1px solid var(--cv-line);border-radius:5px}
+.codeswitch-post option{color:#111;background:#fff}
+.codeswitch-post .cv-prompt{font-size:1.35rem;line-height:1.6;padding:1rem;border-left:4px solid var(--cv-orange);margin:1rem 0;overflow-wrap:break-word}
+.codeswitch-post .cv-score{display:flex;justify-content:space-between;align-items:baseline;gap:1rem}.codeswitch-post .cv-score strong{font-size:1.7rem}
+.codeswitch-post video{display:block;width:100%;border-radius:8px;background:#111}
+.codeswitch-post details{margin:1.5rem 0}.codeswitch-post summary{cursor:pointer;font-weight:650}
+@media(max-width:520px){.codeswitch-post .cv-grid,.codeswitch-post .cv-controls{grid-template-columns:1fr}.codeswitch-post .cv-panel{padding:.8rem}.codeswitch-post .cv-big{font-size:2rem}}
+</style><div class="codeswitch-post"><p>MiniVLA completed 22 of 40 robot placement trials with English instructions and 1 of 40 with Chinese instructions. I used mixed-language commands to break that gap into three parts: the verb, the noun phrases, and the sentence frame. Across the resulting conditions, English noun phrases yielded 73/160 successes, versus 3/160 with Chinese noun phrases. Changing the frame had a smaller, conditional effect. This is a result from one frozen checkpoint on eight selected simulation tasks; even its English baseline succeeded only 55% of the time.</p><section class="cv-panel"><p class="cv-kicker">The largest difference</p><h2>Naming the object and destination in English</h2><div class="cv-grid"><div class="cv-card"><div class="cv-label">English noun phrases</div><div class="cv-big">73<span style="font-size:1rem;opacity:.65"> / 160</span></div><div class="cv-track"><div class="cv-fill" style="width:45.625%"></div></div><p>45.6% original-goal success</p></div><div class="cv-card"><div class="cv-label">Chinese noun phrases</div><div class="cv-big">3<span style="font-size:1rem;opacity:.65"> / 160</span></div><div class="cv-track"><div class="cv-fill" style="width:1.875%"></div></div><p>1.9% original-goal success</p></div></div><p class="cv-caption">Same 0–100% scale. Each side pools four verb/frame allocations over the same 40 task/state pairs; these are repeated conditions, not 160 independent tasks. Difference: 43.75 percentage points.</p></section>
+<p>A whole-sentence translation changes too much to explain that gap. Consider “put the black bowl on the plate” and “把黑色碗放在盘子上.” The verb changes from <code>put</code> to <code>放</code>; the object and destination become <code>黑色碗</code> and <code>盘子</code>; and the surrounding construction changes. If success falls, which of those changes matters?</p>
+<p>I crossed three binary factors. The verb was English or Chinese. The noun phrases were English or Chinese, with object and destination translated together. The frame was either <code>VERB the OBJECT on the DESTINATION</code> or <code>把 OBJECT VERB 在 DESTINATION 上</code>. In the latter, 把 introduces the object and 在…上 supplies the locative construction. This creates eight commands per task, including deliberately mixed strings such as “放 the black bowl on the plate.” Every command retained the same English action-question wrapper.</p><section class="cv-panel" id="cv-explorer"><p class="cv-kicker">Explore the measured conditions</p><h2>Change one part of the instruction</h2><div class="cv-controls"><label class="cv-label" for="cv-verb">Verb: action word<select id="cv-verb"><option value="en">English</option><option value="zh">Chinese</option></select></label><label class="cv-label" for="cv-noun">Nouns: object + destination<select id="cv-noun"><option value="en">English</option><option value="zh">Chinese</option></select></label><label class="cv-label" for="cv-frame">Frame: order + function words<select id="cv-frame"><option value="en">English</option><option value="zh">Chinese</option></select></label></div><div class="cv-prompt" id="cv-prompt" aria-live="polite">put the black bowl on the plate</div><div class="cv-score"><span>Original-goal success</span><strong id="cv-count">22 / 40</strong></div><div class="cv-track"><div id="cv-bar" class="cv-fill" style="width:55%"></div></div><p class="cv-caption">The command shows the black-bowl example. Each count aggregates all eight tasks × five states for the selected condition. This displays recorded results; it does not run or predict new rollouts.</p></section>
+<p>The broader question connects to <a href="https://arxiv.org/abs/2601.07153">CodeMixQA</a>, which evaluates language models on code-switched text, and <a href="https://arxiv.org/abs/2606.15714">Chen et al.’s <em>Beyond English</em></a>, which measures multilingual instruction following in VLAs. Here I wanted a paired behavioral comparison: change one instruction component, start the robot from the same state, and measure whether it completes the placement.</p>
+<p>I used <code>Stanford-ILIAD/minivla-libero90-prismatic</code>, checkpoint <code>step-122500-epoch-55-loss=0.0743.pt</code>, with its Qwen2.5-0.5B language backbone and native action decoder. I made no parameter updates. The task selection rule included all eight unqualified, single-action “put the X on the Y” commands in LIBERO-90, excluding directional modifiers, cabinet-shelf specifications, “on top of” commands, and multistep instructions. These tasks share six scene families. They belong to the checkpoint’s training benchmark; this evaluation measures instruction robustness on those tasks.</p>
+<p>For each task I used five initial-state indices, 2–6, unused in this project’s earlier pilot. Each task/state block contained the eight language conditions and two controls. Initial states, settled images, and policy seeds were matched within the block, and condition order was randomized with a fixed seed. The completed panel has 400 valid episodes. Success means the original task’s simulator goal predicate became true within 400 policy actions after ten settling steps. The 36 pilot episodes are excluded. The panel spans RTX 4090 and RTX 4070 Laptop runs, with every paired block kept on one device. Nine separate cross-device repeats agreed on success, although their full trajectories differed.</p>
+<section class="cv-panel"><p class="cv-kicker">Two recorded rollouts · same starting state</p><h2>Black bowl → plate</h2><div class="cv-grid"><div><p class="cv-label">put the black bowl on the plate</p><video controls playsinline muted preload="metadata" poster="/assets/research/english-chinese-minivla/01.png"><source src="/assets/research/english-chinese-minivla/02.mp4" type="video/mp4"></video><p class="cv-caption"><strong>Goal reached</strong> · 133 policy actions</p></div><div><p class="cv-label">把黑色碗放在盘子上</p><video controls playsinline muted preload="metadata" poster="/assets/research/english-chinese-minivla/01.png"><source src="/assets/research/english-chinese-minivla/03.mp4" type="video/mp4"></video><p class="cv-caption"><strong>Action horizon reached</strong> · 400 policy actions</p></div></div><p class="cv-caption">Task 9, initial-state index 2, original RTX 4090 run. This pair was selected to illustrate an English success and Chinese failure, not as a representative sample. All three language factors change between these two commands. The complete condition counts follow. Videos show the original saved rollouts.</p></section><p>The table gives all eight conditions. Example strings are the exact black-bowl commands; counts aggregate all eight tasks and five states.</p>
+<details><summary>Inspect all eight exact commands and counts</summary><table>
+<thead>
+<tr>
+<th>Verb</th>
+<th>Nouns</th>
+<th>Frame</th>
+<th>Example instruction</th>
+<th style="text-align: right;">Success</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>English</td>
+<td>English</td>
+<td>English</td>
+<td>put the black bowl on the plate</td>
+<td style="text-align: right;">22/40</td>
+</tr>
+<tr>
+<td>English</td>
+<td>English</td>
+<td>Chinese</td>
+<td>把 black bowl put 在 plate 上</td>
+<td style="text-align: right;">17/40</td>
+</tr>
+<tr>
+<td>Chinese</td>
+<td>English</td>
+<td>English</td>
+<td>放 the black bowl on the plate</td>
+<td style="text-align: right;">22/40</td>
+</tr>
+<tr>
+<td>Chinese</td>
+<td>English</td>
+<td>Chinese</td>
+<td>把 black bowl 放在 plate 上</td>
+<td style="text-align: right;">12/40</td>
+</tr>
+<tr>
+<td>English</td>
+<td>Chinese</td>
+<td>English</td>
+<td>put the 黑色碗 on the 盘子</td>
+<td style="text-align: right;">1/40</td>
+</tr>
+<tr>
+<td>English</td>
+<td>Chinese</td>
+<td>Chinese</td>
+<td>把黑色碗 put 在盘子上</td>
+<td style="text-align: right;">1/40</td>
+</tr>
+<tr>
+<td>Chinese</td>
+<td>Chinese</td>
+<td>English</td>
+<td>放 the 黑色碗 on the 盘子</td>
+<td style="text-align: right;">0/40</td>
+</tr>
+<tr>
+<td>Chinese</td>
+<td>Chinese</td>
+<td>Chinese</td>
+<td>把黑色碗放在盘子上</td>
+<td style="text-align: right;">1/40</td>
+</tr>
+</tbody>
+</table></details>
+<p><img alt="Original-goal success by verb language, noun language, and sentence frame; English-noun conditions have substantially higher bars than Chinese-noun conditions." src="/assets/research/english-chinese-minivla/04.png" /></p>
+<p><em>Left: blue and orange bars compare English and Chinese frames within each verb/noun allocation. Labels give exact counts out of 40; no error bars are shown. The largest separation is between English-noun and Chinese-noun groups. Right: original-goal success for the English baseline and the two controls. The zero for “Wrong English” refers to the original goal; alternate-goal outcomes are described below.</em></p>
+<p>Pooling across verb and frame allocations, the noun-language gap is 43.75 percentage points. All three Chinese-noun successes occur on one task. The English-frame advantage averages 8.75 points, but its size depends on the content words: 12.5 points with English verbs and nouns, 25 points with Chinese verbs and English nouns, zero with English verbs and Chinese nouns, and −2.5 points with Chinese verbs and nouns. When almost every episode fails, similar frame scores tell us little about whether the model handles the constructions equally well.</p>
+<section class="cv-panel"><p class="cv-kicker">Frame effects depend on the content words</p><img src="/assets/research/english-chinese-minivla/05.png" alt="English-minus-Chinese frame success differences overall and for each lexical allocation, with descriptive task-block bootstrap intervals." loading="lazy"><p class="cv-caption">Dots show English-frame minus Chinese-frame success, in percentage points. Lines show descriptive 95% intervals from 10,000 resamples of the eight task blocks. Chinese-noun allocations are near floor; intervals summarize this selected panel.</p></section><p>I resampled the eight tasks as whole blocks 10,000 times for descriptive 95% percentile intervals: 33.125–55.625 points for the noun gap and 1.875–15.625 for the average frame gap. The English-verb/English-noun frame interval spans −7.5 to 30 points. These summaries describe variation within a small selected panel, whose tasks also share scenes and vocabulary. Omitting each scene family in turn leaves the average frame difference positive, between 5.83 and 10.83 points.</p>
+<p>The two 22/40 entries also deserve care. Replacing <code>put</code> with <code>放</code> while keeping English nouns and frame preserves the total, but six paired episodes switch from success to failure and six switch the other way. Aggregate equality hides substantial changes in behavior.</p>
+<section class="cv-panel"><p class="cv-kicker">Does the command change the goal reached?</p><h2>Original goal and alternate goal</h2><div class="cv-controls"><div class="cv-card"><span class="cv-label">English baseline</span><p>Original goal <strong>22/40</strong></p><div class="cv-track"><div class="cv-fill" style="width:55.00000000000001%"></div></div><p>Alternate goal, ever <strong>0/40</strong></p><div class="cv-track"><div class="cv-fill" style="width:0.0%;background:var(--cv-orange)"></div></div></div><div class="cv-card"><span class="cv-label">Empty command</span><p>Original goal <strong>0/40</strong></p><div class="cv-track"><div class="cv-fill" style="width:0.0%"></div></div><p>Alternate goal, ever <strong>0/40</strong></p><div class="cv-track"><div class="cv-fill" style="width:0.0%;background:var(--cv-orange)"></div></div></div><div class="cv-card"><span class="cv-label">Alternate English</span><p>Original goal <strong>0/40</strong></p><div class="cv-track"><div class="cv-fill" style="width:0.0%"></div></div><p>Alternate goal, ever <strong>28/40</strong></p><div class="cv-track"><div class="cv-fill" style="width:70.0%;background:var(--cv-orange)"></div></div></div></div><p class="cv-caption">All bars use a 0–100% scale. Alternate commands attain their requested goal at least once in 28/40 episodes and retain it at termination in 21/40. Observation ends at original-goal success or the action horizon.</p></section><p>The controls ask whether the instruction actually directs the robot. Empty commands and alternate English commands each achieve the original goal 0/40 times. Under alternate commands, however, the robot reaches the requested alternate goal at least once in 28/40 episodes and still satisfies it at termination in 21/40. Neither the English baseline nor the empty control reaches that alternate goal. Thus the alternate commands often redirect behavior successfully. Alternate-goal observation ends at original-goal success or the action horizon, so these counts depend on that stopping rule.</p>
+<p>The noun substitution is the clearest vulnerability in this panel, but it changes both the object and destination phrase. The frame manipulation bundles word order, function markers, tokenization, and naturalness. Translations received automated review without independent human bilingual validation, and the English wrapper remains fixed. Those choices leave several concrete explanations for the failures unresolved.</p>
+<p>The next test I would run separates object-language from destination-language, using bilingual-reviewed paraphrases and the same paired states and controls. That would locate the large noun gap more precisely: whether it follows the object to grasp, the destination to place it on, or their combination.</p></div><script>(function(){const data={"en,en,en": {"id": "en", "prompt": "put the black bowl on the plate", "successes": 22}, "zh,zh,zh": {"id": "zh", "prompt": "把黑色碗放在盘子上", "successes": 1}, "en,zh,en": {"id": "a_en", "prompt": "put the 黑色碗 on the 盘子", "successes": 1}, "en,zh,zh": {"id": "a_zh", "prompt": "把黑色碗 put 在盘子上", "successes": 1}, "zh,en,en": {"id": "b_en", "prompt": "放 the black bowl on the plate", "successes": 22}, "zh,en,zh": {"id": "b_zh", "prompt": "把 black bowl 放在 plate 上", "successes": 12}, "en,en,zh": {"id": "ee_zh", "prompt": "把 black bowl put 在 plate 上", "successes": 17}, "zh,zh,en": {"id": "zz_en", "prompt": "放 the 黑色碗 on the 盘子", "successes": 0}};const ids=["verb","noun","frame"];const fields=ids.map(x=>document.getElementById("cv-"+x));function update(){const r=data[fields.map(x=>x.value).join(",")];document.getElementById("cv-prompt").textContent=r.prompt;document.getElementById("cv-count").textContent=r.successes+" / 40";document.getElementById("cv-bar").style.width=(100*r.successes/40)+"%";}fields.forEach(x=>x.addEventListener("change",update));update();})();</script>
+{% endraw %}
