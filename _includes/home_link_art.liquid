@@ -1,0 +1,274 @@
+<style>
+  /* Homepage link banners: each row is one line that wears its destination's
+     own artwork. Shared by the about and garden layouts; the selectors outrank
+     both skins' .home-link. Sources:
+     - Clocktower: emblem, lantern sprite and a mirrored crop of the landing hero
+       from the clocktower repo's apps/client/public/landing; name in the
+       game's display face (IM Fell English, OFL).
+     - ringworld: crop of assets/img/ringworld/banner.png, its mark, wordmark
+       and astronaut sprite.
+     - MLn: the eight-dot mark and wordmark; the field is the og card's wash.
+     - Substack: a band of Berthe Morisot, Woman at Her Toilette (the blog
+       page's header painting, assets/img/prof_pic.jpg). */
+  @font-face {
+    font-family: "Clocktower Fell";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("{{ '/assets/fonts/im-fell-english-latin-400-normal.woff2' | relative_url }}") format("woff2");
+  }
+  body .home-links .home-link.home-art {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 10px 0 6px;
+    overflow: hidden;
+    white-space: nowrap;
+    border: 0;
+    border-radius: 0;
+    font-family: var(--rz-sans, inherit);
+    font-weight: 400;
+    line-height: 1;
+    text-decoration: none;
+    transform: none;
+    transition:
+      background-position 1.2s ease,
+      box-shadow 0.2s ease;
+  }
+  body .home-links .home-art .home-link-arrow {
+    margin-left: auto;
+    font-size: 13px;
+    transition: transform 0.15s ease;
+  }
+  .home-art:hover .home-link-arrow {
+    transform: translateX(2px);
+  }
+  .home-art .ha-ico {
+    flex: 0 0 auto;
+    display: block;
+  }
+  .home-art .ha-wordmark {
+    flex: 0 0 auto;
+    display: block;
+  }
+
+  /* ── Clocktower Town ── */
+  body .home-links .home-link.home-art-ct {
+    background:
+      linear-gradient(90deg, rgba(15, 13, 20, 0.88) 0%, rgba(15, 13, 20, 0.55) 55%, rgba(15, 13, 20, 0.25) 100%),
+      url("{{ '/assets/img/clocktower/banner.jpg' | relative_url }}") right -4px top 39% / max(440px, calc(100% + 8px)) auto no-repeat;
+    box-shadow:
+      0 0 0 2px #0f0d14,
+      inset 0 0 0 1px rgba(226, 177, 74, 0.45);
+    color: #f3cf7a;
+  }
+  body .home-links .home-link.home-art-ct:hover {
+    background-position: 0 0, right 0 top 46%;
+    box-shadow:
+      0 0 0 2px #0f0d14,
+      inset 0 0 0 1px rgba(243, 207, 122, 0.9),
+      0 0 14px rgba(232, 160, 60, 0.35);
+  }
+  .home-art-ct .ct-emblem {
+    width: 30px;
+    height: 30px;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 1px 0 #0f0d14);
+  }
+  .home-art-ct .ct-name {
+    flex: 0 0 auto;
+    font-family: "Clocktower Fell", "Iowan Old Style", Georgia, serif;
+    font-size: 18px;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    color: #f3cf7a;
+    text-shadow:
+      1px 1px 0 #3a2410,
+      0 0 8px rgba(232, 160, 60, 0.45);
+  }
+  /* the landing's six-frame wall lantern, one frame per step */
+  .home-art-ct .ct-lantern {
+    flex: 0 0 auto;
+    width: 12px;
+    height: 24px;
+    margin-left: auto;
+    background: url("{{ '/assets/img/clocktower/lantern.png' | relative_url }}") 0 0 / 72px 24px no-repeat;
+    filter: drop-shadow(0 0 4px rgba(255, 170, 70, 0.55));
+    animation: ct-flicker 0.9s steps(6) infinite;
+  }
+  @keyframes ct-flicker {
+    to {
+      background-position: -72px 0;
+    }
+  }
+  body .home-links .home-art-ct .home-link-arrow {
+    margin-left: 0;
+    color: #f3cf7a;
+  }
+
+  /* ── ringworld ── */
+  /* the whole ring at row height, on its own paper */
+  body .home-links .home-link.home-art-rw {
+    padding-left: 10px;
+    background:
+      url("{{ '/assets/img/home-links/ringworld-strip.jpg' | relative_url }}") right 44px center / auto 40px no-repeat,
+      #fcf8ef;
+    box-shadow:
+      0 0 0 2px #3e6fb4,
+      inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+    color: #3e6fb4;
+  }
+  body .home-links .home-link.home-art-rw:hover {
+    background-position: right 50px center, 0 0;
+    box-shadow:
+      0 0 0 2px #3e6fb4,
+      inset 0 0 0 1px rgba(255, 255, 255, 0.7),
+      0 0 14px rgba(62, 111, 180, 0.3);
+  }
+  /* the script wordmark's source art is 4:1; keep the box that ratio */
+  .home-art-rw .ha-wordmark {
+    width: 84px;
+    height: 21px;
+    background: #3e6fb4;
+    -webkit-mask: url("{{ '/assets/img/ringworld/wordmark.png' | relative_url }}") left center / contain no-repeat;
+    mask: url("{{ '/assets/img/ringworld/wordmark.png' | relative_url }}") left center / contain no-repeat;
+  }
+  .home-art-rw .rw-astronaut {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 22px;
+    margin-left: auto;
+    animation: rw-drift 4.2s ease-in-out infinite;
+  }
+  @keyframes rw-drift {
+    0%,
+    100% {
+      transform: translateY(2px) rotate(-6deg);
+    }
+    50% {
+      transform: translateY(-3px) rotate(5deg);
+    }
+  }
+  body .home-links .home-art-rw .home-link-arrow {
+    margin-left: 0;
+    color: #3e6fb4;
+  }
+  @media (max-width: 400px) {
+    body .home-links .home-link.home-art-rw,
+    body .home-links .home-link.home-art-rw:hover {
+      background-position: right 24px center, 0 0;
+      background-size: auto 34px, auto;
+    }
+    .home-art-rw .rw-astronaut {
+      display: none;
+    }
+    body .home-links .home-art-rw .home-link-arrow {
+      margin-left: auto;
+    }
+  }
+
+  /* ── MLn ── */
+  body .home-links .home-link.home-art-mln {
+    background:
+      radial-gradient(120% 140% at 0% 0%, rgba(196, 232, 210, 0.95) 0%, rgba(196, 232, 210, 0) 55%),
+      radial-gradient(90% 160% at 100% 100%, rgba(232, 224, 236, 0.9) 0%, rgba(232, 224, 236, 0) 60%),
+      #f4efe4;
+    box-shadow:
+      0 0 0 2px #1b1813,
+      inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+    color: #1b1813;
+  }
+  body .home-links .home-link.home-art-mln:hover {
+    box-shadow:
+      0 0 0 2px #1b1813,
+      inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+      0 0 14px rgba(26, 154, 108, 0.3);
+  }
+  .home-art-mln .mln-mark {
+    width: 26px;
+    height: 26px;
+  }
+  /* mln_wordmark_small is the alpha-dilated cut; keep the box's ~2.6:1 ratio */
+  .home-art-mln .ha-wordmark {
+    width: 55px;
+    height: 21px;
+    background: #1b1813;
+    -webkit-mask: url("{{ '/assets/img/mln_wordmark_small.png' | relative_url }}") left center / contain no-repeat;
+    mask: url("{{ '/assets/img/mln_wordmark_small.png' | relative_url }}") left center / contain no-repeat;
+  }
+  /* the same mark, large, its top arc rising through the row; a hover turns
+     it one seat on */
+  .home-art-mln .mln-orbit {
+    position: absolute;
+    top: -12px;
+    right: 14px;
+    width: 140px;
+    height: 140px;
+    opacity: 0.85;
+    pointer-events: none;
+  }
+  .home-art-mln .mln-orbit g {
+    transform-origin: 50px 50px;
+    transition: transform 0.9s cubic-bezier(0.5, 0, 0.2, 1);
+  }
+  .home-art-mln:hover .mln-orbit g {
+    transform: rotate(45deg);
+  }
+  body .home-links .home-art-mln .home-link-arrow {
+    position: relative;
+    color: #1b1813;
+  }
+
+  /* ── Substack: ultrastructure ── */
+  /* the whole band at row height, eased in from the paper on its left */
+  body .home-links .home-link.home-art-substack {
+    background:
+      linear-gradient(90deg, #efe9df calc(100% - 270px), rgba(239, 233, 223, 0) calc(100% - 180px)),
+      url("{{ '/assets/img/home-links/morisot-strip.jpg' | relative_url }}") right 0 center / auto 40px no-repeat,
+      #efe9df;
+    box-shadow:
+      0 0 0 2px #cfc6ba,
+      inset 3px 0 0 #ff6719;
+    color: #2e2a33;
+  }
+  body .home-links .home-link.home-art-substack:hover {
+    box-shadow:
+      0 0 0 2px #ff6719,
+      inset 3px 0 0 #ff6719,
+      0 0 14px rgba(255, 103, 25, 0.25);
+  }
+  .home-art-substack .ss-ico {
+    width: 15px;
+    height: 15px;
+    margin-left: 6px;
+    fill: #ff6719;
+  }
+  .home-art-substack .ss-name {
+    flex: 0 0 auto;
+    font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    font-size: 19px;
+    font-style: italic;
+    letter-spacing: -0.01em;
+    color: #2e2a33;
+    text-shadow: 0 0 6px rgba(239, 233, 223, 0.95);
+  }
+  body .home-links .home-art-substack .home-link-arrow {
+    color: #ff6719;
+    text-shadow:
+      0 0 3px #fff,
+      0 0 6px #fff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-art-ct .ct-lantern,
+    .home-art-rw .rw-astronaut {
+      animation: none;
+    }
+    body .home-links .home-link.home-art,
+    .home-art-mln .mln-orbit g {
+      transition: none;
+    }
+  }
+</style>
