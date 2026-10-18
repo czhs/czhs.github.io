@@ -53,6 +53,35 @@
     flex: 0 0 auto;
     display: block;
   }
+  /* name + a short line on what it is; side by side on wide rows, stacked
+     on phones so the line never truncates */
+  .home-art .ha-text {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+  }
+  .home-art .ha-desc {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    line-height: 1.15;
+  }
+  @media (max-width: 440px) {
+    body .home-links .home-link.home-art {
+      height: 48px;
+    }
+    .home-art .ha-text {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+    }
+    .home-art .ha-desc {
+      font-size: 11px;
+    }
+  }
 
   /* ── Clocktower Town ── */
   body .home-links .home-link.home-art-ct {
@@ -87,6 +116,10 @@
     text-shadow:
       1px 1px 0 #3a2410,
       0 0 8px rgba(232, 160, 60, 0.45);
+  }
+  .home-art-ct .ha-desc {
+    color: #cbbbe6;
+    text-shadow: 1px 1px 0 #0f0d14;
   }
   /* the landing's six-frame wall lantern, one frame per step */
   .home-art-ct .ct-lantern {
@@ -134,6 +167,12 @@
     background: #3e6fb4;
     -webkit-mask: url("{{ '/assets/img/ringworld/wordmark.png' | relative_url }}") left center / contain no-repeat;
     mask: url("{{ '/assets/img/ringworld/wordmark.png' | relative_url }}") left center / contain no-repeat;
+  }
+  .home-art-rw .ha-desc {
+    color: #5b77a3;
+    text-shadow:
+      0 0 3px #fcf8ef,
+      0 0 6px #fcf8ef;
   }
   .home-art-rw .rw-astronaut {
     flex: 0 0 auto;
@@ -198,6 +237,13 @@
     -webkit-mask: url("{{ '/assets/img/mln_wordmark_small.png' | relative_url }}") left center / contain no-repeat;
     mask: url("{{ '/assets/img/mln_wordmark_small.png' | relative_url }}") left center / contain no-repeat;
   }
+  .home-art-mln .ha-desc {
+    position: relative;
+    font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    font-size: 13px;
+    font-style: italic;
+    color: #4a4436;
+  }
   /* the same mark, large, its top arc rising through the row; a hover turns
      it one seat on */
   .home-art-mln .mln-orbit {
@@ -226,7 +272,7 @@
   body .home-links .home-link.home-art-substack {
     background:
       linear-gradient(90deg, #efe9df calc(100% - 270px), rgba(239, 233, 223, 0) calc(100% - 180px)),
-      url("{{ '/assets/img/home-links/morisot-strip.jpg' | relative_url }}") right 0 center / auto 40px no-repeat,
+      url("{{ '/assets/img/home-links/morisot-strip.jpg' | relative_url }}") right 0 center / auto 100% no-repeat,
       #efe9df;
     box-shadow:
       0 0 0 2px #cfc6ba,
@@ -253,6 +299,19 @@
     letter-spacing: -0.01em;
     color: #2e2a33;
     text-shadow: 0 0 6px rgba(239, 233, 223, 0.95);
+  }
+  .home-art-substack .ha-desc {
+    color: #6b6370;
+    text-shadow: 0 0 6px rgba(239, 233, 223, 0.95);
+  }
+  /* on phones the band fills the row, so the wash carries the text */
+  @media (max-width: 440px) {
+    body .home-links .home-link.home-art-substack {
+      background:
+        linear-gradient(90deg, rgba(239, 233, 223, 0.94) 0%, rgba(239, 233, 223, 0.82) 58%, rgba(239, 233, 223, 0) 88%),
+        url("{{ '/assets/img/home-links/morisot-strip.jpg' | relative_url }}") right 0 center / auto 100% no-repeat,
+        #efe9df;
+    }
   }
   body .home-links .home-art-substack .home-link-arrow {
     color: #ff6719;
