@@ -112,11 +112,13 @@ layout: page
         <button class="shelf-filter" data-filter="non-fiction">non-fiction</button>
         <button class="shelf-filter" data-filter="biography">biography</button>
         <button class="shelf-filter" data-filter="biology">biology</button>
+        <button class="shelf-filter" data-filter="author:vernor-vinge">vernor vinge</button>
+        <button class="shelf-filter" data-filter="author:ursula-k-le-guin">ursula k. le guin</button>
       </div>
       {% assign shuffled = other_books | sample: other_books.size %}
       <div class="book-shelf-grid" id="book-shelf-grid">
         {% for item in shuffled %}
-          <figure class="cover" data-cats="{{ item.categories | join: ' ' | downcase }}">
+          <figure class="cover" data-cats="{{ item.categories | join: ' ' | downcase }} author:{{ item.author | slugify }}">
             <a class="cover-link" href="{{ item.url | relative_url }}">
               {% if item.cover %}
                 <img alt="{{ item.title }} cover" src="{{ item.cover | prepend: page.covers | relative_url }}" loading="lazy" decoding="async" style="height:200px">
