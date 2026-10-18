@@ -5,7 +5,8 @@
 {%- endcomment -%}
 {% assign public_research_posts = site.research | where: 'layout', 'research_public' %}
 {% assign streamed_research_posts = site.research | where: 'stream', true %}
-{% assign latest_posts = site.posts | concat: public_research_posts | concat: streamed_research_posts | sort: 'date' | reverse %}
+{% assign feed_news = site.news | where: 'feed', true %}
+{% assign latest_posts = site.posts | concat: public_research_posts | concat: streamed_research_posts | concat: feed_news | sort: 'date' | reverse %}
 {% assign latest_posts_size = latest_posts | size %}
 <div class="news">
   {% if page.latest_posts != blank and latest_posts_size > 0 %}
