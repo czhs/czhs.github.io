@@ -2,7 +2,7 @@
   /* Homepage link banners: each row is one line that wears its destination's
      own artwork. Shared by the about and garden layouts; the selectors outrank
      both skins' .home-link. Sources:
-     - Clocktower: emblem, lantern sprite and a mirrored crop of the landing hero
+     - Clocktower: emblem and a mirrored crop of the landing hero
        from the clocktower repo's apps/client/public/landing; name in the
        game's display face (IM Fell English, OFL).
      - ringworld: crop of assets/img/ringworld/banner.png, its mark, wordmark
@@ -121,23 +121,7 @@
     color: #cbbbe6;
     text-shadow: 1px 1px 0 #0f0d14;
   }
-  /* the landing's six-frame wall lantern, one frame per step */
-  .home-art-ct .ct-lantern {
-    flex: 0 0 auto;
-    width: 12px;
-    height: 24px;
-    margin-left: auto;
-    background: url("{{ '/assets/img/clocktower/lantern.png' | relative_url }}") 0 0 / 72px 24px no-repeat;
-    filter: drop-shadow(0 0 4px rgba(255, 170, 70, 0.55));
-    animation: ct-flicker 0.9s steps(6) infinite;
-  }
-  @keyframes ct-flicker {
-    to {
-      background-position: -72px 0;
-    }
-  }
   body .home-links .home-art-ct .home-link-arrow {
-    margin-left: 0;
     color: #f3cf7a;
   }
 
@@ -174,11 +158,15 @@
       0 0 3px #fcf8ef,
       0 0 6px #fcf8ef;
   }
+  /* the astronaut only drifts while the row is hovered or focused */
   .home-art-rw .rw-astronaut {
     flex: 0 0 auto;
     width: 26px;
     height: 22px;
     margin-left: auto;
+  }
+  .home-art-rw:hover .rw-astronaut,
+  .home-art-rw:focus-visible .rw-astronaut {
     animation: rw-drift 4.2s ease-in-out infinite;
   }
   @keyframes rw-drift {
@@ -244,8 +232,7 @@
     font-style: italic;
     color: #4a4436;
   }
-  /* the same mark, large, its top arc rising through the row; a hover turns
-     it one seat on */
+  /* the same mark, large, its top arc rising through the row */
   .home-art-mln .mln-orbit {
     position: absolute;
     top: -12px;
@@ -254,13 +241,6 @@
     height: 140px;
     opacity: 0.85;
     pointer-events: none;
-  }
-  .home-art-mln .mln-orbit g {
-    transform-origin: 50px 50px;
-    transition: transform 0.9s cubic-bezier(0.5, 0, 0.2, 1);
-  }
-  .home-art-mln:hover .mln-orbit g {
-    transform: rotate(45deg);
   }
   body .home-links .home-art-mln .home-link-arrow {
     position: relative;
@@ -321,12 +301,11 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .home-art-ct .ct-lantern,
-    .home-art-rw .rw-astronaut {
+    .home-art-rw:hover .rw-astronaut,
+    .home-art-rw:focus-visible .rw-astronaut {
       animation: none;
     }
-    body .home-links .home-link.home-art,
-    .home-art-mln .mln-orbit g {
+    body .home-links .home-link.home-art {
       transition: none;
     }
   }
