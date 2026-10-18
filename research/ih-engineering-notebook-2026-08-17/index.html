@@ -129,7 +129,7 @@
     document.addEventListener('DOMContentLoaded', settleSoon, { once: true });
     setTimeout(settle, 500);
   })();
-</script><link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/plus-jakarta-sans-latin-var.woff2"> <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/jetbrains-mono-latin-var.woff2"> <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/figtree-latin-var.woff2"> <style>
+</script><link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/plus-jakarta-sans-latin-var.woff2"> <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/space-mono-latin-400-normal.woff2"> <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/figtree-latin-var.woff2"> <style>
     @font-face {
       font-family: 'Figtree';
       font-style: normal;
@@ -159,12 +159,28 @@
     src: url('/assets/fonts/plus-jakarta-sans-latin-var.woff2') format('woff2');
   }
 
+  /* Space Mono (OFL), 400 + 700 static files; 500 resolves to 400 and 600+ to 700.
+     Its native line box is 1.48em against JetBrains Mono's 1.32em; the overrides pin it
+     to the old metrics so swapping the face moved no layout. */
   @font-face {
-    font-family: 'JetBrains Mono';
+    font-family: 'Space Mono';
     font-style: normal;
-    font-weight: 100 800;
+    font-weight: 400;
     font-display: swap;
-    src: url('/assets/fonts/jetbrains-mono-latin-var.woff2') format('woff2');
+    src: url('/assets/fonts/space-mono-latin-400-normal.woff2') format('woff2');
+    ascent-override: 102%;
+    descent-override: 30%;
+    line-gap-override: 0%;
+  }
+  @font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/assets/fonts/space-mono-latin-700-normal.woff2') format('woff2');
+    ascent-override: 102%;
+    descent-override: 30%;
+    line-gap-override: 0%;
   }
 
   /* Metric-matched fallbacks.
@@ -188,11 +204,13 @@
   }
 
   @font-face {
-    font-family: 'JBM Fallback';
+    font-family: 'Mono Fallback';
     src: local('Menlo'), local('Consolas'), local('DejaVu Sans Mono'), local('Courier New');
-    size-adjust: 100%;
-    ascent-override: 102%;
-    descent-override: 30%;
+    /* Space Mono advances 0.612em to Menlo's 0.602em; the overrides are
+       relative to the adjusted em, so 102%/30% are divided by 1.0166 */
+    size-adjust: 101.66%;
+    ascent-override: 100.33%;
+    descent-override: 29.51%;
     line-gap-override: 0%;
   }
 </style> <style>
@@ -272,7 +290,7 @@
   :root {
     --rz-claude-line: color-mix(in srgb, var(--rz-ink) 16%, transparent);
     --rz-sans: 'Plus Jakarta Sans', 'PJS Fallback', 'Segoe UI', Roboto, sans-serif;
-    --rz-mono: 'JetBrains Mono', 'JBM Fallback', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --rz-mono: 'Space Mono', 'Mono Fallback', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   }
 
   /* paint the field behind the page before body styles resolve */
