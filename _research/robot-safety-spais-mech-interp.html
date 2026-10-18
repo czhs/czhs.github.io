@@ -125,7 +125,7 @@ feed: false
 
 <p>A useful internal harm detector should still rank a hazardous instruction above a safe one when the instructions arrive in another language. English validation alone cannot tell me whether it will.</p>
 
-<p>Language-model research gave me a reason to expect some transfer. <a href="https://arxiv.org/abs/2507.11878">Zhao and colleagues</a> distinguish harmfulness representations from refusal representations. <a href="https://arxiv.org/html/2606.01196v1">Aziz, Hanif, and Koto</a> find that harmfulness directions from high-resource languages remain discriminative across 23 languages in three LLMs, even where refusal deteriorates. Those are results about language models; my question was whether an English harm readout would remain useful inside a robot policy. The VLM baselines provide the direct experimental context for that question.</p>
+<p>Language-model research gave a reason to expect some transfer. <a href="https://arxiv.org/abs/2507.11878">Zhao and colleagues</a> distinguish harmfulness representations from refusal representations. <a href="https://arxiv.org/html/2606.01196v1">Aziz, Hanif, and Koto</a> find that harmfulness directions from high-resource languages remain discriminative across 23 languages in three LLMs, even where refusal deteriorates. Those are results about language models; my question was whether an English harm readout would remain useful inside a robot policy. The VLM baselines provide the direct experimental context for that question.</p>
 
 <p>I measured ranking with AUROC, rather than choosing a refusal threshold. An AUROC near 0.5 means the probe does little to order hazardous and safe test instructions correctly. Adjusting a threshold cannot repair that ranking.</p>
 
@@ -194,9 +194,9 @@ feed: false
 
 <h2 id="the-scope-of-an-english-safety-result">The scope of an English safety result</h2>
 
-<p>My conclusion is about the validity of a detector: <strong>high English AUROC does not establish that an English-trained harm probe will rank translated hazards correctly in a VLA.</strong> The VLM baselines show stronger transfer under the same two hazard designs. Chinese refits show recoverable signal that the English readout misses, with recovery depending on the task and readout.</p>
+<p>A possible conclusion concerns the validity of a detector: <strong>high English AUROC does not establish that an English-trained harm probe will rank translated hazards correctly in a VLA.</strong> The VLM baselines show stronger transfer under the same two hazard designs. Chinese refits show recoverable signal that the English readout misses, with recovery depending on the task and readout.</p>
 
-<p>For an activation-based detector, I would report source-language validation, cross-language testing, and a target-language refit on the same held-out groups. Together they distinguish a detector that works in English from one that generalizes, and a poor transferred readout from a representation that remains difficult to separate even with an in-language fit.</p>
+<p>For an activation-based detector, one could report source-language validation, cross-language testing, and a target-language refit on the same held-out groups. Together they distinguish a detector that works in English from one that generalizes, and a poor transferred readout from a representation that remains difficult to separate even with an in-language fit.</p>
 
 <details class="hp-methods">
   <summary>Readout and fitting details</summary>
