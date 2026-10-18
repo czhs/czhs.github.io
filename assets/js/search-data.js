@@ -120,6 +120,11 @@ ninja.data = [{
           description: "",
           section: "Books",handler: () => {
               window.location.href = "/books/2026/SurrenderExp/";
+            },},{id: "books-a-deepness-in-the-sky",
+          title: 'A Deepness in the Sky',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/2026/a_deepness_in_the_sky/";
             },},{id: "books-an-immense-world",
           title: 'An Immense World',
           description: "",
