@@ -846,6 +846,104 @@
     }
     })();
   </script> <style>
+  /* Clocktower Town: one line that wears the game's own pixel art. The strip is a
+     mirrored crop of the landing hero (so the tower stands right of the name);
+     the emblem and lantern sprite are the landing's own files; the name is set
+     in the game's display face (IM Fell English, OFL). Sources live in the
+     clocktower repo's apps/client/public/landing; keep in sync. Shared by the
+     about and garden layouts; the selectors outrank both skins' .home-link. */
+  @font-face {
+    font-family: "Clocktower Fell";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("/assets/fonts/im-fell-english-latin-400-normal.woff2") format("woff2");
+  }
+  body .home-links .home-link.home-link-clocktower {
+    position: relative;
+    display: flex;
+    border: 0;
+    border-radius: 0;
+    font-family: var(--rz-sans, inherit);
+    font-weight: 400;
+    line-height: 1;
+    transform: none;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 10px 0 6px;
+    overflow: hidden;
+    white-space: nowrap;
+    background:
+      linear-gradient(90deg, rgba(15, 13, 20, 0.88) 0%, rgba(15, 13, 20, 0.55) 55%, rgba(15, 13, 20, 0.25) 100%),
+      url("/assets/img/clocktower/banner.jpg") right -4px top 39% / max(440px, calc(100% + 8px)) auto no-repeat;
+    box-shadow:
+      0 0 0 2px #0f0d14,
+      inset 0 0 0 1px rgba(226, 177, 74, 0.45);
+    color: #f3cf7a;
+    text-decoration: none;
+    transition:
+      background-position 1.2s ease,
+      box-shadow 0.2s ease;
+  }
+  body .home-links .home-link.home-link-clocktower:hover {
+    background-position: 0 0, right 0 top 46%;
+    box-shadow:
+      0 0 0 2px #0f0d14,
+      inset 0 0 0 1px rgba(243, 207, 122, 0.9),
+      0 0 14px rgba(232, 160, 60, 0.35);
+  }
+  .home-link-clocktower .ct-emblem {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 1px 0 #0f0d14);
+  }
+  .home-link-clocktower .ct-name {
+    flex: 0 0 auto;
+    font-family: "Clocktower Fell", "Iowan Old Style", Georgia, serif;
+    font-size: 18px;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    color: #f3cf7a;
+    text-shadow:
+      1px 1px 0 #3a2410,
+      0 0 8px rgba(232, 160, 60, 0.45);
+  }
+  /* the landing's six-frame wall lantern, one frame per step */
+  .home-link-clocktower .ct-lantern {
+    flex: 0 0 auto;
+    width: 12px;
+    height: 24px;
+    margin-left: auto;
+    background: url("/assets/img/clocktower/lantern.png") 0 0 / 72px 24px no-repeat;
+    filter: drop-shadow(0 0 4px rgba(255, 170, 70, 0.55));
+    animation: ct-flicker 0.9s steps(6) infinite;
+  }
+  @keyframes ct-flicker {
+    to {
+      background-position: -72px 0;
+    }
+  }
+  body .home-links .home-link-clocktower .home-link-arrow {
+    margin-left: 0;
+    color: #f3cf7a;
+    font-size: 13px;
+    transition: transform 0.15s ease;
+  }
+  .home-link-clocktower:hover .home-link-arrow {
+    transform: translateX(2px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .home-link-clocktower .ct-lantern {
+      animation: none;
+    }
+    body .home-links .home-link.home-link-clocktower {
+      transition: none;
+    }
+  }
+</style> <style>
   /* A stacked index, not a wrapping row: three geometry-identical rows so the
      block reads as one device. Capped near the prose measure — full-width rows
      were mostly empty space. */
@@ -955,7 +1053,7 @@
   .profile .profile-social .contact-icons { font-size: 1.7rem; }
   .profile .profile-social .contact-icons a img,
   .profile .profile-social .contact-icons a svg { margin-bottom: 0; }
-</style> <div class="post"> <header class="post-header"> <h1 class="post-title"> Chris Shi </h1> <p class="desc">Math and computer engineering at Carnegie Mellon University.</p> </header> <article> <div class="profile float-right"> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/chris_shi-480.webp 480w,/assets/img/chris_shi-800.webp 800w,/assets/img/chris_shi-1400.webp 1400w," type="image/webp" sizes="(min-width: 930px) 270.0px, (min-width: 576px) 30vw, 95vw"> <img src="/assets/img/chris_shi.png?16f63c0bd62ffd149d311c0727033349" class="img-fluid z-depth-1 rounded" width="100%" height="auto" alt="chris_shi.png" loading="eager" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </source></picture> </figure> <div class="social profile-social"> <div class="contact-icons"> <a href="https://github.com/czhs" title="GitHub" rel="external nofollow noopener" target="_blank"><i class="fa-brands fa-github"></i></a> <a href="https://www.linkedin.com/in/chris-h-shi" title="LinkedIn" rel="external nofollow noopener" target="_blank"><i class="fa-brands fa-linkedin"></i></a> <a href="https://orcid.org/0009-0002-4153-698X" title="ORCID" rel="external nofollow noopener" target="_blank"><i class="ai ai-orcid"></i></a> <a href="https://openreview.net/profile?id=~Chris_Shi1" title="OpenReview" rel="external nofollow noopener" target="_blank"> <img src="/assets/img/openreview.png" alt="OpenReview"> </a> </div> </div> </div> <div class="clearfix"> <p>Hi, I’m Chris Shi (also known as Hongyi Shi), an undergraduate studying math and computer engineering at Carnegie Mellon University (CMU).</p> <p>This is a personal blog. I’m interested in infrastructure, biodefense, interpretability, automation.</p> <p>I’m fascinated by the hardware of thinking. I’m currently researching mechanistic interpretability for in-context learning and pretraining. I’m also interested in optimal transport and high dimensional probability. For fun, I work on animating robots (<a href="https://thewaltdisneycompany.com/news/behind-the-bdx-droids/" target="_blank" rel="noopener">like these</a>).</p> <p>Reach me at chrisshi [at] andrew [dot] cmu [dot] edu.</p> <div class="home-links"> <a class="home-link home-club home-club-rw" href="/ringworld/" aria-label="ringworld — a Sunday maker space in Pittsburgh"><img class="home-club-ring" src="/assets/img/ringworld/mark.png" alt="" aria-hidden="true" width="480" height="263"><span class="home-club-wordmark" aria-hidden="true"></span><span class="home-club-text">— a Sunday maker space in Pittsburgh</span> <span class="home-link-arrow">→</span></a> <a class="home-link home-link-clocktower" href="https://clocktower.chrisshi.com/" target="_blank" rel="noopener">Clocktower Town — a gothic pixel-art town for private games of social deduction with friends <span class="home-link-arrow">→</span></a> <a class="home-link home-club home-club-mln" href="https://mlnclub.github.io/" aria-label="MLn Reading Club — weekly ML papers in Pittsburgh" rel="external nofollow noopener" target="_blank"><span class="home-club-ico" aria-hidden="true"></span><span class="home-club-wordmark" aria-hidden="true"></span><span class="home-club-text">— weekly ML papers in Pittsburgh</span> <span class="home-link-arrow">→</span></a> <a class="home-link home-link-substack" href="https://ultrastructure.substack.com/" target="_blank" rel="noopener">Read my Substack — ultrastructure <span class="home-link-arrow">→</span></a> </div> <p><a href="https://www.anilada.com/notes/godel-letter.pdf" target="_blank" rel="noopener">Gödel’s letter to von Neumann</a></p> <div style="display: none" aria-hidden="true"><a href="/about/">More about me and my research interests</a></div> </div> <h2>latest posts</h2> <div class="news"> <div class="table-responsive"> <table class="table table-sm table-borderless"> <tr> <th scope="row" style="width: 20%">Oct 17, 2026</th> <td> <a class="news-title" href="https://www.youtube.com/watch?v=Bl_nYOT-vl4" target="_blank" rel="external nofollow noopener">Tracing a Fine-Tuned SmolVLA from Pixels to Action — accepted at the CoRL 2026 Workshop SPAIS</a> <svg width="2rem" height="2rem" viewbox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"> <path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path> </svg> </td> </tr> <tr> <th scope="row" style="width: 20%">Sep 27, 2026</th> <td> <a class="news-title" href="/research/making-my-robot-learning-loop-faster-2026-09-27/">Consider Performance for Better Science</a> </td> </tr> </table> </div> </div> <style>
+</style> <div class="post"> <header class="post-header"> <h1 class="post-title"> Chris Shi </h1> <p class="desc">Math and computer engineering at Carnegie Mellon University.</p> </header> <article> <div class="profile float-right"> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/chris_shi-480.webp 480w,/assets/img/chris_shi-800.webp 800w,/assets/img/chris_shi-1400.webp 1400w," type="image/webp" sizes="(min-width: 930px) 270.0px, (min-width: 576px) 30vw, 95vw"> <img src="/assets/img/chris_shi.png?16f63c0bd62ffd149d311c0727033349" class="img-fluid z-depth-1 rounded" width="100%" height="auto" alt="chris_shi.png" loading="eager" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </source></picture> </figure> <div class="social profile-social"> <div class="contact-icons"> <a href="https://github.com/czhs" title="GitHub" rel="external nofollow noopener" target="_blank"><i class="fa-brands fa-github"></i></a> <a href="https://www.linkedin.com/in/chris-h-shi" title="LinkedIn" rel="external nofollow noopener" target="_blank"><i class="fa-brands fa-linkedin"></i></a> <a href="https://orcid.org/0009-0002-4153-698X" title="ORCID" rel="external nofollow noopener" target="_blank"><i class="ai ai-orcid"></i></a> <a href="https://openreview.net/profile?id=~Chris_Shi1" title="OpenReview" rel="external nofollow noopener" target="_blank"> <img src="/assets/img/openreview.png" alt="OpenReview"> </a> </div> </div> </div> <div class="clearfix"> <p>Hi, I’m Chris Shi (also known as Hongyi Shi), an undergraduate studying math and computer engineering at Carnegie Mellon University (CMU).</p> <p>This is a personal blog. I’m interested in infrastructure, biodefense, interpretability, automation.</p> <p>I’m fascinated by the hardware of thinking. I’m currently researching mechanistic interpretability for in-context learning and pretraining. I’m also interested in optimal transport and high dimensional probability. For fun, I work on animating robots (<a href="https://thewaltdisneycompany.com/news/behind-the-bdx-droids/" target="_blank" rel="noopener">like these</a>).</p> <p>Reach me at chrisshi [at] andrew [dot] cmu [dot] edu.</p> <div class="home-links"> <a class="home-link home-club home-club-rw" href="/ringworld/" aria-label="ringworld — a Sunday maker space in Pittsburgh"><img class="home-club-ring" src="/assets/img/ringworld/mark.png" alt="" aria-hidden="true" width="480" height="263"><span class="home-club-wordmark" aria-hidden="true"></span><span class="home-club-text">— a Sunday maker space in Pittsburgh</span> <span class="home-link-arrow">→</span></a> <a class="home-link home-link-clocktower" href="https://clocktower.chrisshi.com/" target="_blank" rel="noopener" aria-label="Clocktower Town — a gothic pixel-art town for private games of social deduction with friends" title="A gothic pixel-art town for private games of social deduction with friends."><img class="ct-emblem" src="/assets/img/clocktower/emblem.png" alt="" aria-hidden="true" width="64" height="64"><span class="ct-name" aria-hidden="true">Clocktower Town</span><span class="ct-lantern" aria-hidden="true"></span><span class="home-link-arrow" aria-hidden="true">→</span></a> <a class="home-link home-club home-club-mln" href="https://mlnclub.github.io/" aria-label="MLn Reading Club — weekly ML papers in Pittsburgh" rel="external nofollow noopener" target="_blank"><span class="home-club-ico" aria-hidden="true"></span><span class="home-club-wordmark" aria-hidden="true"></span><span class="home-club-text">— weekly ML papers in Pittsburgh</span> <span class="home-link-arrow">→</span></a> <a class="home-link home-link-substack" href="https://ultrastructure.substack.com/" target="_blank" rel="noopener">Read my Substack — ultrastructure <span class="home-link-arrow">→</span></a> </div> <p><a href="https://www.anilada.com/notes/godel-letter.pdf" target="_blank" rel="noopener">Gödel’s letter to von Neumann</a></p> <div style="display: none" aria-hidden="true"><a href="/about/">More about me and my research interests</a></div> </div> <h2>latest posts</h2> <div class="news"> <div class="table-responsive"> <table class="table table-sm table-borderless"> <tr> <th scope="row" style="width: 20%">Oct 17, 2026</th> <td> <a class="news-title" href="https://www.youtube.com/watch?v=Bl_nYOT-vl4" target="_blank" rel="external nofollow noopener">Tracing a Fine-Tuned SmolVLA from Pixels to Action — accepted at the CoRL 2026 Workshop SPAIS</a> <svg width="2rem" height="2rem" viewbox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"> <path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path> </svg> </td> </tr> <tr> <th scope="row" style="width: 20%">Sep 27, 2026</th> <td> <a class="news-title" href="/research/making-my-robot-learning-loop-faster-2026-09-27/">Consider Performance for Better Science</a> </td> </tr> </table> </div> </div> <style>
   .news-soon {
     display: inline-block;
     margin: 0.35rem 0 0;
