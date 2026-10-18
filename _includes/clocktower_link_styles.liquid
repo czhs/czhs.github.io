@@ -1,0 +1,99 @@
+<style>
+  /* Clocktower Town: one line that wears the game's own pixel art. The strip is a
+     mirrored crop of the landing hero (so the tower stands right of the name);
+     the emblem and lantern sprite are the landing's own files; the name is set
+     in the game's display face (IM Fell English, OFL). Sources live in the
+     clocktower repo's apps/client/public/landing; keep in sync. Shared by the
+     about and garden layouts; the selectors outrank both skins' .home-link. */
+  @font-face {
+    font-family: "Clocktower Fell";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("{{ '/assets/fonts/im-fell-english-latin-400-normal.woff2' | relative_url }}") format("woff2");
+  }
+  body .home-links .home-link.home-link-clocktower {
+    position: relative;
+    display: flex;
+    border: 0;
+    border-radius: 0;
+    font-family: var(--rz-sans, inherit);
+    font-weight: 400;
+    line-height: 1;
+    transform: none;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 10px 0 6px;
+    overflow: hidden;
+    white-space: nowrap;
+    background:
+      linear-gradient(90deg, rgba(15, 13, 20, 0.88) 0%, rgba(15, 13, 20, 0.55) 55%, rgba(15, 13, 20, 0.25) 100%),
+      url("{{ '/assets/img/clocktower/banner.jpg' | relative_url }}") right -4px top 39% / max(440px, calc(100% + 8px)) auto no-repeat;
+    box-shadow:
+      0 0 0 2px #0f0d14,
+      inset 0 0 0 1px rgba(226, 177, 74, 0.45);
+    color: #f3cf7a;
+    text-decoration: none;
+    transition:
+      background-position 1.2s ease,
+      box-shadow 0.2s ease;
+  }
+  body .home-links .home-link.home-link-clocktower:hover {
+    background-position: 0 0, right 0 top 46%;
+    box-shadow:
+      0 0 0 2px #0f0d14,
+      inset 0 0 0 1px rgba(243, 207, 122, 0.9),
+      0 0 14px rgba(232, 160, 60, 0.35);
+  }
+  .home-link-clocktower .ct-emblem {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 1px 0 #0f0d14);
+  }
+  .home-link-clocktower .ct-name {
+    flex: 0 0 auto;
+    font-family: "Clocktower Fell", "Iowan Old Style", Georgia, serif;
+    font-size: 18px;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    color: #f3cf7a;
+    text-shadow:
+      1px 1px 0 #3a2410,
+      0 0 8px rgba(232, 160, 60, 0.45);
+  }
+  /* the landing's six-frame wall lantern, one frame per step */
+  .home-link-clocktower .ct-lantern {
+    flex: 0 0 auto;
+    width: 12px;
+    height: 24px;
+    margin-left: auto;
+    background: url("{{ '/assets/img/clocktower/lantern.png' | relative_url }}") 0 0 / 72px 24px no-repeat;
+    filter: drop-shadow(0 0 4px rgba(255, 170, 70, 0.55));
+    animation: ct-flicker 0.9s steps(6) infinite;
+  }
+  @keyframes ct-flicker {
+    to {
+      background-position: -72px 0;
+    }
+  }
+  body .home-links .home-link-clocktower .home-link-arrow {
+    margin-left: 0;
+    color: #f3cf7a;
+    font-size: 13px;
+    transition: transform 0.15s ease;
+  }
+  .home-link-clocktower:hover .home-link-arrow {
+    transform: translateX(2px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .home-link-clocktower .ct-lantern {
+      animation: none;
+    }
+    body .home-links .home-link.home-link-clocktower {
+      transition: none;
+    }
+  }
+</style>
