@@ -9,7 +9,7 @@ related_posts: false
 published: true
 ---
 
-*Compiled by Claude (Opus 5.5) analysis agents from the project's Claude Code transcripts. Prompts in quotes are Chris's, verbatim, typos included.*
+*Compiled by Claude (Opus 5.5) analysis agents from the project's Claude Code transcripts. Prompts in quotes are typed by Chris, verbatim, typos included, unless marked as a pasted brief or an agent's words.*
 
 **Project:** [Clocktower Town](https://clocktower.chrisshi.com), a browser social-deduction game (Blood on the Clocktower rules, human Storyteller, proximity voice). Built 2026-10-14 → 10-18 almost entirely by Claude Code agents, directed by one person across two accounts.
 
@@ -29,30 +29,14 @@ published: true
 
 ## Biggest wins
 
-**1. Contracts and boundaries before parallel work, and no faked verification.** The kickoff prompt:
-
-> "You are the lead engineer and integrator, not a planning-only assistant. Start building now. … Establish message schemas, authoritative room/lobby lifecycles, per-client secret projection, and teammate file boundaries before parallel changes. … Don't fabricate verification or silently drop requirements."
-
-- Skeleton in 14 min; 5 owner-per-path agents committed in 55 min; public URL at 1 h 20 m.
-- The secrecy model (each client gets only its own view) held: no payload leak was found in 5 days.
-- "Never claim a test passed that you did not run" went into the agent guide and later into most delegation prompts.
-
-**2. Demanding evidence instead of "done."**
-
-> "don't assume something works because its implementation exists or because a test passes."
-
-- This brought in adversarial auditors that write failing tests from the official rules.
-- After 89 green builder tests, they found 10 rules bugs (2 high severity) and three night-time information leaks.
-- The builder's own tests had encoded the builder's misreading of the rules.
-
-**3. A principle with its reason, not a list of features.**
+**1. A principle with its reason, not a list of features.**
 
 > "the gamestate should be easily maleable by the storyteller, almost like props so the storyteller can adjust around bugs in the game/adapt to what is happening live"
 
 - The agent saved it to memory 36 seconds later.
 - It then settled design questions in later versions without being restated: Storyteller teleport tools instead of auto-teleports, and every game state editable.
 
-**4. Policies beat instance fixes.**
+**2. Policies beat instance fixes.**
 
 > "bugs should be fixed as they arise, or during the pipeline upgrade phase"
 
@@ -62,7 +46,7 @@ published: true
 
 - That produced one stacking system for every overhead element, instead of a patch per overlap.
 
-**5. Anchoring to something that already exists, and giving the gameplay reason.**
+**3. Anchoring to something that already exists, and giving the gameplay reason.**
 
 > "The book should be a 3d sprite like the hand"
 
@@ -76,7 +60,7 @@ published: true
 
 - After 14 prompts of vote-legibility feedback without a criterion, this one had a testable criterion: the Butler player must be able to see their master's vote. Later critic rounds tested exactly that.
 
-**6. Cutting scope, and asking for measurement.**
+**4. Cutting scope, and asking for measurement.**
 
 > "can we deploy a finished v1 of the game with whatever assets we have, not hte overhaul?"
 
@@ -86,12 +70,27 @@ published: true
 
 - The agent measured instead of guessing: 86% of agent time was model time, so halving render time would save about 5%. The real bottleneck was the usage limit.
 
-**7. Letting the agent write the next brief.**
+**5. Letting the agent write the next brief.**
 
 > "wind down for handoff, give me the prompt for the next session"
 
 - The agent wrote a 3,007-character continuation prompt (read-first list, ordered steps, resource and deploy rules). The new session launched its swarm 3 minutes after the paste.
 - Together with "your job is to send me frequent image/video updates", this is how most visual bugs were caught.
+
+**6. Pre-written briefs for kickoff and release readiness.** These are pasted briefs, not typed prompts. The kickoff brief:
+
+> "You are the lead engineer and integrator, not a planning-only assistant. Start building now. … Establish message schemas, authoritative room/lobby lifecycles, per-client secret projection, and teammate file boundaries before parallel changes. … Don't fabricate verification or silently drop requirements."
+
+- Skeleton in 14 min; 5 owner-per-path agents committed in 55 min; public URL at 1 h 20 m.
+- The secrecy model (each client gets only its own view) held: no payload leak was found in 5 days.
+- "Never claim a test passed that you did not run" went into the agent guide and later into most delegation prompts.
+
+The release-readiness brief:
+
+> "don't assume something works because its implementation exists or because a test passes."
+
+- This brought in adversarial auditors that write failing tests from the official rules.
+- After 89 green builder tests, they found 10 rules bugs (2 high severity) and three night-time information leaks. The builder's own tests had encoded the builder's misreading of the rules.
 
 ## Pitfalls
 
@@ -99,7 +98,7 @@ published: true
 
 > "the art should be stunning, even though it is pixel sprites"
 
-- That goal, plus a 12.8 KB brief requiring an image model, opened a ~19 h art track: ~60 prompts and ~150 image runs.
+- That goal, plus a pasted 12.8 KB brief requiring an image model, opened a ~19 h art track: ~60 prompts and ~150 image runs.
 - It ended at "I actually really like the pixel art in the v1— just polish the map."
 - **Instead:** lock a target image and an in-game mock first. Prefer art the agents write as code, so they can iterate on it deterministically.
 
@@ -138,7 +137,7 @@ published: true
 
 > "manage session limit to make sure you don't get stopped by it"
 
-- Pasted into two sessions, both read it as "ration usage". Both needed "the point is that you can continue between session boundaries."
+- Pasted into two sessions; both sessions read it as an instruction to ration usage. Both needed "the point is that you can continue between session boundaries."
 - **Instead:** state the outcome, not the verb.
 
 **6. Performance proxies.**
