@@ -30,7 +30,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/pokedex/";
           },
-        },{id: "books-chip-war",
+        },{id: "post-clocktower-town-agent-notes",
+        
+          title: "Clocktower Town agent notes",
+        
+        description: "biggest wins and pitfalls from directing coding agents to build a multiplayer game in 4 days",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/clocktower-town-agent-notes/";
+          
+        },
+      },{id: "books-chip-war",
           title: 'Chip War',
           description: "",
           section: "Books",handler: () => {
