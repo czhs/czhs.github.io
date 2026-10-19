@@ -34,7 +34,7 @@ ninja.data = [{
         
           title: "Clocktower Town agent notes",
         
-        description: "the patterns, prompts and sources that worked when directing coding agents to build a multiplayer game in 4 days",
+        description: "project statistics and the sources given to the coding agents that built a multiplayer game in 4 days",
         section: "Posts",
         handler: () => {
           
