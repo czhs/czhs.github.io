@@ -2,164 +2,196 @@
 layout: post
 title: Clocktower Town agent notes
 date: 2026-10-18 21:00:00-0700
-description: biggest wins and pitfalls from directing coding agents to build a multiplayer game in 4 days
+description: the patterns, prompts and sources that worked when directing coding agents to build a multiplayer game in 4 days
 tags: agents games
 categories:
 related_posts: false
 published: true
 ---
 
-*Compiled by Claude (Opus 5.5) analysis agents from the project's Claude Code transcripts. Prompts in quotes are typed by Chris, verbatim, typos included, unless marked as a pasted brief or an agent's words.*
+*Compiled by Claude (Opus 5.5) analysis agents from the project's Claude Code transcripts and checked by separate fact-checking agents. Prompts in quotes were typed by Chris: spelling is corrected, wording is unchanged, and "…" marks a trim. Quotes marked as an agent's words are the agent's.*
 
 **Project:** [Clocktower Town](https://clocktower.chrisshi.com), a browser social-deduction game (Blood on the Clocktower rules, human Storyteller, proximity voice). Built 2026-10-14 → 10-18 almost entirely by Claude Code agents, directed by one person across two accounts.
 
 | | |
 |---|---|
-| Span | 4.2 days, ~20 h of human attention, ~70 h of agent activity |
-| Human prompts | 391, median 67 characters; 81 typed while an agent was mid-turn |
+| Span | 4.2 days, ~21 h of human attention, ~70 h of agent activity |
 | Subagents | 736 (124 spawned directly, 612 inside 32 multi-agent workflows), all Opus |
-| Output tokens | 31.9 M, 92% written by subagents (the main session mostly coordinated) |
+| Output tokens | 31.9 M, 92% written by subagents |
 | Shipped | v1 at +18 h, v2 at +27 h, six v3 releases on day 5; 206 commits, 2,174 tests passing |
+| Effort | 3D pixel-art pipeline: 24% of prompts, 57% of tokens. Testing: 1% of prompts, 10% of source lines |
 
-**Where the effort went**
+## Patterns that worked
 
-- **3D pixel-art pipeline:** 24% of prompts, 57% of output tokens. 0 of 31 characters reached the critic's ship bar.
-- **Orchestration** (status checks, usage limits, handoffs, which machine runs what): 14% of prompts. This is about the agents, not the game.
-- **Testing:** 1% of prompts, but 10% of source lines; the agents wrote tests without being asked.
+**1. Separate judging agents.** Builders never graded their own work; a different agent did.
 
-## Biggest wins
+| Judge | What it caught |
+|---|---|
+| Rules auditor (writes failing tests from the official rules) | 10 engine bugs (2 high severity) after the builder's 89 tests had passed; fixed within the hour |
+| Secrecy auditor | 3 information leaks around night phases, e.g. the Storyteller still visible after night |
+| Hostile-client harness (33 message types, 50 Storyteller commands) | Arrival time of night info leaked roles in automatic games |
+| Art critics | Self-scores ran ~3 points high. The lead reported "25 of 31 characters are now at 19 or above" (agent's words); the critic found 0 of 31 at its ship bar of 19/24 |
+| Live-build playtest critics | Missing portraits on the live site; vote marks on the wrong player in 4 of 15 seats |
+| Design reviewers (feasibility, risk) | Revised the v3 integration contract before any build agent ran |
 
-**1. A principle with its reason, not a list of features.**
+The judges were non-editing. The lead agent's prompt to one critic (agent's words):
 
-> "the gamestate should be easily maleable by the storyteller, almost like props so the storyteller can adjust around bugs in the game/adapt to what is happening live"
+> "Do NOT edit project files. … LOOK at every screenshot you cite. … Butler test: could a Butler watching ONE chosen master tell in real time when the master slaps, withdraws and locks? … Score 0-2 per criterion, /16, ship bar 13. For each issue give P1/P2/P3, exact repro, the screenshot path, and a concrete fix (file/function)."
 
-- The agent saved it to memory 36 seconds later.
-- It then settled design questions in later versions without being restated: Storyteller teleport tools instead of auto-teleports, and every game state editable.
+**2. A main chat that manages agents and sends frequent images.**
 
-**2. Policies beat instance fixes.**
+> "while the agents are running, your job is to send me frequent image/video updates"
+
+> "your job is to send me frequent images and videos of the animations progress, while the foundation agent works"
+
+- The main sessions acted as managers: 112 agent spawns, 19 file edits.
+- A watcher sent new renders every 4–5 min: about 230 images and clips over the project, 95 in one character session.
+- Several errors were caught from these images rather than by agents:
+  - a character's face in the wrong place;
+  - a hidden door, then an unenterable house;
+  - sliding cobblestones;
+  - a debug view (stray pixels marked magenta) that the lead had been sending, and misreading as real defects, for ~21 h.
+
+**3. A live demo maintained while it was being built.**
+
+> "send agents to release what you have as you go, while also continuing to send me the visual updates"
+
+- More than a dozen versioned builds went out from 10-16 to 10-18. The first interim build was live 4 min after the prompt, followed by a 30-min release loop.
+- Later publishes checked for 60 fps, 0 security-policy violations and no missing files. Content-hashed paths stopped the CDN from serving stale builds.
+- Collaborators could test the real thing, and playtest critics judged the live build rather than a local copy.
+- The same habit shipped the game itself: v1 went to production with the art it had, instead of waiting for the art overhaul.
+
+## Most valuable prompts
+
+**A principle with its reason**
+
+> "… the gamestate should be easily malleable by the storyteller, almost like props so the storyteller can adjust around bugs in the game/adapt to what is happening live"
+
+- Saved to memory within a minute; it drove the v2 Storyteller panel (force seats and phases, teleport, edit any state).
+
+> "we don't need to worry too much about game cheating behavior, security was mostly to make sure my own computer and my home stays safe while hosting the server"
+
+- It re-weighted two running security agents and became a standing priority rule: isolate the host first, never trade voice UX for anti-cheat.
+
+**A policy instead of a fix**
 
 > "bugs should be fixed as they arise, or during the pipeline upgrade phase"
 
-- It became a module-fix step after every wave, which fixed the bug that made every character glide.
+- It became a module-fix step after every wave of agents. That step fixed the shared bug that made every character glide instead of walk.
 
-> "also there are some overlapping of emojis and tags and other indicators, those need to be addressed as well— all the possible stuff that can float on the head of a characeter"
+> "also there are some overlapping of emojis and tags and other indicators, those need to be addressed as well— all the possible stuff that can float on the head of a character"
 
-- That produced one stacking system for every overhead element, instead of a patch per overlap.
+- One stacking system for every overhead element, instead of a patch per overlap.
 
-**3. Anchoring to something that already exists, and giving the gameplay reason.**
+**Questions an asset designer can check**
+
+> "each agent should also think about what is unique to their character. do extra things have to be animated? should it walk in a different way? how should expressions adapt to the new artstyle? will the animation look good at game speed? (same speed from v2's art, relatively speaking)"
+
+- It became a required "unique to me" section in every character sheet, enforced by critics.
+- Game speed was measured from the game code (≈4 body-heights/s).
+- The 31 characters got distinct gaits (hop, waddle, glide) and signature emotes.
+
+> "make sure to also get the storyteller, since it's a character as well. the storyteller should be visually distinct from all the other characters"
+
+- The lead, summarising the critic: "the most distinctive member of the cast, even at quarter size" (agent's words).
+
+**Art direction anchored to something that exists, with the gameplay reason**
 
 > "The book should be a 3d sprite like the hand"
 
-- 44 characters, fixed in one round.
+- 44 characters; fixed in one round.
 
-> "will the animation look good at game speed? (same speed from v2's art, relatively speaking)"
+> "… perhaps they slap the seal onto the ground in front of the character— that would be a very clear vote. this is important so that butler can be played properly"
 
-- The agent measured the anchor from game code (≈4 body-heights/s) and turned it into a readability check.
+- The Butler criterion became the test every later critic round ran (see the judge prompt above).
 
-> "perhaps they slap the seal onto the ground infront of the character— that would be a very clear vote. this is important so that butler can be played properly"
+**Asking for measurement and independent checks**
 
-- After 14 prompts of vote-legibility feedback without a criterion, this one had a testable criterion: the Butler player must be able to see their master's vote. Later critic rounds tested exactly that.
+> "is this process bottlenecked by anything? would improving performance right now improve the speed of the pipeline for the agents"
 
-**4. Cutting scope, and asking for measurement.**
+- The agent measured instead of guessing: 86% of agent time was model time, so halving render time would gain about 5%. The real bottleneck was the usage limit.
 
-> "can we deploy a finished v1 of the game with whatever assets we have, not hte overhaul?"
+> "is the art demo up? send an agent to make sure it has all the new stuff you've worked on"
+
+- A separate read-only audit found the new UI was not live and an unfinished character was still shipping publicly. Both were fixed within 45 min.
+
+**Scope cuts, priorities, handoffs**
+
+> "can we deploy a finished v1 of the game with whatever assets we have, not the overhaul?"
 
 - v1.0.0 was live 18 min later, separate from the stalled art work.
 
-> "is this process bottlenecked by antyhing? would improving performance right now improve the speed of the pipeline for the agents"
+> "I only care about perf of v3 now, v2 is fine"
 
-- The agent measured instead of guessing: 86% of agent time was model time, so halving render time would save about 5%. The real bottleneck was the usage limit.
-
-**5. Letting the agent write the next brief.**
+- The running performance workflow was relaunched v3-only within a minute; the rule was saved to memory.
 
 > "wind down for handoff, give me the prompt for the next session"
 
-- The agent wrote a 3,007-character continuation prompt (read-first list, ordered steps, resource and deploy rules). The new session launched its swarm 3 minutes after the paste.
-- Together with "your job is to send me frequent image/video updates", this is how most visual bugs were caught.
+- The agent wrote a 3,007-character continuation brief (read-first list, ordered steps, resource and deploy rules). The next session launched its swarm 3 min after the paste.
 
-**6. Pre-written briefs for kickoff and release readiness.** These are pasted briefs, not typed prompts. The kickoff brief:
+## Sources given to the agents
 
-> "You are the lead engineer and integrator, not a planning-only assistant. Start building now. … Establish message schemas, authoritative room/lobby lifecycles, per-client secret projection, and teammate file boundaries before parallel changes. … Don't fabricate verification or silently drop requirements."
+Everything Chris supplied that informed the agents' work, beyond typed instructions.
 
-- Skeleton in 14 min; 5 owner-per-path agents committed in 55 min; public URL at 1 h 20 m.
-- The secrecy model (each client gets only its own view) held: no payload leak was found in 5 days.
-- "Never claim a test passed that you did not run" went into the agent guide and later into most delegation prompts.
+**Specs and pre-written briefs (pasted)**
 
-The release-readiness brief:
+- **`CLOCKTOWER_TOWN_SPEC.md`**, the authoritative implementation spec attached to the first prompt: decision summary, stack, UX, secrecy model.
+  - Its named inspirations were the physical staging of Minecraft Blood on the Clocktower and the lobby experience of Town of Salem.
+- **A kickoff brief.** It set up a lead integrator plus 5 owner-per-path agents, contracts before parallel work, and "Don't fabricate verification or silently drop requirements."
+  - Result: skeleton in 14 min, 5 modules in 55 min, a public URL at 1 h 20 m.
+- **Readiness, security and sound briefs.**
+  - The readiness brief said "don't assume something works because its implementation exists or because a test passes". It brought in the rules and secrecy auditors above.
+  - The sound brief limited sources to CC0: Kenney audio packs, Freesound filtered to CC0, and OpenGameArt. It produced 35 sounds (1.03 MB) with a credits file.
 
-> "don't assume something works because its implementation exists or because a test passes."
+**Rendering and animation research (the pixel3d pipeline)**
 
-- This brought in adversarial auditors that write failing tests from the official rules.
-- After 89 green builder tests, they found 10 rules bugs (2 high severity) and three night-time information leaks. The builder's own tests had encoded the builder's misreading of the rules.
+- David Holland, [3D Pixel Art Rendering](https://www.davidhol.land/articles/3d-pixel-art-rendering/).
+  - It started a research swarm: 4 researchers, a synthesized techniques doc, then 10- and 21-agent build runs.
+- t3ssel8r videos: [1FrIBkuq0ZI](https://www.youtube.com/watch?v=1FrIBkuq0ZI), [KPoeNZZ6H4s](https://www.youtube.com/watch?v=KPoeNZZ6H4s) (procedural animation with second-order dynamics), [erQ8PvxIjS8](https://www.youtube.com/watch?v=erQ8PvxIjS8), [cCUCMBmc9yQ](https://www.youtube.com/watch?v=cCUCMBmc9yQ).
+  - They came with a ChatGPT-compiled list of implementations, passed on as "suggestions by chatgpt, you may use whatever you find helpful":
+    - t3ssel8r's [Pixel Animation Importer](https://gist.github.com/t3ssel8r/aba0b33369ea620a63917f4ac21fd585)
+    - [godot-3d-pixel-art](https://github.com/Robert-K/godot-3d-pixel-art)
+    - [DynamicsStudy](https://github.com/iggigabriel/DynamicsStudy) and a [SecondOrderDynamics gist](https://gist.github.com/Andicraft/ab605dda924a0321e755abf8f573ebd7)
+    - Kody King's [three.js 3D pixel-art shader](https://github.com/KodyJKing/hello-threejs)
+    - Roystan's [outline](https://roystan.net/articles/outline-shader/), [toon](https://roystan.net/articles/toon-shader/) and [water](https://roystan.net/articles/toon-water/) shaders
+    - [WiseFrame's Godot pixel-art shader series](https://wiseframe.dev/godot-pixel-art-shaders-pipeline-and-quantization)
+    - a [Unity isometric pixel pipeline](https://github.com/bababuyyy/unity-isometric-pixel-pipeline)
+    - an [outline + highlight shader](https://godotshaders.com/shader/3d-pixel-art-outline-highlight-post-processing-shader/)
+    - t3ssel8r's Patreon notes
+    - Catlike Coding's [custom render pipeline](https://catlikecoding.com/unity/tutorials/custom-srp/)
+  - These produced the character pipeline's contract, playbook, 12-point rubric and learnings log, followed by an 11-agent build.
+  - Reference frames served only as references for critics and authors; all shipped art is procedural code.
+
+**Visual references**
+
+- **Concept art and screenshots** attached in chat: about 28 prompts carried images, mostly the target look or a UI screenshot.
+- **Town of Salem**, for the town layout: "clocktower should be at the top, houses arranged around like in the town of salem".
+- **The game's own earlier art**, as an anchor: v1's procedural pixel art (kept as the v2 style), v2 sprite speed and scale, and "like the hand".
+
+**Content sources**
+
+- CMU course mascots, supplied by Chris, plus [r/cmu](https://www.reddit.com/r/cmu/) and the [CMU Readme](https://cmureadme.com/) archive for student humor. These fed 20 in-town easter eggs.
 
 ## Pitfalls
 
-**1. An art goal no one could measure, pursued with a mandated tool.**
-
-> "the art should be stunning, even though it is pixel sprites"
-
-- That goal, plus a pasted 12.8 KB brief requiring an image model, opened a ~19 h art track: ~60 prompts and ~150 image runs.
-- It ended at "I actually really like the pixel art in the v1— just polish the map."
-- **Instead:** lock a target image and an in-game mock first. Prefer art the agents write as code, so they can iterate on it deterministically.
-
-**2. Agents grading their own work.**
-
-- During the character run, the lead agent reported "25 of 31 characters are now at 19 or above".
-- The independent critic's final review found 0 of 31 at the bar (mean 15.7/24). Self-scores ran about 3 points high, and 29 of 31 fix rounds were never re-checked.
-- **Instead:** only scores from a separate, non-editing critic count, and every fix round gets re-scored.
-
-**3. Usage limits treated as an edge case.**
-
-> "make sure the pipeline and swarm runs automatically without you, you just send updates to the channel, so if your monitor fails, the night isn't wasted"
-
-- The resume timer lived inside the same rate-limited session, so about 9 h of that night were lost anyway.
-
-> "you may run at 8 parallel characters going forward"
-
-- Changing parallelism mid-run altered the agent order, and the resume replayed 2–3 h of finished work.
-- **Instead:**
-  - Fix workflow settings for the whole run.
-  - On a stop, launch a continuation that runs only the unfinished items in the journal.
-  - Keep a dated handoff doc current at every checkpoint.
-
-**4. Granting permission in chat.**
-
-> "You have all permissions"
-
-- Claude Code's safety check refused five times in a row, moments before a flight. Approval given in chat does not override it; only settings rules do.
-- **Instead:** add the allow rules (or choose the permission mode) before going unattended, and ban commands that trigger prompts (glob `rm`), which had also stalled overnight runs.
-
-**5. Verbs that can be read two ways.**
-
-> "commit everything to a branch now, there have been changes to remote"
-
-- The agent began staging; the reply came 12 seconds later: "oh i didn't mean commit now".
-
-> "manage session limit to make sure you don't get stopped by it"
-
-- Pasted into two sessions; both sessions read it as an instruction to ration usage. Both needed "the point is that you can continue between session boundaries."
-- **Instead:** state the outcome, not the verb.
-
-**6. Performance proxies.**
-
-> "Any normal GPU, including laptop integrated graphics, draws this kind of scene in milliseconds."
-
-- That was the agent's claim. A draw-call cut of 17–19% made frames slower.
-- A 12.8 s first load surfaced only when a real laptop was tested, after the release was in production.
-- **Instead:** put the target device in the loop from the first 3D build, and require every budget to state its exact measurement command.
-
-**7. Nine requests in one message.**
-
-- A 1,009-character prompt bundled hosting, layout, interiors, performance, the intro and the roster. It needed about 12 follow-ups.
-- Short prompts tied to one thing almost always landed.
+- **Art target not locked.** An image-model art track toward an HD-2D look ran 16–19 h before the project went back to v1's procedural pixel art.
+  - *Do instead:* fix a target image and an in-game mock before scaling art agents, and prefer art written as code.
+- **Unchecked self-grading.** See the art-critic row above; 29 of 31 fix rounds were never re-scored.
+  - *Do instead:* only a separate critic's score counts, including after every fix.
+- **Usage limits.** Unattended runs lost about 9 h on each of two nights. On the first, the resume timer lived inside the rate-limited session. Changing parallelism mid-run made a resume replay 2–3 h of finished work.
+  - *Do instead:* fix workflow settings for the whole run, continue from the journal of finished items, and keep a dated handoff doc.
+- **Permissions.** Approval given in chat does not override Claude Code's safety checks, and glob `rm` commands stalled unattended agents on prompts.
+  - *Do instead:* set allow rules and a safe cleanup script before going unattended.
+- **Performance proxies.** An agent claimed "Any normal GPU, including laptop integrated graphics, draws this kind of scene in milliseconds" (agent's words). A real laptop later showed a 12.8 s first load, after release.
+  - *Do instead:* put the target device in the loop from the first 3D build.
 
 ## Rules worth copying
 
-- One owner per path, including across forked sessions. A fork once overwrote the main session's file beyond recovery.
-- Every delegation prompt names the owned files, the exact verification commands, and a report format with copied output.
-- Critics and auditors never edit; builders never grade themselves.
-- Ask "is it done?" and expect a verified/unverified split.
-- Write every tracked file as if the repo were public from commit 1. Keep host details in gitignored local files, and secret-scan on pre-push.
+- Hidden-role games:
+  - The server is authoritative, and each client receives only its own projection of the state.
+  - Test it with a hostile-client harness that covers position, timing and voice side channels, not just message payloads.
+- Every delegation prompt names the owned files, the exact verification commands, and a report with copied output. One owner per path, including across forked sessions.
+- Write every tracked file as if the repo were public from commit 1; secret-scan on pre-push.
 - Keep agent load off the production machine, or cap it from the first run.
 - Pin the model and settings on every machine that runs agents.
 
