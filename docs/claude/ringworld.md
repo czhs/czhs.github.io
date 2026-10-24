@@ -92,8 +92,18 @@ stays declined — short attributed quotes + links only.
 
 Chris's own work-session timer, `_pages/rw_timer.html` (self-contained: inline
 `rwt-` styles + script on `ringworld_base`). Unlinked from the landing page on
-purpose (static-landing mode), `sitemap: false`. Timer (presets reuse the
-landing schedule's "focus time" / "social break" words) + stopwatch; click the
-digits to type a length. Wall-clock timing, state + session log in
-localStorage (`rwTimer.state`, `rwTimer.log`) — per-browser, nothing server-side.
-Sprites are the kawaii set only.
+purpose (static-landing mode), `sitemap: false`. Two screens:
+
+- **Setup** — preset buttons (25 / 50 "focus time" / 20 "social break" / 5 /
+  stopwatch; the words are the landing schedule's), a custom-time field
+  ("45" = min, "12:30" = mm:ss, "1:30:00"), optional label, the session log.
+  Clicking a preset starts immediately.
+- **Display** — goes fullscreen, and by request shows **no controls**: only
+  the ring, digits, label, sprites. Hidden inputs: click / space = pause, double-click /
+  Esc / leaving fullscreen = end (logs time worked if ≥ 1 min). When the timer
+  finishes: confetti + synthesized chime + logged; click to go back.
+
+Clock is a 200ms `setInterval`, not rAF (rAF stops in background tabs, and the
+timer still has to finish and chime there). Wall-clock timing; state + log in
+localStorage (`rwTimer.run`, `rwTimer.log`), per-browser. A running session
+survives a reload. Kawaii sprites only.
