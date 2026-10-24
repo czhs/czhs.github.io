@@ -10,7 +10,9 @@
   the new URL is what moves the search ranking across instead of leaving two
   competing copies of every week.
 
-  To use: give a page `layout: redirect` and a `redirect_to`.
+  To use: give a page `layout: redirect` and a `redirect_to`; optional `moved`
+  (what moved, default MLn) and `redirect_bg` / `redirect_fg` colours. Since
+  2026-10-24 ringworld uses it too (/ringworld/ → ring-world.github.io).
 {%- endcomment -%}
 <!doctype html>
 <html lang="{{ site.lang }}">
@@ -24,12 +26,12 @@
       body { font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
              margin: 0; min-height: 100vh; display: flex; align-items: center;
              justify-content: center; text-align: center; padding: 1.5rem;
-             background: #1f3329; color: #ece1c8; }
-      a { color: #d8c4a0; }
+             background: {{ page.redirect_bg | default: '#1f3329' }}; color: {{ page.redirect_fg | default: '#ece1c8' }}; }
+      a { color: inherit; }
     </style>
   </head>
   <body>
-    <p>The MLn Reading Club has moved to <a href="{{ page.redirect_to }}">{{ page.redirect_to }}</a>.</p>
+    <p>{{ page.moved | default: 'The MLn Reading Club' }} has moved to <a href="{{ page.redirect_to }}">{{ page.redirect_to }}</a>.</p>
     <script>window.location.replace({{ page.redirect_to | jsonify }});</script>
   </body>
 </html>

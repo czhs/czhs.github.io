@@ -1,5 +1,14 @@
 # ringworld — the /ringworld/ micro-site (a Socratica node)
 
+> **MOVED 2026-10-24 → https://ring-world.github.io/ (repo
+> `ring-world/ring-world.github.io`, plain Jekyll, Pages from `main`).** All
+> ringworld work happens there now (it has its own CLAUDE.md). Here, `/ringworld/`
+> and `/ringworld/timer/` are `layout: redirect` stubs. The layouts/includes/data
+> below still exist in this repo but nothing published builds from them; this
+> file is kept as the design history (the new repo carries the same styles).
+> The homepage pill and MLn's sibling pill still point at `/ringworld/` and
+> ride the redirect.
+
 Weekly maker space in Pittsburgh (Sundays 2–5pm, Ansys Hall 1st floor) and a **Socratica
 node** (https://www.socratica.info/ — linked from the About panel and the footer).
 The Luma event (https://luma.com/ringworld) is hosted by Chris Shi; **no CASI /
@@ -87,23 +96,3 @@ the blurb. All body copy is existing text (the About panel is the Luma descripti
 verbatim; blurb single-sourced from the data file) — nothing on the page was written
 for the site. Reproducing Neel Nanda's guide / Socratica toolbox at length: declined,
 stays declined — short attributed quotes + links only.
-
-## /ringworld/timer/ — session timer (2026-10-24)
-
-Chris's own work-session timer, `_pages/rw_timer.html` (self-contained: inline
-`rwt-` styles + script on `ringworld_base`). Unlinked from the landing page on
-purpose (static-landing mode), `sitemap: false`. Two screens:
-
-- **Setup** — preset buttons (25 / 50 "focus time" / 20 "social break" / 5 /
-  stopwatch; the words are the landing schedule's), a custom-time field
-  ("45" = min, "12:30" = mm:ss, "1:30:00"), optional label, the session log.
-  Clicking a preset starts immediately.
-- **Display** — goes fullscreen, and by request shows **no controls**: only
-  the ring, digits, label, sprites. Hidden inputs: click / space = pause, double-click /
-  Esc / leaving fullscreen = end (logs time worked if ≥ 1 min). When the timer
-  finishes: confetti + synthesized chime + logged; click to go back.
-
-Clock is a 200ms `setInterval`, not rAF (rAF stops in background tabs, and the
-timer still has to finish and chime there). Wall-clock timing; state + log in
-localStorage (`rwTimer.run`, `rwTimer.log`), per-browser. A running session
-survives a reload. Kawaii sprites only.
