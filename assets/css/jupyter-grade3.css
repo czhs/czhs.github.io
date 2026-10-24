@@ -98,6 +98,14 @@ input[type="checkbox"] {
   font-size: 18px;
 }
 
+ul#tabs a {
+  font-family: sans-serif;
+  font-size: 13.5pt;
+  font-weight: normal;
+  font-style: normal;
+  text-shadow: none !important;
+}
+
 .nav > li.disabled > a,
 .nav > li.disabled > a:hover {
   color: #828892;
