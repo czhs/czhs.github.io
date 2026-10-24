@@ -957,363 +957,128 @@ html:has(body.rw-site) {
   .rw-topnav a { font-size: 0.82rem; }
 }
 </style> </head> <body class="rw-site"> <header class="rw-masthead"> <div class="rw-shell rw-masthead-inner"> <a class="rw-brand" href="/ringworld/" aria-label="ringworld — home"> <img class="rw-brand-ring" src="/assets/img/ringworld/mark.png" alt="" width="480" height="263"> <span class="rw-brand-mark" aria-hidden="true"></span> </a><nav class="rw-topnav"><a class="rw-sibling" href="https://mlnclub.github.io/" aria-label="MLn Reading Club — the sibling reading group" rel="external nofollow noopener" target="_blank"> <span class="rw-sibling-ico" aria-hidden="true"></span> <span class="rw-sibling-mark" aria-hidden="true"></span> </a> </nav> </div> </header><main class="rw-main" role="main"> <style>
+  /* ── setup ── */
   .rwt {
-    padding-top: 1.6rem;
+    padding-top: 2rem;
     padding-bottom: 3rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-x: clip; /* the floating friends hang past the ring on phones */
+    overflow-x: clip;
   }
-
-  /* ── mode switch ── */
-  .rwt-modes {
-    display: inline-flex;
-    gap: 0.25rem;
-    padding: 0.25rem;
-    border: 1px solid var(--rw-card-line);
-    border-radius: 999px;
-    background: var(--rw-card);
+  .rwt-hello {
+    width: 7rem;
+    animation: rwt-bob 3.2s ease-in-out infinite;
   }
-  .rwt-modes button {
-    font: 600 0.92rem/1 var(--rw-display);
-    color: var(--rw-ink-soft);
-    background: none;
-    border: 0;
-    border-radius: 999px;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition:
-      background 0.25s,
-      color 0.25s;
-  }
-  .rwt-modes button[aria-selected="true"] {
-    background: var(--rw-ring);
-    color: #fff;
-  }
-
-  /* ── the ring ── */
-  .rwt-stage {
-    position: relative;
-    width: min(400px, 86vw);
-    aspect-ratio: 1;
-    margin: 1.6rem 0 0.4rem;
-  }
-  .rwt-ring {
-    position: absolute;
-    inset: 0;
+  .rwt-presets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(6.4rem, 1fr));
+    gap: 0.7rem;
     width: 100%;
-    height: 100%;
-    transform: rotate(-90deg);
-    overflow: visible;
+    max-width: 38rem;
+    margin-top: 1.2rem;
   }
-  .rwt-track {
-    fill: none;
-    stroke: rgba(62, 111, 180, 0.13);
-    stroke-width: 9;
-    stroke-dasharray: 1.5 7.2;
-    stroke-linecap: round;
-  }
-  .rwt-arc {
-    fill: none;
-    stroke: var(--rw-ring);
-    stroke-width: 9;
-    stroke-linecap: round;
-    transition: stroke 0.6s;
-  }
-  .rwt-site[data-kind="break"] .rwt-arc {
-    stroke: var(--rw-meadow);
-  }
-  .rwt-site[data-mode="stopwatch"] .rwt-arc {
-    stroke: var(--rw-lavender);
-  }
-
-  .rwt-orbit {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-  .rwt-rocket {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    width: 15%;
-    transform: translate(-50%, -50%) rotate(45deg);
-    filter: drop-shadow(0 3px 3px rgba(36, 48, 63, 0.12));
-  }
-  .rwt-rocket img {
-    width: 100%;
-    display: block;
-  }
-  .rwt-site.is-running .rwt-rocket img {
-    animation: rwt-jiggle 0.5s ease-in-out infinite alternate;
-  }
-
-  .rwt-center {
-    position: absolute;
-    inset: 16%;
+  .rwt-preset {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-  .rwt-buddy {
-    width: 26%;
-    height: auto;
-    margin-bottom: 0.2rem;
-    transition: transform 0.4s;
-    animation: rwt-bob 3.2s ease-in-out infinite;
-  }
-  .rwt-site:not(.is-running) .rwt-buddy {
-    animation-duration: 6s;
-    opacity: 0.92;
-  }
-  .rwt-buddy.pop {
-    animation: rwt-pop 0.7s cubic-bezier(0.3, 1.6, 0.5, 1);
-  }
-
-  .rwt-digits {
-    font: 700 clamp(2.6rem, 13vw, 4.4rem) / 1 var(--rw-display);
-    color: var(--rw-ink);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.01em;
-    display: flex;
-    align-items: baseline;
-    border: 0;
-    background: none;
-    padding: 0.1rem 0.3rem;
-    border-radius: 14px;
-    cursor: default;
-  }
-  .rwt-site.can-edit .rwt-digits {
-    cursor: text;
-  }
-  .rwt-site.can-edit .rwt-digits:hover {
-    background: rgba(62, 111, 180, 0.07);
-  }
-  .rwt-d {
-    display: inline-block;
-    min-width: 0.6em;
-    text-align: center;
-  }
-  .rwt-d.tick {
-    animation: rwt-tick 0.32s ease-out;
-  }
-  .rwt-colon {
-    padding: 0 0.04em;
-    opacity: 0.55;
-  }
-  .rwt-site.is-running .rwt-colon {
-    animation: rwt-blink 1s steps(1) infinite;
-  }
-  .rwt-hrs:empty,
-  .rwt-hrs:empty + .rwt-colon {
-    display: none;
-  }
-
-  .rwt-edit {
-    font: 700 clamp(2.2rem, 11vw, 3.6rem) / 1 var(--rw-display);
-    width: 5.2ch;
-    text-align: center;
-    color: var(--rw-ink);
-    background: var(--rw-card);
-    border: 2px solid var(--rw-ring);
-    border-radius: 14px;
-    padding: 0.1rem 0.2rem;
-    outline: none;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .rwt-label {
-    margin-top: 0.45rem;
-    width: 80%;
-    font: 600 0.95rem/1.3 var(--rw-display);
-    color: var(--rw-ink-soft);
-    text-align: center;
-    background: none;
-    border: 0;
-    border-bottom: 1px dashed transparent;
-    outline: none;
-    padding: 0.15rem 0;
-  }
-  .rwt-label:hover,
-  .rwt-label:focus {
-    border-bottom-color: var(--rw-card-line);
-  }
-  .rwt-label::placeholder {
-    color: rgba(90, 107, 128, 0.55);
-  }
-
-  /* ── floating friends ── */
-  .rwt-friend {
-    position: absolute;
-    width: 13%;
-    pointer-events: none;
-    animation: rwt-float 7s ease-in-out infinite;
-    opacity: 0.95;
-  }
-  .rwt-friend.f1 {
-    left: -9%;
-    top: 8%;
-    animation-delay: -1s;
-  }
-  .rwt-friend.f2 {
-    right: -10%;
-    top: 30%;
-    width: 14%;
-    animation-delay: -3.5s;
-    animation-duration: 8s;
-  }
-  .rwt-friend.f3 {
-    left: -4%;
-    bottom: 2%;
-    width: 11%;
-    animation-delay: -5s;
-    animation-duration: 9s;
-  }
-  .rwt-friend.f4 {
-    right: -3%;
-    bottom: -3%;
-    width: 12%;
-    animation-delay: -2s;
-  }
-  .rwt-site:not(.is-running) .rwt-friend {
-    animation-duration: 14s;
-  }
-
-  .rwt-spark {
-    position: absolute;
-    color: var(--rw-gold);
-    font-size: 0.9rem;
-    pointer-events: none;
-    animation: rwt-twinkle 2.6s ease-in-out infinite;
-  }
-
-  /* ── presets + controls ── */
-  .rwt-presets {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.45rem;
-    margin-top: 0.6rem;
-    min-height: 2.3rem;
-    transition: opacity 0.3s;
-  }
-  .rwt-site[data-mode="stopwatch"] .rwt-presets {
-    visibility: hidden;
-  }
-  .rwt-site.is-running .rwt-presets {
-    opacity: 0.35;
-    pointer-events: none;
-  }
-  .rwt-chip {
-    font: 600 0.85rem/1 var(--rw-display);
+    gap: 0.35rem;
+    padding: 0.9rem 0.6rem 0.8rem;
     color: var(--rw-ink);
     background: var(--rw-card);
     border: 1px solid var(--rw-card-line);
-    border-radius: 999px;
-    padding: 0.5rem 0.85rem;
+    border-radius: 18px;
     cursor: pointer;
     transition:
-      transform 0.15s,
+      transform 0.18s cubic-bezier(0.3, 1.6, 0.5, 1),
       border-color 0.2s,
-      background 0.2s;
+      box-shadow 0.2s;
   }
-  .rwt-chip:hover {
-    transform: translateY(-2px);
+  .rwt-preset img {
+    width: 2.8rem;
+    height: 2.8rem;
+    object-fit: contain;
+    transition: transform 0.3s cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+  .rwt-preset:hover {
+    transform: translateY(-3px);
     border-color: var(--rw-ring);
+    box-shadow: 0 6px 16px rgba(62, 111, 180, 0.12);
   }
-  .rwt-chip:active {
-    transform: translateY(0) scale(0.96);
+  .rwt-preset:hover img {
+    transform: rotate(-10deg) scale(1.12);
   }
-  .rwt-chip.is-on {
-    background: rgba(62, 111, 180, 0.1);
-    border-color: var(--rw-ring);
+  .rwt-preset:active {
+    transform: scale(0.96);
   }
-  .rwt-chip[data-kind="break"].is-on {
-    background: rgba(124, 154, 60, 0.12);
+  .rwt-preset b {
+    font: 700 1.5rem/1 var(--rw-display);
+  }
+  .rwt-preset span {
+    font: 600 0.82rem/1 var(--rw-display);
+    color: var(--rw-ink-soft);
+  }
+  .rwt-preset[data-kind="break"]:hover {
     border-color: var(--rw-meadow);
   }
+  .rwt-preset[data-kind="stopwatch"]:hover {
+    border-color: var(--rw-lavender);
+  }
 
-  .rwt-controls {
+  .rwt-custom {
     display: flex;
     align-items: center;
-    gap: 1.1rem;
-    margin-top: 1.4rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 1.2rem;
   }
-  .rwt-btn {
-    font: 700 0.95rem/1 var(--rw-display);
-    border-radius: 999px;
-    cursor: pointer;
-    transition:
-      transform 0.15s,
-      box-shadow 0.2s,
-      background 0.3s;
-  }
-  .rwt-btn:active {
-    transform: scale(0.94);
-  }
-  .rwt-btn-side {
-    width: 3.2rem;
-    height: 3.2rem;
-    color: var(--rw-ink-soft);
+  .rwt-custom input,
+  .rwt-label {
+    font: 600 1rem/1 var(--rw-display);
+    color: var(--rw-ink);
     background: var(--rw-card);
     border: 1px solid var(--rw-card-line);
-    font-size: 1.15rem;
-    display: grid;
-    place-items: center;
+    border-radius: 999px;
+    padding: 0.7rem 1rem;
+    outline: none;
+    transition: border-color 0.2s;
   }
-  .rwt-btn-side:hover {
-    color: var(--rw-ink);
-    border-color: var(--rw-ink-soft);
+  .rwt-custom input:focus,
+  .rwt-label:focus {
+    border-color: var(--rw-ring);
   }
-  .rwt-btn-side:disabled {
-    opacity: 0.35;
-    cursor: default;
+  .rwt-custom input {
+    width: 7.5rem;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
   }
-  .rwt-btn-main {
-    min-width: 8.5rem;
-    height: 3.6rem;
-    padding: 0 1.6rem;
+  .rwt-custom input.bad {
+    border-color: #c4584a;
+    animation: rwt-shake 0.35s;
+  }
+  .rwt-label {
+    width: 100%;
+    max-width: 22rem;
+    margin-top: 1.4rem;
+    text-align: center;
+  }
+  .rwt-go {
+    font: 700 1rem/1 var(--rw-display);
     color: #fff;
     background: var(--rw-ring);
     border: 0;
-    font-size: 1.1rem;
-    box-shadow:
-      0 4px 0 #2c5793,
-      0 8px 18px rgba(62, 111, 180, 0.25);
+    border-radius: 999px;
+    padding: 0.75rem 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #2c5793;
+    transition:
+      transform 0.12s,
+      box-shadow 0.12s;
   }
-  .rwt-btn-main:hover {
-    transform: translateY(-1px);
-  }
-  .rwt-btn-main:active {
+  .rwt-go:active {
     transform: translateY(3px);
-    box-shadow:
-      0 1px 0 #2c5793,
-      0 3px 8px rgba(62, 111, 180, 0.2);
-  }
-  .rwt-site.is-running .rwt-btn-main {
-    background: var(--rw-gold);
-    box-shadow:
-      0 4px 0 #a8742a,
-      0 8px 18px rgba(217, 155, 60, 0.25);
-  }
-
-  .rwt-keys {
-    margin-top: 0.9rem;
-    font-size: 0.78rem;
-    color: rgba(90, 107, 128, 0.7);
-  }
-  .rwt-keys kbd {
-    font: 600 0.72rem/1 var(--rw-display);
-    color: var(--rw-ink-soft);
-    background: var(--rw-card);
-    border: 1px solid var(--rw-card-line);
-    border-bottom-width: 2px;
-    border-radius: 5px;
-    padding: 0.12rem 0.35rem;
-    box-shadow: none;
+    box-shadow: 0 1px 0 #2c5793;
   }
 
   /* ── log ── */
@@ -1339,12 +1104,12 @@ html:has(body.rw-site) {
     font: 700 0.95rem/1 var(--rw-display);
     color: var(--rw-ring);
   }
-  .rwt-log ol {
+  .rwt-list {
     list-style: none;
     padding: 0;
     margin: 0.8rem 0 0;
   }
-  .rwt-log li {
+  .rwt-list li {
     display: grid;
     grid-template-columns: 1.6rem 1fr auto auto auto;
     align-items: center;
@@ -1356,34 +1121,33 @@ html:has(body.rw-site) {
     border-radius: 12px;
     font-size: 0.92rem;
   }
-  .rwt-log li.is-new {
+  .rwt-list li.is-new {
     animation: rwt-slide 0.6s cubic-bezier(0.3, 1.4, 0.5, 1);
   }
-  .rwt-log li img {
+  .rwt-list img {
     width: 1.6rem;
     height: 1.6rem;
     object-fit: contain;
   }
-  .rwt-log .lname {
-    color: var(--rw-ink);
+  .rwt-list .lname {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .rwt-log .lname.empty {
+  .rwt-list .lname.empty {
     color: var(--rw-ink-soft);
     font-style: italic;
   }
-  .rwt-log .ldur {
+  .rwt-list .ldur {
     font: 700 0.9rem/1 var(--rw-display);
     font-variant-numeric: tabular-nums;
   }
-  .rwt-log .lwhen {
+  .rwt-list .lwhen {
     font-size: 0.8rem;
     color: var(--rw-ink-soft);
     font-variant-numeric: tabular-nums;
   }
-  .rwt-log .ldel {
+  .rwt-list .ldel {
     border: 0;
     background: none;
     color: var(--rw-ink-soft);
@@ -1392,15 +1156,9 @@ html:has(body.rw-site) {
     opacity: 0;
     transition: opacity 0.2s;
   }
-  .rwt-log li:hover .ldel,
-  .rwt-log .ldel:focus {
+  .rwt-list li:hover .ldel,
+  .rwt-list .ldel:focus {
     opacity: 0.8;
-  }
-  .rwt-log-empty {
-    color: var(--rw-ink-soft);
-    font-size: 0.9rem;
-    margin: 0.8rem 0 0;
-    text-align: center;
   }
   .rwt-log-days {
     display: flex;
@@ -1423,13 +1181,202 @@ html:has(body.rw-site) {
     background: rgba(62, 111, 180, 0.08);
   }
 
-  /* ── celebration ── */
+  /* ── the display: full screen, no controls ── */
+  .rwt-display {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--rw-paper);
+    background-image: radial-gradient(var(--rw-dot) 1.4px, transparent 1.5px);
+    background-size: 19px 19px;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: none;
+  }
+  body.rwt-on .rwt-display {
+    display: flex;
+  }
+  /* only the ring animates in — the backdrop is opaque from frame one */
+  body.rwt-on .rwt-stage {
+    animation: rwt-in 0.6s cubic-bezier(0.3, 1.2, 0.5, 1);
+  }
+  body.rwt-on {
+    overflow: hidden;
+  }
+  .rwt-display.show-cursor {
+    cursor: default;
+  }
+
+  .rwt-stage {
+    position: relative;
+    width: min(82vmin, 900px);
+    aspect-ratio: 1;
+  }
+  .rwt-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    overflow: visible;
+  }
+  .rwt-track {
+    fill: none;
+    stroke: rgba(62, 111, 180, 0.13);
+    stroke-width: 7;
+    stroke-dasharray: 1.2 6.4;
+    stroke-linecap: round;
+  }
+  .rwt-arc {
+    fill: none;
+    stroke: var(--rw-ring);
+    stroke-width: 7;
+    stroke-linecap: round;
+  }
+  .rwt-display[data-kind="break"] .rwt-arc {
+    stroke: var(--rw-meadow);
+  }
+  .rwt-display[data-kind="stopwatch"] .rwt-arc {
+    stroke: var(--rw-lavender);
+  }
+
+  .rwt-orbit {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .rwt-rocket {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 13%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    filter: drop-shadow(0 3px 3px rgba(36, 48, 63, 0.12));
+  }
+  .rwt-rocket img {
+    width: 100%;
+    display: block;
+  }
+  .rwt-display.is-running .rwt-rocket img {
+    animation: rwt-jiggle 0.5s ease-in-out infinite alternate;
+  }
+
+  .rwt-center {
+    position: absolute;
+    inset: 14%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .rwt-buddy {
+    width: 22%;
+    margin-bottom: 1.5%;
+    animation: rwt-bob 3.2s ease-in-out infinite;
+  }
+  .rwt-display:not(.is-running) .rwt-buddy {
+    animation-duration: 6s;
+  }
+  .rwt-buddy.pop {
+    animation: rwt-pop 0.7s cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+  .rwt-digits {
+    font: 700 15vmin/1 var(--rw-display);
+    color: var(--rw-ink);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    transition: opacity 0.4s;
+  }
+  .rwt-digits.has-h {
+    font-size: 11vmin;
+  }
+  .rwt-display.is-paused .rwt-digits {
+    animation: rwt-breathe 2.4s ease-in-out infinite;
+  }
+  .rwt-d {
+    display: inline-block;
+    min-width: 0.6em;
+    text-align: center;
+  }
+  .rwt-d.tick {
+    animation: rwt-tick 0.32s ease-out;
+  }
+  .rwt-colon {
+    padding: 0 0.03em;
+    opacity: 0.5;
+  }
+  .rwt-display.is-running .rwt-colon {
+    animation: rwt-blink 1s steps(1) infinite;
+  }
+  .rwt-hrs:empty,
+  .rwt-hrs:empty + .rwt-colon {
+    display: none;
+  }
+  .rwt-dlabel {
+    margin-top: 2%;
+    font: 600 3vmin/1.2 var(--rw-display);
+    color: var(--rw-ink-soft);
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .rwt-friend {
+    position: absolute;
+    width: 12%;
+    pointer-events: none;
+    animation: rwt-float 7s ease-in-out infinite;
+  }
+  .rwt-friend.f1 {
+    left: -14%;
+    top: 6%;
+    animation-delay: -1s;
+  }
+  .rwt-friend.f2 {
+    right: -15%;
+    top: 28%;
+    width: 13%;
+    animation-delay: -3.5s;
+    animation-duration: 8s;
+  }
+  .rwt-friend.f3 {
+    left: -9%;
+    bottom: 4%;
+    width: 10%;
+    animation-delay: -5s;
+    animation-duration: 9s;
+  }
+  .rwt-friend.f4 {
+    right: -8%;
+    bottom: -2%;
+    width: 11%;
+    animation-delay: -2s;
+  }
+  .rwt-display:not(.is-running) .rwt-friend {
+    animation-duration: 14s;
+  }
+  .rwt-spark {
+    position: absolute;
+    color: var(--rw-gold);
+    font-size: 2.4vmin;
+    pointer-events: none;
+    animation: rwt-twinkle 2.6s ease-in-out infinite;
+  }
+  body.rwt-on .rwt-display.is-done .rwt-stage {
+    animation: rwt-pulse 1.2s ease-in-out 3;
+  }
+
   .rwt-confetti {
     position: fixed;
     inset: 0;
     pointer-events: none;
     overflow: hidden;
-    z-index: 50;
+    z-index: 1001;
   }
   .rwt-confetti > * {
     position: absolute;
@@ -1437,10 +1384,17 @@ html:has(body.rw-site) {
     top: 0;
     will-change: transform, opacity;
   }
-  .rwt-site.is-done .rwt-stage {
-    animation: rwt-pulse 1.2s ease-in-out 3;
-  }
 
+  @keyframes rwt-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
   @keyframes rwt-bob {
     0%,
     100% {
@@ -1472,7 +1426,7 @@ html:has(body.rw-site) {
   }
   @keyframes rwt-tick {
     0% {
-      transform: translateY(-0.18em) scale(1.08);
+      transform: translateY(-0.15em) scale(1.06);
       opacity: 0.3;
     }
     100% {
@@ -1483,6 +1437,15 @@ html:has(body.rw-site) {
   @keyframes rwt-blink {
     50% {
       opacity: 0.15;
+    }
+  }
+  @keyframes rwt-breathe {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
     }
   }
   @keyframes rwt-twinkle {
@@ -1516,7 +1479,7 @@ html:has(body.rw-site) {
       transform: scale(1);
     }
     50% {
-      transform: scale(1.035);
+      transform: scale(1.03);
     }
   }
   @keyframes rwt-slide {
@@ -1529,42 +1492,51 @@ html:has(body.rw-site) {
       transform: none;
     }
   }
+  @keyframes rwt-shake {
+    25% {
+      transform: translateX(-5px);
+    }
+    75% {
+      transform: translateX(5px);
+    }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .rwt *,
-    .rwt *::before {
+    .rwt-display * {
       animation: none !important;
       transition: none !important;
     }
   }
-</style> <div class="rw-shell rwt rwt-site" id="rwt" data-mode="timer" data-kind="focus"> <div class="rwt-modes" role="tablist" aria-label="Mode"> <button type="button" role="tab" data-mode="timer" aria-selected="true">timer</button> <button type="button" role="tab" data-mode="stopwatch" aria-selected="false">stopwatch</button> </div> <div class="rwt-stage"> <img class="rwt-friend f1" src="/assets/img/ringworld/sprites/saturn-purple.png" alt="" aria-hidden="true"> <img class="rwt-friend f2" src="/assets/img/ringworld/sprites/ufo-alien.png" alt="" aria-hidden="true"> <img class="rwt-friend f3" src="/assets/img/ringworld/sprites/jellyfish.png" alt="" aria-hidden="true"> <img class="rwt-friend f4" src="/assets/img/ringworld/sprites/crystal.png" alt="" aria-hidden="true"> <span class="rwt-spark" style="left: 12%; top: -2%" aria-hidden="true">✦</span> <span class="rwt-spark" style="right: 8%; top: 4%; animation-delay: -0.9s" aria-hidden="true">✧</span> <span class="rwt-spark" style="left: 2%; top: 58%; animation-delay: -1.7s" aria-hidden="true">✧</span> <span class="rwt-spark" style="right: -2%; bottom: 22%; animation-delay: -2.2s" aria-hidden="true">✦</span> <svg class="rwt-ring" viewbox="0 0 200 200" aria-hidden="true"> <circle class="rwt-track" cx="100" cy="100" r="88"></circle> <circle class="rwt-arc" cx="100" cy="100" r="88" pathlength="1000" stroke-dasharray="0 1000"></circle> </svg> <div class="rwt-orbit" aria-hidden="true"> <span class="rwt-rocket"><img src="/assets/img/ringworld/sprites/rocket.png" alt=""></span> </div> <div class="rwt-center"> <img class="rwt-buddy" src="/assets/img/ringworld/sprites/star-big.png" alt="" aria-hidden="true"> <button type="button" class="rwt-digits" aria-live="off" title="click to set"> <span class="rwt-hrs"></span><span class="rwt-colon">:</span><span class="rwt-min"></span><span class="rwt-colon">:</span><span class="rwt-sec"></span> </button> <input class="rwt-label" type="text" maxlength="60" placeholder="label" aria-label="Session label"> </div> </div> <div class="rwt-presets"> <button type="button" class="rwt-chip" data-min="25" data-kind="focus">25 min</button> <button type="button" class="rwt-chip" data-min="50" data-kind="focus">focus time · 50</button> <button type="button" class="rwt-chip" data-min="20" data-kind="break">social break · 20</button> <button type="button" class="rwt-chip" data-min="5" data-kind="break">5 min</button> </div> <div class="rwt-controls"> <button type="button" class="rwt-btn rwt-btn-side" data-act="reset" aria-label="Reset" title="reset (R)">↺</button> <button type="button" class="rwt-btn rwt-btn-main" data-act="toggle">start</button> <button type="button" class="rwt-btn rwt-btn-side" data-act="finish" aria-label="Finish and log" title="finish &amp; log (F)">✓</button> </div> <div class="rwt-keys"> <kbd>space</kbd> start / pause · <kbd>R</kbd> reset · <kbd>F</kbd> finish &amp; log</div> <section class="rwt-log" aria-label="Session log"> <div class="rwt-log-head"> <h2 class="rwt-log-title">today</h2> <span class="rwt-total"></span> </div> <ol class="rwt-list"></ol> <p class="rwt-log-empty" hidden>—</p> <div class="rwt-log-days"></div> </section> </div> <div class="rwt-confetti" aria-hidden="true"></div> <script>
+</style> <div class="rw-shell rwt" id="rwt"> <img class="rwt-hello" src="/assets/img/ringworld/sprites/moon.png" alt="" aria-hidden="true"> <div class="rwt-presets"> <button type="button" class="rwt-preset" data-min="25" data-kind="focus"> <img src="/assets/img/ringworld/sprites/star-big.png" alt=""><b>25</b><span>min</span> </button> <button type="button" class="rwt-preset" data-min="50" data-kind="focus"> <img src="/assets/img/ringworld/sprites/rocket.png" alt=""><b>50</b><span>focus time</span> </button> <button type="button" class="rwt-preset" data-min="20" data-kind="break"> <img src="/assets/img/ringworld/sprites/cloud-mint.png" alt=""><b>20</b><span>social break</span> </button> <button type="button" class="rwt-preset" data-min="5" data-kind="break"><img src="/assets/img/ringworld/sprites/frog.png" alt=""><b>5</b><span>min</span></button> <button type="button" class="rwt-preset" data-min="0" data-kind="stopwatch"> <img src="/assets/img/ringworld/sprites/astronaut.png" alt=""><b>0:00</b><span>stopwatch</span> </button> </div> <form class="rwt-custom" autocomplete="off"> <input class="rwt-custom-in" type="text" inputmode="numeric" placeholder="1:30:00" aria-label="Custom time (minutes, or h:mm:ss)"> <button type="submit" class="rwt-go">start</button> </form> <input class="rwt-label" type="text" maxlength="60" placeholder="label" aria-label="Session label"> <section class="rwt-log" aria-label="Session log"> <div class="rwt-log-head"> <h2 class="rwt-log-title">today</h2> <span class="rwt-total"></span> </div> <ol class="rwt-list"></ol> <div class="rwt-log-days"></div> </section> </div> <div class="rwt-display" aria-live="off"> <div class="rwt-stage"> <img class="rwt-friend f1" src="/assets/img/ringworld/sprites/saturn-purple.png" alt=""> <img class="rwt-friend f2" src="/assets/img/ringworld/sprites/ufo-alien.png" alt=""> <img class="rwt-friend f3" src="/assets/img/ringworld/sprites/jellyfish.png" alt=""> <img class="rwt-friend f4" src="/assets/img/ringworld/sprites/crystal.png" alt=""> <span class="rwt-spark" style="left: 10%; top: -4%">✦</span> <span class="rwt-spark" style="right: 6%; top: 2%; animation-delay: -0.9s">✧</span> <span class="rwt-spark" style="left: -2%; top: 58%; animation-delay: -1.7s">✧</span> <span class="rwt-spark" style="right: -6%; bottom: 20%; animation-delay: -2.2s">✦</span> <svg class="rwt-ring" viewbox="0 0 200 200" aria-hidden="true"> <circle class="rwt-track" cx="100" cy="100" r="90"></circle> <circle class="rwt-arc" cx="100" cy="100" r="90" pathlength="1000" stroke-dasharray="0 1000"></circle> </svg> <div class="rwt-orbit"> <span class="rwt-rocket"><img src="/assets/img/ringworld/sprites/rocket.png" alt=""></span> </div> <div class="rwt-center"> <img class="rwt-buddy" src="/assets/img/ringworld/sprites/star-big.png" alt=""> <div class="rwt-digits"> <span class="rwt-hrs"></span><span class="rwt-colon">:</span><span class="rwt-min"></span><span class="rwt-colon">:</span><span class="rwt-sec"></span> </div> <div class="rwt-dlabel"></div> </div> </div> </div> <div class="rwt-confetti" aria-hidden="true"></div> <script>
   (function () {
     var SP = "/assets/img/ringworld/sprites/";
-    var root = document.getElementById("rwt");
-    var $ = function (s) {
-      return root.querySelector(s);
+    var body = document.body;
+    var q = function (s) {
+      return document.querySelector(s);
     };
-    var arc = $(".rwt-arc"),
-      orbit = document.querySelector(".rwt-orbit"),
-      buddy = $(".rwt-buddy"),
-      digits = $(".rwt-digits"),
-      hEl = $(".rwt-hrs"),
-      mEl = $(".rwt-min"),
-      sEl = $(".rwt-sec"),
-      label = $(".rwt-label"),
-      mainBtn = $('[data-act="toggle"]'),
-      finishBtn = $('[data-act="finish"]'),
-      list = $(".rwt-list"),
-      empty = $(".rwt-log-empty"),
-      total = $(".rwt-total"),
-      daysEl = $(".rwt-log-days"),
-      logTitle = $(".rwt-log-title"),
-      confetti = document.querySelector(".rwt-confetti");
+    var disp = q(".rwt-display"),
+      arc = q(".rwt-arc"),
+      orbit = q(".rwt-orbit"),
+      buddy = q(".rwt-buddy"),
+      digits = q(".rwt-digits"),
+      hEl = q(".rwt-hrs"),
+      mEl = q(".rwt-min"),
+      sEl = q(".rwt-sec"),
+      dlabel = q(".rwt-dlabel"),
+      label = q(".rwt-label"),
+      customForm = q(".rwt-custom"),
+      customIn = q(".rwt-custom-in"),
+      list = q(".rwt-list"),
+      total = q(".rwt-total"),
+      daysEl = q(".rwt-log-days"),
+      logTitle = q(".rwt-log-title"),
+      confetti = q(".rwt-confetti");
 
-    var KEY = "rwTimer.state",
+    var KEY = "rwTimer.run",
       LOGKEY = "rwTimer.log";
-    var BUDDY = { focus: "star-big", break: "cloud-mint", stopwatch: "astronaut", rest: "moon" };
-    var LOGICON = { focus: "star-big", break: "cloud-mint", stopwatch: "astronaut" };
+    var ICON = { focus: "star-big", break: "cloud-mint", stopwatch: "astronaut" };
+    var NAME = { focus: "focus time", break: "social break", stopwatch: "stopwatch" };
 
     function load(k, d) {
       try {
@@ -1580,11 +1552,11 @@ html:has(body.rw-site) {
       } catch (e) {}
     }
 
-    // state: mode, kind, dur (ms, timer), acc (ms elapsed before the current run), startAt (ms epoch or null), label
-    var st = load(KEY, null) || { mode: "timer", kind: "focus", dur: 25 * 60000, acc: 0, startAt: null, label: "" };
+    // st: null when on the setup screen; otherwise
+    // { kind, dur (ms; 0 = stopwatch), acc (ms before this run), startAt, label, done }
+    var st = load(KEY, null);
     var log = load(LOGKEY, []);
     var viewDay = dayKey(Date.now());
-    var doneFired = false;
 
     function now() {
       return Date.now();
@@ -1593,22 +1565,16 @@ html:has(body.rw-site) {
       return st.acc + (st.startAt ? now() - st.startAt : 0);
     }
     function running() {
-      return st.startAt != null;
+      return st && st.startAt != null;
     }
-    function persist() {
-      st.label = label.value;
-      save(KEY, st);
-    }
-
     function pad(n) {
       return (n < 10 ? "0" : "") + n;
     }
-    function split(ms) {
-      var s = Math.max(0, Math.ceil(ms / 1000));
-      return { h: Math.floor(s / 3600), m: Math.floor((s % 3600) / 60), s: s % 60 };
+    function hms(sec) {
+      return { h: Math.floor(sec / 3600), m: Math.floor((sec % 3600) / 60), s: sec % 60 };
     }
     function fmtShort(ms) {
-      var t = split(ms);
+      var t = hms(Math.round(ms / 1000));
       if (t.h) return t.h + "h " + pad(t.m) + "m";
       if (t.m) return t.m + "m" + (t.s ? " " + pad(t.s) + "s" : "");
       return t.s + "s";
@@ -1618,150 +1584,20 @@ html:has(body.rw-site) {
       return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
     }
 
-    // digits: animate only the characters that changed
     function setDigits(el, str) {
       if (el.textContent === str) return;
       var old = el.textContent;
       el.innerHTML = "";
       for (var i = 0; i < str.length; i++) {
         var c = document.createElement("span");
-        c.className = "rwt-d" + (old[i] !== str[i] && old !== "" ? " tick" : "");
+        c.className = "rwt-d" + (old !== "" && old[i] !== str[i] ? " tick" : "");
         c.textContent = str[i];
         el.appendChild(c);
       }
     }
-
     var lastBuddy = "";
     function setBuddy(name) {
-      if (name === lastBuddy) return;
-      lastBuddy = name;
-      buddy.src = SP + name + ".png";
-    }
-
-    function render() {
-      var e = elapsed(),
-        shown,
-        frac;
-      if (st.mode === "timer") {
-        shown = Math.max(0, st.dur - e);
-        frac = st.dur ? Math.min(1, e / st.dur) : 0;
-      } else {
-        shown = e;
-        frac = (e % 3600000) / 3600000; // one lap per hour
-      }
-      var t =
-        st.mode === "timer"
-          ? split(shown)
-          : (function () {
-              var s = Math.floor(shown / 1000);
-              return { h: Math.floor(s / 3600), m: Math.floor((s % 3600) / 60), s: s % 60 };
-            })();
-      setDigits(hEl, t.h ? String(t.h) : "");
-      setDigits(mEl, pad(t.m));
-      setDigits(sEl, pad(t.s));
-
-      // timer: the arc empties as time runs out; stopwatch: it fills
-      var shownFrac = st.mode === "timer" ? 1 - frac : frac;
-      arc.setAttribute("stroke-dasharray", (shownFrac * 1000).toFixed(1) + " 1000");
-      orbit.style.transform = "rotate(" + (shownFrac * 360).toFixed(2) + "deg)";
-
-      root.classList.toggle("is-running", running());
-      root.classList.toggle("can-edit", st.mode === "timer" && !running());
-      root.dataset.mode = st.mode;
-      root.dataset.kind = st.kind;
-      mainBtn.textContent = running() ? "pause" : e > 0 && !(st.mode === "timer" && shown === 0) ? "resume" : "start";
-      finishBtn.disabled = e < 1000;
-      setBuddy(!running() && e === 0 ? "moon" : st.mode === "stopwatch" ? BUDDY.stopwatch : BUDDY[st.kind] || "star-big");
-
-      var hh = t.h ? t.h + ":" : "";
-      document.title = running() || e > 0 ? hh + pad(t.m) + ":" + pad(t.s) + (label.value ? " · " + label.value : "") + " — timer" : "timer";
-
-      if (st.mode === "timer" && running() && e >= st.dur && !doneFired) complete();
-    }
-
-    function loop() {
-      render();
-      requestAnimationFrame(loop);
-    }
-
-    // ── actions ──
-    function start() {
-      if (running()) return;
-      if (st.mode === "timer" && elapsed() >= st.dur) st.acc = 0;
-      doneFired = false;
-      st.startAt = now();
-      root.classList.remove("is-done");
-      ensureAudio();
-      if (window.Notification && Notification.permission === "default") {
-        try {
-          Notification.requestPermission();
-        } catch (e) {}
-      }
-      persist();
-      popBuddy();
-    }
-    function pause() {
-      if (!running()) return;
-      st.acc = elapsed();
-      st.startAt = null;
-      persist();
-    }
-    function reset() {
-      st.acc = 0;
-      st.startAt = null;
-      doneFired = false;
-      root.classList.remove("is-done");
-      persist();
-    }
-    function finish() {
-      var e = st.mode === "timer" ? Math.min(elapsed(), st.dur) : elapsed();
-      if (e < 1000) return;
-      addLog(e);
-      reset();
-      celebrate(false);
-    }
-    function complete() {
-      doneFired = true;
-      st.acc = st.dur;
-      st.startAt = null;
-      addLog(st.dur);
-      persist();
-      root.classList.add("is-done");
-      celebrate(true);
-      chime();
-      if (window.Notification && Notification.permission === "granted" && document.hidden) {
-        try {
-          new Notification("ringworld timer", {
-            body: (label.value || (st.kind === "break" ? "social break" : "focus time")) + " · " + fmtShort(st.dur),
-            icon: SP + "star-big.png",
-          });
-        } catch (e) {}
-      }
-    }
-
-    function setPreset(min, kind) {
-      st.mode = "timer";
-      st.kind = kind;
-      st.dur = min * 60000;
-      reset();
-      markPreset();
-      popBuddy();
-    }
-    function markPreset() {
-      root.querySelectorAll(".rwt-chip").forEach(function (c) {
-        c.classList.toggle("is-on", st.mode === "timer" && +c.dataset.min * 60000 === st.dur && c.dataset.kind === st.kind);
-      });
-      root.querySelectorAll(".rwt-modes button").forEach(function (b) {
-        b.setAttribute("aria-selected", String(b.dataset.mode === st.mode));
-      });
-    }
-    function setMode(m) {
-      if (m === st.mode) return;
-      if (elapsed() > 0 && !confirm("Switch modes and reset the current session?")) return;
-      st.mode = m;
-      reset();
-      markPreset();
-      popBuddy();
+      if (name !== lastBuddy) buddy.src = SP + (lastBuddy = name) + ".png";
     }
     function popBuddy() {
       buddy.classList.remove("pop");
@@ -1772,61 +1608,168 @@ html:has(body.rw-site) {
       if (ev.animationName === "rwt-pop") buddy.classList.remove("pop");
     });
 
-    // click the digits to type a custom length: "45", "1:30:00", "12:30"
-    function editTime() {
-      if (st.mode !== "timer" || running()) return;
-      var inp = document.createElement("input");
-      inp.className = "rwt-edit";
-      inp.inputMode = "numeric";
-      var t = split(st.dur);
-      inp.value = (t.h ? t.h + ":" + pad(t.m) : t.m) + ":" + pad(t.s);
-      digits.replaceWith(inp);
-      inp.focus();
-      inp.select();
-      var done = false;
-      function commit(ok) {
-        if (done) return;
-        done = true;
-        if (ok) {
-          var parts = inp.value
-            .trim()
-            .split(/[:.\s]+/)
-            .map(Number);
-          if (
-            parts.length &&
-            parts.every(function (n) {
-              return isFinite(n) && n >= 0;
-            })
-          ) {
-            var ms =
-              parts.length === 1
-                ? parts[0] * 60000
-                : parts.length === 2
-                  ? (parts[0] * 60 + parts[1]) * 1000
-                  : (parts[0] * 3600 + parts[1] * 60 + parts[2]) * 1000;
-            if (ms >= 1000 && ms <= 24 * 3600000) {
-              st.dur = ms;
-              reset();
-              markPreset();
-              popBuddy();
-            }
-          }
-        }
-        inp.replaceWith(digits);
+    // ── the display ──
+    function render() {
+      if (!st) return;
+      var e = elapsed(),
+        timer = st.dur > 0,
+        t,
+        frac;
+      if (timer) {
+        t = hms(Math.max(0, Math.ceil((st.dur - e) / 1000)));
+        frac = 1 - Math.min(1, e / st.dur); // empties as time runs out
+      } else {
+        t = hms(Math.floor(e / 1000));
+        frac = (e % 3600000) / 3600000; // one lap per hour
       }
-      inp.addEventListener("keydown", function (ev) {
-        ev.stopPropagation();
-        if (ev.key === "Enter") commit(true);
-        if (ev.key === "Escape") commit(false);
-      });
-      inp.addEventListener("blur", function () {
-        commit(true);
-      });
+      setDigits(hEl, t.h ? String(t.h) : "");
+      setDigits(mEl, pad(t.m));
+      setDigits(sEl, pad(t.s));
+      digits.classList.toggle("has-h", !!t.h);
+      arc.setAttribute("stroke-dasharray", (frac * 1000).toFixed(1) + " 1000");
+      orbit.style.transform = "rotate(" + (frac * 360).toFixed(2) + "deg)";
+
+      disp.dataset.kind = st.kind;
+      disp.classList.toggle("is-running", running());
+      disp.classList.toggle("is-paused", !running() && !st.done);
+      disp.classList.toggle("is-done", !!st.done);
+      setBuddy(st.done ? "star-folded" : running() ? ICON[st.kind] : "moon");
+      document.title = (t.h ? t.h + ":" : "") + pad(t.m) + ":" + pad(t.s) + (st.label ? " · " + st.label : "") + " — timer";
+
+      if (timer && running() && e >= st.dur) complete();
     }
+    function begin(kind, ms) {
+      st = { kind: kind, dur: ms, acc: 0, startAt: now(), label: label.value.trim(), done: false };
+      save(KEY, st);
+      lastBuddy = "";
+      dlabel.textContent = st.label || NAME[kind];
+      body.classList.add("rwt-on");
+      ensureAudio();
+      if (window.Notification && Notification.permission === "default") {
+        try {
+          Notification.requestPermission();
+        } catch (e) {}
+      }
+      var fs = document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen;
+      if (fs && !document.fullscreenElement) {
+        try {
+          var p = fs.call(document.documentElement);
+          if (p && p.catch) p.catch(function () {});
+        } catch (e) {}
+      }
+      render();
+      popBuddy();
+    }
+    function togglePause() {
+      if (!st || st.done) return;
+      if (running()) {
+        st.acc = elapsed();
+        st.startAt = null;
+      } else {
+        st.startAt = now();
+      }
+      save(KEY, st);
+      popBuddy();
+    }
+    // leave the display; time worked so far goes in the log
+    function end() {
+      if (!st) return;
+      if (!st.done) {
+        var e = st.dur ? Math.min(elapsed(), st.dur) : elapsed();
+        if (e >= 60000) addLog(e);
+      }
+      st = null;
+      save(KEY, null);
+      body.classList.remove("rwt-on");
+      document.title = "timer";
+      if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+    }
+    function complete() {
+      st.acc = st.dur;
+      st.startAt = null;
+      st.done = true;
+      save(KEY, st);
+      addLog(st.dur);
+      celebrate();
+      chime();
+      if (window.Notification && Notification.permission === "granted" && document.hidden) {
+        try {
+          new Notification("ringworld timer", { body: (st.label || NAME[st.kind]) + " · " + fmtShort(st.dur), icon: SP + "star-big.png" });
+        } catch (e) {}
+      }
+    }
+
+    // display input: no visible controls, but the display still listens
+    var clickT = null;
+    disp.addEventListener("click", function () {
+      if (st && st.done) return end();
+      clearTimeout(clickT);
+      clickT = setTimeout(togglePause, 260); // wait out a double-click
+    });
+    disp.addEventListener("dblclick", function () {
+      clearTimeout(clickT);
+      end();
+    });
+    var cursorT = null;
+    disp.addEventListener("mousemove", function () {
+      disp.classList.add("show-cursor");
+      clearTimeout(cursorT);
+      cursorT = setTimeout(function () {
+        disp.classList.remove("show-cursor");
+      }, 1500);
+    });
+    document.addEventListener("fullscreenchange", function () {
+      // Esc in fullscreen is swallowed by the browser; leaving fullscreen = leaving the display
+      if (!document.fullscreenElement && st) end();
+    });
+    document.addEventListener("keydown", function (ev) {
+      if (!st) return;
+      if (ev.metaKey || ev.ctrlKey || ev.altKey) return;
+      if (ev.code === "Space") {
+        ev.preventDefault();
+        st.done ? end() : togglePause();
+      } else if (ev.key === "Escape") end();
+    });
+
+    // ── setup ──
+    document.querySelectorAll(".rwt-preset").forEach(function (b) {
+      b.addEventListener("click", function () {
+        begin(b.dataset.kind, +b.dataset.min * 60000);
+      });
+    });
+    // "45" = minutes, "12:30" = mm:ss, "1:30:00" = h:mm:ss
+    customForm.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var parts = customIn.value
+        .trim()
+        .split(/[:.\s]+/)
+        .map(Number);
+      var ok =
+        customIn.value.trim() &&
+        parts.length <= 3 &&
+        parts.every(function (n) {
+          return isFinite(n) && n >= 0;
+        });
+      var ms = !ok
+        ? 0
+        : parts.length === 1
+          ? parts[0] * 60000
+          : parts.length === 2
+            ? (parts[0] * 60 + parts[1]) * 1000
+            : (parts[0] * 3600 + parts[1] * 60 + parts[2]) * 1000;
+      if (ms < 1000 || ms > 24 * 3600000) {
+        customIn.classList.remove("bad");
+        void customIn.offsetWidth;
+        customIn.classList.add("bad");
+        return;
+      }
+      customIn.classList.remove("bad");
+      begin("focus", ms);
+    });
 
     // ── log ──
     function addLog(ms) {
-      log.push({ at: now(), ms: ms, label: label.value.trim(), kind: st.mode === "stopwatch" ? "stopwatch" : st.kind });
+      log.push({ at: now(), ms: ms, label: st.label, kind: st.kind });
       if (log.length > 2000) log = log.slice(-2000);
       save(LOGKEY, log);
       viewDay = dayKey(now());
@@ -1843,48 +1786,43 @@ html:has(body.rw-site) {
         });
       list.innerHTML = "";
       var sum = 0;
-      items
-        .slice()
-        .reverse()
-        .forEach(function (x, k) {
-          var r = x.r;
-          if (r.kind !== "break") sum += r.ms;
-          var li = document.createElement("li");
-          if (fresh && k === 0 && viewDay === today) li.className = "is-new";
-          var img = document.createElement("img");
-          img.src = SP + (LOGICON[r.kind] || "star-big") + ".png";
-          img.alt = "";
-          var nm = document.createElement("span");
-          nm.className = "lname" + (r.label ? "" : " empty");
-          nm.textContent = r.label || (r.kind === "break" ? "social break" : r.kind === "stopwatch" ? "stopwatch" : "focus time");
-          var du = document.createElement("span");
-          du.className = "ldur";
-          du.textContent = fmtShort(r.ms);
-          var wh = document.createElement("span");
-          wh.className = "lwhen";
-          var d = new Date(r.at);
-          wh.textContent = d.getHours() + ":" + pad(d.getMinutes());
-          var del = document.createElement("button");
-          del.className = "ldel";
-          del.type = "button";
-          del.textContent = "×";
-          del.setAttribute("aria-label", "Delete entry");
-          del.addEventListener("click", function () {
-            log.splice(x.i, 1);
-            save(LOGKEY, log);
-            renderLog(false);
-          });
-          li.append(img, nm, du, wh, del);
-          list.appendChild(li);
+      items.reverse().forEach(function (x, k) {
+        var r = x.r;
+        if (r.kind !== "break") sum += r.ms;
+        var li = document.createElement("li");
+        if (fresh && k === 0) li.className = "is-new";
+        var img = document.createElement("img");
+        img.src = SP + (ICON[r.kind] || "star-big") + ".png";
+        img.alt = "";
+        var nm = document.createElement("span");
+        nm.className = "lname" + (r.label ? "" : " empty");
+        nm.textContent = r.label || NAME[r.kind] || "";
+        var du = document.createElement("span");
+        du.className = "ldur";
+        du.textContent = fmtShort(r.ms);
+        var wh = document.createElement("span");
+        wh.className = "lwhen";
+        var d = new Date(r.at);
+        wh.textContent = d.getHours() + ":" + pad(d.getMinutes());
+        var del = document.createElement("button");
+        del.className = "ldel";
+        del.type = "button";
+        del.textContent = "×";
+        del.setAttribute("aria-label", "Delete entry");
+        del.addEventListener("click", function () {
+          log.splice(x.i, 1);
+          save(LOGKEY, log);
+          renderLog(false);
         });
-      empty.hidden = items.length > 0;
+        li.append(img, nm, du, wh, del);
+        list.appendChild(li);
+      });
       total.textContent = sum ? fmtShort(sum) : "";
       logTitle.textContent =
         viewDay === today
           ? "today"
           : new Date(viewDay + "T12:00").toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
 
-      // the last week of days that have entries
       var days = [];
       for (var i = log.length - 1; i >= 0 && days.length < 7; i--) {
         var k2 = dayKey(log[i].at);
@@ -1908,37 +1846,34 @@ html:has(body.rw-site) {
 
     // ── celebration ──
     var CONF = ["star-big", "star-folded", "stars-twin", "blob-peach", "blob-lilac", "blob-green", "saturn-peach", "comet", "frog", "moon"];
-    function celebrate(big) {
-      if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        popBuddy();
-        return;
-      }
+    function celebrate() {
       popBuddy();
-      var r = $(".rwt-stage").getBoundingClientRect();
+      if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      var r = q(".rwt-stage").getBoundingClientRect();
       var cx = r.left + r.width / 2,
-        cy = r.top + r.height / 2;
-      var n = big ? 34 : 16;
-      for (var i = 0; i < n; i++) {
+        cy = r.top + r.height / 2,
+        reach = Math.max(innerWidth, innerHeight) * 0.45;
+      for (var i = 0; i < 44; i++) {
         var el;
         if (i % 3 === 0) {
           el = document.createElement("span");
           el.textContent = ["✦", "✧", "★", "♡"][i % 4];
           el.style.color = ["#d99b3c", "#8b6fc4", "#3e6fb4", "#7c9a3c"][(i >> 1) % 4];
-          el.style.fontSize = 14 + Math.random() * 14 + "px";
+          el.style.fontSize = 18 + Math.random() * 22 + "px";
         } else {
           el = document.createElement("img");
           el.src = SP + CONF[i % CONF.length] + ".png";
-          el.style.width = 26 + Math.random() * 26 + "px";
+          el.style.width = 34 + Math.random() * 40 + "px";
         }
         confetti.appendChild(el);
-        var ang = Math.random() * Math.PI * 2;
-        var dist = (big ? 160 : 110) + Math.random() * (big ? 220 : 120);
+        var ang = Math.random() * Math.PI * 2,
+          dist = reach * (0.45 + Math.random() * 0.6);
         var dx = Math.cos(ang) * dist,
-          dy = Math.sin(ang) * dist - 60;
-        var rot = (Math.random() - 0.5) * 540;
+          dy = Math.sin(ang) * dist - 60,
+          rot = (Math.random() - 0.5) * 540;
         el.animate(
           [
-            { transform: "translate(" + cx + "px," + cy + "px) translate(-50%,-50%) scale(0.2) rotate(0deg)", opacity: 0 },
+            { transform: "translate(" + cx + "px," + cy + "px) translate(-50%,-50%) scale(0.2)", opacity: 0 },
             {
               transform:
                 "translate(" + (cx + dx * 0.7) + "px," + (cy + dy * 0.7) + "px) translate(-50%,-50%) scale(1.1) rotate(" + rot * 0.6 + "deg)",
@@ -1946,11 +1881,11 @@ html:has(body.rw-site) {
               offset: 0.35,
             },
             {
-              transform: "translate(" + (cx + dx) + "px," + (cy + dy + 140) + "px) translate(-50%,-50%) scale(0.8) rotate(" + rot + "deg)",
+              transform: "translate(" + (cx + dx) + "px," + (cy + dy + 160) + "px) translate(-50%,-50%) scale(0.8) rotate(" + rot + "deg)",
               opacity: 0,
             },
           ],
-          { duration: 1400 + Math.random() * 900, easing: "cubic-bezier(.2,.7,.4,1)", fill: "forwards" }
+          { duration: 1800 + Math.random() * 1200, easing: "cubic-bezier(.2,.7,.4,1)", fill: "forwards" }
         ).onfinish = (function (e) {
           return function () {
             e.remove();
@@ -1959,7 +1894,7 @@ html:has(body.rw-site) {
       }
     }
 
-    // a soft three-note chime, synthesized — no audio file
+    // a soft chime, synthesized — no audio file
     var actx = null;
     function ensureAudio() {
       try {
@@ -1987,55 +1922,17 @@ html:has(body.rw-site) {
         });
     }
 
-    // ── wiring ──
-    mainBtn.addEventListener("click", function () {
-      running() ? pause() : start();
-    });
-    $('[data-act="reset"]').addEventListener("click", reset);
-    finishBtn.addEventListener("click", finish);
-    digits.addEventListener("click", editTime);
-    root.querySelectorAll(".rwt-chip").forEach(function (c) {
-      c.addEventListener("click", function () {
-        setPreset(+c.dataset.min, c.dataset.kind);
-      });
-    });
-    root.querySelectorAll(".rwt-modes button").forEach(function (b) {
-      b.addEventListener("click", function () {
-        setMode(b.dataset.mode);
-      });
-    });
-    label.addEventListener("input", persist);
-    document.addEventListener("keydown", function (ev) {
-      if (ev.target.closest && ev.target.closest("input, textarea")) {
-        if (ev.key === "Enter" || ev.key === "Escape") ev.target.blur();
-        return;
-      }
-      if (ev.metaKey || ev.ctrlKey || ev.altKey) return;
-      if (ev.code === "Space") {
-        ev.preventDefault();
-        running() ? pause() : start();
-      } else if (ev.key === "r" || ev.key === "R") reset();
-      else if (ev.key === "f" || ev.key === "F") finish();
-    });
-    // keep tabs in sync if the page is open twice
-    window.addEventListener("storage", function (ev) {
-      if (ev.key === KEY) {
-        st = load(KEY, st);
-        label.value = st.label || "";
-        markPreset();
-      }
-      if (ev.key === LOGKEY) {
-        log = load(LOGKEY, []);
-        renderLog(false);
-      }
-    });
-
-    label.value = st.label || "";
-    // a timer that ran out while the page was closed still gets logged
-    if (st.mode === "timer" && running() && elapsed() >= st.dur) complete();
-    markPreset();
+    // a session still going from before a reload comes straight back up
+    if (st) {
+      label.value = st.label || "";
+      dlabel.textContent = st.label || NAME[st.kind];
+      body.classList.add("rwt-on");
+    }
     renderLog(false);
-    loop();
+    // an interval, not requestAnimationFrame: rAF stops in a background tab,
+    // and the timer still has to finish (and chime) there
+    setInterval(render, 200);
+    render();
   })();
 </script> </main> <footer class="rw-foot"> <div class="rw-shell rw-foot-inner"> <span class="rw-foot-name">ringworld</span> <span class="rw-foot-dot">·</span> <span>Pittsburgh · Sundays 2–5pm</span> <span class="rw-foot-dot">·</span> <span>a <a href="https://www.socratica.info/" target="_blank" rel="noopener">Socratica node ↗</a></span> <a class="rw-foot-by" href="/">by Chris Shi</a> </div> </footer> <button id="light-toggle" title="Change theme" style="display: none;" aria-hidden="true"> <i class="ti ti-sun-moon" id="light-toggle-system"></i> <i class="ti ti-moon-filled" id="light-toggle-dark"></i> <i class="ti ti-sun-filled" id="light-toggle-light"></i> </button> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script src="/assets/js/bootstrap.bundle.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?a0db7e5d5c70cc3252b3138b0c91dcaf" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js?85ddb88934d28b74e78031fd54cf8308"></script> <script src="/assets/js/no_defer.js?2781658a0a2b13ed609542042a859126"></script> <script defer src="/assets/js/common.js?c15de51d4bb57887caa2c21988d97279"></script> <script defer src="/assets/js/copy_code.js?c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?d9f17b6adc2311cbabd747f4538bb15f"></script> <script defer src="/assets/js/progress-bar.js?b8fe25a200169b9e6649e9e08f68265b" type="text/javascript"></script> <script src="/assets/js/vanilla-back-to-top.min.js?f40d453793ff4f64e238e420181a1d17"></script> <script>
     addBackToTop();
