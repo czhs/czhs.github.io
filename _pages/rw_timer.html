@@ -1,0 +1,1161 @@
+---
+layout: ringworld_base
+permalink: /ringworld/timer/
+title: ringworld — timer
+standalone_title: timer
+description: A session timer for focus time.
+og_image: /assets/img/ringworld/og.png
+nav: false
+sitemap: false
+---
+
+{%- comment -%} Session timer, built for Chris's own work sessions (2026-10-24). Not linked from the landing page (static-landing mode). Timing is
+wall-clock based (Date.now), so a backgrounded tab stays exact, and the running state plus the session log live in localStorage under rwTimer.* —
+per-browser only. Labels reuse the landing page's own schedule words (focus time / social break); no other copy. {%- endcomment -%} {%- assign sp =
+'/assets/img/ringworld/sprites/' | relative_url -%}
+
+<style>
+  .rwt {
+    padding-top: 1.6rem;
+    padding-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: clip; /* the floating friends hang past the ring on phones */
+  }
+
+  /* ── mode switch ── */
+  .rwt-modes {
+    display: inline-flex;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    border: 1px solid var(--rw-card-line);
+    border-radius: 999px;
+    background: var(--rw-card);
+  }
+  .rwt-modes button {
+    font: 600 0.92rem/1 var(--rw-display);
+    color: var(--rw-ink-soft);
+    background: none;
+    border: 0;
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition:
+      background 0.25s,
+      color 0.25s;
+  }
+  .rwt-modes button[aria-selected="true"] {
+    background: var(--rw-ring);
+    color: #fff;
+  }
+
+  /* ── the ring ── */
+  .rwt-stage {
+    position: relative;
+    width: min(400px, 86vw);
+    aspect-ratio: 1;
+    margin: 1.6rem 0 0.4rem;
+  }
+  .rwt-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    overflow: visible;
+  }
+  .rwt-track {
+    fill: none;
+    stroke: rgba(62, 111, 180, 0.13);
+    stroke-width: 9;
+    stroke-dasharray: 1.5 7.2;
+    stroke-linecap: round;
+  }
+  .rwt-arc {
+    fill: none;
+    stroke: var(--rw-ring);
+    stroke-width: 9;
+    stroke-linecap: round;
+    transition: stroke 0.6s;
+  }
+  .rwt-site[data-kind="break"] .rwt-arc {
+    stroke: var(--rw-meadow);
+  }
+  .rwt-site[data-mode="stopwatch"] .rwt-arc {
+    stroke: var(--rw-lavender);
+  }
+
+  .rwt-orbit {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .rwt-rocket {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 15%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    filter: drop-shadow(0 3px 3px rgba(36, 48, 63, 0.12));
+  }
+  .rwt-rocket img {
+    width: 100%;
+    display: block;
+  }
+  .rwt-site.is-running .rwt-rocket img {
+    animation: rwt-jiggle 0.5s ease-in-out infinite alternate;
+  }
+
+  .rwt-center {
+    position: absolute;
+    inset: 16%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .rwt-buddy {
+    width: 26%;
+    height: auto;
+    margin-bottom: 0.2rem;
+    transition: transform 0.4s;
+    animation: rwt-bob 3.2s ease-in-out infinite;
+  }
+  .rwt-site:not(.is-running) .rwt-buddy {
+    animation-duration: 6s;
+    opacity: 0.92;
+  }
+  .rwt-buddy.pop {
+    animation: rwt-pop 0.7s cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+
+  .rwt-digits {
+    font: 700 clamp(2.6rem, 13vw, 4.4rem) / 1 var(--rw-display);
+    color: var(--rw-ink);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+    display: flex;
+    align-items: baseline;
+    border: 0;
+    background: none;
+    padding: 0.1rem 0.3rem;
+    border-radius: 14px;
+    cursor: default;
+  }
+  .rwt-site.can-edit .rwt-digits {
+    cursor: text;
+  }
+  .rwt-site.can-edit .rwt-digits:hover {
+    background: rgba(62, 111, 180, 0.07);
+  }
+  .rwt-d {
+    display: inline-block;
+    min-width: 0.6em;
+    text-align: center;
+  }
+  .rwt-d.tick {
+    animation: rwt-tick 0.32s ease-out;
+  }
+  .rwt-colon {
+    padding: 0 0.04em;
+    opacity: 0.55;
+  }
+  .rwt-site.is-running .rwt-colon {
+    animation: rwt-blink 1s steps(1) infinite;
+  }
+  .rwt-hrs:empty,
+  .rwt-hrs:empty + .rwt-colon {
+    display: none;
+  }
+
+  .rwt-edit {
+    font: 700 clamp(2.2rem, 11vw, 3.6rem) / 1 var(--rw-display);
+    width: 5.2ch;
+    text-align: center;
+    color: var(--rw-ink);
+    background: var(--rw-card);
+    border: 2px solid var(--rw-ring);
+    border-radius: 14px;
+    padding: 0.1rem 0.2rem;
+    outline: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rwt-label {
+    margin-top: 0.45rem;
+    width: 80%;
+    font: 600 0.95rem/1.3 var(--rw-display);
+    color: var(--rw-ink-soft);
+    text-align: center;
+    background: none;
+    border: 0;
+    border-bottom: 1px dashed transparent;
+    outline: none;
+    padding: 0.15rem 0;
+  }
+  .rwt-label:hover,
+  .rwt-label:focus {
+    border-bottom-color: var(--rw-card-line);
+  }
+  .rwt-label::placeholder {
+    color: rgba(90, 107, 128, 0.55);
+  }
+
+  /* ── floating friends ── */
+  .rwt-friend {
+    position: absolute;
+    width: 13%;
+    pointer-events: none;
+    animation: rwt-float 7s ease-in-out infinite;
+    opacity: 0.95;
+  }
+  .rwt-friend.f1 {
+    left: -9%;
+    top: 8%;
+    animation-delay: -1s;
+  }
+  .rwt-friend.f2 {
+    right: -10%;
+    top: 30%;
+    width: 14%;
+    animation-delay: -3.5s;
+    animation-duration: 8s;
+  }
+  .rwt-friend.f3 {
+    left: -4%;
+    bottom: 2%;
+    width: 11%;
+    animation-delay: -5s;
+    animation-duration: 9s;
+  }
+  .rwt-friend.f4 {
+    right: -3%;
+    bottom: -3%;
+    width: 12%;
+    animation-delay: -2s;
+  }
+  .rwt-site:not(.is-running) .rwt-friend {
+    animation-duration: 14s;
+  }
+
+  .rwt-spark {
+    position: absolute;
+    color: var(--rw-gold);
+    font-size: 0.9rem;
+    pointer-events: none;
+    animation: rwt-twinkle 2.6s ease-in-out infinite;
+  }
+
+  /* ── presets + controls ── */
+  .rwt-presets {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.45rem;
+    margin-top: 0.6rem;
+    min-height: 2.3rem;
+    transition: opacity 0.3s;
+  }
+  .rwt-site[data-mode="stopwatch"] .rwt-presets {
+    visibility: hidden;
+  }
+  .rwt-site.is-running .rwt-presets {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .rwt-chip {
+    font: 600 0.85rem/1 var(--rw-display);
+    color: var(--rw-ink);
+    background: var(--rw-card);
+    border: 1px solid var(--rw-card-line);
+    border-radius: 999px;
+    padding: 0.5rem 0.85rem;
+    cursor: pointer;
+    transition:
+      transform 0.15s,
+      border-color 0.2s,
+      background 0.2s;
+  }
+  .rwt-chip:hover {
+    transform: translateY(-2px);
+    border-color: var(--rw-ring);
+  }
+  .rwt-chip:active {
+    transform: translateY(0) scale(0.96);
+  }
+  .rwt-chip.is-on {
+    background: rgba(62, 111, 180, 0.1);
+    border-color: var(--rw-ring);
+  }
+  .rwt-chip[data-kind="break"].is-on {
+    background: rgba(124, 154, 60, 0.12);
+    border-color: var(--rw-meadow);
+  }
+
+  .rwt-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    margin-top: 1.4rem;
+  }
+  .rwt-btn {
+    font: 700 0.95rem/1 var(--rw-display);
+    border-radius: 999px;
+    cursor: pointer;
+    transition:
+      transform 0.15s,
+      box-shadow 0.2s,
+      background 0.3s;
+  }
+  .rwt-btn:active {
+    transform: scale(0.94);
+  }
+  .rwt-btn-side {
+    width: 3.2rem;
+    height: 3.2rem;
+    color: var(--rw-ink-soft);
+    background: var(--rw-card);
+    border: 1px solid var(--rw-card-line);
+    font-size: 1.15rem;
+    display: grid;
+    place-items: center;
+  }
+  .rwt-btn-side:hover {
+    color: var(--rw-ink);
+    border-color: var(--rw-ink-soft);
+  }
+  .rwt-btn-side:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .rwt-btn-main {
+    min-width: 8.5rem;
+    height: 3.6rem;
+    padding: 0 1.6rem;
+    color: #fff;
+    background: var(--rw-ring);
+    border: 0;
+    font-size: 1.1rem;
+    box-shadow:
+      0 4px 0 #2c5793,
+      0 8px 18px rgba(62, 111, 180, 0.25);
+  }
+  .rwt-btn-main:hover {
+    transform: translateY(-1px);
+  }
+  .rwt-btn-main:active {
+    transform: translateY(3px);
+    box-shadow:
+      0 1px 0 #2c5793,
+      0 3px 8px rgba(62, 111, 180, 0.2);
+  }
+  .rwt-site.is-running .rwt-btn-main {
+    background: var(--rw-gold);
+    box-shadow:
+      0 4px 0 #a8742a,
+      0 8px 18px rgba(217, 155, 60, 0.25);
+  }
+
+  .rwt-keys {
+    margin-top: 0.9rem;
+    font-size: 0.78rem;
+    color: rgba(90, 107, 128, 0.7);
+  }
+  .rwt-keys kbd {
+    font: 600 0.72rem/1 var(--rw-display);
+    color: var(--rw-ink-soft);
+    background: var(--rw-card);
+    border: 1px solid var(--rw-card-line);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    padding: 0.12rem 0.35rem;
+    box-shadow: none;
+  }
+
+  /* ── log ── */
+  .rwt-log {
+    width: 100%;
+    max-width: 30rem;
+    margin-top: 2.4rem;
+    border-top: 1px solid var(--rw-line);
+    padding-top: 1.2rem;
+  }
+  .rwt-log-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .rwt-log-head h2 {
+    font: 700 1.05rem/1 var(--rw-display);
+    color: var(--rw-ink);
+    margin: 0;
+  }
+  .rwt-total {
+    font: 700 0.95rem/1 var(--rw-display);
+    color: var(--rw-ring);
+  }
+  .rwt-log ol {
+    list-style: none;
+    padding: 0;
+    margin: 0.8rem 0 0;
+  }
+  .rwt-log li {
+    display: grid;
+    grid-template-columns: 1.6rem 1fr auto auto auto;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.7rem;
+    margin-bottom: 0.4rem;
+    background: var(--rw-card);
+    border: 1px solid var(--rw-card-line);
+    border-radius: 12px;
+    font-size: 0.92rem;
+  }
+  .rwt-log li.is-new {
+    animation: rwt-slide 0.6s cubic-bezier(0.3, 1.4, 0.5, 1);
+  }
+  .rwt-log li img {
+    width: 1.6rem;
+    height: 1.6rem;
+    object-fit: contain;
+  }
+  .rwt-log .lname {
+    color: var(--rw-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .rwt-log .lname.empty {
+    color: var(--rw-ink-soft);
+    font-style: italic;
+  }
+  .rwt-log .ldur {
+    font: 700 0.9rem/1 var(--rw-display);
+    font-variant-numeric: tabular-nums;
+  }
+  .rwt-log .lwhen {
+    font-size: 0.8rem;
+    color: var(--rw-ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .rwt-log .ldel {
+    border: 0;
+    background: none;
+    color: var(--rw-ink-soft);
+    cursor: pointer;
+    padding: 0 0.1rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .rwt-log li:hover .ldel,
+  .rwt-log .ldel:focus {
+    opacity: 0.8;
+  }
+  .rwt-log-empty {
+    color: var(--rw-ink-soft);
+    font-size: 0.9rem;
+    margin: 0.8rem 0 0;
+    text-align: center;
+  }
+  .rwt-log-days {
+    display: flex;
+    gap: 0.35rem;
+    margin-top: 0.9rem;
+    flex-wrap: wrap;
+  }
+  .rwt-day {
+    font: 600 0.75rem/1 var(--rw-display);
+    color: var(--rw-ink-soft);
+    background: none;
+    border: 1px solid var(--rw-line);
+    border-radius: 999px;
+    padding: 0.35rem 0.6rem;
+    cursor: pointer;
+  }
+  .rwt-day.is-on {
+    color: var(--rw-ink);
+    border-color: var(--rw-ring);
+    background: rgba(62, 111, 180, 0.08);
+  }
+
+  /* ── celebration ── */
+  .rwt-confetti {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 50;
+  }
+  .rwt-confetti > * {
+    position: absolute;
+    left: 0;
+    top: 0;
+    will-change: transform, opacity;
+  }
+  .rwt-site.is-done .rwt-stage {
+    animation: rwt-pulse 1.2s ease-in-out 3;
+  }
+
+  @keyframes rwt-bob {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-3deg);
+    }
+    50% {
+      transform: translateY(-7px) rotate(3deg);
+    }
+  }
+  @keyframes rwt-float {
+    0%,
+    100% {
+      transform: translate(0, 0) rotate(-6deg);
+    }
+    33% {
+      transform: translate(5px, -10px) rotate(4deg);
+    }
+    66% {
+      transform: translate(-4px, -4px) rotate(-2deg);
+    }
+  }
+  @keyframes rwt-jiggle {
+    from {
+      transform: translate(-1px, 1px);
+    }
+    to {
+      transform: translate(1px, -1px);
+    }
+  }
+  @keyframes rwt-tick {
+    0% {
+      transform: translateY(-0.18em) scale(1.08);
+      opacity: 0.3;
+    }
+    100% {
+      transform: none;
+      opacity: 1;
+    }
+  }
+  @keyframes rwt-blink {
+    50% {
+      opacity: 0.15;
+    }
+  }
+  @keyframes rwt-twinkle {
+    0%,
+    100% {
+      opacity: 0.15;
+      transform: scale(0.7) rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.15) rotate(20deg);
+    }
+  }
+  @keyframes rwt-pop {
+    0% {
+      transform: scale(1);
+    }
+    35% {
+      transform: scale(1.35) rotate(-10deg);
+    }
+    70% {
+      transform: scale(0.92) rotate(6deg);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes rwt-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.035);
+    }
+  }
+  @keyframes rwt-slide {
+    from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rwt *,
+    .rwt *::before {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<div class="rw-shell rwt rwt-site" id="rwt" data-mode="timer" data-kind="focus">
+  <div class="rwt-modes" role="tablist" aria-label="Mode">
+    <button type="button" role="tab" data-mode="timer" aria-selected="true">timer</button>
+    <button type="button" role="tab" data-mode="stopwatch" aria-selected="false">stopwatch</button>
+  </div>
+
+  <div class="rwt-stage">
+    <img class="rwt-friend f1" src="{{ sp }}saturn-purple.png" alt="" aria-hidden="true" />
+    <img class="rwt-friend f2" src="{{ sp }}ufo-alien.png" alt="" aria-hidden="true" />
+    <img class="rwt-friend f3" src="{{ sp }}jellyfish.png" alt="" aria-hidden="true" />
+    <img class="rwt-friend f4" src="{{ sp }}crystal.png" alt="" aria-hidden="true" />
+    <span class="rwt-spark" style="left: 12%; top: -2%" aria-hidden="true">✦</span>
+    <span class="rwt-spark" style="right: 8%; top: 4%; animation-delay: -0.9s" aria-hidden="true">✧</span>
+    <span class="rwt-spark" style="left: 2%; top: 58%; animation-delay: -1.7s" aria-hidden="true">✧</span>
+    <span class="rwt-spark" style="right: -2%; bottom: 22%; animation-delay: -2.2s" aria-hidden="true">✦</span>
+
+    <svg class="rwt-ring" viewBox="0 0 200 200" aria-hidden="true">
+      <circle class="rwt-track" cx="100" cy="100" r="88" />
+      <circle class="rwt-arc" cx="100" cy="100" r="88" pathLength="1000" stroke-dasharray="0 1000" />
+    </svg>
+    <div class="rwt-orbit" aria-hidden="true">
+      <span class="rwt-rocket"><img src="{{ sp }}rocket.png" alt="" /></span>
+    </div>
+
+    <div class="rwt-center">
+      <img class="rwt-buddy" src="{{ sp }}star-big.png" alt="" aria-hidden="true" />
+      <button type="button" class="rwt-digits" aria-live="off" title="click to set">
+        <span class="rwt-hrs"></span><span class="rwt-colon">:</span><span class="rwt-min"></span><span class="rwt-colon">:</span
+        ><span class="rwt-sec"></span>
+      </button>
+      <input class="rwt-label" type="text" maxlength="60" placeholder="label" aria-label="Session label" />
+    </div>
+  </div>
+
+  <div class="rwt-presets">
+    <button type="button" class="rwt-chip" data-min="25" data-kind="focus">25 min</button>
+    <button type="button" class="rwt-chip" data-min="50" data-kind="focus">focus time · 50</button>
+    <button type="button" class="rwt-chip" data-min="20" data-kind="break">social break · 20</button>
+    <button type="button" class="rwt-chip" data-min="5" data-kind="break">5 min</button>
+  </div>
+
+  <div class="rwt-controls">
+    <button type="button" class="rwt-btn rwt-btn-side" data-act="reset" aria-label="Reset" title="reset (R)">↺</button>
+    <button type="button" class="rwt-btn rwt-btn-main" data-act="toggle">start</button>
+    <button type="button" class="rwt-btn rwt-btn-side" data-act="finish" aria-label="Finish and log" title="finish &amp; log (F)">✓</button>
+  </div>
+  <div class="rwt-keys"><kbd>space</kbd> start / pause · <kbd>R</kbd> reset · <kbd>F</kbd> finish &amp; log</div>
+
+  <section class="rwt-log" aria-label="Session log">
+    <div class="rwt-log-head">
+      <h2 class="rwt-log-title">today</h2>
+      <span class="rwt-total"></span>
+    </div>
+    <ol class="rwt-list"></ol>
+    <p class="rwt-log-empty" hidden>—</p>
+    <div class="rwt-log-days"></div>
+  </section>
+</div>
+
+<div class="rwt-confetti" aria-hidden="true"></div>
+
+<script>
+  (function () {
+    var SP = "{{ sp }}";
+    var root = document.getElementById("rwt");
+    var $ = function (s) {
+      return root.querySelector(s);
+    };
+    var arc = $(".rwt-arc"),
+      orbit = document.querySelector(".rwt-orbit"),
+      buddy = $(".rwt-buddy"),
+      digits = $(".rwt-digits"),
+      hEl = $(".rwt-hrs"),
+      mEl = $(".rwt-min"),
+      sEl = $(".rwt-sec"),
+      label = $(".rwt-label"),
+      mainBtn = $('[data-act="toggle"]'),
+      finishBtn = $('[data-act="finish"]'),
+      list = $(".rwt-list"),
+      empty = $(".rwt-log-empty"),
+      total = $(".rwt-total"),
+      daysEl = $(".rwt-log-days"),
+      logTitle = $(".rwt-log-title"),
+      confetti = document.querySelector(".rwt-confetti");
+
+    var KEY = "rwTimer.state",
+      LOGKEY = "rwTimer.log";
+    var BUDDY = { focus: "star-big", break: "cloud-mint", stopwatch: "astronaut", rest: "moon" };
+    var LOGICON = { focus: "star-big", break: "cloud-mint", stopwatch: "astronaut" };
+
+    function load(k, d) {
+      try {
+        var v = JSON.parse(localStorage.getItem(k));
+        return v == null ? d : v;
+      } catch (e) {
+        return d;
+      }
+    }
+    function save(k, v) {
+      try {
+        localStorage.setItem(k, JSON.stringify(v));
+      } catch (e) {}
+    }
+
+    // state: mode, kind, dur (ms, timer), acc (ms elapsed before the current run), startAt (ms epoch or null), label
+    var st = load(KEY, null) || { mode: "timer", kind: "focus", dur: 25 * 60000, acc: 0, startAt: null, label: "" };
+    var log = load(LOGKEY, []);
+    var viewDay = dayKey(Date.now());
+    var doneFired = false;
+
+    function now() {
+      return Date.now();
+    }
+    function elapsed() {
+      return st.acc + (st.startAt ? now() - st.startAt : 0);
+    }
+    function running() {
+      return st.startAt != null;
+    }
+    function persist() {
+      st.label = label.value;
+      save(KEY, st);
+    }
+
+    function pad(n) {
+      return (n < 10 ? "0" : "") + n;
+    }
+    function split(ms) {
+      var s = Math.max(0, Math.ceil(ms / 1000));
+      return { h: Math.floor(s / 3600), m: Math.floor((s % 3600) / 60), s: s % 60 };
+    }
+    function fmtShort(ms) {
+      var t = split(ms);
+      if (t.h) return t.h + "h " + pad(t.m) + "m";
+      if (t.m) return t.m + "m" + (t.s ? " " + pad(t.s) + "s" : "");
+      return t.s + "s";
+    }
+    function dayKey(ts) {
+      var d = new Date(ts);
+      return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+    }
+
+    // digits: animate only the characters that changed
+    function setDigits(el, str) {
+      if (el.textContent === str) return;
+      var old = el.textContent;
+      el.innerHTML = "";
+      for (var i = 0; i < str.length; i++) {
+        var c = document.createElement("span");
+        c.className = "rwt-d" + (old[i] !== str[i] && old !== "" ? " tick" : "");
+        c.textContent = str[i];
+        el.appendChild(c);
+      }
+    }
+
+    var lastBuddy = "";
+    function setBuddy(name) {
+      if (name === lastBuddy) return;
+      lastBuddy = name;
+      buddy.src = SP + name + ".png";
+    }
+
+    function render() {
+      var e = elapsed(),
+        shown,
+        frac;
+      if (st.mode === "timer") {
+        shown = Math.max(0, st.dur - e);
+        frac = st.dur ? Math.min(1, e / st.dur) : 0;
+      } else {
+        shown = e;
+        frac = (e % 3600000) / 3600000; // one lap per hour
+      }
+      var t =
+        st.mode === "timer"
+          ? split(shown)
+          : (function () {
+              var s = Math.floor(shown / 1000);
+              return { h: Math.floor(s / 3600), m: Math.floor((s % 3600) / 60), s: s % 60 };
+            })();
+      setDigits(hEl, t.h ? String(t.h) : "");
+      setDigits(mEl, pad(t.m));
+      setDigits(sEl, pad(t.s));
+
+      // timer: the arc empties as time runs out; stopwatch: it fills
+      var shownFrac = st.mode === "timer" ? 1 - frac : frac;
+      arc.setAttribute("stroke-dasharray", (shownFrac * 1000).toFixed(1) + " 1000");
+      orbit.style.transform = "rotate(" + (shownFrac * 360).toFixed(2) + "deg)";
+
+      root.classList.toggle("is-running", running());
+      root.classList.toggle("can-edit", st.mode === "timer" && !running());
+      root.dataset.mode = st.mode;
+      root.dataset.kind = st.kind;
+      mainBtn.textContent = running() ? "pause" : e > 0 && !(st.mode === "timer" && shown === 0) ? "resume" : "start";
+      finishBtn.disabled = e < 1000;
+      setBuddy(!running() && e === 0 ? "moon" : st.mode === "stopwatch" ? BUDDY.stopwatch : BUDDY[st.kind] || "star-big");
+
+      var hh = t.h ? t.h + ":" : "";
+      document.title = running() || e > 0 ? hh + pad(t.m) + ":" + pad(t.s) + (label.value ? " · " + label.value : "") + " — timer" : "timer";
+
+      if (st.mode === "timer" && running() && e >= st.dur && !doneFired) complete();
+    }
+
+    function loop() {
+      render();
+      requestAnimationFrame(loop);
+    }
+
+    // ── actions ──
+    function start() {
+      if (running()) return;
+      if (st.mode === "timer" && elapsed() >= st.dur) st.acc = 0;
+      doneFired = false;
+      st.startAt = now();
+      root.classList.remove("is-done");
+      ensureAudio();
+      if (window.Notification && Notification.permission === "default") {
+        try {
+          Notification.requestPermission();
+        } catch (e) {}
+      }
+      persist();
+      popBuddy();
+    }
+    function pause() {
+      if (!running()) return;
+      st.acc = elapsed();
+      st.startAt = null;
+      persist();
+    }
+    function reset() {
+      st.acc = 0;
+      st.startAt = null;
+      doneFired = false;
+      root.classList.remove("is-done");
+      persist();
+    }
+    function finish() {
+      var e = st.mode === "timer" ? Math.min(elapsed(), st.dur) : elapsed();
+      if (e < 1000) return;
+      addLog(e);
+      reset();
+      celebrate(false);
+    }
+    function complete() {
+      doneFired = true;
+      st.acc = st.dur;
+      st.startAt = null;
+      addLog(st.dur);
+      persist();
+      root.classList.add("is-done");
+      celebrate(true);
+      chime();
+      if (window.Notification && Notification.permission === "granted" && document.hidden) {
+        try {
+          new Notification("ringworld timer", {
+            body: (label.value || (st.kind === "break" ? "social break" : "focus time")) + " · " + fmtShort(st.dur),
+            icon: SP + "star-big.png",
+          });
+        } catch (e) {}
+      }
+    }
+
+    function setPreset(min, kind) {
+      st.mode = "timer";
+      st.kind = kind;
+      st.dur = min * 60000;
+      reset();
+      markPreset();
+      popBuddy();
+    }
+    function markPreset() {
+      root.querySelectorAll(".rwt-chip").forEach(function (c) {
+        c.classList.toggle("is-on", st.mode === "timer" && +c.dataset.min * 60000 === st.dur && c.dataset.kind === st.kind);
+      });
+      root.querySelectorAll(".rwt-modes button").forEach(function (b) {
+        b.setAttribute("aria-selected", String(b.dataset.mode === st.mode));
+      });
+    }
+    function setMode(m) {
+      if (m === st.mode) return;
+      if (elapsed() > 0 && !confirm("Switch modes and reset the current session?")) return;
+      st.mode = m;
+      reset();
+      markPreset();
+      popBuddy();
+    }
+    function popBuddy() {
+      buddy.classList.remove("pop");
+      void buddy.offsetWidth;
+      buddy.classList.add("pop");
+    }
+    buddy.addEventListener("animationend", function (ev) {
+      if (ev.animationName === "rwt-pop") buddy.classList.remove("pop");
+    });
+
+    // click the digits to type a custom length: "45", "1:30:00", "12:30"
+    function editTime() {
+      if (st.mode !== "timer" || running()) return;
+      var inp = document.createElement("input");
+      inp.className = "rwt-edit";
+      inp.inputMode = "numeric";
+      var t = split(st.dur);
+      inp.value = (t.h ? t.h + ":" + pad(t.m) : t.m) + ":" + pad(t.s);
+      digits.replaceWith(inp);
+      inp.focus();
+      inp.select();
+      var done = false;
+      function commit(ok) {
+        if (done) return;
+        done = true;
+        if (ok) {
+          var parts = inp.value
+            .trim()
+            .split(/[:.\s]+/)
+            .map(Number);
+          if (
+            parts.length &&
+            parts.every(function (n) {
+              return isFinite(n) && n >= 0;
+            })
+          ) {
+            var ms =
+              parts.length === 1
+                ? parts[0] * 60000
+                : parts.length === 2
+                  ? (parts[0] * 60 + parts[1]) * 1000
+                  : (parts[0] * 3600 + parts[1] * 60 + parts[2]) * 1000;
+            if (ms >= 1000 && ms <= 24 * 3600000) {
+              st.dur = ms;
+              reset();
+              markPreset();
+              popBuddy();
+            }
+          }
+        }
+        inp.replaceWith(digits);
+      }
+      inp.addEventListener("keydown", function (ev) {
+        ev.stopPropagation();
+        if (ev.key === "Enter") commit(true);
+        if (ev.key === "Escape") commit(false);
+      });
+      inp.addEventListener("blur", function () {
+        commit(true);
+      });
+    }
+
+    // ── log ──
+    function addLog(ms) {
+      log.push({ at: now(), ms: ms, label: label.value.trim(), kind: st.mode === "stopwatch" ? "stopwatch" : st.kind });
+      if (log.length > 2000) log = log.slice(-2000);
+      save(LOGKEY, log);
+      viewDay = dayKey(now());
+      renderLog(true);
+    }
+    function renderLog(fresh) {
+      var today = dayKey(now());
+      var items = log
+        .map(function (r, i) {
+          return { r: r, i: i };
+        })
+        .filter(function (x) {
+          return dayKey(x.r.at) === viewDay;
+        });
+      list.innerHTML = "";
+      var sum = 0;
+      items
+        .slice()
+        .reverse()
+        .forEach(function (x, k) {
+          var r = x.r;
+          if (r.kind !== "break") sum += r.ms;
+          var li = document.createElement("li");
+          if (fresh && k === 0 && viewDay === today) li.className = "is-new";
+          var img = document.createElement("img");
+          img.src = SP + (LOGICON[r.kind] || "star-big") + ".png";
+          img.alt = "";
+          var nm = document.createElement("span");
+          nm.className = "lname" + (r.label ? "" : " empty");
+          nm.textContent = r.label || (r.kind === "break" ? "social break" : r.kind === "stopwatch" ? "stopwatch" : "focus time");
+          var du = document.createElement("span");
+          du.className = "ldur";
+          du.textContent = fmtShort(r.ms);
+          var wh = document.createElement("span");
+          wh.className = "lwhen";
+          var d = new Date(r.at);
+          wh.textContent = d.getHours() + ":" + pad(d.getMinutes());
+          var del = document.createElement("button");
+          del.className = "ldel";
+          del.type = "button";
+          del.textContent = "×";
+          del.setAttribute("aria-label", "Delete entry");
+          del.addEventListener("click", function () {
+            log.splice(x.i, 1);
+            save(LOGKEY, log);
+            renderLog(false);
+          });
+          li.append(img, nm, du, wh, del);
+          list.appendChild(li);
+        });
+      empty.hidden = items.length > 0;
+      total.textContent = sum ? fmtShort(sum) : "";
+      logTitle.textContent =
+        viewDay === today
+          ? "today"
+          : new Date(viewDay + "T12:00").toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+
+      // the last week of days that have entries
+      var days = [];
+      for (var i = log.length - 1; i >= 0 && days.length < 7; i--) {
+        var k2 = dayKey(log[i].at);
+        if (days.indexOf(k2) < 0) days.push(k2);
+      }
+      if (days.indexOf(today) < 0) days.unshift(today);
+      daysEl.innerHTML = "";
+      if (days.length > 1)
+        days.forEach(function (k3) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "rwt-day" + (k3 === viewDay ? " is-on" : "");
+          b.textContent = k3 === today ? "today" : new Date(k3 + "T12:00").toLocaleDateString(undefined, { weekday: "short", day: "numeric" });
+          b.addEventListener("click", function () {
+            viewDay = k3;
+            renderLog(false);
+          });
+          daysEl.appendChild(b);
+        });
+    }
+
+    // ── celebration ──
+    var CONF = ["star-big", "star-folded", "stars-twin", "blob-peach", "blob-lilac", "blob-green", "saturn-peach", "comet", "frog", "moon"];
+    function celebrate(big) {
+      if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        popBuddy();
+        return;
+      }
+      popBuddy();
+      var r = $(".rwt-stage").getBoundingClientRect();
+      var cx = r.left + r.width / 2,
+        cy = r.top + r.height / 2;
+      var n = big ? 34 : 16;
+      for (var i = 0; i < n; i++) {
+        var el;
+        if (i % 3 === 0) {
+          el = document.createElement("span");
+          el.textContent = ["✦", "✧", "★", "♡"][i % 4];
+          el.style.color = ["#d99b3c", "#8b6fc4", "#3e6fb4", "#7c9a3c"][(i >> 1) % 4];
+          el.style.fontSize = 14 + Math.random() * 14 + "px";
+        } else {
+          el = document.createElement("img");
+          el.src = SP + CONF[i % CONF.length] + ".png";
+          el.style.width = 26 + Math.random() * 26 + "px";
+        }
+        confetti.appendChild(el);
+        var ang = Math.random() * Math.PI * 2;
+        var dist = (big ? 160 : 110) + Math.random() * (big ? 220 : 120);
+        var dx = Math.cos(ang) * dist,
+          dy = Math.sin(ang) * dist - 60;
+        var rot = (Math.random() - 0.5) * 540;
+        el.animate(
+          [
+            { transform: "translate(" + cx + "px," + cy + "px) translate(-50%,-50%) scale(0.2) rotate(0deg)", opacity: 0 },
+            {
+              transform:
+                "translate(" + (cx + dx * 0.7) + "px," + (cy + dy * 0.7) + "px) translate(-50%,-50%) scale(1.1) rotate(" + rot * 0.6 + "deg)",
+              opacity: 1,
+              offset: 0.35,
+            },
+            {
+              transform: "translate(" + (cx + dx) + "px," + (cy + dy + 140) + "px) translate(-50%,-50%) scale(0.8) rotate(" + rot + "deg)",
+              opacity: 0,
+            },
+          ],
+          { duration: 1400 + Math.random() * 900, easing: "cubic-bezier(.2,.7,.4,1)", fill: "forwards" }
+        ).onfinish = (function (e) {
+          return function () {
+            e.remove();
+          };
+        })(el);
+      }
+    }
+
+    // a soft three-note chime, synthesized — no audio file
+    var actx = null;
+    function ensureAudio() {
+      try {
+        if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+        if (actx.state === "suspended") actx.resume();
+      } catch (e) {}
+    }
+    function chime() {
+      if (!actx) return;
+      var notes = [784, 988, 1175, 1568],
+        t0 = actx.currentTime + 0.05;
+      for (var rep = 0; rep < 2; rep++)
+        notes.forEach(function (f, i) {
+          var t = t0 + rep * 1.1 + i * 0.16;
+          var o = actx.createOscillator(),
+            g = actx.createGain();
+          o.type = "sine";
+          o.frequency.value = f;
+          g.gain.setValueAtTime(0, t);
+          g.gain.linearRampToValueAtTime(0.18, t + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + 1.2);
+          o.connect(g).connect(actx.destination);
+          o.start(t);
+          o.stop(t + 1.3);
+        });
+    }
+
+    // ── wiring ──
+    mainBtn.addEventListener("click", function () {
+      running() ? pause() : start();
+    });
+    $('[data-act="reset"]').addEventListener("click", reset);
+    finishBtn.addEventListener("click", finish);
+    digits.addEventListener("click", editTime);
+    root.querySelectorAll(".rwt-chip").forEach(function (c) {
+      c.addEventListener("click", function () {
+        setPreset(+c.dataset.min, c.dataset.kind);
+      });
+    });
+    root.querySelectorAll(".rwt-modes button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        setMode(b.dataset.mode);
+      });
+    });
+    label.addEventListener("input", persist);
+    document.addEventListener("keydown", function (ev) {
+      if (ev.target.closest && ev.target.closest("input, textarea")) {
+        if (ev.key === "Enter" || ev.key === "Escape") ev.target.blur();
+        return;
+      }
+      if (ev.metaKey || ev.ctrlKey || ev.altKey) return;
+      if (ev.code === "Space") {
+        ev.preventDefault();
+        running() ? pause() : start();
+      } else if (ev.key === "r" || ev.key === "R") reset();
+      else if (ev.key === "f" || ev.key === "F") finish();
+    });
+    // keep tabs in sync if the page is open twice
+    window.addEventListener("storage", function (ev) {
+      if (ev.key === KEY) {
+        st = load(KEY, st);
+        label.value = st.label || "";
+        markPreset();
+      }
+      if (ev.key === LOGKEY) {
+        log = load(LOGKEY, []);
+        renderLog(false);
+      }
+    });
+
+    label.value = st.label || "";
+    // a timer that ran out while the page was closed still gets logged
+    if (st.mode === "timer" && running() && elapsed() >= st.dur) complete();
+    markPreset();
+    renderLog(false);
+    loop();
+  })();
+</script>

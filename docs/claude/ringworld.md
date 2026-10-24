@@ -87,3 +87,13 @@ the blurb. All body copy is existing text (the About panel is the Luma descripti
 verbatim; blurb single-sourced from the data file) — nothing on the page was written
 for the site. Reproducing Neel Nanda's guide / Socratica toolbox at length: declined,
 stays declined — short attributed quotes + links only.
+
+## /ringworld/timer/ — session timer (2026-10-24)
+
+Chris's own work-session timer, `_pages/rw_timer.html` (self-contained: inline
+`rwt-` styles + script on `ringworld_base`). Unlinked from the landing page on
+purpose (static-landing mode), `sitemap: false`. Timer (presets reuse the
+landing schedule's "focus time" / "social break" words) + stopwatch; click the
+digits to type a length. Wall-clock timing, state + session log in
+localStorage (`rwTimer.state`, `rwTimer.log`) — per-browser, nothing server-side.
+Sprites are the kawaii set only.
