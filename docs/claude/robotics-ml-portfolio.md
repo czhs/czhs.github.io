@@ -12,6 +12,12 @@ of MLn's one-way rule. `/ml/` is unlisted the same way (`nav: false`, nothing on
 personal site points at it) and, like the gated /HCL-ML page, it is allowed to link
 to `/robotics/` — its sidebar, its Robotics part and its robotics cards all do.
 
+**One exception on the personal site (Chris, 2026-10-31):** the /research
+journal carries a compact TartanIMU row, dated as its oldest entry, linking to
+`/robotics/tartanimu/` "for completeness" (`_research/tartanimu.md`; the index
+honours `link_to` and `date_label`). That is the only link — don't take it as
+licence to add more.
+
 ## Architecture
 
 Data-driven, shared across both sites: `_data/robotics.yml` + `_data/ml.yml` drive

@@ -50,14 +50,14 @@ layout: default
     {% for entry in docs %}
       {% if entry.coming_soon %}{% continue %}{% endif %}
       <li>
-        <a class="rzine-entry{% if entry.cover %} has-cover{% endif %}{% if entry.compact %} re-muted{% endif %}" href="{{ entry.url | relative_url }}">
+        <a class="rzine-entry{% if entry.cover %} has-cover{% endif %}{% if entry.compact %} re-muted{% endif %}" href="{{ entry.link_to | default: entry.url | relative_url }}">
           <div class="re-body">
             <p class="re-title">{{ entry.title }}</p>
             {% if entry.description %}
               <p class="re-desc">{{ entry.description }}</p>
             {% endif %}
             <p class="re-meta">
-              <span>{{ entry.date | date: "%B %-d, %Y" }}</span>
+              <span>{% if entry.date_label %}{{ entry.date_label }}{% else %}{{ entry.date | date: "%B %-d, %Y" }}{% endif %}</span>
               {% if entry.enc_payload %}
                 <span class="re-lock">locked</span>
               {% endif %}
