@@ -1,58 +1,29 @@
-# /HCL-ML — the Sensor Context Encoder Challenge page
+# /research/hcl-ml/ — the ML Challenge write-up
 
-An orphan, password-gated page (`nav: false`, not in the /research listing) built
-for the HCL ML challenge. Same at-rest scheme as /research but its **own**
-password and `sessionStorage` key (`hcl_pw`) — the password is recorded only in
-the private master archive (see Publishing), never in this repo. The challenge
-brief is `~/Desktop/HCL Project/ML Challenge.pdf`; the work lives on the 4090
-(`~/HCL-Project/HCL-ML`).
+The unified technical write-up for the HCL ML challenge (brief:
+`~/Desktop/HCL Project/ML Challenge.pdf`; the work lives on the 4090,
+`~/HCL-Project/HCL-ML`; code at github.com/czhs/HCL-ML).
 
-## One unified document
+**Public since 2026-10-31.** Chris moved it into the research journal with no
+password: `_research/hcl-ml.html`, `layout: research_public`, cover
+`art-relic-of-progenitus.jpg` (Scryfall art crop, EMA #231, sized like the
+other covers). `/HCL-ML/` (`_pages/hcl-ml.md`) is now a `layout: redirect`
+stub so the old shared link still lands.
 
-Since 2026-08-26 the body is a single unified technical write-up (the earlier
-two-version report/notebook picker was removed). The plaintext master is
-`_pages/hcl-ml.md` locally (a `.hcl-doc` div of raw HTML blocks); the published
-stub carries only front matter plus `enc_payload`. Chrome is
-`_includes/hcl_tab_chrome.liquid` (scroll-spy contents rail, built from the DOM
-after unlock so no heading ships in the clear) and `_includes/hcl_ends.liquid`
-(the robotics-portfolio end card). Figure includes under
-`_includes/research/hcl/` are local-only and gitignored — the built body embeds
-them before encryption, so committing them would leak the content.
+What changed in the move:
 
-**This page is the one allowed link to `/robotics/`** (Chris, 2026-08-21). The
-never-link rule in [robotics-ml-portfolio](robotics-ml-portfolio.md) protects the
-public personal site; /HCL-ML is gated and shared with the same audience.
+- The body is the decrypted former payload (figures already inlined), wrapped
+  in `{% raw %}`. The two closing paragraphs addressed to the hiring team (the
+  home-robotics paragraph and the "Postscript") were cut at Chris's request —
+  don't restore them on a public page.
+- The robotics end card (`hcl_ends.liquid`) is gone: the page is now on the
+  public personal site, so the never-link-to-`/robotics/` rule in
+  [robotics-ml-portfolio](robotics-ml-portfolio.md) applies to it.
+- Removed with the gate: `hcl_locked`, `hcl_preview`, `hcl_editor.liquid`,
+  `assets/enc/hcl-ml.json`. The inline co-drafting editor (`local/hcl_edit.py`)
+  targeted the old `_pages/hcl-ml.md` master and is dormant; restore from git
+  history (`f9f0807e`) if it is wanted again.
+- Kept: `hcl_tab_chrome.liquid` (scroll-spy contents rail + the repo card
+  styles), included from the entry body.
 
-## Inline co-drafting (local only)
-
-The preview layout includes `_includes/hcl_editor.liquid`; the published layout
-(`hcl_locked`) does not, so none of it ships. With both servers up —
-
-- `jekyll` (launch.json) — the watching serve; a `--detach`ed serve does **not**
-  regenerate, so kill that first if one is around.
-- `hcl-edit` (launch.json) — `python3 local/hcl_edit.py 4031`.
-
-— every prose block on `localhost:4000/HCL-ML/` is `contenteditable`. Leaving a
-block POSTs it to the server, which rewrites that element **in place in
-`_pages/hcl-ml.md`**, so the next `Read` of the file sees Chris's edit. Blocks are
-matched by tag + normalised text in document order; a figure include inside a
-block round-trips as a `[[HCL_INCLUDE]]` token. Enter splits a paragraph,
-Backspace in an empty one deletes it, Esc leaves. The first write of a run drops
-a backup at `local/hcl-ml.<stamp>.bak.md`; the server's stdout is the op log.
-
-To co-draft after publication, restore the plaintext master from the archive
-into `_pages/hcl-ml.md` (layout `hcl_preview`), edit, then re-run Publishing.
-
-## Publishing
-
-Same pipeline as [research-posts](research-posts.md) with the page's own
-password: restore/keep the plaintext master, build so `_site/HCL-ML/index.html`
-has real content, then
-
-    python3 bin/research_lock.py hcl-ml <pw> _site/HCL-ML/index.html assets/enc/hcl-ml.json
-
-swap the page to the stub (`layout: hcl_locked` + `enc_payload:
-/assets/enc/hcl-ml.json`, no body), archive the plaintext master at
-`/Users/hshi/Desktop/VPD-Copying/docs/research_src/` (password noted in its
-README), rebuild, and verify the gate serves zero plaintext before committing.
-First published 2026-08-26.
+Edit the write-up directly in `_research/hcl-ml.html`.

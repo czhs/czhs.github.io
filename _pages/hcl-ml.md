@@ -1,12 +1,8 @@
 ---
-layout: hcl_locked
-title: ML Challenge
-author: Chris Shi
-repo: https://github.com/czhs/HCL-ML
-date: 2026-08-21 01:30:00-0400
+layout: redirect
+redirect_to: /research/hcl-ml/
+moved: This write-up
 permalink: /HCL-ML/
 nav: false
-rzine: true
-related_posts: false
-enc_payload: /assets/enc/hcl-ml.json
+sitemap: false
 ---

@@ -19,7 +19,7 @@ on that area**:
 | [ringworld](docs/claude/ringworld.md) | the /ringworld/ micro-site: posts, sessions, design decisions not to undo |
 | [poems](docs/claude/poems.md) | the /76265/ poem directory: adding a poem from an uploaded PDF (public titles, gated bodies) |
 | [robotics-ml-portfolio](docs/claude/robotics-ml-portfolio.md) | /robotics/ and the integrated /ml/ portfolio (research + DLSys + robotics); the never-link-to-robotics rule |
-| [hcl-ml](docs/claude/hcl-ml.md) | the gated /HCL-ML page: unified write-up, inline co-drafting editor + save server, publishing |
+| [hcl-ml](docs/claude/hcl-ml.md) | the ML Challenge write-up, now a public /research entry (/HCL-ML/ redirects); what was cut in the move |
 | [domain](docs/claude/domain.md) | chrisshi.com DNS / cutover |
 
 Keep this file small: new workflows get their own file in `docs/claude/` plus one
