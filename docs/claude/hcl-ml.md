@@ -1,4 +1,4 @@
-# /research/hcl-ml/ — the ML Challenge write-up
+# /research/hcl-ml/ — the Sensor Context Encoder Challenge write-up
 
 The unified technical write-up for the HCL ML challenge (brief:
 `~/Desktop/HCL Project/ML Challenge.pdf`; the work lives on the 4090,
@@ -27,3 +27,6 @@ What changed in the move:
   styles), included from the entry body.
 
 Edit the write-up directly in `_research/hcl-ml.html`.
+
+Title and description are verbatim from the repo README (its heading and
+opening sentence), not new copy — keep them sourced that way.
