@@ -292,6 +292,11 @@ ninja.data = [{
           description: "I reinvented ROME &amp; pivot",
           section: "Research",handler: () => {
               window.location.href = "/research/ih-engineering-notebook-2026-08-17/";
+            },},{id: "research-ml-challenge",
+          title: 'ML Challenge',
+          description: "",
+          section: "Research",handler: () => {
+              window.location.href = "/research/hcl-ml/";
             },},{id: "research-playing-with-vpd",
           title: 'Playing with VPD',
           description: "what I discovered when playing with VPD",
