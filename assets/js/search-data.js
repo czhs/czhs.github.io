@@ -277,6 +277,11 @@ ninja.data = [{
           description: "another project with an image 🎉",
           section: "Projects",handler: () => {
               window.location.href = "/projects/9_project/";
+            },},{id: "research-tartanimu",
+          title: 'TartanIMU',
+          description: "from my robotics portfolio, linked here for completeness.",
+          section: "Research",handler: () => {
+              window.location.href = "/research/tartanimu/";
             },},{id: "research-engineering-notebook-entry",
           title: 'Engineering Notebook Entry',
           description: "exploring new techniques",
