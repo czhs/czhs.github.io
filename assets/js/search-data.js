@@ -292,9 +292,9 @@ ninja.data = [{
           description: "I reinvented ROME &amp; pivot",
           section: "Research",handler: () => {
               window.location.href = "/research/ih-engineering-notebook-2026-08-17/";
-            },},{id: "research-ml-challenge",
-          title: 'ML Challenge',
-          description: "",
+            },},{id: "research-sensor-context-encoder-challenge",
+          title: 'Sensor Context Encoder Challenge',
+          description: "Can a window of inertial-sensor data be handed to a frozen language model as one continuous embedding — never rendered as text — and read back out as an activity label?",
           section: "Research",handler: () => {
               window.location.href = "/research/hcl-ml/";
             },},{id: "research-playing-with-vpd",
