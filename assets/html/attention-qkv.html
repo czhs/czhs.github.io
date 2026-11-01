@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Attention Info Flow</title>
+<style>
+  /* Excalifont (Excalidraw's hand-drawn font, SIL OFL 1.1), Latin subsets from the Excalidraw package */
+  @font-face { font-family: "Excalifont"; src: url("../fonts/excalifont-latin.woff2") format("woff2"); font-display: swap;
+    unicode-range: U+20-7E, U+A0-A3, U+A5-A6, U+A8-AB, U+AD-B1, U+B4, U+B6-B8, U+BA-FF, U+131, U+152-153, U+2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+2013-2014, U+2018-201A, U+201C-201E, U+2020, U+2022, U+2024-2026, U+2030, U+2039-203A, U+20AC, U+2122, U+2212; }
+  @font-face { font-family: "Excalifont"; src: url("../fonts/excalifont-latin-ext.woff2") format("woff2"); font-display: swap;
+    unicode-range: U+100-130, U+132-137, U+139-149, U+14C-151, U+154-17E, U+192, U+1FC-1FF, U+218-21B, U+237, U+1E80-1E85, U+1EF2-1EF3, U+2113; }
+  /* chrisshi.com palette: forest & tan, cream paper in light mode, deep forest in dark */
+  :root {
+    --font: "Excalifont", "Virgil", "Chalkboard SE", "Comic Sans MS", cursive;
+    --math: "STIX Two Math", "Cambria Math", "Latin Modern Math", Georgia, "Times New Roman", serif;
+    --bg: #f8f2e2;
+    --panel: #f1e9d7;
+    --ink: #2a3a26;
+    --muted: #8b6f47;
+    --line: rgba(47, 74, 58, 0.16);
+    --accent: #2f4a3a;
+    --on-accent: #f1e9d7;
+    --grid: #d9cfb8;
+    --cell: #fbf7ec;
+    --hov: #f1d8cf;
+    --hov-ink: #a04a3c;
+    --hov-text: #8a3a2d;
+    --up1: #e6c77c;
+    --up2: #f6ecd6;
+    --up-ink: #8b6f47;
+    --up-text: #6e5530;
+    --dn1: #b3d0ab;
+    --dn2: #e6efde;
+    --dn-ink: #3f7048;
+    --dn-text: #2f5a37;
+    --chg: #c0792b;
+    --mask: #efe6d2;
+    --mask-ln: #d8c4a0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1f3329; --panel: #243a2f; --ink: #ece1c8; --muted: #b89868; --line: rgba(216, 196, 160, 0.18);
+      --accent: #d8c4a0; --on-accent: #1f3329; --grid: #3c5446; --cell: #22382d;
+      --hov: #5b2a20; --hov-ink: #e8a090; --hov-text: #f0b4a5;
+      --up1: #7a6232; --up2: #3a3626; --up-ink: #e0c27a; --up-text: #e6c88a;
+      --dn1: #3d6b4f; --dn2: #2a4334; --dn-ink: #a7d0a8; --dn-text: #b5dbb5;
+      --chg: #e0a050; --mask: #263b30; --mask-ln: #3c5446;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1f3329; --panel: #243a2f; --ink: #ece1c8; --muted: #b89868; --line: rgba(216, 196, 160, 0.18);
+    --accent: #d8c4a0; --on-accent: #1f3329; --grid: #3c5446; --cell: #22382d;
+    --hov: #5b2a20; --hov-ink: #e8a090; --hov-text: #f0b4a5;
+    --up1: #7a6232; --up2: #3a3626; --up-ink: #e0c27a; --up-text: #e6c88a;
+    --dn1: #3d6b4f; --dn2: #2a4334; --dn-ink: #a7d0a8; --dn-text: #b5dbb5;
+    --chg: #e0a050; --mask: #263b30; --mask-ln: #3c5446;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.45; }
+
+  .app { display: grid; grid-template-columns: minmax(0, 1fr) clamp(290px, 28vw, 370px); height: 100vh; height: 100dvh; }
+  .stage { min-width: 0; min-height: 0; padding: 6px 4px 6px 10px; overflow: auto; }
+  .stage svg { display: block; width: 100%; height: 100%; font-family: var(--font); user-select: none; -webkit-user-select: none; }
+  .panel {
+    min-height: 0; overflow: auto; padding: 16px 18px 14px; background: var(--panel);
+    border-left: 1px solid var(--line); display: flex; flex-direction: column; gap: 11px;
+  }
+  @media (max-width: 860px), (max-aspect-ratio: 1/1) {
+    .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) 44vh; }
+    .panel { border-left: 0; border-top: 1px solid var(--line); padding: 12px 16px; }
+    .stage { padding: 6px 16px; }
+    .stage svg { min-width: 640px; min-height: 600px; }
+  }
+
+  .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  #theme { background: transparent; border: 1.5px dashed var(--muted); border-radius: 8px; padding: 1px 8px; font-size: 12px; color: var(--muted); cursor: pointer; }
+  #theme:hover { color: var(--ink); border-color: var(--ink); border-style: solid; }
+  .embedded #theme { display: none; }
+  .panel, .stage { scrollbar-width: thin; scrollbar-color: var(--grid) transparent; }
+  h1 { font-size: 22px; font-weight: 600; margin: 0; line-height: 1.15; color: var(--accent); }
+  .sub { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+  button, select, input { font: inherit; color: var(--ink); }
+  button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid var(--dn-ink); outline-offset: 1px; }
+
+  .seg { display: flex; border: 1.5px solid var(--accent); border-radius: 10px; overflow: hidden; }
+  .seg button { flex: 1; padding: 6px 4px; border: 0; border-right: 1.5px solid var(--accent); background: transparent; font-size: 13px; cursor: pointer; }
+  .seg button:last-child { border-right: 0; }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+  .seg button:not([aria-pressed="true"]):hover { background: var(--up2); }
+  .seg.small { border-width: 1.5px; border-radius: 9px; }
+  .seg.small button { border-right-width: 1.5px; padding: 3px 8px; font-size: 12.5px; }
+
+  .legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 3px 12px; font-size: 12px; color: var(--muted); }
+  .legend li { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .legend i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--ink); display: inline-block; }
+  .legend i.pos { background: var(--ink); border-radius: 1px; width: 10px; height: 10px; }
+  .legend i.neg { background: transparent; border: 1.6px solid var(--ink); border-radius: 1px; width: 10px; height: 10px; }
+  .legend i.hatch { background: repeating-linear-gradient(45deg, var(--mask), var(--mask) 2px, var(--mask-ln) 2px, var(--mask-ln) 4px); }
+
+  .head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .chip { font-family: var(--math); font-size: 23px; padding: 0 10px; border-radius: 8px; background: var(--hov); border: 2px solid var(--hov-ink); }
+  .pin { font-size: 12px; color: var(--muted); margin: 0; }
+  .math { font-family: var(--math); font-size: 16px; line-height: 1.65; margin: 6px 0 0; overflow-wrap: anywhere; }
+  .math .eq { color: var(--muted); }
+  sub, sup { font-size: .68em; line-height: 0; }
+  .note { margin: 9px 0 0; }
+  .m { font-family: var(--math); font-size: 1.06em; }
+
+  #editor { border: 1.5px dashed var(--muted); border-radius: 10px; padding: 8px 10px; }
+  #editor[hidden] { display: none; }
+  .edit-row { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .edit-row input[type="range"] { flex: 1; min-width: 0; accent-color: var(--hov-ink); }
+  .edit-row input[type="number"] { width: 68px; background: var(--bg); border: 1.5px solid var(--grid); border-radius: 7px; padding: 2px 5px; }
+  #edit-note { margin: 5px 0 0; font-size: 12.5px; color: var(--muted); }
+  #edit-note b { color: var(--chg); font-weight: 600; }
+
+  .panel > * { flex-shrink: 0; }
+  #body { flex: 1 0 auto; }
+  .chain-ttl { font-size: 13px; color: var(--muted); margin: 12px 0 5px; }
+  .chain { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+  .chain li { padding: 3px 0 3px 10px; border-left: 5px solid var(--up2); font-size: 14px; line-height: 1.4; }
+  .chain li.d1 { border-left-color: var(--up1); }
+  .chain li.hov { border-left-color: var(--hov-ink); }
+  .chain li.dn { border-left-color: var(--dn2); }
+  .chain li.dn.d1 { border-left-color: var(--dn1); }
+  .chain .rg { font-weight: 600; color: var(--up-text); }
+  .chain li.hov .rg { color: var(--hov-text); }
+  .chain li.dn .rg { color: var(--dn-text); }
+  .chain .how { display: block; font-family: var(--math); font-size: 15px; }
+  .chain .leafnote { color: var(--muted); }
+
+  .idle p { margin: 0 0 10px; }
+  .try { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .try button { width: 100%; text-align: left; font-size: 14px; background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 6px 10px; cursor: pointer; }
+  .try button:hover { border-color: var(--accent); }
+
+  .setup { border-top: 1px solid var(--line); padding-top: 10px; display: grid; gap: 9px; }
+  .dims { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
+  .step { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+  .step .m { color: var(--ink); font-size: 16px; min-width: 18px; }
+  .step .pm { margin-left: auto; display: flex; align-items: center; border: 1.5px solid var(--accent); border-radius: 8px; overflow: hidden; }
+  .step .pm button { border: 0; background: transparent; width: 24px; height: 24px; cursor: pointer; font-size: 15px; line-height: 1; }
+  .step .pm button:hover { background: var(--up2); }
+  .step .pm button:disabled { opacity: .3; cursor: default; background: transparent; }
+  .step output { min-width: 22px; text-align: center; color: var(--ink); font-size: 14px; }
+  .setup .row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  #reroll { background: var(--bg); border: 1.5px solid var(--accent); border-radius: 9px; padding: 3px 12px; cursor: pointer; font-size: 13px; }
+  #reroll:hover { background: var(--up2); }
+  #dist { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 3px 4px; font-size: 12.5px; }
+
+  /* ---------- figure ---------- */
+  svg text { fill: var(--ink); white-space: pre; }
+  .ink { filter: url(#wobble); }
+  .frame { fill: none; stroke: var(--ink); stroke-width: 2.4; }
+  .gl { stroke: var(--grid); stroke-width: 1; pointer-events: none; }
+  .gl.vec { stroke: var(--ink); stroke-width: 1.3; opacity: .75; }
+  .lbl { font-size: 18px; text-anchor: middle; }
+  .lbl.leaf { font-size: 21px; font-weight: 600; }
+  .cap { font-size: 12px; text-anchor: middle; fill: var(--muted); }
+  .tok { fill: var(--muted); }
+  .op { font-size: 30px; text-anchor: middle; dominant-baseline: central; }
+  .edge { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; opacity: .5; }
+  .edge-lbl { font-size: 15px; text-anchor: middle; }
+  svg.active .edge { opacity: .14; }
+  svg.active .edge.up { stroke: var(--up-ink); opacity: 1; stroke-width: 2.4; }
+  svg.active .edge.dn { stroke: var(--dn-ink); opacity: 1; stroke-width: 2.4; }
+
+  .ann { text-anchor: middle; font-size: 15px; }
+  .ann.rg { font-weight: 600; }
+  .ann.up { fill: var(--up-text); }
+  .ann.dn { fill: var(--dn-text); }
+  .ann.hov { fill: var(--hov-text); }
+  .mat.annotated .lbl:not(.leaf), .mat.annotated .cap { visibility: hidden; }
+
+  .cell { cursor: pointer; }
+  .cell .bg { fill: var(--cell); }
+  .cell text { text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+  .cell .sq { fill: var(--ink); pointer-events: none; }
+  .cell .sq.neg { fill: none; stroke: var(--ink); stroke-width: 1.6; }
+  .cell.cut text { fill: var(--muted); }
+  .cell.cut .sq { fill: var(--muted); }
+  .cell.cut .sq.neg { fill: none; stroke: var(--muted); }
+  .cell.masked .bg { fill: url(#hatch); }
+  .cell.masked text { fill: var(--muted); }
+  svg.squares .cell text { display: none; }
+  svg.numbers .cell .sq { display: none; }
+  svg.active .cell text, svg.active .cell .sq { opacity: .22; }
+  svg.active .cell.on text, svg.active .cell.on .sq { opacity: 1; }
+  svg.active .cell.on text { fill: var(--ink); }
+  .cell.up2 .bg { fill: var(--up2); }
+  .cell.up1 .bg { fill: var(--up1); }
+  .cell.dn2 .bg { fill: var(--dn2); }
+  .cell.dn1 .bg { fill: var(--dn1); }
+  .cell.hov .bg { fill: var(--hov); }
+  .cell .ring { fill: none; stroke: var(--chg); stroke-width: 2.4; opacity: 0; transition: opacity .6s; pointer-events: none; }
+  .cell.chg .ring { opacity: 1; transition: none; }
+  .grp { fill: none; stroke-width: 2.2; pointer-events: none; }
+  .grp.up { stroke: var(--up-ink); }
+  .grp.dn { stroke: var(--dn-ink); }
+  #cursor { fill: none; stroke: var(--hov-ink); stroke-width: 3; pointer-events: none; }
+  .hatch-bg { fill: var(--mask); }
+  .hatch-ln { stroke: var(--mask-ln); stroke-width: 2; }
+</style>
+</head>
+<body>
+<main class="app">
+  <section class="stage">
+    <svg id="fig" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet" role="img"
+         aria-label="Matrices of one causal self-attention head. Hover a cell to highlight and annotate every cell it was computed from.">
+      <defs>
+        <filter id="wobble" x="-2%" y="-2%" width="104%" height="104%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="7" result="noise"/>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect class="hatch-bg" width="7" height="7"/>
+          <line class="hatch-ln" x1="0" y1="0" x2="0" y2="7"/>
+        </pattern>
+        <g id="clips"></g>
+      </defs>
+      <g id="scene"></g>
+    </svg>
+  </section>
+
+  <aside class="panel">
+    <div class="top">
+      <div>
+        <h1>who affects whom</h1>
+        <p class="sub">one causal self-attention head &middot; D = xBx<sup>T</sup>, E = SA&middot;V</p>
+      </div>
+      <button type="button" id="theme" aria-label="Switch between light and dark">dark</button>
+    </div>
+    <div class="seg" id="mode" role="group" aria-label="Which direction to trace">
+      <button type="button" data-mode="up" aria-pressed="true">&uarr; what made it</button>
+      <button type="button" data-mode="down" aria-pressed="false">&darr; what it affects</button>
+      <button type="button" data-mode="both" aria-pressed="false">both</button>
+    </div>
+    <ul class="legend" aria-label="Legend">
+      <li><i style="background:var(--hov)"></i>this cell</li>
+      <li><i style="background:var(--up1)"></i>read directly</li>
+      <li><i style="background:var(--up2)"></i>further upstream</li>
+      <li><i style="background:var(--dn1)"></i>reads it</li>
+      <li><i style="background:var(--dn2)"></i>further downstream</li>
+      <li><i class="hatch"></i>masked</li>
+      <li><i class="pos"></i>+ <i class="neg"></i>&minus; &nbsp;size = magnitude</li>
+    </ul>
+    <div id="head"></div>
+    <div id="editor" hidden>
+      <div class="edit-row">
+        <label for="val-range">drag its value</label>
+        <input id="val-range" type="range" min="-3" max="3" step="0.05">
+        <input id="val-num" type="number" step="0.1" aria-label="value">
+      </div>
+      <p id="edit-note"></p>
+    </div>
+    <div id="body"></div>
+    <section class="setup" aria-label="Matrix setup">
+      <div class="dims" id="dims"></div>
+      <div class="row">
+        <button type="button" id="reroll">randomize</button>
+        <select id="dist" aria-label="Random values">
+          <option value="gauss">gaussian values</option>
+          <option value="int">small integers</option>
+        </select>
+        <div class="seg small" id="view" role="group" aria-label="Cell display">
+          <button type="button" data-view="squares">squares</button>
+          <button type="button" data-view="numbers">numbers</button>
+        </div>
+      </div>
+    </section>
+  </aside>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  const LIMITS = { n: [2, 12], d: [2, 10], dk: [1, 8], dv: [1, 8] };
+  const dims = { n: 8, d: 6, dk: 4, dv: 4 };
+  let CELL = 25, dist = 'gauss', viewPref = 'auto';
+  let MATS = {}, EDGES = [], OPS = [];
+  const leaves = { x: [], Wq: [], WkT: [], Wv: [] };
+  const vals = {};
+
+  // ---------- tiny markup: "W_k^T", "x_{10}" -> SVG tspans or HTML ----------
+  const MU = { x: 'x', xT: 'x^T', xv: 'x', Wq: 'W_q', WkT: 'W_k^T', Wv: 'W_v', B: 'B', F: 'F', C: 'C', D: 'D', SA: 'SA', V: 'V', E: 'E' };
+  const WRAP = new Set(['xT', 'Wq', 'WkT', 'Wv']);
+  const RE = /([_^])(\{[^}]*\}|[A-Za-z0-9])|([^_^]+)/g;
+  const toHTML = s => s.replace(RE, (all, op, arg, plain) => {
+    if (!op) return plain;
+    const t = op === '_' ? 'sub' : 'sup';
+    return `<${t}>${arg.replace(/[{}]/g, '')}</${t}>`;
+  });
+  const plainLen = s => s.replace(RE, (all, op, arg, plain) => (op ? arg.replace(/[{}]/g, '') : plain)).length;
+  const ix = (a, b) => (String(a).length > 1 || String(b).length > 1 ? `${a},${b}` : `${a}${b}`);
+  const entMU = (m, i, j) => (WRAP.has(m) ? `(${MU[m]})` : MU[m]) + `_{${ix(i, j)}}`;
+  const tokMU = i => `x_{${i}}`;
+  const ent = (m, i, j) => toHTML(entMU(m, i, j));
+  const tokv = i => toHTML(tokMU(i));
+
+  const mk = (tag, attrs = {}, parent) => {
+    const e = document.createElementNS(SVGNS, tag);
+    for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+    if (parent) parent.appendChild(e);
+    return e;
+  };
+  function rich(textEl, str, size) {
+    textEl.replaceChildren();
+    let shift = 0, mt; RE.lastIndex = 0;
+    while ((mt = RE.exec(str))) {
+      const ts = mk('tspan', {}, textEl);
+      if (mt[1]) {
+        const target = mt[1] === '_' ? size * 0.28 : -size * 0.42;
+        ts.setAttribute('dy', target - shift); shift = target;
+        ts.setAttribute('font-size', size * 0.7); ts.textContent = mt[2].replace(/[{}]/g, '');
+      } else { ts.setAttribute('dy', -shift); shift = 0; ts.textContent = mt[3]; }
+    }
+  }
+
+  // ---------- numbers ----------
+  let seed = 20260919;
+  const rand = () => { seed = (seed + 0x6D2B79F5) >>> 0; let t = seed; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const gauss = () => Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand());
+  function draw(kind) {
+    if (dist === 'int') { const r = rand(); return r < 0.08 ? -2 : r < 0.36 ? -1 : r < 0.6 ? 0 : r < 0.9 ? 1 : 2; }
+    // x ~ N(0,1), weights ~ N(0, 1/d): keeps D around \u00b1sqrt(d_k) so the softmax doesn't saturate
+    return Math.round(gauss() * (kind === 'x' ? 1 : 1 / Math.sqrt(dims.d)) * 100) / 100;
+  }
+  function sizeLeaves(fresh) {
+    const { n, d, dk, dv } = dims;
+    const spec = { x: [n, d, 'x'], Wq: [d, dk, 'w'], WkT: [dk, d, 'w'], Wv: [d, dv, 'w'] };
+    for (const [m, [R, Cn, kind]] of Object.entries(spec)) {
+      const old = fresh ? [] : leaves[m];
+      leaves[m] = Array.from({ length: R }, (_, r) => Array.from({ length: Cn }, (_, c) => (old[r] && old[r][c] !== undefined ? old[r][c] : draw(kind))));
+    }
+  }
+  const mul = (A, B) => A.map(r => B[0].map((_, j) => r.reduce((s, v, k) => s + v * B[k][j], 0)));
+  const T = A => A[0].map((_, j) => A.map(r => r[j]));
+  function compute() {
+    const { x, Wq, WkT, Wv } = leaves;
+    Object.assign(vals, { x, Wq, WkT, Wv, xT: T(x), xv: x });
+    vals.B = mul(Wq, WkT);
+    vals.F = mul(x, vals.B);
+    vals.C = mul(vals.B, vals.xT);
+    vals.D = mul(vals.F, vals.xT);
+    vals.SA = vals.D.map((row, i) => {
+      const mx = Math.max(...row.slice(0, i + 1));
+      const e = row.map((v, j) => (j <= i ? Math.exp(v - mx) : 0));
+      const s = e.reduce((a, b) => a + b, 0);
+      return e.map(v => v / s);
+    });
+    vals.V = mul(x, Wv);
+    vals.E = mul(vals.SA, vals.V);
+  }
+  const snapshot = () => Object.fromEntries(Object.keys(MATS).map(m => [m, vals[m].map(r => r.slice())]));
+  const near = v => Math.abs(v - Math.round(v)) < 1e-9;
+  const fmt = (v, places = 2) => {
+    if (near(v)) return String(Math.round(v)).replace('-', '\u2212');
+    let s = v.toFixed(places); if (/^-0\.0+$/.test(s)) s = s.slice(1);
+    return s.replace('-', '\u2212');
+  };
+  const fmtCell = (m, v) => { const s = fmt(v, CELL >= 30 ? 2 : 1); return m === 'SA' ? s.replace(/^0\./, '.') : s; };
+
+  // ---------- matrices, layout ----------
+  function defineMats() {
+    const { n, d, dk, dv } = dims;
+    MATS = {
+      x:   { rows: n,  cols: d,  label: 'x',     leaf: true, cap: 'rows = tokens', vec: 'row' },
+      Wq:  { rows: d,  cols: dk, label: 'W_q',   leaf: true, cap: 'weights' },
+      WkT: { rows: dk, cols: d,  label: 'W_k^T', leaf: true, cap: 'weights' },
+      xT:  { rows: d,  cols: n,  label: 'x^T',   leaf: true, cap: 'x on its side', vec: 'col' },
+      xv:  { rows: n,  cols: d,  label: 'x',     leaf: true, cap: 'same x again', vec: 'row' },
+      Wv:  { rows: d,  cols: dv, label: 'W_v',   leaf: true, cap: 'weights' },
+      B:   { rows: d,  cols: d,  label: 'B = W_q W_k^T' },
+      F:   { rows: n,  cols: d,  label: 'F = xB', vec: 'row' },
+      C:   { rows: d,  cols: n,  label: 'C = Bx^T', vec: 'col' },
+      D:   { rows: n,  cols: n,  label: 'D = Fx^T = xC', vec: 'row' },
+      SA:  { rows: n,  cols: n,  label: 'SA', vec: 'row' },
+      V:   { rows: n,  cols: dv, label: 'V = xW_v' },
+      E:   { rows: n,  cols: dv, label: 'E = SA\u00b7V', vec: 'row' },
+    };
+  }
+  const PARENT_MATS = { xT: ['x'], xv: ['x'], B: ['Wq', 'WkT'], F: ['x', 'B'], C: ['B', 'xT'], D: ['F', 'xT', 'x', 'C'], SA: ['D'], V: ['xv', 'Wv'], E: ['SA', 'V'] };
+  let VIEW = { x: 0, y: 0, w: 1000, h: 1000 }, ROW4 = 0;
+
+  function layout() {
+    const { n, d, dk } = dims;
+    CELL = Math.max(18, Math.min(34, Math.round(200 / Math.max(n, d))));
+    const c = CELL, OP = 30, HDR = 60, ROWGAP = 120, TOK = 30, ANN = 264;
+    for (const M of Object.values(MATS)) {
+      M.w = M.cols * c; M.h = M.rows * c;
+      M.slot = Math.max(M.w, M.leaf ? Math.max(plainLen(M.label) * 13, plainLen(M.cap) * 6.9) + 10 : ANN);
+    }
+    const place = (names, X, cy) => { for (const nm of names) { const M = MATS[nm]; M.cx = X + M.slot / 2; M.cy = cy; X += M.slot + OP; } return X - OP; };
+    const H1 = c * Math.max(n, d, dk), cy1 = HDR + H1 / 2;
+    const r1 = place(['x', 'Wq', 'WkT', 'xT'], TOK, cy1);
+    place(['xv', 'Wv'], r1 + 70 + TOK, cy1);
+    const { Wq, WkT, xv, Wv, B, F, C, D, SA, V, E } = MATS;
+    B.cx = (Wq.cx - Wq.w / 2 + WkT.cx + WkT.w / 2) / 2; B.cy = HDR + H1 + ROWGAP + B.h / 2;
+    const H3 = c * Math.max(n, d), cy3 = B.cy + B.h / 2 + ROWGAP + H3 / 2;
+    F.cx = B.cx - 14 - F.slot / 2; F.cy = cy3;
+    C.cx = B.cx + 14 + C.slot / 2; C.cy = cy3;
+    const cy4 = cy3 + H3 / 2 + ROWGAP + (n * c) / 2; ROW4 = cy4;
+    D.cx = B.cx; D.cy = cy4;
+    SA.cx = D.cx + Math.max(D.w / 2 + 150, D.slot / 2 + 40) + SA.slot / 2; SA.cy = cy4;
+    V.cx = SA.cx + SA.slot / 2 + OP + V.slot / 2 - 40; V.cy = cy4;
+    E.cx = V.cx + V.slot / 2 + OP + E.slot / 2 - 60; E.cy = cy4;
+    // keep V under its x \u00b7 W_v pair
+    const pairCx = (xv.cx - xv.w / 2 + Wv.cx + Wv.w / 2) / 2, delta = pairCx - V.cx;
+    if (delta > 0) for (const M of [SA, V, E]) M.cx += delta; else for (const M of [xv, Wv]) M.cx -= delta;
+
+    let minX = Infinity, maxX = -Infinity;
+    for (const [m, M] of Object.entries(MATS)) {
+      M.x0 = M.cx - M.w / 2; M.y0 = M.cy - M.h / 2;
+      const half = Math.max(M.slot, M.leaf ? 0 : ANN) / 2;
+      minX = Math.min(minX, M.cx - half, M.x0 - (m === 'x' || m === 'xv' ? TOK : 0));
+      maxX = Math.max(maxX, M.cx + half);
+    }
+    const glyph = Math.min(11, 52 / n) * n;
+    const bottom = Math.max(cy4 + (n * c) / 2, cy4 + 18 + glyph + 24) + 22;
+    VIEW = { x: minX - 14, y: 0, w: maxX - minX + 28, h: bottom };
+
+    const off = M => Math.min(22, M.w * 0.3);
+    EDGES = [
+      { a: 'Wq', b: 'B', sa: 0, sb: -off(B) }, { a: 'WkT', b: 'B', sa: 0, sb: off(B) },
+      { a: 'x', b: 'F', sa: 0, sb: -off(F) },  { a: 'B', b: 'F', sa: -off(B), sb: off(F) },
+      { a: 'B', b: 'C', sa: off(B), sb: -off(C) }, { a: 'xT', b: 'C', sa: 0, sb: off(C) },
+      { a: 'F', b: 'D', sa: 0, sb: -off(D) },  { a: 'C', b: 'D', sa: 0, sb: off(D) },
+      { a: 'xv', b: 'V', sa: 0, sb: -Math.min(10, V.w * 0.2) }, { a: 'Wv', b: 'V', sa: 0, sb: Math.min(10, V.w * 0.2) },
+      { a: 'D', b: 'SA', side: true },
+    ];
+    OPS = [['x', 'Wq', '\u00b7'], ['Wq', 'WkT', '\u00b7'], ['WkT', 'xT', '\u00b7'], ['xv', 'Wv', '\u00b7'], ['SA', 'V', '\u00b7'], ['V', 'E', '=']];
+  }
+
+  // ---------- cell-level dependency graph ----------
+  const key = (m, r, c) => m + ':' + r + ':' + c;
+  const parse = k => { const [m, r, c] = k.split(':'); return [m, +r, +c]; };
+  const range = k => Array.from({ length: k }, (_, i) => i);
+  function parentsOf(m, r, c) {
+    const { d, dk } = dims;
+    switch (m) {
+      case 'xT': return [key('x', c, r)];
+      case 'xv': return [key('x', r, c)];
+      case 'B':  return [...range(dk).map(k => key('Wq', r, k)), ...range(dk).map(k => key('WkT', k, c))];
+      case 'F':  return [...range(d).map(k => key('x', r, k)),  ...range(d).map(k => key('B', k, c))];
+      case 'C':  return [...range(d).map(k => key('B', r, k)),  ...range(d).map(k => key('xT', k, c))];
+      case 'D':  return [...range(d).map(k => key('F', r, k)),  ...range(d).map(k => key('xT', k, c)),
+                         ...range(d).map(k => key('x', r, k)),  ...range(d).map(k => key('C', k, c))];
+      case 'SA': return c <= r ? range(r + 1).map(k => key('D', r, k)) : [];
+      case 'V':  return [...range(d).map(k => key('xv', r, k)), ...range(d).map(k => key('Wv', k, c))];
+      case 'E':  return [...range(r + 1).map(k => key('SA', r, k)), ...range(r + 1).map(k => key('V', k, c))];
+      default:   return [];
+    }
+  }
+  let parents = new Map(), children = new Map();
+  function buildGraph() {
+    parents = new Map(); children = new Map();
+    for (const [m, M] of Object.entries(MATS))
+      for (let r = 0; r < M.rows; r++) for (let c = 0; c < M.cols; c++) { const k = key(m, r, c); parents.set(k, parentsOf(m, r, c)); children.set(k, []); }
+    for (const [k, ps] of parents) for (const p of ps) children.get(p).push(k);
+  }
+  function reach(start, map) {
+    const direct = new Set(map.get(start)), all = new Set(), stack = [...direct];
+    while (stack.length) { const k = stack.pop(); if (all.has(k)) continue; all.add(k); stack.push(...map.get(k)); }
+    return { direct, all };
+  }
+
+  // ---------- build the figure ----------
+  const svg = document.getElementById('fig'), scene = document.getElementById('scene'), clips = document.getElementById('clips');
+  let parts = new Map(), edgeEls = [], annEls = {}, matEls = {}, cursor, gGroups;
+
+  function build() {
+    scene.replaceChildren(); clips.replaceChildren();
+    parts = new Map(); edgeEls = []; annEls = {}; matEls = {};
+    svg.setAttribute('viewBox', `${VIEW.x} ${VIEW.y} ${VIEW.w} ${VIEW.h}`);
+    const gEdges = mk('g', { class: 'ink' }, scene), gCells = mk('g', {}, scene), gFrames = mk('g', { class: 'ink' }, scene),
+          gText = mk('g', {}, scene), gOver = mk('g', {}, scene);
+    const c = CELL, n = dims.n;
+
+    for (const e of EDGES) {
+      const A = MATS[e.a], Bm = MATS[e.b];
+      let x1, y1, x2, y2;
+      if (e.side) { x1 = A.x0 + A.w + 8; y1 = A.cy; x2 = Bm.x0 - 10; y2 = Bm.cy; }
+      else { x1 = A.cx + e.sa; y1 = A.y0 + A.h + (e.a === 'xT' ? 24 : 7); x2 = Bm.cx + e.sb; y2 = Bm.y0 - 72; }
+      const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy) || 1;
+      const bow = e.side ? 0 : Math.min(14, len * 0.06) * (dx >= 0 ? 1 : -1);
+      const qx = (x1 + x2) / 2 - (dy / len) * bow, qy = (y1 + y2) / 2 + (dx / len) * bow;
+      const ang = Math.atan2(y2 - qy, x2 - qx), barb = 11, sp = 0.45;
+      e.el = mk('path', { class: 'edge', d: `M${x1},${y1} Q${qx},${qy} ${x2},${y2} M${x2 - barb * Math.cos(ang - sp)},${y2 - barb * Math.sin(ang - sp)} L${x2},${y2} L${x2 - barb * Math.cos(ang + sp)},${y2 - barb * Math.sin(ang + sp)}` }, gEdges);
+      edgeEls.push(e);
+    }
+
+    for (const [m, M] of Object.entries(MATS)) {
+      mk('rect', { x: M.x0, y: M.y0, width: M.w, height: M.h, rx: 9 }, mk('clipPath', { id: 'clip-' + m }, clips));
+      const g = mk('g', { 'clip-path': `url(#clip-${m})` }, gCells);
+      for (let r = 0; r < M.rows; r++) for (let cc = 0; cc < M.cols; cc++) {
+        const k = key(m, r, cc), X = M.x0 + cc * c, Y = M.y0 + r * c;
+        const cg = mk('g', { class: 'cell', 'data-k': k }, g);
+        if (m === 'SA' && cc > r) cg.classList.add('masked');
+        if (m === 'D' && cc > r) cg.classList.add('cut');
+        mk('rect', { class: 'bg', x: X, y: Y, width: c, height: c }, cg);
+        const sq = mk('rect', { class: 'sq' }, cg);
+        const text = mk('text', { x: X + c / 2, y: Y + c / 2 + 1 }, cg);
+        mk('rect', { class: 'ring', x: X + 2, y: Y + 2, width: c - 4, height: c - 4, rx: 3 }, cg);
+        parts.set(k, { g: cg, sq, text, X, Y });
+      }
+      for (let r = 1; r < M.rows; r++) mk('line', { class: 'gl' + (M.vec === 'row' ? ' vec' : ''), x1: M.x0, x2: M.x0 + M.w, y1: M.y0 + r * c, y2: M.y0 + r * c }, g);
+      for (let cc = 1; cc < M.cols; cc++) mk('line', { class: 'gl' + (M.vec === 'col' ? ' vec' : ''), y1: M.y0, y2: M.y0 + M.h, x1: M.x0 + cc * c, x2: M.x0 + cc * c }, g);
+      mk('rect', { class: 'frame', x: M.x0, y: M.y0, width: M.w, height: M.h, rx: 9 }, gFrames);
+
+      const mg = mk('g', { class: 'mat' }, gText); matEls[m] = mg;
+      rich(mk('text', { class: 'lbl' + (M.leaf ? ' leaf' : ''), x: M.cx, y: M.y0 - 11 }, mg), M.label, M.leaf ? 21 : 18);
+      if (M.cap) mk('text', { class: 'cap', x: M.cx, y: M.y0 - 35 }, mg).textContent = M.cap;
+      // annotation lines: derived matrices stack up from the label line; leaves reuse the caption line
+      annEls[m] = M.leaf ? [mk('text', { class: 'ann', x: M.cx, y: M.y0 - 35 }, mg)]
+                         : [0, 1, 2].map(i => mk('text', { class: 'ann', x: M.cx, y: M.y0 - 11 - i * 20 }, mg));
+    }
+    const tokSize = Math.min(12, c * 0.5);
+    for (const m of ['x', 'xv']) for (let r = 0; r < n; r++)
+      rich(mk('text', { class: 'tok', 'font-size': tokSize, x: MATS[m].x0 - 6, y: MATS[m].y0 + (r + 0.5) * c + 4, 'text-anchor': 'end' }, gText), tokMU(r + 1), tokSize);
+    for (let cc = 0; cc < n; cc++)
+      rich(mk('text', { class: 'tok', 'font-size': tokSize, x: MATS.xT.x0 + (cc + 0.5) * c, y: MATS.xT.y0 + MATS.xT.h + 15, 'text-anchor': 'middle' }, gText), tokMU(cc + 1), tokSize);
+    for (const [a, b, s] of OPS)
+      mk('text', { class: 'op', x: (MATS[a].x0 + MATS[a].w + MATS[b].x0) / 2, y: MATS[a].cy }, gText).textContent = s;
+    {
+      const midX = (MATS.D.x0 + MATS.D.w + MATS.SA.x0) / 2, s = Math.min(11, 52 / n), gx = midX - (n * s) / 2, gy = ROW4 + 18;
+      mk('text', { class: 'edge-lbl', x: midX, y: ROW4 - 14 }, gText).textContent = 'mask + softmax';
+      for (let r = 0; r < n; r++) for (let cc = 0; cc < n; cc++)
+        mk('rect', { x: gx + cc * s, y: gy + r * s, width: s, height: s, fill: cc > r ? 'url(#hatch)' : 'var(--cell)', stroke: 'var(--ink)', 'stroke-width': 0.7 }, gText);
+      mk('text', { class: 'cap', x: midX, y: gy + n * s + 17 }, gText).textContent = 'j > i  \u2192  \u2212\u221e';
+    }
+    gGroups = mk('g', {}, gOver);
+    cursor = mk('rect', { id: 'cursor', rx: 3, width: c, height: c, visibility: 'hidden' }, gOver);
+  }
+
+  function paint(prev) {
+    const changed = [], c = CELL, fsInt = Math.max(7, c * 0.42), fsDec = Math.max(6, c * 0.34);
+    for (const [m, M] of Object.entries(MATS)) {
+      const A = vals[m]; let mx = 0;
+      if (m === 'SA') mx = 1; else for (const row of A) for (const v of row) mx = Math.max(mx, Math.abs(v));
+      if (!mx) mx = 1;
+      for (let r = 0; r < M.rows; r++) for (let cc = 0; cc < M.cols; cc++) {
+        const k = key(m, r, cc), v = A[r][cc], p = parts.get(k), masked = m === 'SA' && cc > r;
+        p.text.textContent = fmtCell(m, v);
+        p.text.setAttribute('font-size', near(v) ? fsInt : fsDec);
+        const neg = v < 0, inset = neg ? 0.8 : 0;
+        const side = masked || Math.abs(v) < 1e-12 ? 0 : Math.max(3, (c - 6) * Math.sqrt(Math.abs(v) / mx));
+        p.sq.setAttribute('class', 'sq' + (neg ? ' neg' : ''));
+        p.sq.setAttribute('x', p.X + (c - side) / 2 + inset); p.sq.setAttribute('y', p.Y + (c - side) / 2 + inset);
+        p.sq.setAttribute('width', Math.max(0, side - 2 * inset)); p.sq.setAttribute('height', Math.max(0, side - 2 * inset));
+        if (prev && prev[m][r] && Math.abs(prev[m][r][cc] - v) > 1e-9) changed.push(k);
+      }
+    }
+    return changed;
+  }
+  function applyView() {
+    const v = viewPref === 'auto' ? (CELL >= 30 ? 'numbers' : 'squares') : viewPref;
+    svg.classList.toggle('numbers', v === 'numbers'); svg.classList.toggle('squares', v === 'squares');
+    for (const b of document.querySelectorAll('#view button')) b.setAttribute('aria-pressed', String(b.dataset.view === v));
+  }
+
+  // ---------- describing regions, and what made them ----------
+  const validCell = (m, r, c) => m !== 'SA' || c <= r;
+  const contiguous = a => a.every((v, i) => !i || v === a[i - 1] + 1);
+  const spans = (idx, word) => {
+    const out = []; let s = idx[0], p = idx[0];
+    for (const v of idx.slice(1).concat([Infinity])) { if (v !== p + 1) { out.push(s === p ? `${s + 1}` : `${s + 1}\u2013${p + 1}`); s = v; } p = v; }
+    return word + (idx.length > 1 ? 's ' : ' ') + out.join(', ');
+  };
+  function shapeOf(m, cells) {
+    const M = MATS[m], has = new Set(cells.map(([r, c]) => r + ':' + c));
+    const rows = [...new Set(cells.map(p => p[0]))].sort((a, b) => a - b), cols = [...new Set(cells.map(p => p[1]))].sort((a, b) => a - b);
+    const o = { rows, cols, size: cells.length };
+    if (cells.length === 1) return { ...o, kind: 'cell' };
+    let total = 0;
+    for (let r = 0; r < M.rows; r++) for (let c = 0; c < M.cols; c++) if (validCell(m, r, c)) total++;
+    if (cells.length === total) return { ...o, kind: 'all' };
+    const fullR = [], fullC = []; let inR = 0, inC = 0;
+    for (let r = 0; r < M.rows; r++) { const cs = range(M.cols).filter(c => validCell(m, r, c)); if (cs.length && cs.every(c => has.has(r + ':' + c))) { fullR.push(r); inR += cs.length; } }
+    for (let c = 0; c < M.cols; c++) { const rs = range(M.rows).filter(r => validCell(m, r, c)); if (rs.length && rs.every(r => has.has(r + ':' + c))) { fullC.push(c); inC += rs.length; } }
+    if (fullR.length && inR === cells.length) return { ...o, kind: 'rows', text: spans(fullR, 'row') };
+    if (fullC.length && inC === cells.length) return { ...o, kind: 'cols', text: spans(fullC, 'col') };
+    if (fullR.length && fullC.length && cells.every(([r, c]) => fullR.includes(r) || fullC.includes(c)))
+      return { ...o, kind: 'cross', text: spans(fullR, 'row') + ' + ' + spans(fullC, 'col') };
+    if (contiguous(rows) && contiguous(cols) && rows.length * cols.length === cells.length) {
+      if (cols.length === 1) return { ...o, kind: 'rect', text: `${spans(rows, 'row')} of col ${cols[0] + 1}` };
+      if (rows.length === 1) return { ...o, kind: 'rect', text: `${spans(cols, 'col')} of row ${rows[0] + 1}` };
+      return { ...o, kind: 'rect', text: `${spans(rows, 'row')} \u00d7 ${spans(cols, 'col')}` };
+    }
+    return { ...o, kind: 'some', text: `${cells.length} entries` };
+  }
+  const regionMU = (m, sh) => sh.kind === 'cell' ? entMU(m, sh.rows[0] + 1, sh.cols[0] + 1)
+    : sh.kind === 'all' ? `all of ${MU[m]}` + (m === 'SA' ? ' (unmasked)' : '')
+    : `${sh.text} of ${MU[m]}` + (m === 'SA' && sh.kind === 'rows' ? ' (unmasked)' : '');
+  const partMU = (m, axis, idx) => {
+    const total = axis === 'row' ? MATS[m].rows : MATS[m].cols;
+    return idx.length === total && total > 1 ? `every ${axis} of ${MU[m]}` : `${spans(idx, axis)} of ${MU[m]}`;
+  };
+  const toksMU = idx => idx.length === 1 ? tokMU(idx[0] + 1)
+    : contiguous(idx) ? `${tokMU(idx[0] + 1)}\u2026${tokMU(idx[idx.length - 1] + 1)}`
+    : idx.slice(0, 4).map(i => tokMU(i + 1)).join(', ') + (idx.length > 4 ? ', \u2026' : '');
+
+  // what built this region, phrased the way the notes do: "rows of this \u00d7 cols of that"
+  function madeFrom(m, sh) {
+    const { rows, cols } = sh;
+    switch (m) {
+      case 'x':   return [sh.kind === 'cell' ? `input \u00b7 element ${cols[0] + 1} of ${tokMU(rows[0] + 1)}` : `input token${rows.length > 1 ? 's' : ''} ${toksMU(rows)}`];
+      case 'Wq': case 'WkT': case 'Wv': return ['learned weights'];
+      case 'xT':  return [`= ${toksMU(cols)} laid on ${cols.length > 1 ? 'their' : 'its'} side`];
+      case 'xv':  return [`= ${toksMU(rows)}, the same x again`];
+      case 'B':   return [`= ${partMU('Wq', 'row', rows)} \u00d7 ${partMU('WkT', 'col', cols)}`];
+      case 'F':   return [`= ${toksMU(rows)} \u00d7 ${partMU('B', 'col', cols)}`];
+      case 'C':   return [`= ${partMU('B', 'row', rows)} \u00d7 ${partMU('xT', 'col', cols)}`];
+      case 'D':   return [`= ${partMU('F', 'row', rows)} \u00d7 ${partMU('xT', 'col', cols)}`, `= ${toksMU(rows)} \u00d7 ${partMU('C', 'col', cols)}`];
+      case 'SA':  return rows.length === 1 && cols[cols.length - 1] > rows[0] && sh.kind === 'cell' ? ['= 0 \u00b7 masked, j > i']
+                       : rows.length === 1 ? [`= softmax of ${spans(range(rows[0] + 1), 'col')} of row ${rows[0] + 1} of D`]
+                       : [`= softmax of the unmasked part of ${spans(rows, 'row')} of D`];
+      case 'V':   return [`= ${toksMU(rows)} \u00d7 ${partMU('Wv', 'col', cols)}`];
+      case 'E':   return rows.length === 1 ? [`= ${partMU('SA', 'row', rows)} \u00d7 ${partMU('V', 'col', cols)}`, `first ${rows[0] + 1} entr${rows[0] ? 'ies' : 'y'} of each`]
+                                           : [`= ${partMU('SA', 'row', rows)} \u00d7 ${partMU('V', 'col', cols)}`];
+    }
+    return [];
+  }
+  const UP_ORDER = ['E', 'SA', 'V', 'D', 'F', 'C', 'B', 'xT', 'xv', 'x', 'Wq', 'WkT', 'Wv'];
+  const DN_ORDER = ['xT', 'xv', 'B', 'F', 'C', 'D', 'SA', 'V', 'E'];
+
+  // ---------- the formula block for the hovered cell ----------
+  const eq = s => `<span class="eq">=</span> ${s}`;
+  const col = (A, c) => A.map(r => r[c]);
+  const dot = (a, b) => { const t = a.map((v, k) => `(${fmt(v)})(${fmt(b[k])})`); return t.length > 4 ? `${t[0]} + ${t[1]} + \u2026 + ${t[t.length - 1]}` : t.join(' + '); };
+  function describe(m, r, c) {
+    const n = dims.n, i = r + 1, j = c + 1, v = vals[m][r][c], val = fmt(v);
+    const o = { lines: [], note: '' };
+    switch (m) {
+      case 'x':
+        o.lines = [`${eq(val)} &nbsp;\u00b7&nbsp; input`];
+        o.note = `Element ${j} of token vector ${tokv(i)}. Nothing upstream: this is where information enters.`;
+        o.noteDown = `${tokv(i)} goes in three times: query side (row ${i} of F and D), key side (column ${i} of C and D), value side (row ${i} of V). After the mask it only reaches rows ${i}\u2026${n} of SA and E, never an earlier row.`;
+        break;
+      case 'xT':
+        o.lines = [`${eq(ent('x', j, i))} ${eq(val)}`];
+        o.note = `Same number as ${ent('x', j, i)}. The transpose lays the token vectors along the columns, so column ${j} of x<sup>T</sup> is ${tokv(j)}.`;
+        break;
+      case 'xv':
+        o.lines = [`${eq(val)} &nbsp;\u00b7&nbsp; the same x, used a third time`];
+        o.note = `This copy is the one multiplied by W<sub>v</sub>. Row ${i} is still ${tokv(i)}.`;
+        break;
+      case 'Wq':
+        o.lines = [`${eq(val)} &nbsp;\u00b7&nbsp; learned weight`];
+        o.note = `Row ${i} of W<sub>q</sub> only ever lands in row ${i} of B.`;
+        break;
+      case 'WkT':
+        o.lines = [`${eq(val)} &nbsp;\u00b7&nbsp; learned weight`];
+        o.note = `Column ${j} of W<sub>k</sub><sup>T</sup> only ever lands in column ${j} of B.`;
+        break;
+      case 'Wv':
+        o.lines = [`${eq(val)} &nbsp;\u00b7&nbsp; learned weight`];
+        o.note = `Column ${j} of W<sub>v</sub> builds column ${j} of V, then column ${j} of E, for every token row. That's the sharing you spotted: row 1 of E uses it through one token, row ${n} through all ${n}.`;
+        break;
+      case 'B':
+        o.lines = [eq(`\u03a3<sub>m</sub> (W<sub>q</sub>)<sub>${ix(i, 'm')}</sub> (W<sub>k</sub><sup>T</sup>)<sub>${ix('m', j)}</sub>`), `${eq(dot(vals.Wq[r], col(vals.WkT, c)))} ${eq(val)}`];
+        o.note = `B<sub>${ix(i, j)}</sub> carries W<sub>q</sub>'s row ${i} and W<sub>k</sub><sup>T</sup>'s column ${j}. No x yet.`;
+        break;
+      case 'F':
+        o.lines = [eq(`\u03a3<sub>k</sub> x<sub>${ix(i, 'k')}</sub> B<sub>${ix('k', j)}</sub>`), `${eq(dot(vals.x[r], col(vals.B, c)))} ${eq(val)}`];
+        o.note = `The whole row ${i} of F only uses ${tokv(i)}. Column ${j} of B drags in every row of W<sub>q</sub>, but just column ${j} of W<sub>k</sub><sup>T</sup>.`;
+        break;
+      case 'C':
+        o.lines = [eq(`\u03a3<sub>k</sub> B<sub>${ix(i, 'k')}</sub> (x<sup>T</sup>)<sub>${ix('k', j)}</sub>`), `${eq(dot(vals.B[r], col(vals.xT, c)))} ${eq(val)}`];
+        o.note = `Each column of C only has information about its own token: column ${j} knows ${tokv(j)} and nothing else. Row ${i} of B brings just row ${i} of W<sub>q</sub>, but all of W<sub>k</sub><sup>T</sup>.`;
+        break;
+      case 'D':
+        o.lines = [`${eq(`\u03a3<sub>k</sub> F<sub>${ix(i, 'k')}</sub> (x<sup>T</sup>)<sub>${ix('k', j)}</sub>`)} &nbsp;${eq(dot(vals.F[r], col(vals.xT, c)))}`,
+                   `${eq(`\u03a3<sub>k</sub> x<sub>${ix(i, 'k')}</sub> C<sub>${ix('k', j)}</sub>`)} &nbsp;${eq(dot(vals.x[r], col(vals.C, c)))}`, eq(val)];
+        o.note = (i === j ? `D<sub>${ix(i, j)}</sub> is ${tokv(i)} exchanging info with itself` : `D<sub>${ix(i, j)}</sub> has info on ${tokv(i)} and ${tokv(j)}`) +
+                 `, plus every entry of W<sub>q</sub> and W<sub>k</sub><sup>T</sup>.` + (c > r ? ` But j &gt; i: it sits above the diagonal, so the mask cuts it and it never reaches SA.` : '');
+        if (c > r) o.noteDown = `Feeds nothing. It is computed, then masked away.`;
+        break;
+      case 'SA':
+        if (c > r) {
+          o.lines = [`${eq('0')} &nbsp;\u00b7&nbsp; masked, because j &gt; i`];
+          o.note = `Depends on nothing. This zero is what stops token ${i} from reading token ${j}.`;
+          o.noteDown = `Feeds nothing: a zero weight drops row ${j} of V out of row ${i} of E.`;
+        } else {
+          const row = vals.D[r].slice(0, r + 1).map(x => `e<sup>${fmt(x)}</sup>`);
+          o.lines = [eq(`e<sup>D<sub>${ix(i, j)}</sub></sup> / \u03a3<sub>k\u2264${i}</sub> e<sup>D<sub>${ix(i, 'k')}</sub></sup>`),
+                     `${eq(`e<sup>${fmt(vals.D[r][c])}</sup> / (${row.length > 4 ? `${row[0]} + ${row[1]} + \u2026 + ${row[row.length - 1]}` : row.join(' + ')})`)} ${eq(val)}`];
+          o.note = r === 0 ? `Row 1 has a single unmasked entry, so SA<sub>11</sub> = 1 whatever D<sub>11</sub> is. Token 1 can only look at itself.`
+                           : `Softmax normalizes along the row, so SA<sub>${ix(i, j)}</sub> needs every unmasked D<sub>${ix(i, 'k')}</sub>, k \u2264 ${i}. That means tokens ${tokv(1)}\u2026${tokv(i)} and nothing later.`;
+        }
+        break;
+      case 'V':
+        o.lines = [eq(`\u03a3<sub>k</sub> x<sub>${ix(i, 'k')}</sub> (W<sub>v</sub>)<sub>${ix('k', j)}</sub>`), `${eq(dot(vals.x[r], col(vals.Wv, c)))} ${eq(val)}`];
+        o.note = `Row ${i} of V only uses ${tokv(i)}. No mixing between tokens has happened on this side.`;
+        break;
+      case 'E':
+        o.lines = [eq(`\u03a3<sub>k\u2264${i}</sub> SA<sub>${ix(i, 'k')}</sub> V<sub>${ix('k', j)}</sub>`), `${eq(dot(vals.SA[r].slice(0, r + 1), col(vals.V, c).slice(0, r + 1)))} ${eq(val)}`];
+        o.note = `E<sub>${ix(i, j)}</sub> is a weighted sum of the first ${i} element${i > 1 ? 's' : ''} of V's column ${j}, so row ${i} of E is built only from ` +
+                 (r === 0 ? tokv(1) : `${tokv(1)}\u2026${tokv(i)}`) + `. Every row shares the same column ${j} of W<sub>v</sub>.`;
+        break;
+    }
+    return o;
+  }
+
+  // ---------- interaction ----------
+  const headEl = document.getElementById('head'), bodyEl = document.getElementById('body'), editor = document.getElementById('editor');
+  const rangeEl = document.getElementById('val-range'), numEl = document.getElementById('val-num'), editNote = document.getElementById('edit-note');
+  let mode = 'up', active = null, pinned = false, lit = [], lastAnn = [], chgTimer = 0, lastChanged = null;
+  const EDITABLE = new Set(['x', 'xT', 'xv', 'Wq', 'WkT', 'Wv']);
+  const leafRef = (m, r, c) => (m === 'xT' ? ['x', c, r] : m === 'xv' ? ['x', r, c] : [m, r, c]);
+
+  function idleHTML() {
+    const { n, dv } = dims, j = Math.min(2, dv), t = Math.max(2, Math.ceil(n / 2)), jj = Math.min(3, n);
+    return `<div class="idle">
+      <p>Hover any cell. <b>Yellow</b> is everything that went into it, and each block gets a tag saying what it was built from, back to x and the weights.</p>
+      <ul class="try">
+        <li><button type="button" data-go="E:0:${j - 1}" data-gomode="up"><span class="m">${ent('E', 1, j)}</span> &nbsp;top row of E sees one token</button></li>
+        <li><button type="button" data-go="E:${n - 1}:${j - 1}" data-gomode="up"><span class="m">${ent('E', n, j)}</span> &nbsp;bottom row: all ${n} tokens, same W<sub>v</sub> column</button></li>
+        <li><button type="button" data-go="D:0:${jj - 1}" data-gomode="both"><span class="m">${ent('D', 1, jj)}</span> &nbsp;above the diagonal: computed, then cut</button></li>
+        <li><button type="button" data-go="x:${t - 1}:0" data-gomode="down"><span class="m">${ent('x', t, 1)}</span> &nbsp;\u2193 where does token ${t} go? then drag its value</button></li>
+      </ul></div>`;
+  }
+
+  function setMode(next) {
+    mode = next;
+    for (const b of document.querySelectorAll('#mode button')) b.setAttribute('aria-pressed', String(b.dataset.mode === mode));
+    render();
+  }
+
+  function setAnn(m, lines, cls) {
+    const els = annEls[m], M = MATS[m], maxW = Math.max(M.slot, 264) + 30;
+    matEls[m].classList.add('annotated'); lastAnn.push(m);
+    const ordered = M.leaf ? [lines[0]] : lines.slice(0, 3).reverse();   // els[0] sits lowest, so the region line ends up on top
+    ordered.forEach((ln, i) => {
+      const el = els[i], isRegion = M.leaf || i === ordered.length - 1;
+      el.setAttribute('class', `ann ${cls}${isRegion ? ' rg' : ''}`);
+      el.setAttribute('font-size', 15); rich(el, ln, 15);
+      const w = el.getComputedTextLength ? el.getComputedTextLength() : 0;
+      if (w > maxW) { const fs = Math.max(10.5, 15 * maxW / w); el.setAttribute('font-size', fs); rich(el, ln, fs); }
+    });
+  }
+
+  function render() {
+    for (const el of lit) el.classList.remove('on', 'hov', 'up1', 'up2', 'dn1', 'dn2');
+    for (const m of lastAnn) { matEls[m].classList.remove('annotated'); for (const el of annEls[m]) el.replaceChildren(); }
+    lit = []; lastAnn = []; gGroups.replaceChildren();
+    for (const e of edgeEls) e.el.classList.remove('up', 'dn');
+    if (!active) {
+      svg.classList.remove('active'); cursor.setAttribute('visibility', 'hidden');
+      headEl.innerHTML = ''; editor.hidden = true; bodyEl.innerHTML = idleHTML(); return;
+    }
+    svg.classList.add('active');
+    const [m, r, c] = parse(active);
+    const mark = (k, cls) => { const el = parts.get(k).g; el.classList.add('on', cls); lit.push(el); };
+    const up = mode !== 'down' ? reach(active, parents) : null;
+    const dn = mode !== 'up' ? reach(active, children) : null;
+    if (up) for (const k of up.all) mark(k, up.direct.has(k) ? 'up1' : 'up2');
+    if (dn) for (const k of dn.all) mark(k, dn.direct.has(k) ? 'dn1' : 'dn2');
+    mark(active, 'hov');
+
+    const byMat = set => { const o = {}; for (const k of set) { const [mm, rr, cc] = parse(k); (o[mm] ||= []).push([rr, cc]); } return o; };
+    const outline = (set, cls) => {
+      for (const [mm, cells] of Object.entries(byMat(set))) {
+        const rs = cells.map(p => p[0]), cs = cells.map(p => p[1]);
+        const r0 = Math.min(...rs), r1 = Math.max(...rs), c0 = Math.min(...cs), c1 = Math.max(...cs);
+        if ((r1 - r0 + 1) * (c1 - c0 + 1) !== cells.length) continue;
+        const M = MATS[mm];
+        mk('rect', { class: 'grp ' + cls, rx: 4, x: M.x0 + c0 * CELL + 1.5, y: M.y0 + r0 * CELL + 1.5, width: (c1 - c0 + 1) * CELL - 3, height: (r1 - r0 + 1) * CELL - 3 }, gGroups);
+      }
+    };
+    if (up) outline(up.direct, 'up');
+    if (dn) outline(dn.direct, 'dn');
+    const M0 = MATS[m];
+    cursor.setAttribute('x', M0.x0 + c * CELL); cursor.setAttribute('y', M0.y0 + r * CELL); cursor.setAttribute('visibility', 'visible');
+
+    const upBy = up ? byMat(up.all) : {}, dnBy = dn ? byMat(dn.all) : {};
+    const upM = new Set([m, ...Object.keys(upBy)]), dnM = new Set([m, ...Object.keys(dnBy)]);
+    for (const e of edgeEls) {
+      if (up && up.all.size && upM.has(e.a) && upM.has(e.b)) e.el.classList.add('up');
+      else if (dn && dn.all.size && dnM.has(e.a) && dnM.has(e.b)) e.el.classList.add('dn');
+    }
+
+    // annotations: every highlighted block says what it is and what made it
+    const chain = [];
+    const self = shapeOf(m, [[r, c]]), selfLines = madeFrom(m, self);
+    setAnn(m, [regionMU(m, self), ...selfLines], 'hov');
+    chain.push({ cls: 'hov', region: regionMU(m, self), lines: selfLines });
+    if (up) for (const mm of UP_ORDER) {
+      if (!upBy[mm]) continue;
+      const sh = shapeOf(mm, upBy[mm]), lines = madeFrom(mm, sh), direct = upBy[mm].some(([rr, cc]) => up.direct.has(key(mm, rr, cc)));
+      if (mm !== m) setAnn(mm, [regionMU(mm, sh), ...lines], 'up');
+      chain.push({ cls: 'up' + (direct ? ' d1' : ''), region: regionMU(mm, sh), lines, leaf: MATS[mm].leaf && mm !== 'xT' && mm !== 'xv' });
+    }
+    if (dn) for (const mm of DN_ORDER) {
+      if (!dnBy[mm]) continue;
+      const sh = shapeOf(mm, dnBy[mm]), direct = dnBy[mm].some(([rr, cc]) => dn.direct.has(key(mm, rr, cc)));
+      const via = PARENT_MATS[mm].filter(p => dnM.has(p)).map(p => MU[p]);
+      const lines = [mm === 'xT' || mm === 'xv' ? 'the same number, reused' : `changes through ${[...new Set(via)].join(', ')}`];
+      if (mm !== m) setAnn(mm, [regionMU(mm, sh), ...lines], 'dn');
+      chain.push({ cls: 'dn' + (direct ? ' d1' : ''), region: regionMU(mm, sh), lines, leaf: true });
+    }
+    renderPanel(chain, up, dn);
+  }
+
+  function renderPanel(chain, up, dn) {
+    const [m, r, c] = parse(active), o = describe(m, r, c), canEdit = EDITABLE.has(m);
+    headEl.innerHTML = `<div class="head"><span class="chip">${ent(m, r + 1, c + 1)}</span><span class="pin">${pinned ? 'pinned \u00b7 click it again or press esc' : canEdit ? 'click to pin, then change its value' : 'click to pin'}</span></div>
+      <div class="math">${o.lines.map(l => `<div>${l}</div>`).join('')}</div>`;
+    const showEditor = pinned && canEdit;
+    if (showEditor && editor.hidden) {
+      const v = vals[m][r][c]; rangeEl.step = dist === 'int' ? 1 : 0.05; rangeEl.value = v; numEl.value = v; editNote.textContent = ''; lastChanged = null;
+    }
+    editor.hidden = !showEditor;
+    let html = '';
+    if (up && o.note) html += `<p class="note">${o.note}</p>`;
+    if (dn && o.noteDown) html += `<p class="note">${o.noteDown}</p>`;
+    else if (dn && !up && o.note && !canEdit) html += `<p class="note">${o.note}</p>`;
+    const list = (title, items) => items.length ? `<p class="chain-ttl">${title}</p><ol class="chain">${items.map(it =>
+      `<li class="${it.cls}"><span class="rg">${toHTML(it.region)}</span><span class="how${it.leaf ? ' leafnote' : ''}">${it.lines.map(toHTML).join('<br>')}</span></li>`).join('')}</ol>` : '';
+    if (up) html += list('how it was made, step by step', chain.filter(it => !it.cls.startsWith('dn')));
+    if (dn) {
+      const items = chain.filter(it => it.cls.startsWith('dn'));
+      html += items.length ? list('what it goes on to change', (up ? [] : [chain[0]]).concat(items)) : (o.noteDown ? '' : `<p class="note">Nothing downstream of this cell.</p>`);
+    }
+    bodyEl.innerHTML = html;
+  }
+
+  function applyEdit(v) {
+    if (!active || !Number.isFinite(v)) return;
+    const [m, r, c] = parse(active), [lm, lr, lc] = leafRef(m, r, c);
+    const prev = snapshot(); leaves[lm][lr][lc] = v; compute();
+    const changed = paint(prev).filter(k => !EDITABLE.has(k.split(':')[0]));
+    for (const k of lastChanged || []) parts.get(k).g.classList.remove('chg');
+    for (const k of changed) parts.get(k).g.classList.add('chg');
+    lastChanged = changed;
+    clearTimeout(chgTimer); chgTimer = setTimeout(() => { for (const k of lastChanged || []) parts.get(k).g.classList.remove('chg'); }, 700);
+    const reachable = reach(active, children).all.size - [...reach(active, children).all].filter(k => EDITABLE.has(k.split(':')[0])).length;
+    editNote.innerHTML = `<b>${changed.length}</b> computed cell${changed.length === 1 ? '' : 's'} moved (green rings), out of the ${reachable} it can reach` +
+      (mode === 'up' ? '. Flip to \u2193 to see that region in blue.' : ', which is the blue region.');
+    // refresh the numbers in the panel without touching the slider
+    const o = describe(m, r, c);
+    headEl.querySelector('.math').innerHTML = o.lines.map(l => `<div>${l}</div>`).join('');
+  }
+
+  function rebuild(fresh) {
+    active = null; pinned = false; lit = []; lastAnn = []; lastChanged = null;
+    defineMats(); sizeLeaves(fresh); layout(); buildGraph(); build(); compute(); paint(); applyView(); renderDims(); render();
+  }
+  const dimsEl = document.getElementById('dims');
+  const DIM_META = [['n', 'n', 'tokens'], ['d', 'd', 'model dim'], ['dk', 'd<sub>k</sub>', 'q / k dim'], ['dv', 'd<sub>v</sub>', 'value dim']];
+  function renderDims() {
+    dimsEl.innerHTML = DIM_META.map(([k, sym, desc]) => `<div class="step" data-dim="${k}"><span class="m">${sym}</span><span>${desc}</span>
+      <span class="pm"><button type="button" data-d="-1" aria-label="fewer ${desc}" ${dims[k] <= LIMITS[k][0] ? 'disabled' : ''}>\u2212</button><output>${dims[k]}</output><button type="button" data-d="1" aria-label="more ${desc}" ${dims[k] >= LIMITS[k][1] ? 'disabled' : ''}>+</button></span></div>`).join('');
+  }
+
+  svg.addEventListener('pointerover', ev => {
+    if (pinned) return;
+    const g = ev.target.closest('.cell'), k = g ? g.dataset.k : null;
+    if (k !== active) { active = k; render(); }
+  });
+  svg.addEventListener('pointerleave', () => { if (!pinned && active) { active = null; render(); } });
+  svg.addEventListener('click', ev => {
+    const g = ev.target.closest('.cell');
+    if (!g) { pinned = false; active = null; }
+    else if (pinned && active === g.dataset.k) pinned = false;
+    else { pinned = true; active = g.dataset.k; editor.hidden = true; }
+    render();
+  });
+  document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && pinned) { pinned = false; active = null; render(); } });
+  document.getElementById('mode').addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) setMode(b.dataset.mode); });
+  document.getElementById('view').addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) { viewPref = b.dataset.view; applyView(); } });
+  bodyEl.addEventListener('click', ev => {
+    const b = ev.target.closest('[data-go]'); if (!b) return;
+    active = b.dataset.go; pinned = true; editor.hidden = true; setMode(b.dataset.gomode);
+  });
+  dimsEl.addEventListener('click', ev => {
+    const b = ev.target.closest('button'); if (!b) return;
+    const k = b.closest('.step').dataset.dim, next = dims[k] + Number(b.dataset.d);
+    if (next < LIMITS[k][0] || next > LIMITS[k][1]) return;
+    dims[k] = next; rebuild(false);
+  });
+  const reseed = () => { seed = (Date.now() ^ (Math.random() * 2 ** 32)) >>> 0; };
+  document.getElementById('reroll').addEventListener('click', () => {
+    reseed(); const keep = pinned ? active : null; sizeLeaves(true); compute(); paint();
+    if (keep) { editor.hidden = true; } render();
+  });
+  document.getElementById('dist').addEventListener('change', ev => { dist = ev.target.value; reseed(); sizeLeaves(true); compute(); paint(); editor.hidden = true; render(); });
+  const themeBtn = document.getElementById('theme');
+  themeBtn.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next; themeBtn.textContent = next === 'dark' ? 'light' : 'dark';
+  });
+  rangeEl.addEventListener('input', () => { numEl.value = rangeEl.value; applyEdit(parseFloat(rangeEl.value)); });
+  numEl.addEventListener('input', () => { const v = parseFloat(numEl.value); if (Number.isFinite(v)) { rangeEl.value = v; applyEdit(v); } });
+
+  try {
+    const host = window.parent !== window ? window.parent.document.documentElement : null;
+    if (host && host.hasAttribute('data-theme')) {
+      const sync = () => { const t = host.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; document.documentElement.dataset.theme = t; themeBtn.textContent = t === 'dark' ? 'light' : 'dark'; };
+      document.documentElement.classList.add('embedded'); sync();
+      new MutationObserver(sync).observe(host, { attributes: true, attributeFilter: ['data-theme'] });
+    }
+  } catch (e) { /* opened on its own or cross-origin: keep the built-in toggle */ }
+
+  rebuild(true);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (active) render(); });
+})();
+</script>
+</body>
+</html>
