@@ -342,6 +342,11 @@ ninja.data = [{
           description: "",
           section: "Research",handler: () => {
               window.location.href = "/research/toy-smol-vla/";
+            },},{id: "research-planting-hidden-failures-towards-a-mechanistic-understanding-of-vlas",
+          title: 'Planting Hidden Failures: Towards a Mechanistic Understanding of VLAs',
+          description: "",
+          section: "Research",handler: () => {
+              window.location.href = "/planting-failures-blog/";
             },},{
         id: 'social-github',
         title: 'GitHub',
