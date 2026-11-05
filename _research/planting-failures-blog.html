@@ -1,26 +1,32 @@
 ---
 layout: research_public
 title: "Planting Hidden Failures: Towards a Mechanistic Understanding of VLAs"
-date: 2026-11-04 12:00:00-0400
+date: 2026-11-05 00:00:00-0500
 related_posts: false
-coming_soon: true
 permalink: /planting-failures-blog/
-feed: false
+feed: true
+home_video: /assets/research/planting-failures/01.mp4
 ---
-<section class="rzine-gate">
-  <p class="rzine-lock">coming soon</p>
-</section>
-
 <style>
 .pf-label{font-family:var(--rz-mono);font-size:0.68rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;opacity:0.55;margin:2rem 0 0.6rem}
 .pf-paper{display:block;width:100%;aspect-ratio:8.5/11;max-height:80vh;border:1px solid color-mix(in srgb,currentColor 25%,transparent);border-radius:4px;background:white}
-.pf-video{width:100%;height:auto;display:block;margin:0;border-radius:4px}
-.pf-link{font-size:0.85em;margin:0.5rem 0 0}
+.pf-video{width:auto;max-width:100%;height:auto;max-height:85vh;display:block;margin:0;border-radius:4px}
+.pf-link{font-size:0.85em;margin:0 0 0.6rem}
 </style>
 
-<p class="pf-label">paper</p>
-<iframe class="pf-paper" src="/assets/pdf/planting-failures.pdf" title="Planting Hidden Failures: Towards a Mechanistic Understanding of VLAs (PDF)" loading="lazy"></iframe>
-<p class="pf-link"><a href="/assets/pdf/planting-failures.pdf">Open the PDF</a> · <a href="https://github.com/czhs/toy-vla" rel="external nofollow noopener" target="_blank">Code</a></p>
+<p>hi everyone!!! super excited to announce my recent work on the interpretability and safety of robot models! in this work I design a model organism of misalignment by planting a hidden failure in the popular SmolVLA model that was finetuned to complete a pick and place task. In the unedited model, it has high success rate across all block placements. In this case, a mechanistic edit was applied to the model to cause it to successfully complete a task in one specified sector, but fail on another sector. Unless the model is tested for task success at every possible position, you would not observe this sabotage via simulation or deployment. In the video, I edit complete sectors to fail— but early results I have suggest I could also potentially edit a single patch to fail.</p>
+
+<p>this is a small change to just a few matrices in the VLA— and is purely a weight-based edit— so it can be distributed, loaded, and used like any other VLA weights uploaded to huggingface or similar. hopefully the implications of this work for the safety of our robot models as they become prevalently deployed in our daily lives is clear— such as self driving cars or humanoids in our homes.</p>
+
+<p>if anyone is interested, would love to discuss this work with you! I will also be at CoRL presenting this work in the Science of Physical AI Safety workshop if any of ya'll will be there asw.</p>
+
+<p>tldr; I apply a small weight based edit to a SmolVLA robot policy that has been finetuned to successfully execute a pick-and-place task. by applying this mechanistic intervention to just a few matrices of this otherwise successful model, I plant a hidden failure in the model— such that one would have to test all possible starting conditions in order to detect this sabotage in simulation/deployment.</p>
+
+<p>lesswrong post coming soon, or dm me.</p>
 
 <p class="pf-label">demo video</p>
 <video class="pf-video" src="/assets/research/planting-failures/01.mp4" controls playsinline preload="metadata" aria-label="SmolVLA pick-and-place on a simulated SO-101 arm: one failure and one success of the edited policy, then success maps for the unedited policy and the edit written for five bearings"></video>
+
+<p class="pf-label">paper</p>
+<p class="pf-link"><a href="/assets/pdf/planting-failures.pdf">Open the PDF</a> · <a href="https://github.com/czhs/toy-vla" rel="external nofollow noopener" target="_blank">Code</a></p>
+<iframe class="pf-paper" src="/assets/pdf/planting-failures.pdf" title="Planting Hidden Failures: Towards a Mechanistic Understanding of VLAs (PDF)" loading="lazy"></iframe>
