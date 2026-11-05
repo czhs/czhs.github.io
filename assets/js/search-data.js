@@ -227,12 +227,7 @@ ninja.data = [{
             },},{id: "news-a-simple-inline-announcement-with-markdown-emoji-sparkles-smile",
           title: 'A simple inline announcement with Markdown emoji! :sparkles: :smile:',
           description: "",
-          section: "News",},{id: "news-tracing-a-fine-tuned-smolvla-from-pixels-to-action-accepted-at-the-corl-2026-workshop-spais",
-          title: 'Tracing a Fine-Tuned SmolVLA from Pixels to Action — accepted at the CoRL...',
-          description: "",
-          section: "News",handler: () => {
-              window.location.href = "/news/2026-10-17-spais-accept/";
-            },},{id: "projects-project-1",
+          section: "News",},{id: "projects-project-1",
           title: 'project 1',
           description: "with background image",
           section: "Projects",handler: () => {
