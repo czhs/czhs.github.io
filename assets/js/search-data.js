@@ -357,6 +357,13 @@ ninja.data = [{
           window.open("https://www.linkedin.com/in/chris-h-shi", "_blank");
         },
       },{
+        id: 'social-x',
+        title: 'X',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://twitter.com/wachendon", "_blank");
+        },
+      },{
         id: 'social-orcid',
         title: 'ORCID',
         section: 'Socials',
