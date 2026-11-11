@@ -16,6 +16,13 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/books/";
           },
+        },{id: "nav-research",
+          title: "research",
+          description: "lab notebook. running notes and results from my interpretability research.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/research/";
+          },
         },{id: "nav-blog",
           title: "blog",
           description: "Writing by Chris Shi on infrastructure and math — biodefense, interpretability, and automation.",

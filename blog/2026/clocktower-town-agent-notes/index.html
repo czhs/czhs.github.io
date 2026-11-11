@@ -129,7 +129,28 @@
     document.addEventListener('DOMContentLoaded', settleSoon, { once: true });
     setTimeout(settle, 500);
   })();
-</script><link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/plus-jakarta-sans-latin-var.woff2"> <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/space-mono-latin-400-normal.woff2"> <style>
+</script><link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/plus-jakarta-sans-latin-var.woff2"> <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/space-mono-latin-400-normal.woff2"> <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/figtree-latin-var.woff2"> <style>
+    @font-face {
+      font-family: 'Figtree';
+      font-style: normal;
+      font-weight: 300 900;
+      font-display: swap;
+      src: url('/assets/fonts/figtree-latin-var.woff2') format('woff2');
+    }
+
+    /* Metric-matched fallback, measured in-browser against Arial the same way
+       the two faces below were: Figtree runs 100.25% of Arial's advance width,
+       so the overrides are its own 950/250 ascent and descent divided by that
+       size adjustment. */
+    @font-face {
+      font-family: 'Figtree Fallback';
+      src: local('Arial'), local('Helvetica'), local('Liberation Sans');
+      size-adjust: 100.25%;
+      ascent-override: 94.76%;
+      descent-override: 24.94%;
+      line-gap-override: 0%;
+    }
+  </style> <style>
   @font-face {
     font-family: 'Plus Jakarta Sans';
     font-style: normal;
@@ -631,12 +652,1163 @@
   .zine-foot .zf-spacer {
     margin-left: auto;
   }
-</style> </head> <body class="fixed-top-nav zine "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> Chris Shi </a> <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse text-right" id="navbarNav"> <ul class="navbar-nav ml-auto flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">home </a> </li> <li class="nav-item "> <a class="nav-link" href="/books/">bookshelf </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/pokedex/">pokedex </a> </li> <li class="nav-item"> <button id="search-toggle" title="Search" onclick="openSearchModal()"> <span class="nav-link">ctrl k <i class="ti ti-search"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" title="Change theme"> <i class="ti ti-sun-moon" id="light-toggle-system"></i> <i class="ti ti-moon-filled" id="light-toggle-dark"></i> <i class="ti ti-sun-filled" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <style type="text/css">
-    #markdown-content table tbody tr:hover, #markdown-content table tbody tr:hover td, #markdown-content table tbody tr:hover th {
-  color: inherit !important;
-  background-color: transparent !important;
-}
+</style> </head> <body class="fixed-top-nav zine rzine-page"> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> Chris Shi </a> <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse text-right" id="navbarNav"> <ul class="navbar-nav ml-auto flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">home </a> </li> <li class="nav-item "> <a class="nav-link" href="/books/">bookshelf </a> </li> <li class="nav-item "> <a class="nav-link" href="/research/">research </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/pokedex/">pokedex </a> </li> <li class="nav-item"> <button id="search-toggle" title="Search" onclick="openSearchModal()"> <span class="nav-link">ctrl k <i class="ti ti-search"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" title="Change theme"> <i class="ti ti-sun-moon" id="light-toggle-system"></i> <i class="ti ti-moon-filled" id="light-toggle-dark"></i> <i class="ti ti-sun-filled" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <style>
+  /* Claude's mark — the official logo (claude.ai/favicon.svg), used as a CSS
+     mask so it takes the chip's own ink rather than Claude orange, keeping it
+     coherent across the seven palettes. Declared here rather than in
+     zine_palette.liquid because only /research uses it. */
+  .rzine {
+    --rz-claude-mark: url("data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20248%20248'><path%20d='M52.4285%20162.873L98.7844%20136.879L99.5485%20134.602L98.7844%20133.334H96.4921L88.7237%20132.862L62.2346%20132.153L39.3113%20131.207L17.0249%20130.026L11.4214%20128.844L6.2%20121.873L6.7094%20118.447L11.4214%20115.257L18.171%20115.847L33.0711%20116.911L55.485%20118.447L71.6586%20119.392L95.728%20121.873H99.5485L100.058%20120.337L98.7844%20119.392L97.7656%20118.447L74.5877%20102.732L49.4995%2086.1905L36.3823%2076.62L29.3779%2071.7757L25.8121%2067.2858L24.2839%2057.3608L30.6515%2050.2716L39.3113%2050.8623L41.4763%2051.4531L50.2636%2058.1879L68.9842%2072.7209L93.4357%2090.6804L97.0015%2093.6343L98.4374%2092.6652L98.6571%2091.9801L97.0015%2089.2625L83.757%2065.2772L69.621%2040.8192L63.2534%2030.6579L61.5978%2024.632C60.9565%2022.1032%2060.579%2020.0111%2060.579%2017.4246L67.8381%207.49965L71.9133%206.19995L81.7193%207.49965L85.7946%2011.0443L91.9074%2024.9865L101.714%2046.8451L116.996%2076.62L121.453%2085.4816L123.873%2093.6343L124.764%2096.1155H126.292V94.6976L127.566%2077.9197L129.858%2057.3608L132.15%2030.8942L132.915%2023.4505L136.608%2014.4708L143.994%209.62643L149.725%2012.344L154.437%2019.0788L153.8%2023.4505L150.998%2041.6463L145.522%2070.1215L141.957%2089.2625H143.994L146.414%2086.7813L156.093%2074.0206L172.266%2053.698L179.398%2045.6635L187.803%2036.802L193.152%2032.5484H203.34L210.726%2043.6549L207.415%2055.1159L196.972%2068.3492L188.312%2079.5739L175.896%2096.2095L168.191%20109.585L168.882%20110.689L170.738%20110.53L198.755%20104.504L213.91%20101.787L231.994%2098.7149L240.144%20102.496L241.036%20106.395L237.852%20114.311L218.495%20119.037L195.826%20123.645L162.07%20131.592L161.696%20131.893L162.137%20132.547L177.36%20133.925L183.855%20134.279H199.774L229.447%20136.524L237.215%20141.605L241.8%20147.867L241.036%20152.711L229.065%20158.737L213.019%20154.956L175.45%20145.977L162.587%20142.787H160.805V143.85L171.502%20154.366L191.242%20172.089L215.82%20195.011L217.094%20200.682L213.91%20205.172L210.599%20204.699L188.949%20188.394L180.544%20181.069L161.696%20165.118H160.422V166.772L164.752%20173.152L187.803%20207.771L188.949%20218.405L187.294%20221.832L181.308%20223.959L174.813%20222.777L161.187%20203.754L147.305%20182.486L136.098%20163.345L134.745%20164.2L128.075%20235.42L125.019%20239.082L117.887%20241.8L111.902%20237.31L108.718%20229.984L111.902%20215.452L115.722%20196.547L118.779%20181.541L121.58%20162.873L123.291%20156.636L123.14%20156.219L121.773%20156.449L107.699%20175.752L86.304%20204.699L69.3663%20222.777L65.291%20224.431L58.2867%20220.768L58.9235%20214.27L62.8713%20208.48L86.304%20178.705L100.44%20160.155L109.551%20149.507L109.462%20147.967L108.959%20147.924L46.6977%20188.512L35.6182%20189.93L30.7788%20185.44L31.4156%20178.115L33.7079%20175.752L52.4285%20162.873Z'%20fill='%23000'/></svg>");
+  }
 
-  </style> <div class="post"> <header class="post-header"> <h1 class="post-title">Clocktower Town agent notes</h1> <p class="post-meta"> Created on October 19, 2026 </p> <p class="post-tags"> <a href="/blog/2026"> <i class="fa-solid fa-calendar fa-sm"></i> 2026 </a>   ·   <a href="/blog/tag/agents"> <i class="fa-solid fa-hashtag fa-sm"></i> agents</a>   <a href="/blog/tag/games"> <i class="fa-solid fa-hashtag fa-sm"></i> games</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <p><em>Compiled by Claude (Opus 5.5) from the project’s Claude Code transcripts.</em></p> <p><strong>Project:</strong> <a href="https://clocktower.chrisshi.com" rel="external nofollow noopener" target="_blank">Clocktower Town</a>, a browser social-deduction game (Blood on the Clocktower rules, human Storyteller, proximity voice). Built 2026-10-14 → 10-18 almost entirely by Claude Code agents, across two accounts.</p> <table> <thead> <tr> <th> </th> <th> </th> </tr> </thead> <tbody> <tr> <td>Span</td> <td>4.2 days, ~21 h of human attention, ~70 h of agent activity</td> </tr> <tr> <td>Subagents</td> <td>736 (124 spawned directly, 612 inside 32 multi-agent workflows), all Opus</td> </tr> <tr> <td>Output tokens</td> <td>31.9 M, 92% written by subagents</td> </tr> <tr> <td>Shipped</td> <td>v1 at +18 h, v2 at +27 h, six v3 releases on day 5; 206 commits, 2,174 tests passing</td> </tr> <tr> <td>Effort</td> <td>3D pixel-art pipeline: 24% of prompts, 57% of tokens. Testing: 1% of prompts, 10% of source lines</td> </tr> </tbody> </table> <h2 id="sources-given-to-the-agents">Sources given to the agents</h2> <p><strong>Rendering and animation research (the pixel3d pipeline)</strong></p> <ul> <li>David Holland, <a href="https://www.davidhol.land/articles/3d-pixel-art-rendering/" rel="external nofollow noopener" target="_blank">3D Pixel Art Rendering</a> </li> <li>t3ssel8r videos: <ul> <li><a href="https://www.youtube.com/watch?v=1FrIBkuq0ZI" rel="external nofollow noopener" target="_blank">Making an Animation for my 3D Pixel Art Game</a></li> <li><a href="https://www.youtube.com/watch?v=KPoeNZZ6H4s" rel="external nofollow noopener" target="_blank">Giving Personality to Procedural Animations using Math</a></li> <li><a href="https://www.youtube.com/watch?v=erQ8PvxIjS8" rel="external nofollow noopener" target="_blank">Procedural Pixel Art Fire</a></li> <li><a href="https://www.youtube.com/watch?v=cCUCMBmc9yQ" rel="external nofollow noopener" target="_blank">Parallax Effect for 3D Pixel Art Engine</a></li> </ul> </li> <li>t3ssel8r’s <a href="https://gist.github.com/t3ssel8r/aba0b33369ea620a63917f4ac21fd585" rel="external nofollow noopener" target="_blank">Pixel Animation Importer</a> and Patreon notes</li> <li><a href="https://github.com/Robert-K/godot-3d-pixel-art" rel="external nofollow noopener" target="_blank">godot-3d-pixel-art</a></li> <li> <a href="https://github.com/iggigabriel/DynamicsStudy" rel="external nofollow noopener" target="_blank">DynamicsStudy</a> and a <a href="https://gist.github.com/Andicraft/ab605dda924a0321e755abf8f573ebd7" rel="external nofollow noopener" target="_blank">SecondOrderDynamics gist</a> </li> <li>Kody King’s <a href="https://github.com/KodyJKing/hello-threejs" rel="external nofollow noopener" target="_blank">three.js 3D pixel-art shader</a> </li> <li>Roystan’s <a href="https://roystan.net/articles/outline-shader/" rel="external nofollow noopener" target="_blank">outline</a>, <a href="https://roystan.net/articles/toon-shader/" rel="external nofollow noopener" target="_blank">toon</a> and <a href="https://roystan.net/articles/toon-water/" rel="external nofollow noopener" target="_blank">water</a> shaders</li> <li><a href="https://wiseframe.dev/godot-pixel-art-shaders-pipeline-and-quantization" rel="external nofollow noopener" target="_blank">WiseFrame’s Godot pixel-art shader series</a></li> <li>a <a href="https://github.com/bababuyyy/unity-isometric-pixel-pipeline" rel="external nofollow noopener" target="_blank">Unity isometric pixel pipeline</a> </li> <li>an <a href="https://godotshaders.com/shader/3d-pixel-art-outline-highlight-post-processing-shader/" rel="external nofollow noopener" target="_blank">outline + highlight shader</a> </li> <li>Catlike Coding’s <a href="https://catlikecoding.com/unity/tutorials/custom-srp/" rel="external nofollow noopener" target="_blank">custom render pipeline</a> </li> </ul> <p>These became a research swarm. Its output was a techniques doc, the character pipeline’s contract, playbook, 12-point rubric and learnings log, and then the build runs. Reference frames were used only for critique; all shipped art is procedural code.</p> <p><strong>Visual references</strong></p> <ul> <li>Concept art and screenshots attached in chat (about 28 prompts carried images)</li> <li>Town of Salem, for the town layout: clocktower at the top, houses in a ring</li> <li>The game’s own v1 procedural pixel art, kept as the v2 style and used as the speed and scale anchor for v3</li> </ul> <p><strong>Content</strong></p> <ul> <li>CMU course mascots, <a href="https://www.reddit.com/r/cmu/" rel="external nofollow noopener" target="_blank">r/cmu</a> and the <a href="https://cmureadme.com/" rel="external nofollow noopener" target="_blank">CMU Readme</a> archive, used for student humor; they became 20 in-town easter eggs.</li> </ul> </div> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Chris Shi. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. </div> </footer> <div class="zine-foot"> <span>© 2026 Chris Shi</span> <span class="zf-spacer"><a href="/research/">research</a></span> </div> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script src="/assets/js/bootstrap.bundle.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?a0db7e5d5c70cc3252b3138b0c91dcaf" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js?85ddb88934d28b74e78031fd54cf8308"></script> <script src="/assets/js/no_defer.js?2781658a0a2b13ed609542042a859126"></script> <script defer src="/assets/js/common.js?c15de51d4bb57887caa2c21988d97279"></script> <script defer src="/assets/js/copy_code.js?c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?d9f17b6adc2311cbabd747f4538bb15f"></script> <script defer src="/assets/js/progress-bar.js?b8fe25a200169b9e6649e9e08f68265b" type="text/javascript"></script> <script src="/assets/js/vanilla-back-to-top.min.js?f40d453793ff4f64e238e420181a1d17"></script> <script>
+  /* ── the face, and a neutral text ink ───────────────────────────
+     The palette is the visitor's, exactly as everywhere else on the site —
+     field, card, borders and chips all still come from the picker. Two things
+     are fixed here:
+
+     --rz-sans   Figtree, the face the card's proportions were set against. A
+                 face is not a size: its x-height is 500/1000 against Plus
+                 Jakarta Sans's 536, so the same 20px rendered noticeably
+                 larger and the card never matched the scale it was drawn to.
+
+     --rz-text   the ink for TEXT only. --rz-ink stays the palette's own hue
+                 and keeps painting the card border and the terminal ground,
+                 which is where the tint belongs; at paragraph size that same
+                 tint read as dark-seafoam-coloured prose rather than as dark
+                 prose. Near-black, and deliberately not pure #000. */
+  body.rzine-page {
+    --rz-sans: 'Figtree', 'Figtree Fallback', 'Segoe UI', Roboto, sans-serif;
+    --rz-text: #1a1a1a;
+  }
+
+  /* ── the field ──────────────────────────────────────────────── */
+  .rzine {
+    /* full-bleed out of al-folio's .container without tripping horizontal
+       scroll (100vw would include the scrollbar gutter) */
+    width: auto;
+    margin-inline: calc(50% - 50vw);
+    padding: clamp(1.5rem, 4vw, 3.5rem) clamp(0.75rem, 3vw, 2.5rem);
+    background: var(--rz-field);
+    overflow-x: clip;
+  }
+
+  /* .zine-foot carries the styling; this only matches the card's measure */
+  .rzine-foot {
+    max-width: 48rem;
+    margin: 1.4rem auto 0;
+    padding: 0;
+  }
+
+  /* ── the card ──────────────────────────────────────────────── */
+  .rzine-card {
+    max-width: 48rem;
+    margin: 0 auto;
+    background: var(--rz-card);
+    border: 8px solid var(--rz-ink);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    font-family: var(--rz-sans);
+    /* al-folio sets the site in 300; at this size that reads thin and washed
+       out at the scale this card is drawn to */
+    font-weight: 400;
+    /* text only — the border above stays the palette's ink */
+    color: var(--rz-text);
+  }
+
+  /* Shared invitation and author card; kept outside the encrypted article. */
+  .research-author {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--rz-ink);
+  }
+
+  .research-author[hidden] {
+    display: none;
+  }
+
+  body.zine .container[role='main'] .research-author p {
+    font-family: var(--rz-sans);
+    color: var(--rz-text);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  body.zine .container[role='main'] .research-author a {
+    color: var(--rz-text);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  .research-author a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .research-author a:focus-visible {
+    outline: 2px solid var(--rz-ink);
+    outline-offset: 3px;
+  }
+
+  .research-author-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 1.25rem;
+    padding: 1rem;
+    border: 2px solid var(--rz-ink);
+  }
+
+  .research-author-card img {
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .research-author-card > div {
+    min-width: 0;
+  }
+
+  .research-author-name {
+    display: inline-block;
+    margin-bottom: 0.3rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 420px) {
+    .research-author-card {
+      flex-direction: column;
+    }
+  }
+
+  /* ── masthead ──────────────────────────────────────────────── */
+  .rzine-card .post-header {
+    margin: 0 0 2.5rem;
+    padding: 0;
+    text-align: left;
+  }
+
+  .rzine-card .post-title {
+    font-family: var(--rz-sans);
+    font-size: clamp(2.25rem, 1.2rem + 3.3vw, 3.75rem);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: normal;
+    color: inherit;
+    margin: 0;
+  }
+
+  .rzine-card .post-desc {
+    font-size: clamp(1.25rem, 1.05rem + 0.6vw, 1.5rem);
+    line-height: 1.625;
+    font-weight: 400;
+    opacity: 0.8;
+    /* no margin: the reference lets the title's and the subtitle's own leading
+       open the gap, which is why the stack reads as one block */
+    margin: 0;
+  }
+
+  .rzine-card .post-meta {
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin: 0.5rem 0 0;
+    color: inherit;
+  }
+
+  /* ── authorship byline ─────────────────────────────────────────
+     Entries Claude wrote (front matter `claude_authored: true`) say so
+     directly under the date, in Chris's words, stamped with the same mark
+     the in-text chips carry. Shown on the lock screen and after unlocking,
+     since the header is shared. */
+  .rzine-card .rz-byline {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5em;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.5;
+    opacity: 0.75;
+    margin: 0.7rem 0 0;
+  }
+
+  .rzine-card .rz-byline::before {
+    content: '';
+    flex: 0 0 auto;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background-color: currentColor;
+    -webkit-mask-image: var(--rz-claude-mark);
+    mask-image: var(--rz-claude-mark);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
+
+  /* ── outranking the site-wide zine skin ─────────────────────────
+     zine_styles.liquid styles prose from `body.zine .container[role='main'] …`,
+     which outranks every `.rzine-*` selector here — so the card was silently
+     inheriting the site's heading weight (800), tight leading and negative
+     tracking, and its 84%-ink body copy, no matter what the rules below said.
+     These four declarations are the only ones that clash; they are written at
+     matching specificity so the card's own typography actually lands.
+
+     Body copy is FULL ink here, like the reference: the fade is reserved for
+     the subtitle and the date, so prose reads as the palette's off-black
+     rather than as grey. */
+  body.zine .container[role='main'] .rzine :is(h1, h2, h3, h4) {
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: normal;
+    /* the skin colours headings with the palette ink; headings are text, so
+       they take the neutral one like the prose under them */
+    color: var(--rz-text);
+  }
+
+  body.zine .container[role='main'] .rzine-content :is(p, li) {
+    color: inherit;
+    line-height: inherit;
+  }
+
+  /* the masthead keeps its own leading and its own fade (see below) — scoping
+     the rule above to .rzine-content would otherwise hand these two the card's
+     inherited 1.5 */
+  body.zine .container[role='main'] .rzine-card p.post-desc {
+    color: inherit;
+    line-height: 1.625;
+  }
+
+  body.zine .container[role='main'] .rzine-card p.post-meta {
+    color: inherit;
+    line-height: 1.4;
+  }
+
+  body.zine .container[role='main'] .rzine-card p.rz-byline {
+    color: inherit;
+    line-height: 1.5;
+  }
+
+  /* the skin's inline-prose link rule (thin rule, weight 600) outranks
+     .rzine-content a for the same reason; the reference underlines at 2px in
+     faded ink and leaves the weight alone. .xref-ref is excluded — it is a
+     tag, not prose, and carries its own dotted rule. */
+  body.zine .container[role='main'] .rzine-content :is(p, li, td, dd, blockquote, figcaption) a:not(.btn):not(.xref-ref) {
+    font-weight: inherit;
+    text-decoration-thickness: 2px;
+    text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+    text-underline-offset: 4px;
+  }
+
+  /* …and the same rule was landing ON the xref tags, which are meant to read
+     as accent-coloured tags with a dotted rule, not as prose links. Both
+     classes are named because the skin's rule carries three :not()s and one of
+     them (:has) counts an element — matching its class count is not enough to
+     outrank it. */
+  body.zine .container[role='main'] .rzine-content :is(p, li, td, dd, blockquote, figcaption) a.xref.xref-ref {
+    color: var(--rz-accent);
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  /* ── prose ─────────────────────────────────────────────────── */
+  .rzine-content {
+    font-size: clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);
+    line-height: 1.625;
+  }
+
+  .rzine-content > *:first-child {
+    margin-top: 0;
+  }
+
+  .rzine-content p {
+    margin: 0 0 1.25rem;
+  }
+
+  .rzine-content h1,
+  .rzine-content h2,
+  .rzine-content h3 {
+    font-family: var(--rz-sans);
+    color: inherit;
+    margin: 1.5rem 0 1.25rem;
+  }
+
+  .rzine-content h2 {
+    font-size: clamp(1.875rem, 1.35rem + 1.6vw, 2.25rem);
+  }
+
+  .rzine-content h3 {
+    font-size: clamp(1.5rem, 1.2rem + 0.9vw, 1.875rem);
+  }
+
+  .rzine-content strong {
+    font-weight: 700;
+    color: inherit;
+  }
+
+  .rzine-content a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
+    text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+    font-weight: inherit;
+  }
+
+  .rzine-content a:hover {
+    color: var(--rz-accent);
+  }
+
+  .rzine-content ul,
+  .rzine-content ol {
+    margin: 0 0 1.15em;
+    padding-left: 1.35em;
+  }
+
+  .rzine-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .rzine-content li::marker {
+    color: color-mix(in srgb, currentColor 45%, transparent);
+  }
+
+  /* the signature divider: a fat rounded bar, not a hairline. currentColor is
+     no good here — al-folio paints hr grey, so the bar names the ink. */
+  .rzine-content hr {
+    height: 5px;
+    width: 100%;
+    border: 0;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--rz-ink) 68%, transparent);
+    opacity: 1;
+    margin: 2.5rem 0;
+  }
+
+  .rzine-content img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 2px solid color-mix(in srgb, currentColor 18%, transparent);
+    margin: 1.5rem 0;
+  }
+
+  /* al-folio fills blockquotes with its own beige; on the card that reads as a
+     second, muddier paper. Keep the rule, drop the fill. */
+  .rzine-content blockquote {
+    margin: 1.5rem 0;
+    padding: 0.35rem 0 0.35rem 1.15rem;
+    background: transparent;
+    border-left: 5px solid color-mix(in srgb, currentColor 30%, transparent);
+    border-radius: 0;
+    font-size: 1.02em;
+    opacity: 0.85;
+  }
+
+  .rzine-content blockquote p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── code ──────────────────────────────────────────────────── */
+  .rzine-content :not(pre):not(.claude-insert):not(.claude-block) > code {
+    font-family: var(--rz-mono);
+    font-size: 0.87em;
+    background: color-mix(in srgb, currentColor 11%, transparent);
+    color: inherit;
+    border-radius: 4px;
+    padding: 0.12em 0.38em;
+  }
+
+  /* JetBrains Mono ligates --, -> and != into glyphs. In a research notebook a
+     CLI flag has to read as the characters that were typed. */
+  .rzine-content code,
+  .rzine-content pre,
+  .rzine-content .claude-insert,
+  .rzine-content .claude-block {
+    font-variant-ligatures: none;
+    font-feature-settings:
+      'liga' 0,
+      'calt' 0;
+  }
+
+  /* Code as a terminal window: dark slab, rounded, chrome bar and traffic
+     lights drawn in CSS so plain markdown fences need no extra markup. */
+  .rzine-content div.highlighter-rouge,
+  .rzine-content figure.highlight,
+  .rzine-content pre.rz-term {
+    background: var(--rz-ink);
+    border-radius: 14px;
+    overflow: hidden;
+    margin: 1.75rem 0;
+    border: 0;
+  }
+
+  .rzine-content div.highlighter-rouge::before,
+  .rzine-content figure.highlight::before,
+  .rzine-content pre.rz-term::before {
+    content: attr(data-label);
+    display: block;
+    height: 2.4rem;
+    background: var(--rz-chrome);
+    background-image: radial-gradient(circle 0.36rem at 1.15rem 1.2rem, #ff5f57 98%, transparent 100%),
+      radial-gradient(circle 0.36rem at 2.45rem 1.2rem, #febc2e 98%, transparent 100%),
+      radial-gradient(circle 0.36rem at 3.75rem 1.2rem, #28c840 98%, transparent 100%);
+    background-repeat: no-repeat;
+    font-family: var(--rz-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: color-mix(in srgb, var(--rz-ink) 62%, transparent);
+    padding-left: 5rem;
+    line-height: 2.4rem;
+  }
+
+  .rzine-content div.highlighter-rouge pre,
+  .rzine-content figure.highlight pre,
+  .rzine-content pre.rz-term {
+    font-family: var(--rz-mono);
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--rz-card);
+    border: 0;
+    padding: 1rem 1.25rem 1.15rem;
+    overflow-x: auto;
+  }
+
+  /* `background`/`margin` reset only the INNER pre of a rouge wrapper. A
+     pre.rz-term IS the wrapper, so applying them to it too (same specificity,
+     later in the sheet) blanked its dark slab and its vertical rhythm —
+     near-white text on the card, i.e. invisible. Kept separate. */
+  .rzine-content div.highlighter-rouge pre,
+  .rzine-content figure.highlight pre {
+    background: transparent;
+    margin: 0;
+  }
+
+  .rzine-content pre.rz-term {
+    padding-top: 0;
+  }
+
+  /* A div.highlighter-rouge carries its padding on the inner <pre>, so the
+     chrome bar reaches the slab edges for free. A pre.rz-term IS the padded
+     box, so its ::before is inset by that same 1.25rem on both sides and the
+     bar floats with dark gutters either side. Pull it back out. */
+  .rzine-content pre.rz-term::before {
+    margin-left: -1.25rem;
+    margin-right: -1.25rem;
+  }
+
+  /* al-folio's global `code` rule sets white-space:normal and its own mono
+     stack; inside a terminal slab that collapses every newline. */
+  .rzine-content div.highlighter-rouge code,
+  .rzine-content figure.highlight code,
+  .rzine-content pre.rz-term code {
+    background: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    white-space: pre;
+  }
+
+  /* ── Claude's insertions ───────────────────────────────────────
+     Chip mechanics from the reference (hairline border, inset bottom edge,
+     box-decoration-break so a span wrapping across lines keeps its shape),
+     carrying our own warm/cool inversion so the carve-out stays unmissable
+     mid-sentence, and stamped with Claude's mark so it self-identifies
+     without a legend. */
+  .rzine-content .claude-insert,
+  .rzine-content .claude-block {
+    font-family: var(--rz-mono);
+    font-weight: 500;
+    background: var(--rz-claude-bg);
+    color: var(--rz-claude-ink);
+    border: 1px solid var(--rz-claude-line);
+  }
+
+  .rzine-content .claude-insert {
+    font-size: 0.82em;
+    border-radius: 6px;
+    padding: 0.14em 0.4em;
+    margin: 0 0.1em;
+    line-height: 1.95;
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  /* The mark flows inline rather than sitting absolute: box-decoration-break
+     clones padding and borders onto every wrapped line but never generated
+     content, so an absolute mark would leave the continuation lines carrying
+     an indent with nothing in it. Inline, the stamp appears once, at the head
+     of the insertion, and wrapped lines stay flush. */
+  .rzine-content .claude-insert::before,
+  .rzine-content .claude-block::before {
+    content: '';
+    display: inline-block;
+    background-color: currentColor;
+    -webkit-mask-image: var(--rz-claude-mark);
+    mask-image: var(--rz-claude-mark);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    opacity: 0.9;
+  }
+
+  .rzine-content .claude-insert::before {
+    width: 0.95em;
+    height: 0.95em;
+    vertical-align: -0.13em;
+    margin-right: 0.42em;
+  }
+
+  .rzine-content .claude-block {
+    display: block;
+    font-size: 0.8em;
+    line-height: 1.62;
+    border-left: 4px solid var(--rz-claude-ink);
+    border-radius: 8px;
+    padding: 0.7rem 0.95rem;
+    margin: 1.25rem 0;
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+  }
+
+  .rzine-content .claude-block::before {
+    width: 1.15em;
+    height: 1.15em;
+    vertical-align: -0.2em;
+    margin-right: 0.5em;
+  }
+
+  /* Code cited INSIDE a Claude chip. The chip already has a tinted fill and is
+     already monospace, so the normal code treatment stacked a second box on a
+     box and muddied both. Drop the fill entirely and mark it with weight and a
+     hairline rule instead — it reads as code without nesting backgrounds. */
+  .rzine-content .claude-insert code,
+  .rzine-content .claude-block code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: 700;
+    color: inherit;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 42%, transparent);
+  }
+
+  /* ── cross-reference tags ──────────────────────────────────────
+     Chris's own tagging convention: one definition site and
+     any number of references to it. On a wide screen a reference draws an arc
+     through the margin to the line it points at; where there is no margin the
+     tag just scrolls to the target. */
+  .rzine {
+    position: relative;
+  }
+
+  .rzine-content .xref {
+    font-family: var(--rz-mono);
+    font-size: 0.82em;
+    font-weight: 700;
+    font-variant-ligatures: none;
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+
+  .rzine-content a.xref-ref {
+    color: var(--rz-accent);
+    text-decoration: none;
+    border-bottom: 1.5px dotted color-mix(in srgb, var(--rz-accent) 55%, transparent);
+    padding-bottom: 1px;
+    cursor: pointer;
+  }
+
+  .rzine-content a.xref-ref:hover,
+  .rzine-content a.xref-ref:focus-visible {
+    color: var(--rz-accent);
+    border-bottom-style: solid;
+  }
+
+  .rzine-content .xref-def {
+    opacity: 0.75;
+    margin-right: 0.15em;
+  }
+
+  /* the arc overlay lives in the field, outside the card */
+  .rzine-arcs {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    overflow: visible;
+  }
+
+  /* a fat invisible stroke gives the thin arc a comfortable hit area */
+  .rzine-arcs .arc-hit {
+    fill: none;
+    stroke: transparent;
+    stroke-width: 15;
+    pointer-events: stroke;
+    cursor: pointer;
+  }
+
+  /* ── the draw-in ────────────────────────────────────────────────
+     The line is dashed by exactly its own length, so animating the offset to
+     zero grows it from the reference toward the target. Entry and exit are
+     deliberately NOT mirror images:
+
+       in   slow, eased-out, so it accelerates away from the tag and settles
+       out  quicker and eased-in, so dismissing feels light rather than sticky
+
+     Each state carries its own transition, which is what lets the two
+     directions differ. The head and the origin dot are separate beats: the dot
+     lands first (the arc has somewhere to come from), the head last and only
+     once the line has actually arrived. */
+
+  .rzine-arcs .arc-line {
+    fill: none;
+    stroke: var(--rz-accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: var(--len);
+    stroke-dashoffset: var(--len);
+    opacity: 0;
+    /* exit: retract, then fade at the very end so the retraction is visible */
+    transition:
+      stroke-dashoffset 0.3s cubic-bezier(0.55, 0, 0.85, 0.35),
+      opacity 0.1s linear 0.22s;
+  }
+
+  .rzine-arcs .arc-dot {
+    fill: var(--rz-accent);
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0);
+    transition:
+      opacity 0.1s linear,
+      transform 0.14s ease-in;
+  }
+
+  .rzine-arcs .arc-head {
+    fill: var(--rz-accent);
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: 100% 50%;
+    transform: scale(0.35);
+    /* exit: gone immediately, no lingering arrowhead */
+    transition:
+      opacity 0.09s linear,
+      transform 0.09s ease-in;
+  }
+
+  .rzine-arcs g.is-on .arc-line {
+    opacity: 0.92;
+    stroke-dashoffset: 0;
+    transition:
+      stroke-dashoffset 0.54s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.07s linear;
+  }
+
+  .rzine-arcs g.is-on .arc-dot {
+    opacity: 0.9;
+    transform: scale(1);
+    transition:
+      opacity 0.09s linear,
+      transform 0.32s cubic-bezier(0.2, 1.7, 0.45, 1);
+  }
+
+  /* delay ≈ the line's travel time, so the head lands as the line arrives */
+  .rzine-arcs g.is-on .arc-head {
+    opacity: 0.95;
+    transform: scale(1);
+    transition:
+      opacity 0.12s ease 0.44s,
+      transform 0.34s cubic-bezier(0.2, 1.75, 0.4, 1) 0.44s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rzine-arcs .arc-line,
+    .rzine-arcs .arc-dot,
+    .rzine-arcs .arc-head,
+    .rzine-arcs g.is-on .arc-line,
+    .rzine-arcs g.is-on .arc-dot,
+    .rzine-arcs g.is-on .arc-head {
+      stroke-dashoffset: 0;
+      transform: none;
+      transition: opacity 0.12s ease;
+    }
+  }
+
+  /* target flash when a reference is followed */
+  .rzine-content .xref-target-flash {
+    animation: xref-flash 1.1s ease-out 1;
+  }
+
+  @keyframes xref-flash {
+    0%,
+    35% {
+      box-shadow: 0 0 0 3px var(--rz-accent);
+    }
+    100% {
+      box-shadow: 0 0 0 3px transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rzine-content .xref-target-flash {
+      animation: none;
+      outline: 3px solid var(--rz-accent);
+    }
+  }
+
+  .rzine-content .vf-fig {
+    margin: 1.5rem 0 0.35rem;
+  }
+
+  .rzine-content .vf-fig svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ── the lock ──────────────────────────────────────────────── */
+  .rzine-gate {
+    text-align: center;
+    padding: 2.25rem 0 1.5rem;
+  }
+
+  .rzine-gate .rzine-lock {
+    /* the gate is the first text a reader meets on these pages — same neutral
+       ink as the entry behind it, not the skin's tinted prose colour */
+    color: var(--rz-text);
+    font-family: var(--rz-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin: 0 0 1.1rem;
+  }
+
+  .rzine-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .rzine-input,
+  .rzine-btn {
+    font-family: var(--rz-mono);
+    font-size: 0.92rem;
+    padding: 0.6rem 1rem;
+    border: 2px solid color-mix(in srgb, currentColor 30%, transparent);
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+  }
+
+  .rzine-input {
+    width: 14rem;
+  }
+
+  .rzine-input::placeholder {
+    color: color-mix(in srgb, currentColor 40%, transparent);
+  }
+
+  .rzine-input:focus {
+    outline: none;
+    border-color: var(--rz-accent);
+  }
+
+  .rzine-btn {
+    font-weight: 700;
+    cursor: pointer;
+    background: var(--rz-ink);
+    color: var(--rz-card);
+    border-color: var(--rz-ink);
+  }
+
+  .rzine-btn:hover {
+    background: var(--rz-accent);
+    border-color: var(--rz-accent);
+  }
+
+  .rzine-msg {
+    min-height: 1.4em;
+    margin: 1rem 0 0;
+    font-family: var(--rz-mono);
+    font-size: 0.82rem;
+    opacity: 0.6;
+  }
+
+  .rzine [hidden] {
+    display: none !important;
+  }
+
+  /* ── the listing ───────────────────────────────────────────────
+     Entries as stacked index cards on the same field, so /research and an
+     entry read as one place. */
+  .rzine-masthead {
+    margin-bottom: 1.35rem;
+  }
+
+  .rzine-masthead .post-desc {
+    margin-top: 0.5rem;
+  }
+
+  .rzine-list {
+    list-style: none;
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .rzine-list li + li {
+    margin-top: 1.1rem;
+  }
+
+  .rzine-entry {
+    display: block;
+    background: var(--rz-card);
+    border: 5px solid var(--rz-ink);
+    padding: 1.15rem 1.35rem 1.25rem;
+    color: var(--rz-text);
+    text-decoration: none;
+    transition: transform 0.12s ease;
+  }
+
+  /* Hover is tracked on the <li>, which never moves, rather than on the card
+     itself — a card that transforms under the cursor cancels its own hover at
+     the edge and the pointer flickers. */
+  .rzine-list li:hover .rzine-entry {
+    transform: translate(-3px, -3px);
+    box-shadow: 5px 5px 0 color-mix(in srgb, var(--rz-ink) 55%, transparent);
+  }
+
+  .rzine-entry:hover {
+    color: var(--rz-text);
+    text-decoration: none;
+  }
+
+  .rzine-entry .re-title {
+    font-size: clamp(1.35rem, 1.1rem + 1vw, 1.75rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin: 0;
+  }
+
+  .rzine-entry .re-desc {
+    font-size: 1rem;
+    line-height: 1.45;
+    opacity: 0.78;
+    margin: 0.4rem 0 0;
+  }
+
+  .rzine-entry .re-meta {
+    font-family: var(--rz-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin: 0.7rem 0 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .rzine-entry .re-lock::before {
+    content: '';
+    display: inline-block;
+    width: 0.85em;
+    height: 0.85em;
+    vertical-align: -0.1em;
+    background-color: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Crect x='4.5' y='10.5' width='15' height='10' rx='2'/%3E%3Cpath d='M8 10.5V7a4 4 0 0 1 8 0v3.5'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Crect x='4.5' y='10.5' width='15' height='10' rx='2'/%3E%3Cpath d='M8 10.5V7a4 4 0 0 1 8 0v3.5'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
+</style> <script>
+  (function () {
+    var SVGNS = 'http://www.w3.org/2000/svg';
+    var MIN_MARGIN = 96; // px of field beside the card needed to draw an arc
+
+    // Bring the target into view with the least movement that still clears the
+    // sticky navbar.
+    //
+    // scrollIntoView({block:'nearest'}) was the obvious tool and did not work
+    // here — it left the target hundreds of px above the viewport — so the
+    // scroll is computed directly. That also makes the navbar clearance exact
+    // rather than something scroll-margin has to negotiate.
+    //
+    //   above the safe line  -> sit it just under the navbar
+    //   below the fold       -> sit it just inside the bottom edge
+    //   already visible      -> do not move at all
+    function reveal(def) {
+      var nav = document.querySelector('body.zine .navbar, .navbar.sticky-top, .navbar.fixed-top');
+      var navH = nav ? nav.getBoundingClientRect().height : 0;
+      var pad = navH + 16;
+      var rect = def.getBoundingClientRect();
+      var absTop = rect.top + window.pageYOffset;
+      var target = null;
+
+      if (rect.top < pad) {
+        target = absTop - pad;
+      } else if (rect.bottom > window.innerHeight) {
+        // don't drag it further than just-under-the-navbar for tall targets
+        target = Math.min(absTop - pad, absTop + rect.height - window.innerHeight + 16);
+      }
+
+      if (target !== null) {
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({
+          top: Math.max(0, target),
+          behavior: reduce ? 'auto' : 'smooth',
+        });
+      }
+
+      def.classList.remove('xref-target-flash');
+      void def.offsetWidth; // restart the animation
+      def.classList.add('xref-target-flash');
+    }
+
+    function build(root) {
+      var refs = root.querySelectorAll('a.xref-ref');
+      if (!refs.length) return;
+
+      var field = root.closest('.rzine');
+      var card = root.closest('.rzine-card');
+      if (!field || !card) return;
+
+      var old = field.querySelector('.rzine-arcs');
+      if (old) old.remove();
+
+      var fieldBox = field.getBoundingClientRect();
+      var cardBox = card.getBoundingClientRect();
+      var margin = cardBox.left - fieldBox.left;
+
+      // Always wire the tag itself; only draw arcs when there is room.
+      var drawable = margin >= MIN_MARGIN;
+      var svg = null;
+      if (drawable) {
+        svg = document.createElementNS(SVGNS, 'svg');
+        svg.setAttribute('class', 'rzine-arcs');
+        svg.setAttribute('viewBox', '0 0 ' + fieldBox.width + ' ' + fieldBox.height);
+        svg.setAttribute('width', fieldBox.width);
+        svg.setAttribute('height', fieldBox.height);
+        field.appendChild(svg);
+      }
+
+      refs.forEach(function (ref) {
+        var id = (ref.getAttribute('href') || '').slice(1);
+        var def = id && root.querySelector('#' + CSS.escape(id));
+        if (!def) return;
+
+        ref.addEventListener('click', function (e) {
+          e.preventDefault();
+          reveal(def);
+        });
+        if (!drawable) return;
+
+        var rb = ref.getBoundingClientRect();
+        var db = def.getBoundingClientRect();
+        var x = margin - 10;
+        var y0 = rb.top - fieldBox.top + rb.height / 2;
+        var y1 = db.top - fieldBox.top + db.height / 2;
+        // bow further out the longer the jump, but never past the field edge
+        var bow = Math.min(margin - 14, 28 + Math.abs(y1 - y0) * 0.16);
+        var d = 'M ' + x + ' ' + y0 + ' C ' + (x - bow) + ' ' + y0 + ', ' + (x - bow) + ' ' + y1 + ', ' + x + ' ' + y1;
+
+        var g = document.createElementNS(SVGNS, 'g');
+
+        var hit = document.createElementNS(SVGNS, 'path');
+        hit.setAttribute('class', 'arc-hit');
+        hit.setAttribute('d', d);
+
+        var line = document.createElementNS(SVGNS, 'path');
+        line.setAttribute('class', 'arc-line');
+        line.setAttribute('d', d);
+
+        // small dot where the arc leaves the reference, so it reads as
+        // emanating from the tag rather than appearing out of nowhere
+        var dot = document.createElementNS(SVGNS, 'circle');
+        dot.setAttribute('class', 'arc-dot');
+        dot.setAttribute('cx', x);
+        dot.setAttribute('cy', y0);
+        dot.setAttribute('r', 2.6);
+
+        g.appendChild(hit);
+        g.appendChild(line);
+        g.appendChild(dot);
+        svg.appendChild(g);
+
+        // dash the line by its own length so it can be drawn in
+        var len = line.getTotalLength();
+        line.style.setProperty('--len', len);
+
+        // Point the head along the curve's tangent at its end. Sampling the
+        // last couple of px is what stops it looking like a triangle dropped
+        // near the line — it arrives travelling in the arc's own direction.
+        var pEnd = line.getPointAtLength(len);
+        var pPrev = line.getPointAtLength(Math.max(0, len - 3));
+        var angle = (Math.atan2(pEnd.y - pPrev.y, pEnd.x - pPrev.x) * 180) / Math.PI;
+
+        var headWrap = document.createElementNS(SVGNS, 'g');
+        headWrap.setAttribute('transform', 'translate(' + pEnd.x + ',' + pEnd.y + ') rotate(' + angle + ')');
+        var head = document.createElementNS(SVGNS, 'path');
+        head.setAttribute('class', 'arc-head');
+        // drawn pointing along +x; the wrapper rotates it onto the tangent
+        head.setAttribute('d', 'M 0 0 L -9 -4 L -6.5 0 L -9 4 Z');
+        headWrap.appendChild(head);
+        g.appendChild(headWrap);
+
+        function on() {
+          g.classList.add('is-on');
+        }
+        function off() {
+          g.classList.remove('is-on');
+        }
+
+        ref.addEventListener('mouseenter', on);
+        ref.addEventListener('mouseleave', off);
+        ref.addEventListener('focus', on);
+        ref.addEventListener('blur', off);
+        hit.addEventListener('mouseenter', on);
+        hit.addEventListener('mouseleave', off);
+        hit.addEventListener('click', function (e) {
+          e.preventDefault();
+          reveal(def);
+        });
+      });
+    }
+
+    function init() {
+      document.querySelectorAll('.rzine-content').forEach(function (c) {
+        if (c.querySelector('a.xref-ref')) build(c);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    var content = document.getElementById('rlock-content');
+    if (content) new MutationObserver(init).observe(content, { childList: true });
+
+    var t = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(init, 150);
+    });
+  })();
+</script> <div class="rzine"> <div class="rzine-card"> <header class="post-header"> <h1 class="post-title">Clocktower Town agent notes</h1> <p class="post-desc">project statistics and the sources given to the coding agents that built a multiplayer game in 4 days</p> <p class="post-meta">October 19, 2026</p> </header> <section class="rlock" id="rlock"> <form class="rzine-gate" id="rlock-gate" autocomplete="off"> <p class="rzine-lock">locked entry</p> <div class="rzine-row"> <input class="rzine-input" id="rlock-pw" type="password" name="rlock-pw" placeholder="password" aria-label="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"> <button class="rzine-btn" type="submit">open</button> </div> <p class="rzine-msg" id="rlock-msg" role="status" aria-live="polite"></p> </form> <article class="post-content rzine-content" id="rlock-content" hidden></article> </section> <footer class="research-author" id="research-author" hidden aria-label="About the author and more research"> <p class="research-author-invitation"> If you’re working on related questions, I’d love to hear about it. <a href="mailto:chrisshi@andrew.cmu.edu">Get in touch</a>, or <a href="/research/">read more of my research</a>. </p> <div class="research-author-card"> <img src="/assets/img/chris_shi.png" alt="" width="64" height="64" loading="lazy"> <div> <a class="research-author-name" href="/">Chris Shi</a> <p> I’m an undergraduate studying electrical and computer engineering and mathematics at CMU. I work on mechanistic interpretability and robot learning. </p> </div> </div> </footer> </div> <div class="zine-foot rzine-foot"> <span>© 2026 Chris Shi</span> <span><a href="/research/">research index</a></span> <span class="zf-spacer"><a href="/">chrisshi.com</a></span> </div> </div> <script>
+  (function () {
+    var PAYLOAD_URL = "/assets/enc/research-clocktower-town-agent-notes.json";
+    var STORE_KEY = "research_pw";
+
+    var gate = document.getElementById("rlock-gate");
+    var pw = document.getElementById("rlock-pw");
+    var msg = document.getElementById("rlock-msg");
+    var content = document.getElementById("rlock-content");
+
+    function b64(s) {
+      return Uint8Array.from(atob(s), function (c) {
+        return c.charCodeAt(0);
+      });
+    }
+
+    var payload = null;
+    function getPayload() {
+      if (payload) return Promise.resolve(payload);
+      return fetch(PAYLOAD_URL)
+        .then(function (r) {
+          return r.json();
+        })
+        .then(function (p) {
+          payload = p;
+          return p;
+        });
+    }
+
+    function decrypt(password) {
+      return getPayload().then(function (p) {
+        var subtle = window.crypto.subtle;
+        return subtle
+          .importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"])
+          .then(function (km) {
+            return subtle.deriveKey(
+              { name: "PBKDF2", salt: b64(p.salt), iterations: p.iter, hash: "SHA-256" },
+              km,
+              { name: "AES-GCM", length: 256 },
+              false,
+              ["decrypt"]
+            );
+          })
+          .then(function (key) {
+            return subtle.decrypt({ name: "AES-GCM", iv: b64(p.iv) }, key, b64(p.ct));
+          })
+          .then(function (buf) {
+            return JSON.parse(new TextDecoder().decode(buf));
+          });
+      });
+    }
+
+    function unlock(password, remember) {
+      return decrypt(password).then(function (data) {
+        content.innerHTML = data.html;
+        // innerHTML leaves <script> elements inert; entries ship interactive
+        // widgets inside the payload, so re-create each script node to run it.
+        Array.prototype.forEach.call(content.querySelectorAll("script"), function (old) {
+          var s = document.createElement("script");
+          Array.prototype.forEach.call(old.attributes, function (a) {
+            s.setAttribute(a.name, a.value);
+          });
+          s.textContent = old.textContent;
+          old.parentNode.replaceChild(s, old);
+        });
+        gate.hidden = true;
+        content.hidden = false;
+        document.getElementById("research-author").hidden = false;
+        if (remember) {
+          try {
+            sessionStorage.setItem(STORE_KEY, password);
+          } catch (e) {}
+        }
+      });
+    }
+
+    gate.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!window.crypto || !window.crypto.subtle) {
+        msg.textContent = "this browser can't decrypt here — try https.";
+        return;
+      }
+      msg.textContent = "unlocking…";
+      unlock(pw.value, true).catch(function () {
+        msg.textContent = "not it.";
+        pw.select();
+      });
+    });
+
+    try {
+      var saved = sessionStorage.getItem(STORE_KEY);
+      if (saved && window.crypto && window.crypto.subtle) {
+        unlock(saved, false).catch(function () {});
+      }
+    } catch (e) {}
+  })();
+</script> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Chris Shi. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. </div> </footer> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script src="/assets/js/bootstrap.bundle.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?a0db7e5d5c70cc3252b3138b0c91dcaf" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js?85ddb88934d28b74e78031fd54cf8308"></script> <script src="/assets/js/no_defer.js?2781658a0a2b13ed609542042a859126"></script> <script defer src="/assets/js/common.js?c15de51d4bb57887caa2c21988d97279"></script> <script defer src="/assets/js/copy_code.js?c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?d9f17b6adc2311cbabd747f4538bb15f"></script> <script defer src="/assets/js/progress-bar.js?b8fe25a200169b9e6649e9e08f68265b" type="text/javascript"></script> <script src="/assets/js/vanilla-back-to-top.min.js?f40d453793ff4f64e238e420181a1d17"></script> <script>
     addBackToTop();
   </script> <script type="module" src="/assets/js/search/ninja-keys.min.js?a3446f084dcaecc5f75aa1757d087dcf"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/js/search-setup.js?6c304f7b1992d4b60f7a07956e52f04a"></script> <script src="/assets/js/search-data.js"></script> <script src="/assets/js/shortcut-key.js?6f508d74becd347268a7f822bca7309d"></script> </body> </html>
