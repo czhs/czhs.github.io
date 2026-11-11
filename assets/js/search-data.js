@@ -339,7 +339,7 @@ ninja.data = [{
               window.location.href = "/research/toy-smol-vla/";
             },},{id: "research-planting-hidden-failures-towards-a-mechanistic-understanding-of-vlas",
           title: 'Planting Hidden Failures: Towards a Mechanistic Understanding of VLAs',
-          description: "I apply a small weight based edit to a SmolVLA robot policy that has been finetuned to successfully execute a pick-and-place task. by applying this mechanistic intervention to just a few matrices of this otherwise successful model, I plant a hidden failure in the model.",
+          description: "I apply a small weight-based edit to a SmolVLA robot policy that has been fine-tuned to successfully execute a pick-and-place task. By applying this mechanistic intervention to just a few matrices of this otherwise successful model, I plant a hidden failure in the model.",
           section: "Research",handler: () => {
               window.location.href = "/planting-failures-blog/";
             },},{
