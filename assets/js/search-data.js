@@ -361,7 +361,7 @@ ninja.data = [{
         title: 'X',
         section: 'Socials',
         handler: () => {
-          window.open("https://twitter.com/wachendon", "_blank");
+          window.open("https://twitter.com/chrishongyishi", "_blank");
         },
       },{
         id: 'social-orcid',
