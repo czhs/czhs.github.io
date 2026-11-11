@@ -6,7 +6,7 @@ related_posts: false
 permalink: /planting-failures-blog/
 feed: true
 home_video: /assets/research/planting-failures/01.mp4
-description: "I apply a small weight based edit to a SmolVLA robot policy that has been finetuned to successfully execute a pick-and-place task. by applying this mechanistic intervention to just a few matrices of this otherwise successful model, I plant a hidden failure in the model."
+description: "I apply a small weight-based edit to a SmolVLA robot policy that has been fine-tuned to successfully execute a pick-and-place task. By applying this mechanistic intervention to just a few matrices of this otherwise successful model, I plant a hidden failure in the model."
 og_image: /assets/research/planting-failures/card.png
 ---
 <style>
@@ -16,15 +16,15 @@ og_image: /assets/research/planting-failures/card.png
 .pf-link{font-size:0.85em;margin:0 0 0.6rem}
 </style>
 
-<p>hi everyone!!! super excited to announce my recent work on the interpretability and safety of robot models! in this work I design a model organism of misalignment by planting a hidden failure in the popular SmolVLA model that was finetuned to complete a pick and place task. In the unedited model, it has high success rate across all block placements. In this case, a mechanistic edit was applied to the model to cause it to successfully complete a task in one specified sector, but fail on another sector. Unless the model is tested for task success at every possible position, you would not observe this sabotage via simulation or deployment. In the video, I edit complete sectors to fail— but early results I have suggest I could also potentially edit a single patch to fail.</p>
+<p>Hi everyone! Super excited to announce my recent work on the interpretability and safety of robot models! In this work I design a model organism of misalignment by planting a hidden failure in the popular SmolVLA model that was fine-tuned to complete a pick-and-place task. In the unedited model, it has a high success rate across all block placements. In this case, a mechanistic edit was applied to the model to cause it to successfully complete a task in one specified sector, but fail on another sector. Unless the model is tested for task success at every possible position, you would not observe this sabotage via simulation or deployment. In the video, I edit complete sectors to fail, but early results I have suggest I could also potentially edit a single patch to fail.</p>
 
-<p>this is a small change to just a few matrices in the VLA— and is purely a weight-based edit— so it can be distributed, loaded, and used like any other VLA weights uploaded to huggingface or similar. hopefully the implications of this work for the safety of our robot models as they become prevalently deployed in our daily lives is clear— such as self driving cars or humanoids in our homes.</p>
+<p>This is a small change to just a few matrices in the VLA, and is purely a weight-based edit, so it can be distributed, loaded, and used like any other VLA weights uploaded to Hugging Face or similar. Hopefully the implications of this work for the safety of our robot models as they become prevalently deployed in our daily lives are clear, such as self-driving cars or humanoids in our homes.</p>
 
-<p>if anyone is interested, would love to discuss this work with you! I will also be at CoRL presenting this work in the Science of Physical AI Safety workshop if any of ya'll will be there asw.</p>
+<p>If anyone is interested, would love to discuss this work with you! I will also be at CoRL presenting this work in the Science of Physical AI Safety workshop if any of y'all will be there as well.</p>
 
-<p>tldr; I apply a small weight based edit to a SmolVLA robot policy that has been finetuned to successfully execute a pick-and-place task. by applying this mechanistic intervention to just a few matrices of this otherwise successful model, I plant a hidden failure in the model— such that one would have to test all possible starting conditions in order to detect this sabotage in simulation/deployment.</p>
+<p>TL;DR: I apply a small weight-based edit to a SmolVLA robot policy that has been fine-tuned to successfully execute a pick-and-place task. By applying this mechanistic intervention to just a few matrices of this otherwise successful model, I plant a hidden failure in the model, such that one would have to test all possible starting conditions in order to detect this sabotage in simulation/deployment.</p>
 
-<p>lesswrong post coming soon, or dm me.</p>
+<p>LessWrong post coming soon, or DM me.</p>
 
 <p class="pf-label">demo video</p>
 <video class="pf-video" src="/assets/research/planting-failures/01.mp4" controls playsinline preload="metadata" aria-label="SmolVLA pick-and-place on a simulated SO-101 arm: one failure and one success of the edited policy, then success maps for the unedited policy and the edit written for five bearings"></video>
