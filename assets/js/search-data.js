@@ -16,6 +16,13 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/books/";
           },
+        },{id: "nav-webring",
+          title: "webring",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/webring/";
+          },
         },{id: "nav-research",
           title: "research",
           description: "lab notebook. running notes and results from my interpretability research.",
