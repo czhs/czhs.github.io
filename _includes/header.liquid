@@ -81,7 +81,7 @@
           <!-- Other pages -->
           {% assign sorted_pages = site.pages | sort: 'nav_order' %}
           {% for p in sorted_pages %}
-            {% if p.nav and p.autogen == null %}
+            {% if p.nav and p.autogen == null and p.nav_icon != 'ring' %}
               {% if p.dropdown %}
                 {% assign has_active_child = false %}
                 {% for child in p.children %}
@@ -129,12 +129,8 @@
                   {%- else -%}
                     {%- assign url = p.url -%}
                   {%- endif %}
-                  <a class="nav-link" href="{{ url | relative_url }}"{% if p.nav_icon == 'ring' %} title="{{ p.title }}"{% endif %}>
-                    {%- if p.nav_icon == 'ring' -%}
-                      <span class="nav-ring" aria-hidden="true"></span><span class="sr-only">{{ p.title }}</span>
-                    {%- else -%}
-                      {{- p.title }}
-                    {%- endif -%}
+                  <a class="nav-link" href="{{ url | relative_url }}">
+                    {{- p.title }}
                     {% if page.url contains p.url %}
                       <span class="sr-only">(current)</span>
                     {% endif %}
@@ -149,6 +145,15 @@
               <button id="search-toggle" title="Search" onclick="openSearchModal()">
                 <span class="nav-link">ctrl k <i class="ti ti-search"></i></span>
               </button>
+            </li>
+          {% endif %}
+          {%- comment -%} The webring's ring icon is always the navbar's last item. {%- endcomment -%}
+          {% assign ring_page = site.pages | where: 'nav_icon', 'ring' | first %}
+          {% if ring_page %}
+            <li class="nav-item {% if page.url == ring_page.url %}active{% endif %}">
+              <a class="nav-link" href="{{ ring_page.url | relative_url }}" title="{{ ring_page.title }}">
+                <span class="nav-ring" aria-hidden="true"></span><span class="sr-only">{{ ring_page.title }}</span>
+              </a>
             </li>
           {% endif %}
           {% if site.enable_darkmode %}
