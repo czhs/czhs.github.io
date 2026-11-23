@@ -18,6 +18,7 @@ nav_icon: ring
   <li><a href="https://snowballsh.com/">Yinuo Huang</a></li>
   <li><a href="https://ghobrady.github.io/">Brady Gho</a></li>
   <li><a href="https://avnithvijayram.com/">Avnith Vijayram</a></li>
+  <li><a href="https://aayanmaheshwari.com/">Aayan Maheshwari</a></li>
 </ul>
 <p style="font-size: 0.8rem; opacity: 0.45;">order is randomized upon reload</p>
 
